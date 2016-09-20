@@ -11,7 +11,7 @@ import org.junit.Test;
  * TODO
  */
 public class DeleteMeTest {
-@Test
+@Test(expected=IllegalArgumentException.class)
 public void testMethod() throws ClientProtocolException, IOException {
 	new DeleteMe().method();
 }
