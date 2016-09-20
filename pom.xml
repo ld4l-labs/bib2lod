@@ -69,7 +69,7 @@
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>4.2.0</version>
 				<configuration>
-					<repoToken>ewQ3qhUIAfcY6WXVeOIF6txl5CGlV1yhx</repoToken>
+					<repoToken>LHLu42oSo4670kDhykEZt6KDgpzEKPp7o7zDu</repoToken>
 				</configuration>
 			</plugin>
 
