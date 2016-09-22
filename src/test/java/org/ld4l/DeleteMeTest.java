@@ -17,9 +17,4 @@ public class DeleteMeTest {
 	public void testMethod() throws ClientProtocolException, IOException {
 		new DeleteMe().method();
 	}
-	@Test
-	public void testMethodAgain() {
-		fail("testMethodAgain not implemented");
-	}
-
 }
