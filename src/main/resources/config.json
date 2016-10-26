@@ -1,0 +1,38 @@
+{
+    "logs": {
+        "location": "/usr/local/bib2lod/logs"
+    },
+    "input": {
+        "location": "/usr/local/bib2lod/data/input/marcxml",
+        "format": "marcxml"
+    },
+    "output": {
+        "location": "/usr/local/bi2lod/data/output/rdf",
+        "format": "ntriples"
+    },
+    "local-namespace": "http://localhost:8080/vitro/individual/",
+    "services": {
+        "logger": "org.ld4l.bib2lod.log.SimpleLogger",
+        "error-handler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
+        "uri-minter": "org.ld4l.bib2lod.uris.RandomUriMinter",
+        "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter",
+        "reader": "org.ld4l.bib2lod.io.SimpleFileReader",
+        "tojson": "org.ld4l.bib2lod.tojson.SimpleJsonConverter"
+    },
+    "converters": [
+        {
+            "cleaner": "org.ld4l.bib2lod.clean.MarcxmlCleaner"
+        },
+        {   
+            "tordf":  "org.ld4l.bib2lod.tordf.Marcxml2Ld4l",
+            "comment": "should tordf and toxml be subpackages of a conversion package?"                               
+        }
+    ],
+    "reconcilers": []
+}                                                                                             
+   
+
+
+
+
+
