@@ -22,8 +22,7 @@ import com.google.gson.JsonParser;
 public class Configurer {
 
     private static final Logger LOGGER = 
-            LogManager.getLogger(Configurer.class);
-    
+            LogManager.getLogger(Configurer.class);    
     private static final String DEFAULT_CONFIG_FILE = 
             "src/main/resources/config.json";
     
@@ -38,9 +37,7 @@ public class Configurer {
     // TODO Using this approach - returning a gson JsonObject rather than a 
     // file, filename, or string - requires users to also use gson rather than
     // using whatever json library they choose. However, if we are also using
-    // gson inside the core converter, it doesn't matter. Also, this is 
-    // probably just within the manager package, so if someone writes their 
-    // own package they can do it differently.
+    // gson inside the core converter, it doesn't matter. Consider this later.
     public JsonObject getConfig() throws IOException  {
         
         JsonObject jsonConfig = null;
