@@ -17,6 +17,7 @@ public class Bib2LodContext {
     // private Reader reader;
     // private Writer writer;
     // private ErrorHandler errorHandler;
+    // private Logger logger;
     
     /**
      * @param args
