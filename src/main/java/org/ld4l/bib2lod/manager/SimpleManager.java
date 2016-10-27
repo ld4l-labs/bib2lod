@@ -1,12 +1,14 @@
 package org.ld4l.bib2lod.manager;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.context.Context;
 import org.ld4l.bib2lod.context.JsonConfigContext;
+import org.ld4l.bib2lod.util.MurmurHash;
 
 public class SimpleManager {
 
@@ -43,7 +45,6 @@ public class SimpleManager {
         // parse the xml into records
 
         LOGGER.info("END CONVERSION.");
-        
     }
     
     private static void convertFiles(String input) {
