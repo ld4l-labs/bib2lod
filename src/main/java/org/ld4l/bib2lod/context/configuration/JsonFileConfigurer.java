@@ -13,8 +13,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileConfigurer extends BaseConfigurer {
 
@@ -26,27 +28,27 @@ public class JsonFileConfigurer extends BaseConfigurer {
     
     private String[] args;
     
+
     public JsonFileConfigurer(String[] args) {
         
         this.args = args;
 
     }
-    
-    // TODO Using this approach - returning a gson JsonObject rather than a 
-    // file, filename, or string - requires users to also use gson rather than
-    // using whatever json library they choose. However, if we are also using
-    // gson inside the core converter, it doesn't matter. Consider this later.
-    /** 
-     * Get config parameters, either from config file or from commandline option
-     * values. 
+    /**
+     * 
      * @return
      * @throws IOException
      * @throws ParseException
      */
-    public JsonObject getConfig() throws IOException, ParseException {
+    // TODO Using this approach - returning a Jackson JsonNode rather than a 
+    // file, filename, or string - requires users to also use Jackson rather 
+    // than using whatever json library they choose. However, if we are also 
+    // using Jackson inside the core converter, it doesn't matter. Consider this 
+    // later. 
+    public JsonNode getConfig() throws IOException, ParseException {
         
-        JsonObject jsonConfig = null;
-
+        JsonNode jsonConfig = null;
+        
         Options options = buildOptions();
         
         // Get commandline options
@@ -62,9 +64,8 @@ public class JsonFileConfigurer extends BaseConfigurer {
         File configFile = new File(configFilename);
 
         try {
-            String jsonString = FileUtils.readFileToString(configFile);
-            JsonParser parser = new JsonParser();
-            jsonConfig = parser.parse(jsonString).getAsJsonObject();
+            ObjectMapper mapper = new ObjectMapper();
+            jsonConfig = mapper.readTree(configFile);
             
             // Note: currently the only commandline option is the config file 
             // location. Later others may be supported, in which case this 
@@ -72,14 +73,19 @@ public class JsonFileConfigurer extends BaseConfigurer {
             // option values and return the result.
             return jsonConfig;
             
+        } catch (JsonParseException e) {
+            throw new IOException("Encountered non-well-formed JSON in config file", e);
+
+        } catch (JsonProcessingException e) {
+            throw new IOException("Error encountered processing JSON config file", e);
+               
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             throw new IOException("Error reading config file " +
                     "configFilename", e);
-        }
+        } 
 
+        
     }
-
 
     /**
      * Define the commandline options accepted by the program.

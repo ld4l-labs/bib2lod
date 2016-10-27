@@ -5,10 +5,10 @@ import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.context.configuration.Configurer;
 import org.ld4l.bib2lod.context.configuration.JsonFileConfigurer;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class JsonConfigContext extends BaseContext {
 
@@ -24,13 +24,16 @@ public class JsonConfigContext extends BaseContext {
     public JsonConfigContext(String[] args) throws IOException, ParseException {    
         
         // Get the configuration used to configure the application and create 
-        // the services.        
-        JsonObject config = new JsonFileConfigurer(args).getConfig();
+        // the services.      
+  
+        Configurer configurer = new JsonFileConfigurer(args);
+        JsonNode config = ((JsonFileConfigurer) configurer).getConfig();
         
-        JsonElement services = config.get("services");
+        LOGGER.debug(config.toString());
+        
+        JsonNode services = config.get("services");
+        
         LOGGER.debug(services.toString());
-        
-
         
         // TODO Create Context object: configuration plus services (reader, 
         // writer, uri minter, logger, error handler)
@@ -38,9 +41,9 @@ public class JsonConfigContext extends BaseContext {
 //        
 //        JsonObject services = config.getAsJsonObject("services");
 //        JsonObject uriMinter = services.getAsJsonObject("uri-minter");
-        //String minterClass = uriMinter.getAsString();
+        // String minterClass = uriMinter.getAsString();
         
-        //LOGGER.debug(minterClass);
+        // LOGGER.debug(minterClass);
 
 
         
