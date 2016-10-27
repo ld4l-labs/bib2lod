@@ -2,25 +2,18 @@ package org.ld4l.bib2lod.manager;
 
 import java.io.IOException;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.context.Bib2LodContext;
+import org.ld4l.bib2lod.context.Context;
+import org.ld4l.bib2lod.context.JsonConfigContext;
 
 public class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
     
-    private static Bib2LodContext context;
+    private static Context context;
 
     
     /** 
@@ -61,14 +54,14 @@ public class SimpleManager {
         
     }
     
-    private static Bib2LodContext setContext(String[] args) throws IOException, 
+    private static Context setContext(String[] args) throws IOException, 
             ParseException {
 
-        Bib2LodContext context = new Bib2LodContext(args);
+        Context context = new JsonConfigContext(args);
         return context;
     }
     
-    public Bib2LodContext getContext() {
+    public Context getContext() {
         return context;
     }
         

@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.context;
+package org.ld4l.bib2lod.context.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,17 +16,17 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class Configurer {
+public class JsonFileConfigurer extends BaseConfigurer {
 
     private static final Logger LOGGER = 
-            LogManager.getLogger(Configurer.class); 
+            LogManager.getLogger(JsonFileConfigurer.class); 
     
     private static final String DEFAULT_CONFIG_FILE = 
             "src/main/resources/config.json";
     
     private String[] args;
     
-    public Configurer(String[] args) {
+    public JsonFileConfigurer(String[] args) {
         
         this.args = args;
 
