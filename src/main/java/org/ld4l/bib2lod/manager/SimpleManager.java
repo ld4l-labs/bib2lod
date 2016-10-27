@@ -13,13 +13,14 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.gson.JsonObject;
+import org.ld4l.bib2lod.context.Bib2LodContext;
 
 public class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
+    
+    private static Bib2LodContext context;
 
     
     /** 
@@ -29,24 +30,17 @@ public class SimpleManager {
     public static void main(String[] args) {
 
         LOGGER.info("START CONVERSION.");
-        
-        JsonObject jsonConfig = null;
-        
+
         try {
-            jsonConfig = new Configurer(args).getConfig();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+            context = setContext(args);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
             return;
-        }
-
-        LOGGER.debug(jsonConfig.toString());   
-            
-        // TODO Create Context object: configuration plus services (reader, 
-        // writer, uri minter, logger, error handler)
+        } 
         
         // TODO: Temporarily hard-coding the input file. Get the input file or
-        // directory from the config file.
+        // directory from the context.
         // TODO: can be either a file or a directory
         String input = "src/test/resources/input/102063.xml";
        
@@ -55,8 +49,6 @@ public class SimpleManager {
         
         // parse the xml into records
 
-
-        
         LOGGER.info("END CONVERSION.");
         
     }
@@ -69,63 +61,15 @@ public class SimpleManager {
         
     }
     
-    // TODO Move all to a Configurer object
-        
-    /**
-     * Define the commandline options accepted by the program.
-     * @return an Options object
-     */
-    private static Options getOptions() {
-        
-        Options options = new Options();
+    private static Bib2LodContext setContext(String[] args) throws IOException, 
+            ParseException {
 
-        options.addOption(Option.builder("c")
-                .longOpt("config")
-                .required(false)
-                .hasArg()
-                .argName("config")
-                .desc("Config file location. Defaults to /src/main/resources/config.json")
-                .build());           
-
-        return options;
-    }
-
-    /**
-     * Parse commandline options.
-     * @param options
-     * @param args
-     * @return
-     */
-    private static CommandLine getCommandLine(Options options, String[] args) {
-        
-        // Parse program arguments
-        CommandLineParser parser = new DefaultParser();
-        try {
-            return parser.parse(options, args);
-        } catch (MissingOptionException e) {
-            LOGGER.fatal(e.getMessage());
-            printHelp(options);
-        } catch (UnrecognizedOptionException e) {
-            LOGGER.fatal(e.getMessage());
-            printHelp(options);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            LOGGER.fatal(e.getStackTrace().toString());
-        }
-        return null;
-    }
-
-    /**
-     * Print help text.
-     * @param options
-     */
-    private static void printHelp(Options options) {
-        
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.setWidth(80);
-        formatter.printHelp("java -jar Bib2Lod.jar", options, true);
+        Bib2LodContext context = new Bib2LodContext(args);
+        return context;
     }
     
-    // END Move all to a Configurer object
+    public Bib2LodContext getContext() {
+        return context;
+    }
         
 }
