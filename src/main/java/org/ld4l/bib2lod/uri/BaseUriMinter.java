@@ -2,7 +2,6 @@ package org.ld4l.bib2lod.uri;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.BaseConfiguration;
 
 public abstract class BaseUriMinter implements UriMinter {
 
@@ -21,7 +20,7 @@ public abstract class BaseUriMinter implements UriMinter {
     
     public String mintUri() {
         String uri = localNamespace + "/" + mintLocalName();
-        LOGGER.debug("URI + " + uri);
+        LOGGER.debug("URI = " + uri);
         return uri;
     }
     

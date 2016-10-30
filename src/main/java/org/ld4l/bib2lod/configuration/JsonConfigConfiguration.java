@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.configuration;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
@@ -7,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.configurer.Configurer;
 import org.ld4l.bib2lod.configuration.configurer.JsonFileConfigurer;
-import org.ld4l.bib2lod.uri.UriMinter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
@@ -26,7 +26,9 @@ public class JsonConfigConfiguration extends BaseConfiguration {
      * @throws ParseException 
      * @throws ReflectiveOperationException
      */
-    public JsonConfigConfiguration(String[] args) throws ClassNotFoundException, IOException, ParseException, ReflectiveOperationException {    
+    public JsonConfigConfiguration(String[] args) throws ClassNotFoundException, 
+            FileNotFoundException, IOException, ParseException, 
+                ReflectiveOperationException {    
         
         // Get the configuration used to configure the application and create 
         // the services.      
@@ -41,11 +43,20 @@ public class JsonConfigConfiguration extends BaseConfiguration {
         LOGGER.debug(services.toString());
         
         String localNamespace = getJsonStringValue(config, "localNamespace");
-        this.uriMinter = createUriMinter(services, localNamespace);
+        setLocalNamespace(localNamespace);
         
-        // TODO Add same for other services
+        createUriMinter(getJsonStringValue(services, "uriMinter"));
         
-        // TODO Add same for other config elements
+        // TODO Add same for other services...
+
+        // TODO Throw error if not defined
+        // TODO Walk the tree to get input location directly, rather than 
+        // defining inputNode first.
+        JsonNode inputNode = config.get("input");
+        String inputPath = getJsonStringValue(inputNode, "location");
+        buildInputFileList(inputPath);
+        
+        // TODO Add same for other config elements...
 
     }
     
@@ -53,30 +64,16 @@ public class JsonConfigConfiguration extends BaseConfiguration {
         
         JsonNode value = node.get(key);
         if (value == null) {
-            throw new RuntimeJsonMappingException("Required value " + key + " not defined in configuration.");
+            throw new RuntimeJsonMappingException("Required value '" + key + 
+                    "' not defined in configuration.");
         }
         String stringValue = value.textValue();
         if (stringValue == null) {
-            throw new RuntimeJsonMappingException("Required value " + key + " must be a string.");
+            throw new RuntimeJsonMappingException("Required value '" + key + 
+                    "' must be a string.");
         }
         return stringValue;
         
     }
-        
-        
-    private UriMinter createUriMinter(JsonNode services,
-            String localNamespace) throws ClassNotFoundException, ReflectiveOperationException {
-
-        String uriMinterName = getJsonStringValue(services, "uriMinter");      
-
-        Class<?> c = Class.forName(uriMinterName);
-        UriMinter minter = (UriMinter) c.getConstructor(String.class)
-                                        .newInstance(localNamespace); 
-        return minter;
-               
-    } 
-    
-        
-
 
 }
