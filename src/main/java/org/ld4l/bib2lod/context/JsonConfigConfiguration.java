@@ -67,20 +67,13 @@ public class JsonConfigConfiguration extends BaseConfiguration {
     private UriMinter createUriMinter(JsonNode services,
             String localNamespace) throws ClassNotFoundException, ReflectiveOperationException {
 
-        String uriMinterName = getJsonStringValue(services, "uriMinter");
-        
-        try {
-            // TODO Make sure ClassNotFoundException message is informative enough: 
-            // i.e., specifies the class name that's not found. If not, catch the
-            // error and throw a more specific one.
-            Class<?> c = Class.forName(uriMinterName);
-            UriMinter minter = (UriMinter) c.getConstructor(String.class)
-                                            .newInstance(localNamespace); 
-            return minter;
-            
-        } catch (ReflectiveOperationException e) { 
-            throw new ReflectiveOperationException("Can't instantiate class " + uriMinterName + ".");           
-        }
+        String uriMinterName = getJsonStringValue(services, "uriMinter");      
+
+        Class<?> c = Class.forName(uriMinterName);
+        UriMinter minter = (UriMinter) c.getConstructor(String.class)
+                                        .newInstance(localNamespace); 
+        return minter;
+               
     } 
     
         

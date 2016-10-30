@@ -107,39 +107,9 @@ public class JsonFileConfigurer extends BaseConfigurer {
         return options;
     }
 
-    /**
-     * Parse commandline options.
-     * @param options
-     * @param args
-     * @return
-     * @throws ParseException
-     */
-    private CommandLine getCommandLine(Options options, String[] args) 
-            throws ParseException {
-        
-        // Parse program arguments
-        CommandLineParser parser = new DefaultParser();
-        
-        // TODO Throws MissingOptionException, UnrecognizedOptionException, and
-        // general ParseException. Check if error messages are specific enough.
-        // If not, catch, add message, and throw.
-        return parser.parse(options, args);           
-    }
 
-//    /**
-//     * Print help text.
-//     * @param options
-//     */
-    // TODO Currently not used. What is best way to do this? If print here,
-    // need to catch exceptions and return null up the chain. If print from
-    // manager or elsewhere, need to supply a method to provide the help string.
-    // See HelpFormatter.renderOptions() or HelpFormatter.renderWrappedText().
-//    private void printHelp(Options options) {
-//        
-//        HelpFormatter formatter = new HelpFormatter();
-//        formatter.setWidth(80);
-//        formatter.printHelp("java -jar Bib2Lod.jar", options, true);
-//    }
+
+
 
     
 }
