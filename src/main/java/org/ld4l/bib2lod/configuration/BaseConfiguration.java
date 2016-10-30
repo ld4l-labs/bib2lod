@@ -59,8 +59,10 @@ public abstract class BaseConfiguration implements Configuration {
      * @return
      * @throws FileNotFoundException 
      */
-    protected void buildInputFileList(String inputPath) 
-            throws FileNotFoundException {
+    // TODO Also pass in file type and make sure we get only the files of this
+    // type
+    protected void buildInputFileList(String inputPath, String fileFormat, 
+            String fileExtension) throws FileNotFoundException {
         
         this.input = new ArrayList<File>(); 
         
@@ -70,9 +72,8 @@ public abstract class BaseConfiguration implements Configuration {
             throw new FileNotFoundException("Input location not found.");            
         }
 
-        // TODO - Add a filter to path.listFiles() so that we get only the
-        // files with the right extension, based on the input type
-        // designated in the config file
+        // TODO - Add filter to path.listFiles() so that we get only the
+        // files with the right extension. See FilenameFilter or FileFilter.
         if (path.isDirectory()) {
             this.input = Arrays.asList(path.listFiles());
         } else {

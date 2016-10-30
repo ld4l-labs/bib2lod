@@ -62,6 +62,8 @@ public class SimpleManager {
      * @param File file
      */
     private static void convertFile(File file) {
+
+        // parse xml - get records 
         
     }
     

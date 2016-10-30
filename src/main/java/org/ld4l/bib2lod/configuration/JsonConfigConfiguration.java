@@ -50,11 +50,11 @@ public class JsonConfigConfiguration extends BaseConfiguration {
         // TODO Add same for other services...
 
         // TODO Throw error if not defined
-        // TODO Walk the tree to get input location directly, rather than 
-        // defining inputNode first.
         JsonNode inputNode = config.get("input");
         String inputPath = getJsonStringValue(inputNode, "location");
-        buildInputFileList(inputPath);
+        String inputFormat = getJsonStringValue(inputNode, "format");
+        String fileExtension = getJsonStringValue(inputNode, "extension");
+        buildInputFileList(inputPath, inputFormat, fileExtension);
         
         // TODO Add same for other config elements...
 
