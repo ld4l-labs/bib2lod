@@ -1,21 +1,19 @@
 package org.ld4l.bib2lod.manager;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.context.Context;
-import org.ld4l.bib2lod.context.JsonConfigContext;
-import org.ld4l.bib2lod.util.MurmurHash;
+import org.ld4l.bib2lod.context.Configuration;
+import org.ld4l.bib2lod.context.JsonConfigConfiguration;
 
 public class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
     
-    private static Context context;
+    private static Configuration configuration;
 
     
     /** 
@@ -27,7 +25,7 @@ public class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-            context = setContext(args);
+            configuration = buildConfiguration(args);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             e.printStackTrace();
@@ -35,11 +33,10 @@ public class SimpleManager {
         } 
         
         // TODO: Temporarily hard-coding the input file. Get the input file or
-        // directory from the context.
+        // directory from the configuration.
         // TODO: can be either a file or a directory
         String input = "src/test/resources/input/102063.xml";
        
-        // TODO This will need to get passed the Context object
         convertFiles(input);
         
         // parse the xml into records
@@ -52,18 +49,24 @@ public class SimpleManager {
         // TODO: this will be a loop on files, then a loop on directories
         // For now: assume a single file
         
+        // TODO this will be a loop through records.
+        // For now: a single record
+        
+        
         
     }
     
-    private static Context setContext(String[] args) throws IOException, 
-            ParseException {
+    /**
+     * 
+     */
+    private static Configuration buildConfiguration(String[] args) throws IOException, ParseException, ReflectiveOperationException {
 
-        Context context = new JsonConfigContext(args);
-        return context;
+        Configuration configuration = new JsonConfigConfiguration(args);
+        return configuration;
     }
     
-    public Context getContext() {
-        return context;
+    public Configuration getConfiguration() {
+        return configuration;
     }
         
 }

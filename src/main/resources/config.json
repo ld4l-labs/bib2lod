@@ -10,11 +10,11 @@
         "location": "/usr/local/bi2lod/data/output/rdf",
         "format": "ntriples"
     },
-    "local-namespace": "http://localhost:8080/vitro/individual/",
+    "localNamespace": "http://localhost:8080/vitro/individual/",
     "services": {
         "logger": "org.ld4l.bib2lod.log.SimpleLogger",
-        "error-handler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
-        "uri-minter": "org.ld4l.bib2lod.uris.RandomUriMinter",
+        "errorHandler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
+        "uriMinter": "org.ld4l.bib2lod.uri.RandomUriMinter",
         "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter",
         "reader": "org.ld4l.bib2lod.io.SimpleFileReader",
         "tojson": "org.ld4l.bib2lod.tojson.SimpleJsonConverter"
