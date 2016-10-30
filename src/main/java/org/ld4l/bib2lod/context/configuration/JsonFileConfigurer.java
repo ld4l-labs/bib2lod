@@ -20,20 +20,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileConfigurer extends BaseConfigurer {
 
+
+
     private static final Logger LOGGER = 
             LogManager.getLogger(JsonFileConfigurer.class); 
     
     private static final String DEFAULT_CONFIG_FILE = 
             "src/main/resources/config.json";
-    
-    private String[] args;
-    
 
+ 
     public JsonFileConfigurer(String[] args) {
-        
-        this.args = args;
-
+        super(args);
     }
+
     /**
      * 
      * @return

@@ -14,8 +14,10 @@ public abstract class BaseConfigurer implements Configurer {
     private static final Logger LOGGER = 
             LogManager.getLogger(BaseConfigurer.class);
     
-    public BaseConfigurer()  {
-        // TODO Auto-generated constructor stub
+    protected String[] args;
+    
+    public BaseConfigurer(String[] args)  {
+        this.args = args;
     }
     
     /**
