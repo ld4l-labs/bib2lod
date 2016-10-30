@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.context.Configuration;
-import org.ld4l.bib2lod.context.JsonConfigConfiguration;
+import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.JsonConfigConfiguration;
 
 public class SimpleManager {
 

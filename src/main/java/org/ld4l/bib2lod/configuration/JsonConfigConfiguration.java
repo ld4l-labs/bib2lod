@@ -1,12 +1,12 @@
-package org.ld4l.bib2lod.context;
+package org.ld4l.bib2lod.configuration;
 
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.context.configuration.Configurer;
-import org.ld4l.bib2lod.context.configuration.JsonFileConfigurer;
+import org.ld4l.bib2lod.configuration.configurer.Configurer;
+import org.ld4l.bib2lod.configuration.configurer.JsonFileConfigurer;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 import com.fasterxml.jackson.databind.JsonNode;

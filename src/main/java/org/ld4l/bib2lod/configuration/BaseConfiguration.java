@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.context;
+package org.ld4l.bib2lod.configuration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

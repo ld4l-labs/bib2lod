@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.context.configuration;
+package org.ld4l.bib2lod.configuration.configurer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

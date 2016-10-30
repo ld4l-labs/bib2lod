@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.context;
+package org.ld4l.bib2lod.configuration;
 
 import org.ld4l.bib2lod.uri.UriMinter;
 

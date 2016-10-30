@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.context.configuration;
+package org.ld4l.bib2lod.configuration.configurer;
 
 import java.io.File;
 import java.io.IOException;
