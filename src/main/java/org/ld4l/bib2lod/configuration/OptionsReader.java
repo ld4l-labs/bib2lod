@@ -18,17 +18,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Configurer {
+public class OptionsReader {
 
     private static final Logger LOGGER = 
-            LogManager.getLogger(Configurer.class); 
+            LogManager.getLogger(OptionsReader.class); 
     
     private static final String DEFAULT_CONFIG_FILE = 
             "src/main/resources/config.json";
 
     protected String[] args;
     
-    public Configurer(String[] args)  {
+    public OptionsReader(String[] args)  {
         this.args = args;
     }
     

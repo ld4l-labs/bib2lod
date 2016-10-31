@@ -10,9 +10,6 @@ import java.util.List;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.clean.Cleaner;
-import org.ld4l.bib2lod.converter.Converter;
-import org.ld4l.bib2lod.parser.Parser;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -47,8 +44,8 @@ public class Configuration {
         // Get the configuration used to configure the application and create 
         // the services.      
   
-        Configurer configurer = new Configurer(args);
-        JsonNode config = ((Configurer) configurer).getConfig();
+        OptionsReader configurer = new OptionsReader(args);
+        JsonNode config = ((OptionsReader) configurer).getConfig();
         
         LOGGER.debug(config.toString());
         
@@ -59,7 +56,7 @@ public class Configuration {
         String localNamespace = getJsonStringValue(config, "localNamespace");
         setLocalNamespace(localNamespace);
         
-        createUriMinter(getJsonStringValue(services, "uriMinter"));
+        makeUriMinter(getJsonStringValue(services, "uriMinter"));
         
         // TODO Add same for other services...
 
@@ -81,19 +78,7 @@ public class Configuration {
     public UriMinter getUriMinter() {
         return uriMinter;
     }
-    
-    
-    public Cleaner getCleaner() {
-        return null;
-    }
-    
-    public Parser getParser() {
-        return null;
-    }
-    
-    public List<Converter> getConverters() {
-        return null;
-    }
+
     
     // TODO Or just return the input string from config file?
     public List<File> getInput() {
@@ -104,7 +89,7 @@ public class Configuration {
         this.localNamespace = localNamespace;
     }
     
-    protected void createUriMinter(String minterClassName) 
+    protected void makeUriMinter(String minterClassName) 
             throws ClassNotFoundException, ReflectiveOperationException {
         
         Class<?> c = Class.forName(minterClassName);

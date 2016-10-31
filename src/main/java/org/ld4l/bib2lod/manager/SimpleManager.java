@@ -1,10 +1,8 @@
 package org.ld4l.bib2lod.manager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -28,7 +26,7 @@ public class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-            Configuration configuration = buildConfiguration(args);
+            Configuration configuration = new Configuration(args);
             convertFiles(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
@@ -43,29 +41,13 @@ public class SimpleManager {
      */
     private static void convertFiles(Configuration configuration) {
           
-        RecordConverter recordConverter = new RecordConverter(configuration);
+        //RecordConverter recordConverter = new RecordConverter(configuration);
         List<File> inputFiles = configuration.getInput();
         for (File file : inputFiles) {
-            String converted = recordConverter.convertFile(file);
+            
+            //String converted = recordConverter.convertFile(file);
             // TODO get back output and write it (use configuration writer)
         }       
     }
-
-
-    /**
-     * 
-     */
-    private static Configuration buildConfiguration(String[] args) 
-            throws IOException, ParseException, ReflectiveOperationException {
-
-        // TODO Here's where we need a factory: the factory figures out from
-        // the config file what type of configuration to create.
-        Configuration configuration = new Configuration(args);
-        return configuration;
-    }
-    
-//    public Configuration getConfiguration() {
-//        return configuration;
-//    }
       
 }
