@@ -1,30 +1,29 @@
-package org.ld4l.bib2lod.conversion;
+package org.ld4l.bib2lod.conversion.to_rdf;
 
 import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.conversion.BaseConverter;
 
-// TODO figure out whether we need an interface and/or base class
-public class RecordConverter {
-    
+public class MarcxmlToLd4lRdf extends BaseConverter {
+
     private static final Logger LOGGER = 
-            LogManager.getLogger(RecordConverter.class);
+            LogManager.getLogger(MarcxmlToLd4lRdf.class);
     
-       
-    public RecordConverter(Configuration config) {
-        // from config, get cleaner, parser, converters and instantiate all
-        
-    }
-    
+    @Override
     public String convertFile(File file) {
-        // TODO Auto-generated method stub
+
         // Loop through records. For each: clean, parse, and loop through 
         // converters to convert
         // TODO Do we need a Record implementation?
         return null;
     }
-    
 
+    @Override
+    public String convertFile(String text) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

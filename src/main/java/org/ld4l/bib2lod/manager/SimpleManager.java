@@ -1,16 +1,16 @@
 package org.ld4l.bib2lod.manager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.conversion.RecordConverter;
 
 // TODO Put common methods (like getInputFiles() into a base class or a 
 // utility class?
-public class SimpleManager {
+public final class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
@@ -38,15 +38,22 @@ public class SimpleManager {
     
     /**
      * Convert a list of input files
+     * @throws IOException 
      */
-    private static void convertFiles(Configuration configuration) {
-          
-        //RecordConverter recordConverter = new RecordConverter(configuration);
+    private static void convertFiles(Configuration configuration) 
+            throws IOException {
+        
         List<File> inputFiles = configuration.getInput();
+
         for (File file : inputFiles) {
             
-            //String converted = recordConverter.convertFile(file);
-            // TODO get back output and write it (use configuration writer)
+            // TODO Make work as a loop for a chain of converters?
+            // Then need to first convert to string, so each converter takes a
+            // string as input and returns a string, which is input to next
+            // converter.
+
+            configuration.getConverter().convertFile(file);
+
         }       
     }
       

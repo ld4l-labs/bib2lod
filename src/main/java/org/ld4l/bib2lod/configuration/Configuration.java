@@ -10,9 +10,12 @@ import java.util.List;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
 public class Configuration {
@@ -23,6 +26,11 @@ public class Configuration {
     private String localNamespace;
     private UriMinter uriMinter;
     private List<File> input;
+    
+    // TODO Convert to list later
+    // private List<Converter> converters;
+    private Converter converter;
+    
     // cleaner, parser, converters
     // private Reader reader;
     // private Writer writer;
@@ -44,29 +52,21 @@ public class Configuration {
         // Get the configuration used to configure the application and create 
         // the services.      
   
-        OptionsReader configurer = new OptionsReader(args);
-        JsonNode config = ((OptionsReader) configurer).getConfig();
+        OptionsReader optionsReader = new OptionsReader(args);
+        JsonNode config = optionsReader.configure();
         
         LOGGER.debug(config.toString());
-        
-        JsonNode services = config.get("services");
-        
-        LOGGER.debug(services.toString());
-        
+         
         String localNamespace = getJsonStringValue(config, "localNamespace");
         setLocalNamespace(localNamespace);
         
-        makeUriMinter(getJsonStringValue(services, "uriMinter"));
-        
-        // TODO Add same for other services...
+        buildServices(config);
 
-        // TODO Throw error if not defined
-        JsonNode inputNode = config.get("input");
-        String inputPath = getJsonStringValue(inputNode, "location");
-        String inputFormat = getJsonStringValue(inputNode, "format");
-        String fileExtension = getJsonStringValue(inputNode, "extension");
-        buildInputFileList(inputPath, inputFormat, fileExtension);
+        buildInputFileList(config);
         
+        // buildConverters(config);
+        buildConverter(config);
+    
         // TODO Add same for other config elements...
 
     }
@@ -78,15 +78,33 @@ public class Configuration {
     public UriMinter getUriMinter() {
         return uriMinter;
     }
-
     
     // TODO Or just return the input string from config file?
     public List<File> getInput() {
         return input;
     }
     
+//    public List<Converter> getConverters() {
+//        return converters;
+//    }
+    public Converter getConverter() {
+        return converter;
+    }
+    
     protected void setLocalNamespace(String localNamespace) {
         this.localNamespace = localNamespace;
+    }
+    
+    protected void buildServices(JsonNode config) 
+            throws ClassNotFoundException, ReflectiveOperationException {   
+        
+        JsonNode services = config.get("services");       
+        LOGGER.debug(services.toString());   
+    
+       makeUriMinter(getJsonStringValue(services, "uriMinter"));
+        
+        // TODO Add same for other services...
+       
     }
     
     protected void makeUriMinter(String minterClassName) 
@@ -106,8 +124,14 @@ public class Configuration {
      */
     // TODO Also pass in file type and make sure we get only the files of this
     // type
-    protected void buildInputFileList(String inputPath, String fileFormat, 
-            String fileExtension) throws FileNotFoundException {
+    protected void buildInputFileList(JsonNode config) 
+            throws FileNotFoundException {
+
+        // TODO Throw error if not defined
+        JsonNode inputNode = config.get("input");
+        String inputPath = getJsonStringValue(inputNode, "location");
+        String inputFormat = getJsonStringValue(inputNode, "format");
+        String fileExtension = getJsonStringValue(inputNode, "extension");
         
         this.input = new ArrayList<File>(); 
         
@@ -124,6 +148,27 @@ public class Configuration {
         } else {
             this.input.add(path);
         }        
+    }
+    
+    protected void buildConverter(JsonNode config) 
+            throws ClassNotFoundException, InstantiationException, 
+                IllegalAccessException {
+
+        // ObjectMapper mapper = new ObjectMapper();
+        
+        // JsonNode converterList = config.get("converters"); 
+        // TODO Should be an array of strings or a string. For now just handle
+        // an array.
+        // if string...convert to list
+        // else
+        
+        // TODO Get this to work. Hard-coding as a single converter for now
+        // TypeReference ref = new TypeReference<List<Converter>>() {};
+        // converters = mapper.readValue(converterList, ref);
+       String converter = getJsonStringValue(config, "converter");
+       Class<?> c = Class.forName(converter);
+       this.converter = (Converter) c.newInstance();
+
     }
     
     private String getJsonStringValue(JsonNode node, String key) {

@@ -31,35 +31,11 @@ public class OptionsReader {
     public OptionsReader(String[] args)  {
         this.args = args;
     }
+
     
     /**
-     * Parse commandline options.
-     * @param options
-     * @param args
-     * @return
-     * @throws ParseException
-     */
-    protected CommandLine getCommandLine(Options options, String[] args) 
-            throws ParseException {
-        
-        // Parse program arguments
-        CommandLineParser parser = new DefaultParser();
-        
-        return parser.parse(options, args);           
-    }
-    
-//  /**
-//  * Print help text.
-//  * @param options
-//  */
- // TODO Currently not used. What is best way to do this? If print here,
- // need to catch exceptions and return null up the chain. If print from
- // manager or elsewhere, need to supply a method to provide the help string.
- // See HelpFormatter.renderOptions() or HelpFormatter.renderWrappedText().
-// private void printHelp(Options options) {
-//     
-    /**
-     * 
+     * Get configuration option values from config file or commandline;
+     * commandline overrides config file.
      * @return
      * @throws IOException
      * @throws ParseException
@@ -69,9 +45,9 @@ public class OptionsReader {
     // than using whatever json library they choose. However, if we are also 
     // using Jackson inside the core converter, it doesn't matter. Consider this 
     // later. 
-    public JsonNode getConfig() throws IOException, ParseException {
+    public JsonNode configure() throws IOException, ParseException {
         
-        JsonNode jsonConfig = null;
+        JsonNode config = null;
         
         Options options = buildOptions();
         
@@ -89,13 +65,13 @@ public class OptionsReader {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            jsonConfig = mapper.readTree(configFile);
+            config = mapper.readTree(configFile);
             
             // Note: currently the only commandline option is the config file 
             // location. Later others may be supported, in which case this 
             // will method override the config file values with the commandline 
             // option values and return the result.
-            return jsonConfig;
+            return config;
             
         } catch (JsonParseException e) {
             throw new IOException(
@@ -131,6 +107,21 @@ public class OptionsReader {
                 .build());           
 
         return options;
+    }
+
+    /**
+     * Parse commandline options.
+     * @param options
+     * @param args
+     * @return
+     * @throws ParseException
+     */
+    protected CommandLine getCommandLine(Options options, String[] args) 
+            throws ParseException {
+        
+        // Parse program arguments
+        CommandLineParser parser = new DefaultParser();    
+        return parser.parse(options, args);           
     }
 
 }

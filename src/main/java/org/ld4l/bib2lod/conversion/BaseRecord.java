@@ -1,8 +1,8 @@
 package org.ld4l.bib2lod.conversion;
 
-public abstract class BaseRecordConverter {
+public class BaseRecord implements Record {
 
-    public BaseRecordConverter() {
+    public BaseRecord() {
         // TODO Auto-generated constructor stub
     }
 
