@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.configuration.configurer;
+package org.ld4l.bib2lod.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,21 +18,46 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonFileConfigurer extends BaseConfigurer {
-
-
+public class Configurer {
 
     private static final Logger LOGGER = 
-            LogManager.getLogger(JsonFileConfigurer.class); 
+            LogManager.getLogger(Configurer.class); 
     
     private static final String DEFAULT_CONFIG_FILE = 
             "src/main/resources/config.json";
 
- 
-    public JsonFileConfigurer(String[] args) {
-        super(args);
+    protected String[] args;
+    
+    public Configurer(String[] args)  {
+        this.args = args;
     }
-
+    
+    /**
+     * Parse commandline options.
+     * @param options
+     * @param args
+     * @return
+     * @throws ParseException
+     */
+    protected CommandLine getCommandLine(Options options, String[] args) 
+            throws ParseException {
+        
+        // Parse program arguments
+        CommandLineParser parser = new DefaultParser();
+        
+        return parser.parse(options, args);           
+    }
+    
+//  /**
+//  * Print help text.
+//  * @param options
+//  */
+ // TODO Currently not used. What is best way to do this? If print here,
+ // need to catch exceptions and return null up the chain. If print from
+ // manager or elsewhere, need to supply a method to provide the help string.
+ // See HelpFormatter.renderOptions() or HelpFormatter.renderWrappedText().
+// private void printHelp(Options options) {
+//     
     /**
      * 
      * @return
@@ -108,9 +133,4 @@ public class JsonFileConfigurer extends BaseConfigurer {
         return options;
     }
 
-
-
-
-
-    
 }
