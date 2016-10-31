@@ -16,7 +16,6 @@ public class RandomUriMinter extends BaseUriMinter {
     public RandomUriMinter(String localNamespace) {
         super(localNamespace);
     }
-    
 
     protected String mintLocalName() {
         String uuid = UUID.randomUUID().toString();

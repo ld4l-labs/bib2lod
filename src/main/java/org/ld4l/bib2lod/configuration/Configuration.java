@@ -3,6 +3,8 @@ package org.ld4l.bib2lod.configuration;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
+//TODO Is Context a better name?
 public class Configuration {
 
     private static final Logger LOGGER = 
@@ -57,8 +58,8 @@ public class Configuration {
         
         LOGGER.debug(config.toString());
          
-        String localNamespace = getJsonStringValue(config, "localNamespace");
-        setLocalNamespace(localNamespace);
+
+        setLocalNamespace(config);
         
         buildServices(config);
 
@@ -70,6 +71,7 @@ public class Configuration {
         // TODO Add same for other config elements...
 
     }
+
 
     public String getLocalNamespace() {
         return localNamespace;
@@ -91,7 +93,11 @@ public class Configuration {
         return converter;
     }
     
-    protected void setLocalNamespace(String localNamespace) {
+    protected void setLocalNamespace(JsonNode config) {
+        String localNamespace = getJsonStringValue(config, "localNamespace");
+        if (!localNamespace.endsWith("/")) {
+            localNamespace += "/";
+        }
         this.localNamespace = localNamespace;
     }
     
@@ -152,7 +158,7 @@ public class Configuration {
     
     protected void buildConverter(JsonNode config) 
             throws ClassNotFoundException, InstantiationException, 
-                IllegalAccessException {
+                IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         // ObjectMapper mapper = new ObjectMapper();
         
@@ -166,9 +172,10 @@ public class Configuration {
         // TypeReference ref = new TypeReference<List<Converter>>() {};
         // converters = mapper.readValue(converterList, ref);
        String converter = getJsonStringValue(config, "converter");
-       Class<?> c = Class.forName(converter);
-       this.converter = (Converter) c.newInstance();
-
+       Class<?> converterClass = Class.forName(converter); 
+       Constructor<?> constructor = 
+               converterClass.getConstructor(this.getClass());
+       this.converter = (Converter) constructor.newInstance(this); 
     }
     
     private String getJsonStringValue(JsonNode node, String key) {

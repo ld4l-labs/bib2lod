@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.jena.rdf.model.Model;
+import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public interface Converter {
@@ -12,7 +14,9 @@ public interface Converter {
     public String convertFile(File file) 
             throws ParserConfigurationException, SAXException, IOException;
     
-    // public String convertFile(String text);
+    // Would create file from path and call convertFile(File). Not sure if
+    // needed.
+    // public String convertFile(String path);
   
-    // public String convertRecord(Record record);
+    public Model convertRecord(Element record);
 }

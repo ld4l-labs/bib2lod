@@ -19,7 +19,7 @@ public abstract class BaseUriMinter implements UriMinter {
     }
     
     public String mintUri() {
-        String uri = localNamespace + "/" + mintLocalName();
+        String uri = localNamespace + mintLocalName();
         LOGGER.debug("URI = " + uri);
         return uri;
     }

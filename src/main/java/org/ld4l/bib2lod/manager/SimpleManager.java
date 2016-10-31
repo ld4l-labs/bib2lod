@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.uri.UriMinter;
 import org.xml.sax.SAXException;
 
 // TODO Put common methods (like getInputFiles() into a base class or a 
@@ -56,7 +57,11 @@ public final class SimpleManager {
             // converter.
 
             try {
+                
+                //*** TODO - Need to get constructor and pass in arg
+                //LOGGER.debug(configuration.getConverter().getClass().getName());
                 configuration.getConverter().convertFile(file); 
+
                 
             // TODO Log record/id to error file to pass to LTS. Ideally log
             // bib id and the line or field where error occurred.

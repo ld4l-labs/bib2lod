@@ -11,11 +11,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.clean.Cleaner;
-import org.ld4l.bib2lod.clean.marcxml.MarcxmlCleaner;
+import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.BaseConverter;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -23,9 +22,13 @@ import org.xml.sax.SAXException;
 // MarcxmlToRdf > FromMarcxmlToLd4lRdf. Aside from the tag name, convertFile()
 // can be in FromXml. FromMarcxml specifies tag name "record"
 public abstract class MarcxmlToRdf extends BaseConverter {
-    
+
     private static final Logger LOGGER = 
             LogManager.getLogger(MarcxmlToRdf.class);
+    
+    public MarcxmlToRdf(Configuration configuration) {
+        super(configuration);
+    }
 
     @Override
     public String convertFile(File file) 
@@ -39,8 +42,8 @@ public abstract class MarcxmlToRdf extends BaseConverter {
         
         Model model = ModelFactory.createDefaultModel();
         NodeList records = doc.getElementsByTagName("record");
-        for (int index = 0; index < records.getLength(); index++) {
-            Node record = records.item(index);
+        for (int i = 0; i < records.getLength(); i++) {
+            Element record = (Element) records.item(i);
             model.add(convertRecord(record));
         }
 
@@ -49,26 +52,28 @@ public abstract class MarcxmlToRdf extends BaseConverter {
 
     }
     
-    protected Model convertRecord(Node record) {
-        
-        // TODO Clean - use marcxml cleaner
-        // TODO Use factory instead of constructor?
-        Cleaner cleaner = new MarcxmlCleaner();
-        // Node cleaned = clean(record);
-        
-        Model model = ModelFactory.createDefaultModel();
+    public abstract Model convertRecord(Element record);
+    
 
-        // loop through fields
-        // first headers etc
-        // convert headers
-        
-        // then datafields
-        // for each datafield - loop through subfields
-        // but not so simple - may need to consider some fields together
-        
-        // model.add(convertDataFields())
-        
-        return model;
-    }
+    // TODO Turn into a ControlFieldConverter?
+    // Because we need to know the type of identifier to create (bf:Identifier),
+    // it's hard to do this from here. We could pass in the Identifier type,
+    // but seems too much trouble to save a little bit of code.
+//    protected Model convertControlFields(Element record, Resource instance) {
+//        
+//        Model model = ModelFactory.createDefaultModel();
+//        
+//        NodeList fields = record.getElementsByTagName("controlfield");
+//        for (int i = 0; i < fields.getLength(); i++) {
+//            Element e = (Element) fields.item(i);
+//            String tag = e.getAttribute("tag");
+//            String value = e.getNodeValue();
+//            if (tag.equals("008")) {
+//                //model.add
+//            }
+//        }        
+//
+//        return model;
+//    }
 
 }
