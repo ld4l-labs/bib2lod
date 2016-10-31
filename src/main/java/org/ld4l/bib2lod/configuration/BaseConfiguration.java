@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.clean.Cleaner;
+import org.ld4l.bib2lod.converter.Converter;
+import org.ld4l.bib2lod.parser.Parser;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 public abstract class BaseConfiguration implements Configuration {
@@ -18,6 +21,7 @@ public abstract class BaseConfiguration implements Configuration {
     protected String localNamespace;
     protected UriMinter uriMinter;
     protected List<File> input;
+    // cleaner, parser, converters
     // private Reader reader;
     // private Writer writer;
     // private ErrorHandler errorHandler;
@@ -33,6 +37,19 @@ public abstract class BaseConfiguration implements Configuration {
     
     public UriMinter getUriMinter() {
         return uriMinter;
+    }
+    
+    
+    public Cleaner getCleaner() {
+        return null;
+    }
+    
+    public Parser getParser() {
+        return null;
+    }
+    
+    public List<Converter> getConverters() {
+        return null;
     }
     
     // TODO Or just return the input string from config file?

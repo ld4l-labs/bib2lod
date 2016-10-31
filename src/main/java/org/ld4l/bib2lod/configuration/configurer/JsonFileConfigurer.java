@@ -73,10 +73,12 @@ public class JsonFileConfigurer extends BaseConfigurer {
             return jsonConfig;
             
         } catch (JsonParseException e) {
-            throw new IOException("Encountered non-well-formed JSON in config file", e);
+            throw new IOException(
+                    "Encountered non-well-formed JSON in config file", e);
 
         } catch (JsonProcessingException e) {
-            throw new IOException("Error encountered processing JSON config file", e);
+            throw new IOException(
+                    "Error encountered processing JSON config file", e);
                
         } catch (IOException e) {
             throw new IOException("Error reading config file " +
