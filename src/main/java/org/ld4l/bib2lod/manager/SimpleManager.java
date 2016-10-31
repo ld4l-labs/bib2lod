@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.xml.sax.SAXException;
 
 // TODO Put common methods (like getInputFiles() into a base class or a 
 // utility class?
@@ -41,7 +44,7 @@ public final class SimpleManager {
      * @throws IOException 
      */
     private static void convertFiles(Configuration configuration) 
-            throws IOException {
+            {
         
         List<File> inputFiles = configuration.getInput();
 
@@ -52,7 +55,26 @@ public final class SimpleManager {
             // string as input and returns a string, which is input to next
             // converter.
 
-            configuration.getConverter().convertFile(file);
+            try {
+                configuration.getConverter().convertFile(file); 
+                
+            // TODO Log record/id to error file to pass to LTS. Ideally log
+            // bib id and the line or field where error occurred.
+            } catch (ParserConfigurationException e) {
+                LOGGER.error(e.getMessage());
+                e.printStackTrace();       
+                
+            // TODO Log record/id to error file to pass to LTS. Ideally log
+            // bib id and the line or field where error occurred.
+            } catch (SAXException e) {
+                LOGGER.error(e.getMessage());
+                e.printStackTrace();
+                
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                e.printStackTrace();
+                
+            } // continue to next record
 
         }       
     }
