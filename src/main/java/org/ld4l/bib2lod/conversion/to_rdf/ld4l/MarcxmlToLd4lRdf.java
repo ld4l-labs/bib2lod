@@ -38,13 +38,13 @@ public class MarcxmlToLd4lRdf extends MarcxmlToRdf {
         
         Model model = ModelFactory.createDefaultModel();
         
-        ResourceBuilder instanceBuilder = new BfInstanceBuilder(uriMinter);
+        ResourceBuilder instanceBuilder = new InstanceBuilder(uriMinter);
         Resource instance = instanceBuilder.build(record, model);
         model.add(instance.getModel());
         
         // TODO *** Put this in the instance builder - that's why we pass in
         // the record.
-        model.add(convertControlFields(record, instance));
+        //
 
         // then datafields
         // for each datafield - loop through subfields
@@ -56,34 +56,6 @@ public class MarcxmlToLd4lRdf extends MarcxmlToRdf {
         return model;
     }    
     
-    protected Model convertControlFields(Element record, Resource instance) {
-  
-        Model model = ModelFactory.createDefaultModel();
-  
-        NodeList fields = record.getElementsByTagName("controlfield");
-        if (fields.getLength() == 0) {
-            return model;
-        }
-        
-        ResourceBuilder identifierBuilder = 
-                new BfIdentifierBuilder(uriMinter);
-        
-        for (int i = 0; i < fields.getLength(); i++) {
-            Element e = (Element) fields.item(i);
-            String tag = e.getAttribute("tag");
-            String value = e.getFirstChild().getTextContent();
-            LOGGER.debug("node value: " + value);
-            if (tag.equals("001")) {
-              Resource identifier = identifierBuilder.build(
-                      "http://bib.ld4l.org/ontology/LocalIlsIdentifier", 
-                          value, model);
-              model.add(identifier.getModel());
-              Property hasIdentifier = model.getProperty("http://id.loc.gov/ontologies/bibframe/identifier");
-              model.add(instance, hasIdentifier, (RDFNode) identifier);
-            }
 
-        }        
-        return model;
-    }
 
 }

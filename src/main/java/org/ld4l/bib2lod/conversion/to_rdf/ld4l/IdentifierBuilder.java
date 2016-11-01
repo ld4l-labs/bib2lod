@@ -5,12 +5,12 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.conversion.to_rdf.BaseResourceBuilder;
 import org.ld4l.bib2lod.uri.UriMinter;
 
-public class BfIdentifierBuilder extends BaseResourceBuilder {
+public class IdentifierBuilder extends BaseResourceBuilder {
 
     private static Resource DEFAULT_TYPE = ResourceFactory.createResource(
             "http://id.loc.gov/ontologies/bibframe/Instance");
     
-    public BfIdentifierBuilder(UriMinter uriMinter)  {
+    public IdentifierBuilder(UriMinter uriMinter)  {
         super(uriMinter);
     }
 
@@ -18,8 +18,5 @@ public class BfIdentifierBuilder extends BaseResourceBuilder {
     protected Resource getDefaultType() {
         return DEFAULT_TYPE;
     }
-
-
-
 
 }

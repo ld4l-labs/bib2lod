@@ -68,20 +68,6 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
         return resource;
     }
 
-
-//
-//    @Override
-//    public Resource build(Element record) {
-//        Resource resource = ResourceFactory.createResource();
-//        return resource;
-//    }
-//
-//    @Override
-//    public Resource build(Element record, String type) {
-//        Resource resource = ResourceFactory.createResource();
-//        return resource;
-//    }
-    
     protected abstract Resource getDefaultType();
 
 
