@@ -7,10 +7,14 @@ import org.w3c.dom.Element;
 public interface ResourceBuilder {
 
     public Resource build(Model model);
+    
+    public Resource build(Element element, Model model);
 
     public Resource build(Resource type, Model model);
     
     public Resource build(String type, Model model);
+    
+    public Resource build(String type, String label, Model model);
 
 
 }

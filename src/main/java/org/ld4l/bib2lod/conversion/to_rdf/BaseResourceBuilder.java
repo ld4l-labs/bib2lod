@@ -4,9 +4,11 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.uri.UriMinter;
+import org.w3c.dom.Element;
 
 public abstract class BaseResourceBuilder implements ResourceBuilder {
 
@@ -27,7 +29,7 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
         // NB Can't add assertion to resource unless it has a model.
         // Resource resource = ResourceFactory.createResource(uri);
         Resource resource = model.getResource(uri);
-        resource.addProperty(RDF.type, getDefaultType());  
+        resource.addProperty(RDF.type, type);  
         return resource;
     }
     
@@ -43,9 +45,27 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
     }
     
     @Override
+    /**
+     * For non-implementing subclasses
+     */
+    // TODO Put here or in the interface?
+    public Resource build(Element element, Model model) {
+        return build(model);
+    }
+    
+    @Override
     public Resource build(String typeUri, Model model) {
         Resource resource = ResourceFactory.createResource(typeUri);
         return build(resource, model);
+    }
+    
+    @Override
+    public Resource build(String typeUri, String label, Model model) {
+        Resource resource = build(typeUri, model);
+        if (label != null) {
+            resource.addProperty(RDFS.label, label);
+        }
+        return resource;
     }
 
 
