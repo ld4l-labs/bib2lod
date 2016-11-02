@@ -44,8 +44,8 @@ public final class SimpleManager {
      * Convert a list of input files
      * @throws IOException 
      */
-    private static void convertFiles(Configuration configuration) 
-            {
+    private static void convertFiles(Configuration configuration) {
+
         
         List<File> inputFiles = configuration.getInput();
 
