@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -29,7 +30,7 @@ public class OptionsReader {
     protected String[] args;
     
     public OptionsReader(String[] args)  {
-        this.args = args;
+        this.args = Objects.requireNonNull(args);
     }
 
     
@@ -57,8 +58,10 @@ public class OptionsReader {
         String configFilename = cmd.getOptionValue("config");
         
         // If no commandline config file arg, use default location
+        // TODO Remove and throw an error instead
         if (configFilename == null) {
-            configFilename = DEFAULT_CONFIG_FILE;
+            // configFilename = DEFAULT_CONFIG_FILE;
+            throw new IllegalArgumentException();
         }        
         
         File configFile = new File(configFilename);
@@ -102,8 +105,7 @@ public class OptionsReader {
                 .required(false)
                 .hasArg()
                 .argName("config")
-                .desc("Config file location. Defaults to " +
-                        "/src/main/resources/config.json")
+                .desc("Config file location")
                 .build());           
 
         return options;

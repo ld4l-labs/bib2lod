@@ -58,7 +58,6 @@ public class Configuration {
         
         LOGGER.debug(config.toString());
          
-
         setLocalNamespace(config);
         
         buildServices(config);

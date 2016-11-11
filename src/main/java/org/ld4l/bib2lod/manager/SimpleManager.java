@@ -18,12 +18,11 @@ public final class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
-    
-//    private static Configuration configuration;
+
     
     /** 
-     * Read in program options and call appropriate conversion functionality.
-     * @param args
+     * Gets a Configuration object and calls method to convert specified files.
+     * @param args - Commandline arguments
      */
     public static void main(String[] args) {
 
@@ -41,12 +40,12 @@ public final class SimpleManager {
     
     
     /**
-     * Convert a list of input files
+     * Converts a list of input files.
+     * @param configuration - The Configuration object
      * @throws IOException 
      */
     private static void convertFiles(Configuration configuration) {
 
-        
         List<File> inputFiles = configuration.getInput();
 
         for (File file : inputFiles) {
@@ -55,31 +54,30 @@ public final class SimpleManager {
             // Then need to first convert to string, so each converter takes a
             // string as input and returns a string, which is input to next
             // converter.
-
-            try {
+//            try {
                 
                 //*** TODO - Need to get constructor and pass in arg
                 //LOGGER.debug(configuration.getConverter().getClass().getName());
-                configuration.getConverter().convertFile(file); 
+                // configuration.getConverter().convertFile(file); 
 
                 
             // TODO Log record/id to error file to pass to LTS. Ideally log
             // bib id and the line or field where error occurred.
-            } catch (ParserConfigurationException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();       
+//            } catch (ParserConfigurationException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();       
+//                
+//            // TODO Log record/id to error file to pass to LTS. Ideally log
+//            // bib id and the line or field where error occurred.
+//            } catch (SAXException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();
+//                
+//            } catch (IOException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();
                 
-            // TODO Log record/id to error file to pass to LTS. Ideally log
-            // bib id and the line or field where error occurred.
-            } catch (SAXException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();
-                
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();
-                
-            } // continue to next record
+ //           } // continue to next record
 
         }       
     }
