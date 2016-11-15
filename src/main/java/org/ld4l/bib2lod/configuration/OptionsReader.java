@@ -1,7 +1,10 @@
 package org.ld4l.bib2lod.configuration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
@@ -48,7 +51,46 @@ public class OptionsReader {
     // later. 
     public JsonNode configure() throws IOException, ParseException {
         
+        Reader reader = findConfigFile(); // add a test 
+        JsonNode node = processConfigFile(reader); // add a test with new StringReader()
+        return node;
+        
+    }
+
+    private JsonNode processConfigFile(Reader reader) throws IOException {
+        
         JsonNode config = null;
+        
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            config = mapper.readTree(reader);
+            if (config.isNull()) {
+                throw new IOException("Encountered empty JSON config file");                   
+            }
+            
+            // Note: currently the only commandline option is the config file 
+            // location. Later others may be supported, in which case this 
+            // will method override the config file values with the commandline 
+            // option values and return the result.
+            return config;
+            
+        } catch (JsonParseException e) {
+            throw new IOException(
+                    "Encountered ill-formed JSON in config file", e);
+
+        } catch (JsonProcessingException e) {
+            throw new IOException(
+                    "Error encountered processing JSON config file", e);
+               
+        } catch (IOException e) {
+            throw new IOException("Error reading config file " +
+                    "configFilename", e);
+        } 
+
+    }
+
+
+    private Reader findConfigFile() throws ParseException, FileNotFoundException  {
         
         Options options = buildOptions();
         
@@ -62,35 +104,12 @@ public class OptionsReader {
         if (configFilename == null) {
             // configFilename = DEFAULT_CONFIG_FILE;
             throw new IllegalArgumentException();
-        }        
-        
-        File configFile = new File(configFilename);
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            config = mapper.readTree(configFile);
-            
-            // Note: currently the only commandline option is the config file 
-            // location. Later others may be supported, in which case this 
-            // will method override the config file values with the commandline 
-            // option values and return the result.
-            return config;
-            
-        } catch (JsonParseException e) {
-            throw new IOException(
-                    "Encountered non-well-formed JSON in config file", e);
-
-        } catch (JsonProcessingException e) {
-            throw new IOException(
-                    "Error encountered processing JSON config file", e);
-               
-        } catch (IOException e) {
-            throw new IOException("Error reading config file " +
-                    "configFilename", e);
         } 
-
         
+        Reader reader = new FileReader(configFilename);
+        return reader;
     }
+
 
     /**
      * Define the commandline options accepted by the program.
