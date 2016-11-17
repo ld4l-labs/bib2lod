@@ -1,6 +1,5 @@
 package org.ld4l.bib2lod.configuration;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,36 +55,23 @@ public class OptionsReader {
         
     }
 
-    private JsonNode processConfigFile(Reader reader) throws IOException {
+    private JsonNode processConfigFile(Reader reader) throws JsonParseException, 
+            JsonProcessingException, IOException {
         
         JsonNode config = null;
         
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            config = mapper.readTree(reader);
-            if (config.isNull()) {
-                throw new IOException("Encountered empty JSON config file");                   
-            }
-            
-            // Note: currently the only commandline option is the config file 
-            // location. Later others may be supported, in which case this 
-            // will method override the config file values with the commandline 
-            // option values and return the result.
-            return config;
-            
-        } catch (JsonParseException e) {
-            throw new IOException(
-                    "Encountered ill-formed JSON in config file", e);
-
-        } catch (JsonProcessingException e) {
-            throw new IOException(
-                    "Error encountered processing JSON config file", e);
-               
-        } catch (IOException e) {
-            throw new IOException("Error reading config file " +
-                    "configFilename", e);
-        } 
-
+        ObjectMapper mapper = new ObjectMapper();
+        config = mapper.readTree(reader);
+        if (config.isNull()) {
+            throw new IOException("Encountered empty JSON config file");                   
+        }
+        
+        // Note: currently the only commandline option is the config file 
+        // location. Later others may be supported, in which case this 
+        // will method override the config file values with the commandline 
+        // option values and return the result.
+        return config;
+        
     }
 
 
