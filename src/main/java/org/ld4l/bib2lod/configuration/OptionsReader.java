@@ -24,9 +24,6 @@ public class OptionsReader {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(OptionsReader.class); 
-    
-    private static final String DEFAULT_CONFIG_FILE = 
-            "src/main/resources/config.json";
 
     protected String[] args;
     
@@ -125,9 +122,10 @@ public class OptionsReader {
     protected CommandLine getCommandLine(Options options, String[] args) 
             throws ParseException {
         
-        // Parse program arguments
+        // Parse program arguments. parse.parse() throws 
+        // UnrecognizedOptionException for unsupported options.
         CommandLineParser parser = new DefaultParser();    
-        return parser.parse(options, args);           
+        return parser.parse(options, args);     
     }
 
 }

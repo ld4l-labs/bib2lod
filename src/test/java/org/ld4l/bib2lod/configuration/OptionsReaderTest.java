@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.MissingArgumentException;
+import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
@@ -111,10 +112,23 @@ public class OptionsReaderTest extends AbstractTestClass {
         reader.configure();
     }
     
-    @Test (expected = JsonParseException.class)
-    public void invalidOption_Succeeds() throws Exception {
+    @Test (expected = ParseException.class)
+    public void invalidOption_ThrowsException() throws Exception {
         OptionsReader reader = new OptionsReader(new String[] {UNSUPPORTED_OPTION, UNSUPPORTED_OPTION_VALUE});
+        reader.configure();  
+    }
+   
+    @Test (expected = ParseException.class)
+    public void invalidOptionWithValidOption_ThrowsException() throws Exception {
+        OptionsReader reader = new OptionsReader(new String[] {"--config", CONFIG_FILENAME, UNSUPPORTED_OPTION, UNSUPPORTED_OPTION_VALUE});
         reader.configure();
+   
+    }
+    
+    @Test (expected = ParseException.class)
+    public void invalidOptionWithoutArgument_ThrowsException() throws Exception {
+        OptionsReader reader = new OptionsReader(new String[] {UNSUPPORTED_OPTION});
+        reader.configure();     
     }
 
     
