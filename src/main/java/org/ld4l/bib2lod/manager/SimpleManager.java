@@ -40,7 +40,7 @@ public final class SimpleManager {
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             e.printStackTrace();
-            LOGGER.error("CONVERSION DID NOT COMPLETE");
+            LOGGER.error("CONVERSION FAILED TO COMPLETE");
         } 
     }
     
