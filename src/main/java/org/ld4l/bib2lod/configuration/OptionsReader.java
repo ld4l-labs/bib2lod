@@ -20,6 +20,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Reads commandline arguments and gets configuration option values from either
+ * these or the configuration file.
+ * Currently the only commandline arguments supported is the configuration file
+ * path. Other values must be defined in the file.
+ * @author rjy7
+ *
+ */
 public class OptionsReader {
 
     private static final Logger LOGGER = 
@@ -33,9 +41,9 @@ public class OptionsReader {
 
     
     /**
-     * Get configuration option values from config file or commandline;
-     * commandline overrides config file.
-     * @return
+     * Gets the defined options, gets the configuration file from the program
+     * arguments, and reads the file into a JSON object.
+     * @return JsonNode
      * @throws IOException
      * @throws ParseException
      */
@@ -46,13 +54,69 @@ public class OptionsReader {
     // later. 
     public JsonNode configure() throws IOException, ParseException {
         
-        Reader reader = findConfigFile(); // add a test 
-        JsonNode node = processConfigFile(reader); // add a test with new StringReader()
+        // Get the defined options
+        Options options = buildOptions();
+        
+        // Get commandline option values
+        CommandLine cmd = parseCommandLine(options, args);
+        
+        Reader reader = findConfigFile(cmd); // add a test 
+        JsonNode node = parseConfigFile(reader); // add a test with new StringReader()
         return node;
         
     }
 
-    private JsonNode processConfigFile(Reader reader) throws JsonParseException, 
+    /**
+     * Defines the commandline options accepted by the program.
+     * @return Options
+     */
+    private Options buildOptions() {
+        
+        Options options = new Options();
+
+        options.addOption(Option.builder("c")
+                .longOpt("config")
+                .required(false)
+                .hasArg()
+                .argName("config")
+                .desc("Config file location")
+                .build());           
+
+        return options;
+    }
+    
+    /**
+     * Gets the configuration file location from the commandline option values.
+     * Returns a Reader for the file.
+     * @return Reader
+     * @throws ParseException
+     * @throws FileNotFoundException
+     */
+    private Reader findConfigFile(CommandLine cmd) 
+            throws ParseException, FileNotFoundException {
+        
+        String configFilename = cmd.getOptionValue("config");
+        
+        // If no commandline config file arg, use default location
+        // TODO Remove and throw an error instead
+        if (configFilename == null) {
+            // configFilename = DEFAULT_CONFIG_FILE;
+            throw new IllegalArgumentException();
+        } 
+        
+        Reader reader = new FileReader(configFilename);
+        return reader;
+    }
+    
+    /**
+     * Parses the configuration file into a JSON object.
+     * @param reader
+     * @return JsonNode
+     * @throws JsonParseException
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
+    private JsonNode parseConfigFile(Reader reader) throws JsonParseException, 
             JsonProcessingException, IOException {
         
         JsonNode config = null;
@@ -72,58 +136,19 @@ public class OptionsReader {
     }
 
 
-    private Reader findConfigFile() throws ParseException, FileNotFoundException  {
-        
-        Options options = buildOptions();
-        
-        // Get commandline options
-        CommandLine cmd = getCommandLine(options, args);
-
-        String configFilename = cmd.getOptionValue("config");
-        
-        // If no commandline config file arg, use default location
-        // TODO Remove and throw an error instead
-        if (configFilename == null) {
-            // configFilename = DEFAULT_CONFIG_FILE;
-            throw new IllegalArgumentException();
-        } 
-        
-        Reader reader = new FileReader(configFilename);
-        return reader;
-    }
-
-
     /**
-     * Define the commandline options accepted by the program.
-     * @return an Options object
-     */
-    private Options buildOptions() {
-        
-        Options options = new Options();
-
-        options.addOption(Option.builder("c")
-                .longOpt("config")
-                .required(false)
-                .hasArg()
-                .argName("config")
-                .desc("Config file location")
-                .build());           
-
-        return options;
-    }
-
-    /**
-     * Parse commandline options.
+     * Parses commandline options.
      * @param options
      * @param args
-     * @return
+     * @return CommandLine
      * @throws ParseException
      */
-    protected CommandLine getCommandLine(Options options, String[] args) 
+    protected CommandLine parseCommandLine(Options options, String[] args) 
             throws ParseException {
         
-        // Parse program arguments. parse.parse() throws 
-        // UnrecognizedOptionException for unsupported options.
+        // Parse program arguments. parser.parse() throws 
+        // UnrecognizedOptionException for unsupported options, so easier to 
+        // follow this than try to ignore undefined options.
         CommandLineParser parser = new DefaultParser();    
         return parser.parse(options, args);     
     }
