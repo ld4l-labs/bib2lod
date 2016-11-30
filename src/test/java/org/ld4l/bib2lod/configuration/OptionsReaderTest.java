@@ -48,8 +48,6 @@ public class OptionsReaderTest extends AbstractTestClass {
     public void argsIsNull_ThrowsException() {
         new OptionsReader(null);
     }
-    
-    //private void configureOptionsReader
 
     @Test (expected = IllegalArgumentException.class)
     public void argsIsEmpty_ThrowsException() throws Exception {

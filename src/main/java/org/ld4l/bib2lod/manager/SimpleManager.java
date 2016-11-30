@@ -12,14 +12,6 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.uri.UriMinter;
 import org.xml.sax.SAXException;
 
-/*
- * Test plan: 
- * (maybe should test in ConfigurationTest instead of SimpleManagerTest)
- * No configuration object returned from Configuration constructor
- * No input file list returned from Configuration.getInput()
- * File rather than directory returned from Configuration.getInput()
- * 
- */
 
 /** 
  * Simple manager to orchestrate conversion of a directory of files or a single
