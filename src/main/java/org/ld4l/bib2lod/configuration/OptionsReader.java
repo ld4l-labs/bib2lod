@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
 import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
@@ -57,13 +58,30 @@ public class OptionsReader {
         // Get the defined options
         Options options = buildOptions();
         
-        // Get commandline option values
-        CommandLine cmd = parseCommandLine(options, args);
+        // Parse program arguments. parser.parse() throws 
+        // UnrecognizedOptionException for unsupported options, so easier to 
+        // follow this than try to ignore undefined options.
+        CommandLineParser parser = new DefaultParser();    
+        CommandLine cmd = parser.parse(options, args); 
         
-        Reader reader = findConfigFile(cmd); // add a test 
-        JsonNode node = parseConfigFile(reader); // add a test with new StringReader()
-        return node;
+        // Parse the config file
+        Reader reader = findConfigFile(cmd); 
+        JsonNode node = parseConfigFile(reader); 
         
+        // TODO for each item in node, prefer the value in cmd if available
+        // i.e., change values in node to that defined by cmd - iterate through
+        // cmd and if present, change value in node.
+        // Can't test yet because we don't support any other cmdline args
+        Iterator<Option> it = cmd.iterator();
+        while (it.hasNext()) {
+            Option opt = it.next();
+            if (opt.getOpt() != "c") {
+                // TODO use value from cmdline instead of config file
+                // Will implement after switch from Jackson to javax.json
+            } 
+        }
+        
+        return node;        
     }
 
     /**
@@ -133,24 +151,6 @@ public class OptionsReader {
         // option values and return the result.
         return config;
         
-    }
-
-
-    /**
-     * Parses commandline options.
-     * @param options
-     * @param args
-     * @return CommandLine
-     * @throws ParseException
-     */
-    protected CommandLine parseCommandLine(Options options, String[] args) 
-            throws ParseException {
-        
-        // Parse program arguments. parser.parse() throws 
-        // UnrecognizedOptionException for unsupported options, so easier to 
-        // follow this than try to ignore undefined options.
-        CommandLineParser parser = new DefaultParser();    
-        return parser.parse(options, args);     
     }
 
 }
