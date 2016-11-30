@@ -34,59 +34,62 @@ public class OptionsReaderTest extends AbstractTestClass {
             "src/test/resources/config/empty_config.json";
     private static final String MALFORMED_CONFIG_FILENAME = 
             "src/test/resources/config/malformed_config.json";
-    private static final String UNSUPPORTED_OPTION = "--invalid";
-    private static final String UNSUPPORTED_OPTION_VALUE = 
+    private static final String INVALID_OPTION = "--invalid";
+    private static final String INVALID_OPTION_VALUE = 
             "invalid option value";
     
+    private JsonNode configureOptionsReader(String[] args) throws Exception {
+        OptionsReader reader = new OptionsReader(args);
+        JsonNode node = reader.configure();
+        return node;
+    }
 
     @Test (expected = NullPointerException.class)
-    public void argsNull_ThrowsException() {
+    public void argsIsNull_ThrowsException() {
         new OptionsReader(null);
-             
     }
+    
+    //private void configureOptionsReader
 
     @Test (expected = IllegalArgumentException.class)
     public void argsIsEmpty_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {});
-        reader.configure();
+        configureOptionsReader(new String[] {});
     }
     
     @Test 
-    public void providingPathUsingShortForm_Succeeds() throws Exception {
-        OptionsReader reader = 
-                new OptionsReader(new String[] {"-c", CONFIG_FILENAME});
-        JsonNode config = reader.configure();
+    public void providingPathUsingShortForm_Succeeds() throws Exception {       
+        JsonNode config = configureOptionsReader(
+                new String[] {"-c", CONFIG_FILENAME});
         assertNotNull(config);
     }
     
     @Test 
     public void providingPathUsingLongForm_Succeeds() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", CONFIG_FILENAME});
-        JsonNode config = reader.configure();
+        JsonNode config = configureOptionsReader(
+                new String[] {"--config", CONFIG_FILENAME});
         assertNotNull(config);
     }
     
     @Test (expected = MissingArgumentException.class)
     public void providingNoPath_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config"});
-        reader.configure();
+        configureOptionsReader(new String[] {"--config"});
     }
     
     @Test (expected = FileNotFoundException.class)
     public void configFileNotFound_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", MISSING_CONFIG_FILENAME});
-        reader.configure();
+        configureOptionsReader(
+                new String[] {"--config", MISSING_CONFIG_FILENAME});
     }
     
     @Test (expected = FileNotFoundException.class)
     public void configFileNotReadable_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", UNREADABLE_CONFIG_FILENAME});
+        OptionsReader reader = new OptionsReader(
+                new String[] {"--config", UNREADABLE_CONFIG_FILENAME});
         File file = new File(UNREADABLE_CONFIG_FILENAME);
         file.setReadable(false);
         try {
             reader.configure();
         } catch(FileNotFoundException e) {
-            // System.out.println("Found unreadable file");
             throw new FileNotFoundException();
         } finally {
             file.setReadable(true);
@@ -95,41 +98,39 @@ public class OptionsReaderTest extends AbstractTestClass {
     
     @Test (expected = FileNotFoundException.class)
     public void configFileIsDirectory_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", CONFIG_DIRNAME});
-        reader.configure();
+        configureOptionsReader(new String[] {"--config", CONFIG_DIRNAME});
     }
     
     @Test (expected = IOException.class)
     public void emptyConfigFile_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", EMPTY_CONFIG_FILENAME});
-        reader.configure();
+        configureOptionsReader(
+                new String[] {"--config", EMPTY_CONFIG_FILENAME});
     }
     
     @Test (expected = JsonParseException.class)
-    public void malFormedJsonConfigFile_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", MALFORMED_CONFIG_FILENAME});
-        reader.configure();
+    public void malFormedConfigFile_ThrowsException() throws Exception {
+        configureOptionsReader(
+                new String[] {"--config", MALFORMED_CONFIG_FILENAME});
     }
     
     @Test (expected = ParseException.class)
     public void invalidOption_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {UNSUPPORTED_OPTION, UNSUPPORTED_OPTION_VALUE});
-        reader.configure();  
+        configureOptionsReader(
+                new String[] {INVALID_OPTION, INVALID_OPTION_VALUE});
     }
    
     @Test (expected = ParseException.class)
     public void invalidOptionWithValidOption_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {"--config", CONFIG_FILENAME, UNSUPPORTED_OPTION, UNSUPPORTED_OPTION_VALUE});
-        reader.configure();
-   
+        configureOptionsReader(
+                new String[] {"--config", CONFIG_FILENAME, INVALID_OPTION, 
+                        INVALID_OPTION_VALUE});   
     }
     
     @Test (expected = ParseException.class)
     public void invalidOptionWithoutArgument_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(new String[] {UNSUPPORTED_OPTION});
-        reader.configure();     
+        configureOptionsReader(new String[] {INVALID_OPTION}); 
     }
-
+    
     
 //    Start the test this way.
 //    @Test
