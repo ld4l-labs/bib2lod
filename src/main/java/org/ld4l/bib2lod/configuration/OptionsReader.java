@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Reads commandline arguments and gets configuration option values from either
@@ -66,22 +68,27 @@ public class OptionsReader {
         
         // Parse the config file
         Reader reader = findConfigFile(cmd); 
-        JsonNode node = parseConfigFile(reader); 
+        JsonNode jsonNode = parseConfigFile(reader); 
+        
+        // A JsonNode is immutable, so cast to mutable ObjectNode
+        ObjectNode objNode = (ObjectNode) jsonNode;
         
         // TODO for each item in node, prefer the value in cmd if available
         // i.e., change values in node to that defined by cmd - iterate through
         // cmd and if present, change value in node.
-        // Can't test yet because we don't support any other cmdline args
+        // Can't test yet because we don't support any other commandline args
         Iterator<Option> it = cmd.iterator();
         while (it.hasNext()) {
             Option opt = it.next();
-            if (opt.getOpt() != "c") {
-                // TODO use value from cmdline instead of config file
-                // Will implement after switch from Jackson to javax.json
+            String fieldName = opt.getLongOpt();
+            LOGGER.debug("field name = " + fieldName);
+            // Makes no sense for config file to specify config file!
+            if (! fieldName.equals("config")) {
+                objNode.set(fieldName, jsonNode.get(fieldName));
             } 
         }
         
-        return node;        
+        return objNode;      
     }
 
     /**
