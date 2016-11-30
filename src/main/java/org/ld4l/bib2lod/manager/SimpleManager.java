@@ -12,8 +12,21 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.uri.UriMinter;
 import org.xml.sax.SAXException;
 
-// TODO Put common methods (like getInputFiles() into a base class or a 
-// utility class?
+/*
+ * Test plan: 
+ * (maybe should test in ConfigurationTest instead of SimpleManagerTest)
+ * No configuration object returned from Configuration constructor
+ * No input file list returned from Configuration.getInput()
+ * File rather than directory returned from Configuration.getInput()
+ * 
+ */
+
+/** 
+ * Simple manager to orchestrate conversion of a directory of files or a single
+ * file.
+ * @author rjy7
+ *
+ */
 public final class SimpleManager {
 
     private static final Logger LOGGER = 
@@ -21,8 +34,8 @@ public final class SimpleManager {
 
     
     /** 
-     * Gets a Configuration object and calls method to convert specified files.
-     * @param args - Commandline arguments
+     * Main method: gets a Configuration object and calls conversion method.
+     * @param args - commandline arguments
      */
     public static void main(String[] args) {
 
@@ -35,13 +48,14 @@ public final class SimpleManager {
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             e.printStackTrace();
+            LOGGER.error("CONVERSION DID NOT COMPLETE");
         } 
     }
     
     
     /**
      * Converts a list of input files.
-     * @param configuration - The Configuration object
+     * @param configuration - the Configuration object
      * @throws IOException 
      */
     private static void convertFiles(Configuration configuration) {

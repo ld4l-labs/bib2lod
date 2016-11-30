@@ -15,9 +15,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Test plan
+ * Tests for org.ld4l.bib2lod.configuration.OptionsReader
  * 
- * ignore invalid arguments
  * @author rjy7
  *
  */
