@@ -35,7 +35,7 @@ public final class SimpleManager {
 
         try {
             Configuration configuration = new Configuration(args);
-            convertFiles(configuration);
+            // convertFiles(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
