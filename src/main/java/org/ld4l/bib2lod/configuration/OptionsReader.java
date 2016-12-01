@@ -40,7 +40,7 @@ public class OptionsReader {
     public OptionsReader(String[] args)  {
         this.args = Objects.requireNonNull(args);
     }
-
+    
     
     /**
      * Gets the defined options, gets the configuration file from the program
@@ -153,11 +153,6 @@ public class OptionsReader {
         
         ObjectMapper mapper = new ObjectMapper();
         config = mapper.readTree(reader);
-        if (config.isNull()) {
-            // TODO Not the right type of exception. May need to add one.
-            throw new IOException("Encountered empty JSON config file");                   
-        }
-
         return config;
         
     }

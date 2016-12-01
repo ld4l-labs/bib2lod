@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
@@ -16,6 +15,7 @@ import org.junit.Test;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
@@ -105,7 +105,7 @@ public class OptionsReaderTest extends AbstractTestClass {
         configureOptionsReader(new String[] {"--config", CONFIG_DIRNAME});
     }
     
-    @Test (expected = IOException.class)
+    @Test (expected = JsonProcessingException.class)
     public void emptyConfigFile_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {"--config", EMPTY_CONFIG_FILENAME});
