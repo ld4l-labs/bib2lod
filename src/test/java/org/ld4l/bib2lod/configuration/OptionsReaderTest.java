@@ -165,8 +165,7 @@ public class OptionsReaderTest extends AbstractTestClass {
         assertEquals(LOCAL_NAMESPACE, localNamespace);
               
     }
-    
-    
+       
     
 //    Start the test this way.
 //    @Test

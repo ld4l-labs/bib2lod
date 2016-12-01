@@ -45,7 +45,7 @@ public class OptionsReader {
     /**
      * Gets the defined options, gets the configuration file from the program
      * arguments, and reads the file into a JSON object.
-     * @return 
+     * @return a JsonNode built from config file plus commandline arguments
      * @throws IOException
      * @throws ParseException
      */
@@ -66,7 +66,7 @@ public class OptionsReader {
 
     /**
      * Defines the commandline options accepted by the program.
-     * @return 
+     * @return options - the program options
      */
     Options buildOptions() {
         
@@ -87,7 +87,7 @@ public class OptionsReader {
      * 
      * @param options - the supported options 
      * @param args - the commandline arguments
-     * @return
+     * @return the list of options and commandline values
      * @throws ParseException
      */
     CommandLine parseCommandLineArgs(Options options, String[] args) 
@@ -100,9 +100,9 @@ public class OptionsReader {
     }
     
     /**
-     * 
+     * Retrieves and parses the config file specified in the program arguments.
      * @param cmd - the commandline values
-     * @return 
+     * @return a JsonNode containing the config file values
      * @throws ParseException
      * @throws JsonParseException
      * @throws JsonProcessingException
@@ -118,8 +118,7 @@ public class OptionsReader {
     
     /**
      * Gets the configuration file location from the commandline option values.
-     * Returns a Reader for the file.
-     * @return 
+     * @return a Reader to the file
      * @throws ParseException
      * @throws FileNotFoundException
      */
@@ -142,7 +141,7 @@ public class OptionsReader {
     /**
      * Parses the configuration file into a JSON object.
      * @param reader
-     * @return 
+     * @return config - a JsonNode containing the config file values
      * @throws JsonParseException
      * @throws JsonProcessingException
      * @throws IOException
@@ -167,7 +166,8 @@ public class OptionsReader {
      * Override config file values with commandline option values.
      * @param jsonNode
      * @param cmd
-     * @return 
+     * @return objNode - a JsonNode built by overriding config file values with
+     * corresponding commandline values
      */
     JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
             
