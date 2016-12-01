@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -46,56 +45,30 @@ public class OptionsReader {
     /**
      * Gets the defined options, gets the configuration file from the program
      * arguments, and reads the file into a JSON object.
-     * @return JsonNode
+     * @return 
      * @throws IOException
      * @throws ParseException
      */
-    // TODO Using this approach - returning a Jackson JsonNode rather than a 
-    // file, filename, or string - requires users to also use Jackson rather 
-    // than using whatever json library they choose. However, if we are also 
-    // using Jackson inside the core converter, it doesn't matter. Consider this 
-    // later. 
     public JsonNode configure() throws IOException, ParseException {
         
         // Get the defined options
         Options options = buildOptions();
-        
-        // Parse program arguments. parser.parse() throws 
-        // UnrecognizedOptionException for unsupported options, so easier to 
-        // follow this than try to ignore undefined options.
-        CommandLineParser parser = new DefaultParser();    
-        CommandLine cmd = parser.parse(options, args); 
+
+        // Get the commandline values for these options
+        CommandLine cmd = parseCommandLineArgs(options, args); 
         
         // Parse the config file
-        Reader reader = findConfigFile(cmd); 
-        JsonNode jsonNode = parseConfigFile(reader); 
-        
-        // A JsonNode is immutable, so cast to mutable ObjectNode
-        ObjectNode objNode = (ObjectNode) jsonNode;
-        
-        // TODO for each item in node, prefer the value in cmd if available
-        // i.e., change values in node to that defined by cmd - iterate through
-        // cmd and if present, change value in node.
-        // Can't test yet because we don't support any other commandline args
-        Iterator<Option> it = cmd.iterator();
-        while (it.hasNext()) {
-            Option opt = it.next();
-            String fieldName = opt.getLongOpt();
-            LOGGER.debug("field name = " + fieldName);
-            // Makes no sense for config file to specify config file!
-            if (! fieldName.equals("config")) {
-                objNode.set(fieldName, jsonNode.get(fieldName));
-            } 
-        }
-        
-        return objNode;      
+        JsonNode jsonNode = parseConfigFile(cmd);
+
+        // Commandline option values override config file values
+        return applyCommandLineOverrides(jsonNode, cmd);      
     }
 
     /**
      * Defines the commandline options accepted by the program.
-     * @return Options
+     * @return 
      */
-    private Options buildOptions() {
+    Options buildOptions() {
         
         Options options = new Options();
 
@@ -111,9 +84,42 @@ public class OptionsReader {
     }
     
     /**
+     * 
+     * @param options - the supported options 
+     * @param args - the commandline arguments
+     * @return
+     * @throws ParseException
+     */
+    CommandLine parseCommandLineArgs(Options options, String[] args) 
+            throws ParseException {
+        
+        // parser.parse() throws UnrecognizedOptionException for unsupported 
+        // options, so follow this rather than try to ignore undefined options. 
+        CommandLineParser parser = new DefaultParser();    
+        return parser.parse(options, args);  
+    }
+    
+    /**
+     * 
+     * @param cmd - the commandline values
+     * @return 
+     * @throws ParseException
+     * @throws JsonParseException
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
+    JsonNode parseConfigFile(CommandLine cmd) 
+            throws ParseException, JsonParseException, JsonProcessingException, 
+            IOException {
+        
+        Reader reader = findConfigFile(cmd); 
+        return parseConfigFile(reader);        
+    }
+    
+    /**
      * Gets the configuration file location from the commandline option values.
      * Returns a Reader for the file.
-     * @return Reader
+     * @return 
      * @throws ParseException
      * @throws FileNotFoundException
      */
@@ -136,7 +142,7 @@ public class OptionsReader {
     /**
      * Parses the configuration file into a JSON object.
      * @param reader
-     * @return JsonNode
+     * @return 
      * @throws JsonParseException
      * @throws JsonProcessingException
      * @throws IOException
@@ -149,15 +155,38 @@ public class OptionsReader {
         ObjectMapper mapper = new ObjectMapper();
         config = mapper.readTree(reader);
         if (config.isNull()) {
+            // TODO Not the right type of exception. May need to add one.
             throw new IOException("Encountered empty JSON config file");                   
         }
-        
-        // Note: currently the only commandline option is the config file 
-        // location. Later others may be supported, in which case this 
-        // will method override the config file values with the commandline 
-        // option values and return the result.
+
         return config;
         
+    }
+    
+    /**
+     * Override config file values with commandline option values.
+     * @param jsonNode
+     * @param cmd
+     * @return 
+     */
+    JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
+            
+        // A JsonNode is immutable, so cast to mutable ObjectNode
+        ObjectNode objNode = (ObjectNode) jsonNode;
+        
+        // Give preference to commandline option value over config option value.
+        Iterator<Option> it = cmd.iterator();
+        while (it.hasNext()) {
+            Option opt = it.next();
+            String optName = opt.getLongOpt();
+            LOGGER.debug("arg name = " + optName);
+            // Makes no sense for config file to specify config file!
+            if (! optName.equals("config")) {
+                objNode.put(optName, cmd.getOptionValue(optName));
+            } 
+        }
+        
+        return objNode;  
     }
 
 }

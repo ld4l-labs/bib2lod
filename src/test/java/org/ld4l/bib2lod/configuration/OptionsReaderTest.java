@@ -1,12 +1,16 @@
 package org.ld4l.bib2lod.configuration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -22,6 +26,8 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class OptionsReaderTest extends AbstractTestClass {
     
+    private static final String LOCAL_NAMESPACE = 
+            "http://local.namespace.org/test/";
     private static final String CONFIG_FILENAME = 
             "src/test/resources/config/config.json";
     private static final String MISSING_CONFIG_FILENAME = 
@@ -128,6 +134,38 @@ public class OptionsReaderTest extends AbstractTestClass {
     public void invalidOptionWithoutArgument_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {INVALID_OPTION}); 
     }
+    
+    @Test 
+    public void commandLineOverridesConfigFile() throws Exception { 
+ 
+        String[] args = new String[] {"-c", CONFIG_FILENAME, 
+                "--localNamespace", LOCAL_NAMESPACE};
+        
+        OptionsReader reader = new OptionsReader(args);
+        
+        Options options = reader.buildOptions();
+        
+        options.addOption(Option.builder("l")
+                .longOpt("localNamespace")
+                .required(false)
+                .hasArg()
+                .argName("localNamespace")
+                .desc("Local namespace used to build URIs")
+                .build());    
+        
+        // Get the commandline values for these options
+        CommandLine cmd = reader.parseCommandLineArgs(options, args); 
+        
+        // Parse the config file
+        JsonNode jsonNode = reader.parseConfigFile(cmd);
+
+        // Commandline option values override config file values
+        JsonNode node = reader.applyCommandLineOverrides(jsonNode, cmd);
+        String localNamespace = node.get("localNamespace").textValue();
+        assertEquals(LOCAL_NAMESPACE, localNamespace);
+              
+    }
+    
     
     
 //    Start the test this way.
