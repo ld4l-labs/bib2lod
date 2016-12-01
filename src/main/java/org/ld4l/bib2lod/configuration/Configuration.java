@@ -18,7 +18,12 @@ import org.ld4l.bib2lod.uri.UriMinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
-//TODO Is Context a better name?
+
+/**
+ * An object providing program configuration values
+ * @author rjy7
+ *
+ */
 public class Configuration {
 
     private static final Logger LOGGER = 
@@ -39,7 +44,7 @@ public class Configuration {
     // private Logger logger;
     
     /**
-     * @param args
+     * @param args - the commandline arguments
      * @throws Exception 
      * @throws ClassNotFoundException 
      * @throws IOException 
@@ -58,7 +63,6 @@ public class Configuration {
         
         LOGGER.debug(config.toString());
          
-
         setLocalNamespace(config);
         
         buildServices(config);
@@ -72,15 +76,27 @@ public class Configuration {
 
     }
 
-
+    
+    /**
+     * Gets the configured local namespace.
+     * @return localNamespace - the local namespace
+     */
     public String getLocalNamespace() {
         return localNamespace;
     }
     
+    /**
+     * Gets the configured URI minter
+     * @return uriMinter - the configured UriMinter
+     */
     public UriMinter getUriMinter() {
         return uriMinter;
     }
     
+    /**
+     * Gets the configured list of input files.
+     * @return input - the list of input files
+     */
     // TODO Or just return the input string from config file?
     public List<File> getInput() {
         return input;
@@ -89,10 +105,19 @@ public class Configuration {
 //    public List<Converter> getConverters() {
 //        return converters;
 //    }
+    
+    /**
+     * Gets the configured converter
+     * @return converter - the converter
+     */
     public Converter getConverter() {
         return converter;
     }
     
+    /**
+     * Sets the local namespace
+     * @param config
+     */
     protected void setLocalNamespace(JsonNode config) {
         String localNamespace = getJsonStringValue(config, "localNamespace");
         if (!localNamespace.endsWith("/")) {
@@ -101,6 +126,12 @@ public class Configuration {
         this.localNamespace = localNamespace;
     }
     
+    /**
+     * Builds the services specified in the config file
+     * @param config
+     * @throws ClassNotFoundException
+     * @throws ReflectiveOperationException
+     */
     protected void buildServices(JsonNode config) 
             throws ClassNotFoundException, ReflectiveOperationException {   
         
@@ -113,6 +144,12 @@ public class Configuration {
        
     }
     
+    /**
+     * Builds the UriMinter service
+     * @param minterClassName
+     * @throws ClassNotFoundException
+     * @throws ReflectiveOperationException
+     */
     protected void makeUriMinter(String minterClassName) 
             throws ClassNotFoundException, ReflectiveOperationException {
         
@@ -122,7 +159,7 @@ public class Configuration {
     }
     
     /**
-     * Get list of input files from the input path
+     * Builds list of input files from the input path
      * @param input
      * @return 
      * @return
@@ -136,8 +173,8 @@ public class Configuration {
         // TODO Throw error if not defined
         JsonNode inputNode = config.get("input");
         String inputPath = getJsonStringValue(inputNode, "location");
-        String inputFormat = getJsonStringValue(inputNode, "format");
-        String fileExtension = getJsonStringValue(inputNode, "extension");
+//        String inputFormat = getJsonStringValue(inputNode, "format");
+//        String fileExtension = getJsonStringValue(inputNode, "extension");
         
         this.input = new ArrayList<File>(); 
         
@@ -156,9 +193,22 @@ public class Configuration {
         }        
     }
     
+    /**
+     * Builds the converter specified in the config file
+     * @param config
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     */
     protected void buildConverter(JsonNode config) 
             throws ClassNotFoundException, InstantiationException, 
-                IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+                IllegalAccessException, IllegalArgumentException, 
+                InvocationTargetException, NoSuchMethodException, 
+                SecurityException {
 
         // ObjectMapper mapper = new ObjectMapper();
         
@@ -178,6 +228,12 @@ public class Configuration {
        this.converter = (Converter) constructor.newInstance(this); 
     }
     
+    /**
+     * Utility method to return the string value of a JsonNode.
+     * @param node
+     * @param key
+     * @return stringValue - the string value if non-null
+     */
     private String getJsonStringValue(JsonNode node, String key) {
         
         JsonNode value = node.get(key);

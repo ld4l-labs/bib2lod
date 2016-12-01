@@ -12,18 +12,22 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.uri.UriMinter;
 import org.xml.sax.SAXException;
 
-// TODO Put common methods (like getInputFiles() into a base class or a 
-// utility class?
+
+/** 
+ * Simple manager to orchestrate conversion of a directory of files or a single
+ * file.
+ * @author rjy7
+ *
+ */
 public final class SimpleManager {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(SimpleManager.class);
-    
-//    private static Configuration configuration;
+
     
     /** 
-     * Read in program options and call appropriate conversion functionality.
-     * @param args
+     * Main method: gets a Configuration object and calls conversion method.
+     * @param args - commandline arguments
      */
     public static void main(String[] args) {
 
@@ -36,17 +40,18 @@ public final class SimpleManager {
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             e.printStackTrace();
+            LOGGER.error("CONVERSION FAILED TO COMPLETE");
         } 
     }
     
     
     /**
-     * Convert a list of input files
+     * Converts a list of input files.
+     * @param configuration - the Configuration object
      * @throws IOException 
      */
     private static void convertFiles(Configuration configuration) {
 
-        
         List<File> inputFiles = configuration.getInput();
 
         for (File file : inputFiles) {
@@ -55,31 +60,30 @@ public final class SimpleManager {
             // Then need to first convert to string, so each converter takes a
             // string as input and returns a string, which is input to next
             // converter.
-
-            try {
+//            try {
                 
                 //*** TODO - Need to get constructor and pass in arg
                 //LOGGER.debug(configuration.getConverter().getClass().getName());
-                configuration.getConverter().convertFile(file); 
+                // configuration.getConverter().convertFile(file); 
 
                 
             // TODO Log record/id to error file to pass to LTS. Ideally log
             // bib id and the line or field where error occurred.
-            } catch (ParserConfigurationException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();       
+//            } catch (ParserConfigurationException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();       
+//                
+//            // TODO Log record/id to error file to pass to LTS. Ideally log
+//            // bib id and the line or field where error occurred.
+//            } catch (SAXException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();
+//                
+//            } catch (IOException e) {
+//                LOGGER.error(e.getMessage());
+//                e.printStackTrace();
                 
-            // TODO Log record/id to error file to pass to LTS. Ideally log
-            // bib id and the line or field where error occurred.
-            } catch (SAXException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();
-                
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-                e.printStackTrace();
-                
-            } // continue to next record
+ //           } // continue to next record
 
         }       
     }

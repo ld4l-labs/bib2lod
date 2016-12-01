@@ -1,0 +1,26 @@
+{
+    "logs": {
+        "location": "/usr/local/bib2lod/logs"
+    },
+    "input": {
+        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
+        "format": "marcxml",
+        "extension": "xml"
+    },
+    "output": {
+        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
+        "format": "ntriples"
+    },
+    "localNamespace": "http://data.ld4l.org/cornell/",
+    "services": {
+        "logger": "org.ld4l.bib2lod.log.SimpleLogger",
+        "errorHandler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
+        "uriMinter": "org.ld4l.bib2lod.uri.RandomUriMinter",
+        "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter",
+        "reader": "org.ld4l.bib2lod.io.SimpleFileReader"
+    },
+    "converters": [
+        "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"
+    ],
+    "reconcilers": []
+}                                                                                             

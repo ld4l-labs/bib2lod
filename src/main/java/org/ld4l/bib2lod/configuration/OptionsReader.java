@@ -1,7 +1,11 @@
 package org.ld4l.bib2lod.configuration;
 
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -9,7 +13,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,83 +20,55 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * Reads commandline arguments and gets configuration option values from either
+ * these or the configuration file.
+ * Currently the only commandline arguments supported is the configuration file
+ * path. Other values must be defined in the file.
+ * @author rjy7
+ *
+ */
 public class OptionsReader {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(OptionsReader.class); 
-    
-    private static final String DEFAULT_CONFIG_FILE = 
-            "src/main/resources/config.json";
 
     protected String[] args;
     
     public OptionsReader(String[] args)  {
-        this.args = args;
+        this.args = Objects.requireNonNull(args);
     }
-
+    
     
     /**
-     * Get configuration option values from config file or commandline;
-     * commandline overrides config file.
-     * @return
+     * Gets the defined options, gets the configuration file from the program
+     * arguments, and reads the file into a JSON object.
+     * @return a JsonNode built from config file plus commandline arguments
      * @throws IOException
      * @throws ParseException
      */
-    // TODO Using this approach - returning a Jackson JsonNode rather than a 
-    // file, filename, or string - requires users to also use Jackson rather 
-    // than using whatever json library they choose. However, if we are also 
-    // using Jackson inside the core converter, it doesn't matter. Consider this 
-    // later. 
     public JsonNode configure() throws IOException, ParseException {
         
-        JsonNode config = null;
-        
+        // Get the defined options
         Options options = buildOptions();
-        
-        // Get commandline options
-        CommandLine cmd = getCommandLine(options, args);
 
-        String configFilename = cmd.getOptionValue("config");
+        // Get the commandline values for these options
+        CommandLine cmd = parseCommandLineArgs(options, args); 
         
-        // If no commandline config file arg, use default location
-        if (configFilename == null) {
-            configFilename = DEFAULT_CONFIG_FILE;
-        }        
-        
-        File configFile = new File(configFilename);
+        // Parse the config file
+        JsonNode jsonNode = parseConfigFile(cmd);
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            config = mapper.readTree(configFile);
-            
-            // Note: currently the only commandline option is the config file 
-            // location. Later others may be supported, in which case this 
-            // will method override the config file values with the commandline 
-            // option values and return the result.
-            return config;
-            
-        } catch (JsonParseException e) {
-            throw new IOException(
-                    "Encountered non-well-formed JSON in config file", e);
-
-        } catch (JsonProcessingException e) {
-            throw new IOException(
-                    "Error encountered processing JSON config file", e);
-               
-        } catch (IOException e) {
-            throw new IOException("Error reading config file " +
-                    "configFilename", e);
-        } 
-
-        
+        // Commandline option values override config file values
+        return applyCommandLineOverrides(jsonNode, cmd);      
     }
 
     /**
-     * Define the commandline options accepted by the program.
-     * @return an Options object
+     * Defines the commandline options accepted by the program.
+     * @return options - the program options
      */
-    private Options buildOptions() {
+    Options buildOptions() {
         
         Options options = new Options();
 
@@ -102,26 +77,111 @@ public class OptionsReader {
                 .required(false)
                 .hasArg()
                 .argName("config")
-                .desc("Config file location. Defaults to " +
-                        "/src/main/resources/config.json")
+                .desc("Config file location")
                 .build());           
 
         return options;
     }
-
+    
     /**
-     * Parse commandline options.
-     * @param options
-     * @param args
-     * @return
+     * 
+     * @param options - the supported options 
+     * @param args - the commandline arguments
+     * @return the list of options and commandline values
      * @throws ParseException
      */
-    protected CommandLine getCommandLine(Options options, String[] args) 
+    CommandLine parseCommandLineArgs(Options options, String[] args) 
             throws ParseException {
         
-        // Parse program arguments
+        // parser.parse() throws UnrecognizedOptionException for unsupported 
+        // options, so follow this rather than try to ignore undefined options. 
         CommandLineParser parser = new DefaultParser();    
-        return parser.parse(options, args);           
+        return parser.parse(options, args);  
+    }
+    
+    /**
+     * Retrieves and parses the config file specified in the program arguments.
+     * @param cmd - the commandline values
+     * @return a JsonNode containing the config file values
+     * @throws ParseException
+     * @throws JsonParseException
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
+    JsonNode parseConfigFile(CommandLine cmd) 
+            throws ParseException, JsonParseException, JsonProcessingException, 
+            IOException {
+        
+        Reader reader = findConfigFile(cmd); 
+        return parseConfigFile(reader);        
+    }
+    
+    /**
+     * Gets the configuration file location from the commandline option values.
+     * @return a Reader to the file
+     * @throws ParseException
+     * @throws FileNotFoundException
+     */
+    private Reader findConfigFile(CommandLine cmd) 
+            throws ParseException, FileNotFoundException {
+        
+        String configFilename = cmd.getOptionValue("config");
+        
+        // If no commandline config file arg, use default location
+        // TODO Remove and throw an error instead
+        if (configFilename == null) {
+            // configFilename = DEFAULT_CONFIG_FILE;
+            throw new IllegalArgumentException();
+        } 
+        
+        Reader reader = new FileReader(configFilename);
+        return reader;
+    }
+    
+    /**
+     * Parses the configuration file into a JSON object.
+     * @param reader
+     * @return config - a JsonNode containing the config file values
+     * @throws JsonParseException
+     * @throws JsonProcessingException
+     * @throws IOException
+     */
+    private JsonNode parseConfigFile(Reader reader) throws JsonParseException, 
+            JsonProcessingException, IOException {
+        
+        JsonNode config = null;
+        
+        ObjectMapper mapper = new ObjectMapper();
+        config = mapper.readTree(reader);
+        return config;
+        
+    }
+    
+    /**
+     * Override config file values with commandline option values.
+     * @param jsonNode
+     * @param cmd
+     * @return objNode - a JsonNode built by overriding config file values with
+     * corresponding commandline values
+     */
+    JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
+            
+        // A JsonNode is immutable, so cast to mutable ObjectNode
+        ObjectNode objNode = (ObjectNode) jsonNode;
+        
+        // Give preference to commandline option value over config option value.
+        Iterator<Option> it = cmd.iterator();
+        while (it.hasNext()) {
+            Option opt = it.next();
+            String optName = opt.getLongOpt();
+            LOGGER.debug("arg name = " + optName);
+            // Makes no sense for config file to specify config file!
+            if (! optName.equals("config")) {
+                objNode.put(optName, cmd.getOptionValue(optName));
+            } 
+        }
+        
+        return objNode;  
     }
 
 }
