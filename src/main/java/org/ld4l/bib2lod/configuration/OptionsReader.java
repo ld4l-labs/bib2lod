@@ -13,6 +13,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -127,10 +128,7 @@ public class OptionsReader {
         
         String configFilename = cmd.getOptionValue("config");
         
-        // If no commandline config file arg, use default location
-        // TODO Remove and throw an error instead
         if (configFilename == null) {
-            // configFilename = DEFAULT_CONFIG_FILE;
             throw new IllegalArgumentException();
         } 
         

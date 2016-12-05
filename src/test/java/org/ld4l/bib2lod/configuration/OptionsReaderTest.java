@@ -29,7 +29,7 @@ public class OptionsReaderTest extends AbstractTestClass {
     private static final String LOCAL_NAMESPACE = 
             "http://local.namespace.org/test/";
     private static final String CONFIG_FILENAME = 
-            "src/test/resources/config/config.json";
+            "src/main/resources/config.json";
     private static final String MISSING_CONFIG_FILENAME = 
             "src/test/resources/config/no_config.json";
     private static final String CONFIG_DIRNAME = 
@@ -40,6 +40,8 @@ public class OptionsReaderTest extends AbstractTestClass {
             "src/test/resources/config/empty_config.json";
     private static final String MALFORMED_CONFIG_FILENAME = 
             "src/test/resources/config/malformed_config.json";
+    private static final String NON_JSON_EXTENSION = 
+            "src/test/resources/config/config.txt";
     private static final String INVALID_OPTION = "--invalid";
     private static final String INVALID_OPTION_VALUE = 
             "invalid option value";
@@ -115,6 +117,12 @@ public class OptionsReaderTest extends AbstractTestClass {
     public void malFormedConfigFile_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {"--config", MALFORMED_CONFIG_FILENAME});
+    }
+    
+    @Test 
+    public void nonJsonExtension_Succeeds() throws Exception {
+        configureOptionsReader(
+                new String[] {"--config", NON_JSON_EXTENSION});
     }
     
     @Test (expected = ParseException.class)
