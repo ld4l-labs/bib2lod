@@ -1,31 +1,29 @@
 package org.ld4l.bib2lod.configuration;
 
-import java.io.File;
+import static org.junit.Assert.fail;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.ld4l.bib2lod.configuration.Configuration.MissingRequiredKeyException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
 /*
  * Test plan: 
- * 
- * No configuration object returned from Configuration constructor - exception
- * No input file list returned from Configuration.getInput() - exception
- * File rather than list of files returned from Configuration.getInput()
+
  * 
  * No local namespace in config - exception
  * Local namespace empty - exception
  * Local namespace null - exception
  * Local namespace not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * Local namespace not well-formed URI - exception
  * 
  * No input in config - exception
  * Input value empty - exception
  * Input value null - exception
  * Input not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * Input location doesn't exist - exception
  * Input location a directory but is empty - succeed, does nothing
  * IO exception - exception
@@ -34,11 +32,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * output value empty - exception
  * output value null - exception
  * output not an object - exception
+ * ?? Test all possible data types: number, boolean, array, string?
  * 
  * No output location in config - exception
  * Location value empty - exception
  * Location value null - exception
  * Location value not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * output location doesn't exist - exception
  * output location not a directory
  * output location not writable
@@ -54,6 +54,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Log value empty - exception
  * Log value null - exception
  * Log value not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * Log value doesn't exist - exception
  * Log value not a directory - exception
  * Log value not writable - exception
@@ -63,10 +64,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Services empty
  * Services null
  * Services not an object
+ * ?? Test all possible data types: number, boolean, array, string?
  * 
  * No UriMinter in config - exception
  * UriMinter empty - exception
  * UriMinter null - exception
+ * UriMinter not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * URI minter class doesn't exist - exception
  * Uri minter class doesn't extend AbstractUriMinter - exception
  * Can't create Uri minter instance - exception
@@ -74,17 +78,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * No writer in config - exception
  * writer empty - exception
  * writer null - exception
+ * writer not a string - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * writer class doesn't exist - exception
  * writer class doesn't extend AbstractWriter - exception
  * Can't create writer instance - exception
  * 
- * TODO later: add same other services
+ * TODO later: add same for other services
  * 
- * No converter in config - succeed and do nothing (may only to cleaning, for example)
- * Converter empty - succeed and do nothing (may only to cleaning, for example)
- * converter null - succeed and do nothing (may only to cleaning, for example)
- * Converter not a string - exception
- * TODO Change to an array or a string
+ * No converters in config - succeed and do nothing (may only to cleaning, for example)
+ * Converters empty - succeed and do nothing (may only to cleaning, for example)
+ * converters null - succeed and do nothing (may only to cleaning, for example)
+ * Converters not an array - exception
+ * ?? Test all possible data types: number, boolean, string, object?
  * converter class doesn't exist - exception
  * converter doesn't extend AbstractConverter - exception
  * Convert can't be instantiated - exception
@@ -93,24 +99,52 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * reconcilers empty - succeed
  * reconcilers null - succeed
  * reconciler not an array - exception
+ * ?? Test all possible data types: number, boolean, array, object?
  * reconciler an empty array - succeed and do nothing 
  * 
  */
 public class ConfigurationTest extends AbstractTestClass {
-
-    private static JsonNode CONFIG = null;
-
-    @Before
-    public void setUpConfiguration() throws Exception {
-
-        File configFile = new File("src/test/resources/config/config.json");
-        ObjectMapper mapper = new ObjectMapper();
-        CONFIG = mapper.readTree(configFile);
+    
+    private static final String MISSING_LOCAL_NAMESPACE_CONFIG = 
+            "src/test/resources/config/missing_local_namespace.json";
+    
+    /* 
+     * Local namespace tests 
+     */
+    
+    @Test (expected = MissingRequiredKeyException.class)
+    public void missingLocalNamespace_ThrowsException() throws Exception {
+        new Configuration(new String[] {"-c", MISSING_LOCAL_NAMESPACE_CONFIG});               
     }
-
+    
     @Test
-    public void setLocalNamespace() {
-
+    public void emptyLocalNamespace_ThrowsException() {
+        fail("emptyLocalNamespace_ThrowsException not implemented");
     }
+    
+    @Test
+    public void nullLocalNamespace_ThrowsException() {
+        fail("nullLocalNamespace_ThrowsException not implemented");
+    }   
+    
+    @Test
+    public void localNamespaceNotString_ThrowsException() {
+        fail("localNamespaceNotString_ThrowsException not implemented");
+    }   
+  
+    
+    @Test
+    public void localNamespaceNotWellFormedUri_ThrowsException() {
+        fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");
+    }   
+    
+    
+    
+
+//  Start the test this way.
+//  @Test
+//  public void sampleTest() {
+//      fail("sampleTest not implemented");
+//  }
 
 }

@@ -28,6 +28,7 @@ public class Configuration {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(Configuration.class);
+    
 
     private String localNamespace;
     private UriMinter uriMinter;
@@ -43,6 +44,32 @@ public class Configuration {
     // private ErrorHandler errorHandler;
     // private Logger logger;
     
+    protected enum Key {
+        
+        CONVERTER("converter"),
+        INPUT("input"),
+        INPUT_LOCATION("location"),
+        LOCAL_NAMESPACE("localNamespace"),
+        URI_MINTER("uriMinter");
+        
+        private final String string;
+        
+        Key(String string) {
+            this.string = string;
+        }
+        
+        protected String string() {
+            return this.string;
+        }
+    }
+    
+    protected class MissingRequiredKeyException extends RuntimeException {
+        
+        protected MissingRequiredKeyException(Key key) {
+            super("Configuration is missing required key '" + key.string + ".'");
+        }
+    }
+    
     /**
      * @param args - the commandline arguments
      * @throws Exception 
@@ -55,9 +82,8 @@ public class Configuration {
             FileNotFoundException, IOException, ParseException, 
                 ReflectiveOperationException {    
         
-        // Get the configuration used to configure the application and create 
-        // the services.      
-  
+        // Get the configuration values from the commandline values and 
+        // specified config file as a JSON object.
         OptionsReader optionsReader = new OptionsReader(args);
         JsonNode config = optionsReader.configure();
         
@@ -119,10 +145,19 @@ public class Configuration {
      * @param config
      */
     protected void setLocalNamespace(JsonNode config) {
-        String localNamespace = getJsonStringValue(config, "localNamespace");
+        
+        String localNamespace = getJsonStringValue(config, Key.LOCAL_NAMESPACE);
+                
+        
+        if (localNamespace == null) {
+            throw new MissingRequiredKeyException(Key.LOCAL_NAMESPACE);
+                    
+        }
+        
         if (!localNamespace.endsWith("/")) {
             localNamespace += "/";
         }
+        
         this.localNamespace = localNamespace;
     }
     
@@ -138,7 +173,7 @@ public class Configuration {
         JsonNode services = config.get("services");       
         LOGGER.debug(services.toString());   
     
-       makeUriMinter(getJsonStringValue(services, "uriMinter"));
+       makeUriMinter(getJsonStringValue(services, Key.URI_MINTER));
         
         // TODO Add same for other services...
        
@@ -171,8 +206,8 @@ public class Configuration {
             throws FileNotFoundException {
 
         // TODO Throw error if not defined
-        JsonNode inputNode = config.get("input");
-        String inputPath = getJsonStringValue(inputNode, "location");
+        JsonNode inputNode = config.get(Key.INPUT.string);
+        String inputPath = getJsonStringValue(inputNode, Key.INPUT_LOCATION);
 //        String inputFormat = getJsonStringValue(inputNode, "format");
 //        String fileExtension = getJsonStringValue(inputNode, "extension");
         
@@ -221,7 +256,7 @@ public class Configuration {
         // TODO Get this to work. Hard-coding as a single converter for now
         // TypeReference ref = new TypeReference<List<Converter>>() {};
         // converters = mapper.readValue(converterList, ref);
-       String converter = getJsonStringValue(config, "converter");
+       String converter = getJsonStringValue(config, Key.CONVERTER);
        Class<?> converterClass = Class.forName(converter); 
        Constructor<?> constructor = 
                converterClass.getConstructor(this.getClass());
@@ -234,17 +269,15 @@ public class Configuration {
      * @param key
      * @return stringValue - the string value if non-null
      */
-    private String getJsonStringValue(JsonNode node, String key) {
+    private String getJsonStringValue(JsonNode node, Key key) {
         
-        JsonNode value = node.get(key);
+        JsonNode value = node.get(key.string);
         if (value == null) {
-            throw new RuntimeJsonMappingException("Required value '" + key + 
-                    "' not defined in configuration.");
+            throw new MissingRequiredKeyException(key);
         }
         String stringValue = value.textValue();
         if (stringValue == null) {
-            throw new RuntimeJsonMappingException("Required value '" + key + 
-                    "' must be a string.");
+            throw new MissingRequiredKeyException(key);
         }
         return stringValue;
         
