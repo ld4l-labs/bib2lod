@@ -11,7 +11,7 @@
         "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "ntriples"
     },
-    "localNamespace": "http://data.ld4l.org/cornell/",
+    "local_namespace": "http://data.ld4l.org/cornell/",
     "services": {
         "logger": "org.ld4l.bib2lod.log.SimpleLogger",
         "errorHandler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",

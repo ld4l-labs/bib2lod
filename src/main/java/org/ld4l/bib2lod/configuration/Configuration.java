@@ -48,7 +48,7 @@ public class Configuration {
         CONVERTER("converter"),
         INPUT("input"),
         INPUT_LOCATION("location"),
-        LOCAL_NAMESPACE("localNamespace"),
+        LOCAL_NAMESPACE("local_namespace"),
         URI_MINTER("uriMinter");
         
         private final String string;
