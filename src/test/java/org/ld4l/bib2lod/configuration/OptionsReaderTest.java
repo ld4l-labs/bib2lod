@@ -28,20 +28,25 @@ public class OptionsReaderTest extends AbstractTestClass {
     
     private static final String LOCAL_NAMESPACE = 
             "http://local.namespace.org/test/";
+    
     private static final String CONFIG_FILENAME = 
             "src/main/resources/config.json";
+    
+    private static final String TEST_CONFIG_DIR = "src/test/resources/config/";
+    
     private static final String MISSING_CONFIG_FILENAME = 
-            "src/test/resources/config/no_config.json";
+            TEST_CONFIG_DIR + "no_config.json";
     private static final String CONFIG_DIRNAME = 
-            "src/test/resources/config/config_dir";
+            TEST_CONFIG_DIR + "config_dir";
     private static final String UNREADABLE_CONFIG_FILENAME = 
-            "src/test/resources/config/unreadable_config.json";
+            TEST_CONFIG_DIR + "unreadable_config.json";
     private static final String EMPTY_CONFIG_FILENAME = 
-            "src/test/resources/config/empty_config.json";
+            TEST_CONFIG_DIR + "empty_config.json";
     private static final String MALFORMED_CONFIG_FILENAME = 
-            "src/test/resources/config/malformed_config.json";
+            TEST_CONFIG_DIR + "malformed_config.json";
     private static final String NON_JSON_EXTENSION = 
-            "src/test/resources/config/config.txt";
+            TEST_CONFIG_DIR + "config.txt";
+    
     private static final String INVALID_OPTION = "--invalid";
     private static final String INVALID_OPTION_VALUE = 
             "invalid option value";
