@@ -1,13 +1,8 @@
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.fail;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.Configuration.InvalidTypeException;
+import org.ld4l.bib2lod.configuration.Configuration.InvalidValueException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredKeyMissingException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredValueEmptyException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredValueNullException;
@@ -114,7 +109,7 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
 public class ConfigurationTest extends AbstractTestClass {
     
     private static final String TEST_CONFIG_DIR = 
-            "src/test/resources/config/";
+            "src/test/resources/configuration/";
     
     /* 
      * Local namespace tests 
@@ -172,9 +167,11 @@ public class ConfigurationTest extends AbstractTestClass {
         configureLocalNamespace("local_namespace_number.json");
     } 
      
-    @Test
-    public void localNamespaceMalFormedUri_ThrowsException() {
-        fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");
+    @Test (expected = InvalidValueException.class)
+    public void localNamespaceMalFormedUri_ThrowsException() throws Exception{
+        configureLocalNamespace(
+                "local_namespace_malformed.json");
+        //fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");
     }   
     
     

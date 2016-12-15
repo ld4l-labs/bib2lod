@@ -32,7 +32,8 @@ public class OptionsReaderTest extends AbstractTestClass {
     private static final String CONFIG_FILENAME = 
             "src/main/resources/config.json";
     
-    private static final String TEST_CONFIG_DIR = "src/test/resources/config/";
+    private static final String TEST_CONFIG_DIR = 
+            "src/test/resources/options_reader/";
     
     private static final String MISSING_CONFIG_FILENAME = 
             TEST_CONFIG_DIR + "no_config.json";
