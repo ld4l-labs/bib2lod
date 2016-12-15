@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.configuration;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.Configuration.InvalidTypeException;
 import org.ld4l.bib2lod.configuration.Configuration.InvalidValueException;
@@ -168,11 +170,15 @@ public class ConfigurationTest extends AbstractTestClass {
     } 
      
     @Test (expected = InvalidValueException.class)
-    public void localNamespaceMalFormedUri_ThrowsException() throws Exception{
-        configureLocalNamespace(
-                "local_namespace_malformed.json");
-        //fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");
-    }   
+    public void localNamespaceInvalidUri_ThrowsException() throws Exception{
+        configureLocalNamespace("local_namespace_invalid_uri.json");
+                
+    }  
+    
+    @Test 
+    public void localNamespaceValidUri_Succeeds() throws Exception{
+        fail("localNamespaceValidUri_Succeeds not implemented");                
+    }
     
     
     

@@ -62,33 +62,48 @@ public class Configuration {
         }
     }
     
-    protected class RequiredKeyMissingException extends RuntimeException {       
+    protected class RequiredKeyMissingException extends RuntimeException {   
+        
         protected RequiredKeyMissingException(Key key) {
-            super("Configuration is missing required key '" + key.string + ".'");
+            super("Configuration is missing required key '" + key.string 
+                    + ".'");
         }
     }
     
-    protected class RequiredValueNullException extends RuntimeException {       
+    protected class RequiredValueNullException extends RuntimeException {
+        
         protected RequiredValueNullException(Key key) {
-            super("Value of required configuration key '" + key.string + " is null.'");
+            super("Value of required configuration key '" + key.string 
+                    + " is null.'");
         }
     }
     
-    protected class RequiredValueEmptyException extends RuntimeException {       
+    protected class RequiredValueEmptyException extends RuntimeException {
+        
         protected RequiredValueEmptyException(Key key) {
-            super("Value of required configuration key '" + key.string + " is empty.'");
+            super("Value of required configuration key '" + key.string + 
+                    " is empty.'");
         }
     }
 
-    protected class InvalidTypeException extends RuntimeException {       
+    protected class InvalidTypeException extends RuntimeException { 
+        
         protected InvalidTypeException(Key key) {
-            super("Value of configuration key '" + key.string + " is of invalid type.'");
+            super("Value of configuration key '" + key.string + 
+                    " is of invalid type.'");
         }
     }
     
-    protected class InvalidValueException extends RuntimeException {       
+    protected class InvalidValueException extends RuntimeException {  
+        
         protected InvalidValueException(Key key) {
-            super("Value of configuration key '" + key.string + " is invalid.'");
+            super("Value of configuration key '" + key.string + 
+                    "' is invalid.");
+        }
+        
+        protected InvalidValueException(Key key, String msg) {
+            super("Value of configuration key '" + key.string + 
+                    "' is invalid: " + msg + ".");
         }
     }
     
@@ -166,13 +181,13 @@ public class Configuration {
      * Sets the local namespace
      * @param config
      */
-    protected void setLocalNamespace(JsonNode config) {
+    protected void setLocalNamespace(JsonNode config) 
+            throws InvalidValueException {
         
         String localNamespace = getJsonStringValue(config, Key.LOCAL_NAMESPACE);
-                
-        
-        if (localNamespace == null) {
-            throw new RequiredKeyMissingException(Key.LOCAL_NAMESPACE);                    
+          
+        if (1==1) {
+            throw new InvalidValueException(Key.LOCAL_NAMESPACE, "Invalid URI");
         }
         
         if (!localNamespace.endsWith("/")) {
