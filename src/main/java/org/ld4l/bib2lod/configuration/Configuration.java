@@ -49,7 +49,7 @@ public class Configuration {
         INPUT("input"),
         INPUT_LOCATION("location"),
         LOCAL_NAMESPACE("local_namespace"),
-        URI_MINTER("uriMinter");
+        URI_MINTER("uri_minter");
         
         private final String string;
         

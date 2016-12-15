@@ -5,7 +5,7 @@
         "format": "ntriples"
     },
     "services": {
-        "uriMinter": "org.ld4l.bib2lod.uri.RandomUriMinter",
+        "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
         "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter"
     },
     "converters": [
