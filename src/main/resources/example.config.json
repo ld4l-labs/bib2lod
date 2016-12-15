@@ -14,7 +14,7 @@
     "local_namespace": "http://data.ld4l.org/cornell/",
     "services": {
         "logger": "org.ld4l.bib2lod.log.SimpleLogger",
-        "errorHandler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
+        "error_handler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
         "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
         "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter",
         "reader": "org.ld4l.bib2lod.io.SimpleFileReader"
