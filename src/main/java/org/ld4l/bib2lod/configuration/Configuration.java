@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.iri.IRIException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.conversion.Converter;
@@ -182,17 +183,19 @@ public class Configuration {
      * @param config
      */
     protected void setLocalNamespace(JsonNode config) 
-            throws InvalidValueException {
+            throws IRIException, InvalidValueException {
         
         String localNamespace = getJsonStringValue(config, Key.LOCAL_NAMESPACE);
-          
-        if (1==1) {
-            throw new InvalidValueException(Key.LOCAL_NAMESPACE, "Invalid URI");
+        
+        // Will throw an error if the localNamespace is malformed.
+        org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
+
+        // Require the final slash, otherwise it could be a web page address
+        if (!localNamespace.endsWith("/")) {
+            throw new InvalidValueException(Key.LOCAL_NAMESPACE, 
+                    "Local namespace must end in a forward slash.");
         }
         
-        if (!localNamespace.endsWith("/")) {
-            localNamespace += "/";
-        }
         
         this.localNamespace = localNamespace;
     }

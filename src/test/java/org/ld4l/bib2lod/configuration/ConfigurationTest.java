@@ -23,7 +23,8 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  * Local namespace a non-empty object - InvalidTypeException - DONE
  * Local namespace a number - InvalidTypeException - DONE
  * Local namespace a boolean - InvaldTypeException - DONE
- * Local namespace not well-formed URI - InvalidValueException
+ * Local namespace no final slash - InvalidValueException
+ * Local namespace malformed URI - Jena MalformedURIException
  * 
  * No input in config - exception
  * Input value empty - exception
@@ -170,13 +171,19 @@ public class ConfigurationTest extends AbstractTestClass {
     } 
      
     @Test (expected = InvalidValueException.class)
-    public void localNamespaceInvalidUri_ThrowsException() throws Exception{
-        configureLocalNamespace("local_namespace_invalid_uri.json");
-                
+    public void localNamespaceNoFinalSlash_ThrowsException() throws Exception {
+        //fail("localNamespaceNoFinalSlash_ThrowsException");
+        configureLocalNamespace("local_namespace_no_final_slash.json");              
+    }  
+    
+    @Test (expected = InvalidValueException.class)
+    public void localNamespaceMalformedUri_ThrowsException() throws Exception {
+        //fail("localNamespaceMalformedUri_ThrowsException not implemented");
+        configureLocalNamespace("local_namespace_malformed_uri.json");                
     }  
     
     @Test 
-    public void localNamespaceValidUri_Succeeds() throws Exception{
+    public void localNamespaceValidUri_Succeeds() throws Exception {
         fail("localNamespaceValidUri_Succeeds not implemented");                
     }
     
