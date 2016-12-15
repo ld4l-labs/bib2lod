@@ -80,6 +80,12 @@ public class Configuration {
         }
     }
 
+    protected class InvalidTypeException extends RuntimeException {       
+        protected InvalidTypeException(Key key) {
+            super("Value of configuration key '" + key.string + " is of invalid type.'");
+        }
+    }
+    
     protected class InvalidValueException extends RuntimeException {       
         protected InvalidValueException(Key key) {
             super("Value of configuration key '" + key.string + " is invalid.'");
@@ -166,8 +172,7 @@ public class Configuration {
                 
         
         if (localNamespace == null) {
-            throw new RequiredKeyMissingException(Key.LOCAL_NAMESPACE);
-                    
+            throw new RequiredKeyMissingException(Key.LOCAL_NAMESPACE);                    
         }
         
         if (!localNamespace.endsWith("/")) {
@@ -290,7 +295,7 @@ public class Configuration {
         String keyString = key.string;
         
         // Key is missing
-        if (! node.has(keyString)) {
+        if (! node.has(key.string)) {
             throw new RequiredKeyMissingException(key);
         }
         
@@ -299,14 +304,21 @@ public class Configuration {
             throw new RequiredValueNullException(key);
         }
         
-        String value = node.get(keyString).textValue();
-        // Value is empty - "key": ""
+        JsonNode valueNode = node.get(keyString);
+        
+        // Value is not a string
+        if (! valueNode.isTextual()) {
+            throw new InvalidTypeException(key);
+        }
+
+        String value = valueNode.textValue();
+        
+        // Value is empty - "key": ""   
         if (value.equals("")) {
             throw new RequiredValueEmptyException(key);
         }
         
-        return value;
-        
+        return value;       
     }
 
 }

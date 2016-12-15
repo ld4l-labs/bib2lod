@@ -2,7 +2,12 @@ package org.ld4l.bib2lod.configuration;
 
 import static org.junit.Assert.fail;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.apache.commons.cli.ParseException;
 import org.junit.Test;
+import org.ld4l.bib2lod.configuration.Configuration.InvalidTypeException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredKeyMissingException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredValueEmptyException;
 import org.ld4l.bib2lod.configuration.Configuration.RequiredValueNullException;
@@ -12,18 +17,21 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  * Test plan: 
 
  * 
- * No local namespace in config - exception
- * Local namespace empty - exception
- * Local namespace null - exception
- * Local namespace not a string - exception
- * ?? Test all possible data types: number, boolean, array, object?
- * Local namespace not well-formed URI - exception
+ * No local namespace in config - RequiredKeyMissingException - DONE
+ * Local namespace empty string - RequiredValueEmptyException - DONE
+ * Local namespace empty array - InvalidTypeException - DONE
+ * Local namespace empty object - InvalidTypeException - DONE
+ * Local namespace null - RequiredValueNullException - DONE
+ * Local namespace a non-empty array - InvalidTypeException - DONE
+ * Local namespace a non-empty object - InvalidTypeException - DONE
+ * Local namespace a number - InvalidTypeException - DONE
+ * Local namespace a boolean - InvaldTypeException - DONE
+ * Local namespace not well-formed URI - InvalidValueException
  * 
  * No input in config - exception
  * Input value empty - exception
  * Input value null - exception
  * Input not a string - exception
- * ?? Test all possible data types: number, boolean, array, object?
  * Input location doesn't exist - exception
  * Input location a directory but is empty - succeed, does nothing
  * IO exception - exception
@@ -105,39 +113,65 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class ConfigurationTest extends AbstractTestClass {
     
-    private static final String CONFIG_LOCAL_NAMESPACE_MISSING = 
-            "src/test/resources/config/local_namespace_missing.json";
-    private static final String CONFIG_LOCAL_NAMESPACE_EMPTY = 
-            "src/test/resources/config/local_namespace_empty.json";
-    private static final String CONFIG_LOCAL_NAMESPACE_NULL = 
-            "src/test/resources/config/local_namespace_null.json";
+    private static final String TEST_CONFIG_DIR = 
+            "src/test/resources/config/";
     
     /* 
      * Local namespace tests 
      */
     
+    private Configuration configureLocalNamespace(String filename) 
+            throws Exception {
+        return new Configuration(new String[] {"-c", TEST_CONFIG_DIR + 
+                "local_namespace/" + filename});
+    }
+    
     @Test (expected = RequiredKeyMissingException.class)
-    public void missingLocalNamespace_ThrowsException() throws Exception {
-        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_MISSING});               
+    public void localNamespaceMissing_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_missing.json");               
     }
     
     @Test (expected = RequiredValueEmptyException.class)
-    public void emptyLocalNamespace_ThrowsException() throws Exception {
-        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_EMPTY});        
+    public void localNamespaceEmptyString_ThrowsException() throws Exception {
+        // fail("localNamespaceEmptyString_ThrowsException not implemented");
+        configureLocalNamespace("local_namespace_empty_string.json");        
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceEmptyArray_ThrowsException() throws Exception {                                                  
+        configureLocalNamespace("local_namespace_empty_array.json");        
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceNonEmptyArray_ThrowsException() throws Exception {                                                  
+        configureLocalNamespace("local_namespace_non_empty_array.json");        
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceEmptyObject_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_empty_object.json");        
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceNonEmptyObject_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_non_empty_object.json");        
     }
     
     @Test (expected = RequiredValueNullException.class)
-    public void nullLocalNamespace_ThrowsException() throws Exception {
-        // fail("nullLocalNamespace_ThrowsException not implemented");
-        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_NULL});  
+    public void localNamespaceNull_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_null.json");  
     }   
     
-    @Test
-    public void localNamespaceNotString_ThrowsException() {
-        fail("localNamespaceNotString_ThrowsException not implemented");
-    }   
-  
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceBoolean_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_boolean.json");
+    } 
     
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceNumber_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_number.json");
+    } 
+     
     @Test
     public void localNamespaceMalFormedUri_ThrowsException() {
         fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");

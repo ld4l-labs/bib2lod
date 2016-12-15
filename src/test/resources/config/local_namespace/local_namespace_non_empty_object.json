@@ -1,0 +1,17 @@
+{
+    "input": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
+    "output": {
+        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
+        "format": "ntriples"
+    },
+    "localNamespace": { "a": 1 },
+    "services": {
+        "uriMinter": "org.ld4l.bib2lod.uri.RandomUriMinter",
+        "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter"
+    },
+    "converters": [
+        "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"
+    ],
+    "reconcilers": []
+}                                                                                             
+         
