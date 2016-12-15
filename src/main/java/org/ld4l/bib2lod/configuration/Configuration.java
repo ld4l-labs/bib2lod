@@ -16,7 +16,6 @@ import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
 
 /**
@@ -63,10 +62,27 @@ public class Configuration {
         }
     }
     
-    protected class MissingRequiredKeyException extends RuntimeException {
-        
-        protected MissingRequiredKeyException(Key key) {
+    protected class RequiredKeyMissingException extends RuntimeException {       
+        protected RequiredKeyMissingException(Key key) {
             super("Configuration is missing required key '" + key.string + ".'");
+        }
+    }
+    
+    protected class RequiredValueNullException extends RuntimeException {       
+        protected RequiredValueNullException(Key key) {
+            super("Value of required configuration key '" + key.string + " is null.'");
+        }
+    }
+    
+    protected class RequiredValueEmptyException extends RuntimeException {       
+        protected RequiredValueEmptyException(Key key) {
+            super("Value of required configuration key '" + key.string + " is empty.'");
+        }
+    }
+
+    protected class InvalidValueException extends RuntimeException {       
+        protected InvalidValueException(Key key) {
+            super("Value of configuration key '" + key.string + " is invalid.'");
         }
     }
     
@@ -150,7 +166,7 @@ public class Configuration {
                 
         
         if (localNamespace == null) {
-            throw new MissingRequiredKeyException(Key.LOCAL_NAMESPACE);
+            throw new RequiredKeyMissingException(Key.LOCAL_NAMESPACE);
                     
         }
         
@@ -271,15 +287,25 @@ public class Configuration {
      */
     private String getJsonStringValue(JsonNode node, Key key) {
         
-        JsonNode value = node.get(key.string);
-        if (value == null) {
-            throw new MissingRequiredKeyException(key);
+        String keyString = key.string;
+        
+        // Key is missing
+        if (! node.has(keyString)) {
+            throw new RequiredKeyMissingException(key);
         }
-        String stringValue = value.textValue();
-        if (stringValue == null) {
-            throw new MissingRequiredKeyException(key);
+        
+        // Value is null - "key": null
+        if (! node.hasNonNull(keyString)) {
+            throw new RequiredValueNullException(key);
         }
-        return stringValue;
+        
+        String value = node.get(keyString).textValue();
+        // Value is empty - "key": ""
+        if (value.equals("")) {
+            throw new RequiredValueEmptyException(key);
+        }
+        
+        return value;
         
     }
 

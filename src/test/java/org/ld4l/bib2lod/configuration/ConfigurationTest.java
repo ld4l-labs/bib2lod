@@ -3,10 +3,10 @@ package org.ld4l.bib2lod.configuration;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Configuration.MissingRequiredKeyException;
+import org.ld4l.bib2lod.configuration.Configuration.RequiredKeyMissingException;
+import org.ld4l.bib2lod.configuration.Configuration.RequiredValueEmptyException;
+import org.ld4l.bib2lod.configuration.Configuration.RequiredValueNullException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-
-import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
 /*
  * Test plan: 
@@ -105,26 +105,31 @@ import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
  */
 public class ConfigurationTest extends AbstractTestClass {
     
-    private static final String MISSING_LOCAL_NAMESPACE_CONFIG = 
-            "src/test/resources/config/missing_local_namespace.json";
+    private static final String CONFIG_LOCAL_NAMESPACE_MISSING = 
+            "src/test/resources/config/local_namespace_missing.json";
+    private static final String CONFIG_LOCAL_NAMESPACE_EMPTY = 
+            "src/test/resources/config/local_namespace_empty.json";
+    private static final String CONFIG_LOCAL_NAMESPACE_NULL = 
+            "src/test/resources/config/local_namespace_null.json";
     
     /* 
      * Local namespace tests 
      */
     
-    @Test (expected = MissingRequiredKeyException.class)
+    @Test (expected = RequiredKeyMissingException.class)
     public void missingLocalNamespace_ThrowsException() throws Exception {
-        new Configuration(new String[] {"-c", MISSING_LOCAL_NAMESPACE_CONFIG});               
+        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_MISSING});               
     }
     
-    @Test
-    public void emptyLocalNamespace_ThrowsException() {
-        fail("emptyLocalNamespace_ThrowsException not implemented");
+    @Test (expected = RequiredValueEmptyException.class)
+    public void emptyLocalNamespace_ThrowsException() throws Exception {
+        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_EMPTY});        
     }
     
-    @Test
-    public void nullLocalNamespace_ThrowsException() {
-        fail("nullLocalNamespace_ThrowsException not implemented");
+    @Test (expected = RequiredValueNullException.class)
+    public void nullLocalNamespace_ThrowsException() throws Exception {
+        // fail("nullLocalNamespace_ThrowsException not implemented");
+        new Configuration(new String[] {"-c", CONFIG_LOCAL_NAMESPACE_NULL});  
     }   
     
     @Test
@@ -134,7 +139,7 @@ public class ConfigurationTest extends AbstractTestClass {
   
     
     @Test
-    public void localNamespaceNotWellFormedUri_ThrowsException() {
+    public void localNamespaceMalFormedUri_ThrowsException() {
         fail("localNamespaceNotWellFormedUri_ThrowsException not implemented");
     }   
     
