@@ -1,6 +1,6 @@
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.Configuration.InvalidTypeException;
@@ -114,6 +114,9 @@ public class ConfigurationTest extends AbstractTestClass {
     private static final String TEST_CONFIG_DIR = 
             "src/test/resources/configuration/";
     
+    private static final String VALID_CONFIG_FILENAME = 
+            "src/main/resources/config.json";
+    
     /* 
      * Local namespace tests 
      */
@@ -172,23 +175,21 @@ public class ConfigurationTest extends AbstractTestClass {
      
     @Test (expected = InvalidValueException.class)
     public void localNamespaceNoFinalSlash_ThrowsException() throws Exception {
-        //fail("localNamespaceNoFinalSlash_ThrowsException");
         configureLocalNamespace("local_namespace_no_final_slash.json");              
     }  
     
     @Test (expected = InvalidValueException.class)
     public void localNamespaceMalformedUri_ThrowsException() throws Exception {
-        //fail("localNamespaceMalformedUri_ThrowsException not implemented");
         configureLocalNamespace("local_namespace_malformed_uri.json");                
     }  
     
     @Test 
     public void localNamespaceValidUri_Succeeds() throws Exception {
-        fail("localNamespaceValidUri_Succeeds not implemented");                
+        Configuration config = 
+                configureLocalNamespace("local_namespace_valid.json");
+        assertNotNull(config.getLocalNamespace());             
     }
-    
-    
-    
+  
 
 //  Start the test this way.
 //  @Test

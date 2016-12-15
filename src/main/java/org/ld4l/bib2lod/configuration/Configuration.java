@@ -129,12 +129,12 @@ public class Configuration {
          
         setLocalNamespace(config);
         
-        buildServices(config);
+        // buildServices(config);
 
-        buildInputFileList(config);
+        // buildInputFileList(config);
         
         // buildConverters(config);
-        buildConverter(config);
+        // buildConverter(config);
     
         // TODO Add same for other config elements...
 
@@ -187,7 +187,7 @@ public class Configuration {
         
         String localNamespace = getJsonStringValue(config, Key.LOCAL_NAMESPACE);
         
-        // Will throw an error if the localNamespace is malformed.
+        // Throws an error if the localNamespace is malformed.
         org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
 
         // Require the final slash, otherwise it could be a web page address
@@ -195,8 +195,7 @@ public class Configuration {
             throw new InvalidValueException(Key.LOCAL_NAMESPACE, 
                     "Local namespace must end in a forward slash.");
         }
-        
-        
+               
         this.localNamespace = localNamespace;
     }
     
@@ -212,7 +211,7 @@ public class Configuration {
         JsonNode services = config.get("services");       
         LOGGER.debug(services.toString());   
     
-       makeUriMinter(getJsonStringValue(services, Key.URI_MINTER));
+        makeUriMinter(getJsonStringValue(services, Key.URI_MINTER));
         
         // TODO Add same for other services...
        
