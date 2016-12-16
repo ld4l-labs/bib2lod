@@ -132,6 +132,12 @@ public class ConfigurationTest extends AbstractTestClass {
         configureLocalNamespace("local_namespace_missing.json");               
     }
     
+    @Test (expected = RequiredValueNullException.class)
+    public void localNamespaceNull_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_null.json");  
+    }   
+    
+    // Next three could be combined into a single test localNamespaceEmpty
     @Test (expected = RequiredValueEmptyException.class)
     public void localNamespaceEmptyString_ThrowsException() throws Exception {
         // fail("localNamespaceEmptyString_ThrowsException not implemented");
@@ -142,26 +148,23 @@ public class ConfigurationTest extends AbstractTestClass {
     public void localNamespaceEmptyArray_ThrowsException() throws Exception {                                                  
         configureLocalNamespace("local_namespace_empty_array.json");        
     }
+   
+    @Test (expected = InvalidTypeException.class)
+    public void localNamespaceEmptyObject_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_empty_object.json");        
+    }
     
+    
+    // Next four tests could be a single test for invalid type
     @Test (expected = InvalidTypeException.class)
     public void localNamespaceNonEmptyArray_ThrowsException() throws Exception {                                                  
         configureLocalNamespace("local_namespace_non_empty_array.json");        
     }
     
     @Test (expected = InvalidTypeException.class)
-    public void localNamespaceEmptyObject_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_empty_object.json");        
-    }
-    
-    @Test (expected = InvalidTypeException.class)
     public void localNamespaceNonEmptyObject_ThrowsException() throws Exception {
         configureLocalNamespace("local_namespace_non_empty_object.json");        
     }
-    
-    @Test (expected = RequiredValueNullException.class)
-    public void localNamespaceNull_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_null.json");  
-    }   
     
     @Test (expected = InvalidTypeException.class)
     public void localNamespaceBoolean_ThrowsException() throws Exception {
@@ -173,6 +176,7 @@ public class ConfigurationTest extends AbstractTestClass {
         configureLocalNamespace("local_namespace_number.json");
     } 
      
+    
     @Test (expected = InvalidValueException.class)
     public void localNamespaceNoFinalSlash_ThrowsException() throws Exception {
         configureLocalNamespace("local_namespace_no_final_slash.json");              
