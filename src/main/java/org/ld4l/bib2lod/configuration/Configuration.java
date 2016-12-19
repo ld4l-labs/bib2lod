@@ -1,6 +1,5 @@
 package org.ld4l.bib2lod.configuration;
 
-import org.ld4l.bib2lod.configuration.JsonUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.jena.iri.IRIException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.options.JsonOptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
@@ -78,7 +78,7 @@ public class Configuration {
         
         // Get the configuration values from the commandline values and 
         // specified config file as a JSON object.
-        OptionsReader optionsReader = new OptionsReader(args);
+        JsonOptionsReader optionsReader = new JsonOptionsReader(args);
         JsonNode config = optionsReader.configure();
         
         LOGGER.debug(config.toString());
