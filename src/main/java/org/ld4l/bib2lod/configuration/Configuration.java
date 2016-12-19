@@ -142,7 +142,8 @@ public class Configuration {
             throws IRIException, InvalidValueException {
         
         String localNamespace = 
-                JsonUtils.getJsonStringValue(config, Key.LOCAL_NAMESPACE, true);
+                JsonUtils.getRequiredJsonStringValue(
+                        config, Key.LOCAL_NAMESPACE);
         
         // Throws an error if the localNamespace is malformed.
         org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
@@ -168,8 +169,8 @@ public class Configuration {
         JsonNode services = config.get("services");       
         LOGGER.debug(services.toString());   
     
-        makeUriMinter(JsonUtils.getJsonStringValue(
-                services, Key.URI_MINTER, true));
+        makeUriMinter(JsonUtils.getRequiredJsonStringValue(
+                services, Key.URI_MINTER));
         
         // TODO Add same for other services...
        
@@ -203,8 +204,8 @@ public class Configuration {
 
         // TODO Throw error if not defined
         JsonNode inputNode = config.get(Key.INPUT.string);
-        String inputPath = JsonUtils.getJsonStringValue(
-                inputNode, Key.INPUT_LOCATION, true);
+        String inputPath = JsonUtils.getRequiredJsonStringValue(
+                inputNode, Key.INPUT_LOCATION);
 //        String inputFormat = getJsonStringValue(inputNode, "format");
 //        String fileExtension = getJsonStringValue(inputNode, "extension");
         
@@ -253,7 +254,8 @@ public class Configuration {
         // TODO Get this to work. Hard-coding as a single converter for now
         // TypeReference ref = new TypeReference<List<Converter>>() {};
         // converters = mapper.readValue(converterList, ref);
-       String converter = JsonUtils.getJsonStringValue(config, Key.CONVERTER, true);
+       String converter = JsonUtils.getRequiredJsonStringValue(
+               config, Key.CONVERTER);
        Class<?> converterClass = Class.forName(converter); 
        Constructor<?> constructor = 
                converterClass.getConstructor(this.getClass());
