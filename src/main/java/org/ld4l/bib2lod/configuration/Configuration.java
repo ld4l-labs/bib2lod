@@ -65,6 +65,8 @@ public class Configuration {
     
     protected class RequiredKeyMissingException extends RuntimeException {   
         
+        private static final long serialVersionUID = 1L;
+
         protected RequiredKeyMissingException(Key key) {
             super("Configuration is missing required key '" + key.string 
                     + ".'");
@@ -72,7 +74,9 @@ public class Configuration {
     }
     
     protected class RequiredValueNullException extends RuntimeException {
-        
+
+        private static final long serialVersionUID = 1L;
+
         protected RequiredValueNullException(Key key) {
             super("Value of required configuration key '" + key.string 
                     + " is null.'");
@@ -80,7 +84,9 @@ public class Configuration {
     }
     
     protected class RequiredValueEmptyException extends RuntimeException {
-        
+   
+        private static final long serialVersionUID = 1L;
+
         protected RequiredValueEmptyException(Key key) {
             super("Value of required configuration key '" + key.string + 
                     " is empty.'");
@@ -89,6 +95,8 @@ public class Configuration {
 
     protected class InvalidTypeException extends RuntimeException { 
         
+        private static final long serialVersionUID = 1L;
+
         protected InvalidTypeException(Key key) {
             super("Value of configuration key '" + key.string + 
                     " is of invalid type.'");
@@ -97,6 +105,8 @@ public class Configuration {
     
     protected class InvalidValueException extends RuntimeException {  
         
+        private static final long serialVersionUID = 1L;
+
         protected InvalidValueException(Key key) {
             super("Value of configuration key '" + key.string + 
                     "' is invalid.");
