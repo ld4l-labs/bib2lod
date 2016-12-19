@@ -12,7 +12,6 @@ import org.ld4l.bib2lod.configuration.Configuration;
 /** 
  * Simple manager to orchestrate conversion of a directory of files or a single
  * file.
- * @author rjy7
  *
  */
 public final class SimpleManager {
@@ -30,6 +29,7 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
+            // TODO Use dependency injection here with factory or factory methods
             Configuration configuration = new Configuration(args);
             // convertFiles(configuration);
             LOGGER.info("END CONVERSION.");

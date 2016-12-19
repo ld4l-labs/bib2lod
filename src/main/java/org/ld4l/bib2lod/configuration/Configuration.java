@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * An object providing program configuration values
- * @author rjy7
  *
  */
 public class Configuration {
