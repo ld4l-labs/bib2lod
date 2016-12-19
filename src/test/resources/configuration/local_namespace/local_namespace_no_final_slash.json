@@ -4,7 +4,7 @@
         "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "ntriples"
     },
-    "local_namespace": null,
+    "local_namespace": "http://ld4l.org/cornell",
     "services": {
         "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
         "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter"

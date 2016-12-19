@@ -4,7 +4,7 @@
         "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "ntriples"
     },
-    "local_namespace": { "a": 1 },
+    "local_namespace": "this_is_not_a_well_formed_uri",
     "services": {
         "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
         "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter"

@@ -29,7 +29,7 @@ public class OptionsReaderTest extends AbstractTestClass {
     private static final String LOCAL_NAMESPACE = 
             "http://local.namespace.org/test/";
     
-    private static final String CONFIG_FILENAME = 
+    private static final String VALID_CONFIG_FILENAME = 
             "src/main/resources/config.json";
     
     private static final String TEST_CONFIG_DIR = 
@@ -71,14 +71,14 @@ public class OptionsReaderTest extends AbstractTestClass {
     @Test 
     public void providingPathUsingShortForm_Succeeds() throws Exception {       
         JsonNode config = configureOptionsReader(
-                new String[] {"-c", CONFIG_FILENAME});
+                new String[] {"-c", VALID_CONFIG_FILENAME});
         assertNotNull(config);
     }
     
     @Test 
     public void providingPathUsingLongForm_Succeeds() throws Exception {
         JsonNode config = configureOptionsReader(
-                new String[] {"--config", CONFIG_FILENAME});
+                new String[] {"--config", VALID_CONFIG_FILENAME});
         assertNotNull(config);
     }
     
@@ -140,7 +140,7 @@ public class OptionsReaderTest extends AbstractTestClass {
     @Test (expected = ParseException.class)
     public void invalidOptionWithValidOption_ThrowsException() throws Exception {
         configureOptionsReader(
-                new String[] {"--config", CONFIG_FILENAME, INVALID_OPTION, 
+                new String[] {"--config", VALID_CONFIG_FILENAME, INVALID_OPTION, 
                         INVALID_OPTION_VALUE});   
     }
     
@@ -152,7 +152,7 @@ public class OptionsReaderTest extends AbstractTestClass {
     @Test 
     public void commandLineOverridesConfigFile() throws Exception { 
  
-        String[] args = new String[] {"-c", CONFIG_FILENAME, 
+        String[] args = new String[] {"-c", VALID_CONFIG_FILENAME, 
                 "--localNamespace", LOCAL_NAMESPACE};
         
         OptionsReader reader = new OptionsReader(args);

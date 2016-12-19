@@ -1,69 +1,31 @@
 package org.ld4l.bib2lod.configuration;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Configuration.InvalidTypeException;
-import org.ld4l.bib2lod.configuration.Configuration.InvalidValueException;
-import org.ld4l.bib2lod.configuration.Configuration.RequiredKeyMissingException;
-import org.ld4l.bib2lod.configuration.Configuration.RequiredValueEmptyException;
-import org.ld4l.bib2lod.configuration.Configuration.RequiredValueNullException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /*
  * Test plan: 
+ *
+ * General:
+ * Required but missing - exception
+ * Required but null - exception
+ * Required wrong type - exception
+ * Required empty - exception
+ * Required malformed or bad in some way (as many as needed) - exception
+ * Required and everything OK - succeed
+ * * * * 
+ * Optional and missing - succeed
+ * Optional and null - succeed
+ * Optional but wrong type - exception
+ * Optional and empty - succeed
+ * Optional bad in some way - exception
+ * Optional and everything OK - succeed
+ * 
 
  * 
- * No local namespace in config - RequiredKeyMissingException - DONE
- * Local namespace empty string - RequiredValueEmptyException - DONE
- * Local namespace empty array - InvalidTypeException - DONE
- * Local namespace empty object - InvalidTypeException - DONE
- * Local namespace null - RequiredValueNullException - DONE
- * Local namespace a non-empty array - InvalidTypeException - DONE
- * Local namespace a non-empty object - InvalidTypeException - DONE
- * Local namespace a number - InvalidTypeException - DONE
- * Local namespace a boolean - InvaldTypeException - DONE
- * Local namespace not well-formed URI - InvalidValueException
- * 
- * No input in config - exception
- * Input value empty - exception
- * Input value null - exception
- * Input not a string - exception
- * Input location doesn't exist - exception
- * Input location a directory but is empty - succeed, does nothing
- * IO exception - exception
- * 
- * No output in config - exception
- * output value empty - exception
- * output value null - exception
- * output not an object - exception
- * ?? Test all possible data types: number, boolean, array, string?
- * 
- * No output location in config - exception
- * Location value empty - exception
- * Location value null - exception
- * Location value not a string - exception
- * ?? Test all possible data types: number, boolean, array, object?
- * output location doesn't exist - exception
- * output location not a directory
- * output location not writable
- * Any IO exception - exception
- * 
- * No format in output object - ok - use default
- * Format null - ok - use default
- * format empty - ok - use default
- * format not a string - ok - use default
- * format not a valid rdf serialization value - ok - use default
- * 
- * No log in config - exception
- * Log value empty - exception
- * Log value null - exception
- * Log value not a string - exception
- * ?? Test all possible data types: number, boolean, array, object?
- * Log value doesn't exist - exception
- * Log value not a directory - exception
- * Log value not writable - exception
- * Any IO exception - exception
  * 
  * No services in config
  * Services empty
@@ -108,80 +70,216 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  * reconciler an empty array - succeed and do nothing 
  * 
  */
+
 public class ConfigurationTest extends AbstractTestClass {
     
     private static final String TEST_CONFIG_DIR = 
             "src/test/resources/configuration/";
-    
-    /* 
-     * Local namespace tests 
-     */
-    
+
     private Configuration configureLocalNamespace(String filename) 
             throws Exception {
         return new Configuration(new String[] {"-c", TEST_CONFIG_DIR + 
                 "local_namespace/" + filename});
     }
     
-    @Test (expected = RequiredKeyMissingException.class)
-    public void localNamespaceMissing_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_missing.json");               
+    private Configuration configureInput(String filename) throws Exception {
+        
+        return new Configuration(new String[] {"-c", TEST_CONFIG_DIR + 
+                "input/" + filename});
     }
     
+    /*
+     * Required value
+     */
+    @Test (expected = RequiredKeyMissingException.class)
+    public void requiredKeyMissing_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_missing.json");               
+    }   
+
+    /* 
+     * Required string value
+     */
+    
+    @Test (expected = RequiredValueNullException.class)
+    public void requiredStringValueNull_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_null.json");  
+    }   
+
+    @Test (expected = InvalidTypeException.class)
+    public void requiredStringValueInvalidType_ThrowsException() throws Exception {                                                  
+        configureLocalNamespace("local_namespace_invalid_type.json");        
+    }
+
     @Test (expected = RequiredValueEmptyException.class)
-    public void localNamespaceEmptyString_ThrowsException() throws Exception {
-        // fail("localNamespaceEmptyString_ThrowsException not implemented");
+    public void requiredStringValueEmpty_ThrowsException() throws Exception {
         configureLocalNamespace("local_namespace_empty_string.json");        
     }
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceEmptyArray_ThrowsException() throws Exception {                                                  
-        configureLocalNamespace("local_namespace_empty_array.json");        
+    @Test 
+    public void requiredStringValuePresent_Succeeds() throws Exception {
+        fail("requiredStringValuePresent_Succeeds");        
     }
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceNonEmptyArray_ThrowsException() throws Exception {                                                  
-        configureLocalNamespace("local_namespace_non_empty_array.json");        
+    /*
+     * Optional value
+     */
+
+    @Test 
+    public void optionalKeyMissing_Succeeds() throws Exception {
+        fail("optionalKeyMissing_Succeeds not implemented");         
     }
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceEmptyObject_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_empty_object.json");        
+    /*
+     * Optional string value
+     */
+         
+    @Test 
+    public void optionalStringValueNull_Succeeds() throws Exception {
+        fail("optionalStringValueNull_Succeeds not implemented");         
     }
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceNonEmptyObject_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_non_empty_object.json");        
+    @Test 
+    public void optionalStringValueEmpty_Succeeds() throws Exception {
+        fail("optionalStringValueEmpty_Succeeds not implemented");         
     }
     
-    @Test (expected = RequiredValueNullException.class)
-    public void localNamespaceNull_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_null.json");  
+    @Test 
+    public void optionalStringValueInvalidType_ThrowsException() throws Exception {
+        fail("optionalStringValueInvalidType_ThrowsException not implemented");         
+    }
+    
+    @Test 
+    public void optionalStringValuePresent_Succeeds() throws Exception {
+        fail("optionalStringValuePresent_Succeeds not implemented");         
+    }  
+    
+    /* 
+     * Required object value
+     */
+
+    @Test 
+    public void requiredObjectValueNull_ThrowsException() throws Exception {
+        fail("requiredObjectValueNull_ThrowsException not implemented");  
     }   
+
+    @Test 
+    public void requiredObjectValueInvalidType_ThrowsException() throws Exception {                                                  
+        fail("requiredObjectValueInvalidType_ThrowsException not implemented");        
+    }
+
+    @Test 
+    public void requiredObjectValueEmpty_ThrowsException() throws Exception {
+        fail("requiredObjectValueEmpty_ThrowsException not implemented");        
+    }
+
+    @Test 
+    public void optionalObjectValuePresent_Succeeds() throws Exception {
+        fail("optionalObjectValuePresent_Succeeds not implemented");         
+    }  
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceBoolean_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_boolean.json");
-    } 
+    /*
+     * Optional object value
+     */
     
-    @Test (expected = InvalidTypeException.class)
-    public void localNamespaceNumber_ThrowsException() throws Exception {
-        configureLocalNamespace("local_namespace_number.json");
-    } 
-     
+    @Test 
+    public void optionalObjectValueNull_Succeeds() throws Exception {
+        fail("optionalObjectValueNull_Succeeds not implemented");         
+    }
+    
+    @Test 
+    public void optionalObjectValueEmpty_Succeeds() throws Exception {
+        fail("optionalObjectValueEmpty_Succeeds not implemented");         
+    }
+    
+    @Test 
+    public void optionalObjectValueInvalidType_ThrowsException() throws Exception {
+        fail("optionalObjectValueInvalidType_ThrowsException not implemented");         
+    }
+    
+    
+    /* 
+     * Local namespace format
+     */
+
     @Test (expected = InvalidValueException.class)
-    public void localNamespaceInvalidUri_ThrowsException() throws Exception{
-        configureLocalNamespace("local_namespace_invalid_uri.json");
-                
+    public void localNamespaceNoFinalSlash_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_no_final_slash.json");              
+    }  
+    
+    @Test (expected = InvalidValueException.class)
+    public void localNamespaceMalformedUri_ThrowsException() throws Exception {
+        configureLocalNamespace("local_namespace_malformed_uri.json");                
     }  
     
     @Test 
-    public void localNamespaceValidUri_Succeeds() throws Exception{
-        fail("localNamespaceValidUri_Succeeds not implemented");                
+    public void localNamespaceValidUri_Succeeds() throws Exception {
+        Configuration config = 
+                configureLocalNamespace("local_namespace_valid.json");
+        assertNotNull(config.getLocalNamespace());             
+    }
+    
+    
+    /*
+     * Location
+     */
+    
+    @Test 
+    public void requiredLocationNotFound_ThrowsException() throws Exception {
+        fail("requiredLocationNotFound_ThrowsException not implemented");         
+    }
+    
+    /*
+     * Input location
+     */
+    
+    @Test 
+    public void requiredInputFileNotReadable_ThrowsException() throws Exception {
+        fail("requiredInputFileNotReadable_ThrowsException not implemented");         
+    }
+    
+    @Test 
+    public void requiredInputDirectoryNotReadable_ThrowsException() throws Exception {
+        fail("requiredInputDirectoryNotReadable_ThrowsException not implemented");         
+    }
+
+    @Test 
+    public void requiredInputFileEmpty_Succeeds() throws Exception {
+        fail("requiredInputFileEmpty_Succeeds not implemented");         
+    }
+    
+    @Test 
+    public void requiredInputDirectoryEmpty_Succeeds() throws Exception {
+        fail("requiredInputDirectoryEmpty_Succeeds not implemented");         
+    }
+    
+    @Test 
+    public void requiredInputFileNotEmpty_Succeeds() throws Exception {
+        fail("requiredInputFileEmpty_Succeeds not implemented");         
+    }
+    
+    @Test 
+    public void requiredInputDirectoryNotEmpty_Succeeds() throws Exception {
+        fail("requiredInputDirectoryNotEmpty_Succeeds not implemented");         
     }
     
     
     
+    /*
+     * Input serialization
+     */
+    
+    @Test
+    public void inputSerializationInvalidValue_ThrowsException() throws Exception {
+        fail("inputSerializationInvalidValue_ThrowsException not implemented");         
+    } 
+    
+    @Test
+    public void inputSerializationValid_Succeeds() throws Exception {
+        fail("inputSerializationValid_Succeeds not implemented");         
+    }     
+
+
+
 
 //  Start the test this way.
 //  @Test

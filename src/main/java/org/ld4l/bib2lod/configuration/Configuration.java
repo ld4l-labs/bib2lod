@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.configuration;
 
+import org.ld4l.bib2lod.configuration.JsonUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.iri.IRIException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.conversion.Converter;
@@ -51,7 +53,7 @@ public class Configuration {
         LOCAL_NAMESPACE("local_namespace"),
         URI_MINTER("uri_minter");
         
-        private final String string;
+        final String string;
         
         Key(String string) {
             this.string = string;
@@ -59,51 +61,6 @@ public class Configuration {
         
         protected String string() {
             return this.string;
-        }
-    }
-    
-    protected class RequiredKeyMissingException extends RuntimeException {   
-        
-        protected RequiredKeyMissingException(Key key) {
-            super("Configuration is missing required key '" + key.string 
-                    + ".'");
-        }
-    }
-    
-    protected class RequiredValueNullException extends RuntimeException {
-        
-        protected RequiredValueNullException(Key key) {
-            super("Value of required configuration key '" + key.string 
-                    + " is null.'");
-        }
-    }
-    
-    protected class RequiredValueEmptyException extends RuntimeException {
-        
-        protected RequiredValueEmptyException(Key key) {
-            super("Value of required configuration key '" + key.string + 
-                    " is empty.'");
-        }
-    }
-
-    protected class InvalidTypeException extends RuntimeException { 
-        
-        protected InvalidTypeException(Key key) {
-            super("Value of configuration key '" + key.string + 
-                    " is of invalid type.'");
-        }
-    }
-    
-    protected class InvalidValueException extends RuntimeException {  
-        
-        protected InvalidValueException(Key key) {
-            super("Value of configuration key '" + key.string + 
-                    "' is invalid.");
-        }
-        
-        protected InvalidValueException(Key key, String msg) {
-            super("Value of configuration key '" + key.string + 
-                    "' is invalid: " + msg + ".");
         }
     }
     
@@ -128,12 +85,12 @@ public class Configuration {
          
         setLocalNamespace(config);
         
-        buildServices(config);
+        // buildServices(config);
 
-        buildInputFileList(config);
+        // buildInputFileList(config);
         
         // buildConverters(config);
-        buildConverter(config);
+        // buildConverter(config);
     
         // TODO Add same for other config elements...
 
@@ -182,18 +139,21 @@ public class Configuration {
      * @param config
      */
     protected void setLocalNamespace(JsonNode config) 
-            throws InvalidValueException {
+            throws IRIException, InvalidValueException {
         
-        String localNamespace = getJsonStringValue(config, Key.LOCAL_NAMESPACE);
-          
-        if (1==1) {
-            throw new InvalidValueException(Key.LOCAL_NAMESPACE, "Invalid URI");
-        }
+        String localNamespace = 
+                JsonUtils.getRequiredJsonStringValue(
+                        config, Key.LOCAL_NAMESPACE);
         
+        // Throws an error if the localNamespace is malformed.
+        org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
+
+        // Require the final slash, otherwise it could be a web page address
         if (!localNamespace.endsWith("/")) {
-            localNamespace += "/";
+            throw new InvalidValueException(Key.LOCAL_NAMESPACE, 
+                    "Local namespace must end in a forward slash.");
         }
-        
+               
         this.localNamespace = localNamespace;
     }
     
@@ -209,7 +169,8 @@ public class Configuration {
         JsonNode services = config.get("services");       
         LOGGER.debug(services.toString());   
     
-       makeUriMinter(getJsonStringValue(services, Key.URI_MINTER));
+        makeUriMinter(JsonUtils.getRequiredJsonStringValue(
+                services, Key.URI_MINTER));
         
         // TODO Add same for other services...
        
@@ -243,7 +204,8 @@ public class Configuration {
 
         // TODO Throw error if not defined
         JsonNode inputNode = config.get(Key.INPUT.string);
-        String inputPath = getJsonStringValue(inputNode, Key.INPUT_LOCATION);
+        String inputPath = JsonUtils.getRequiredJsonStringValue(
+                inputNode, Key.INPUT_LOCATION);
 //        String inputFormat = getJsonStringValue(inputNode, "format");
 //        String fileExtension = getJsonStringValue(inputNode, "extension");
         
@@ -292,48 +254,13 @@ public class Configuration {
         // TODO Get this to work. Hard-coding as a single converter for now
         // TypeReference ref = new TypeReference<List<Converter>>() {};
         // converters = mapper.readValue(converterList, ref);
-       String converter = getJsonStringValue(config, Key.CONVERTER);
+       String converter = JsonUtils.getRequiredJsonStringValue(
+               config, Key.CONVERTER);
        Class<?> converterClass = Class.forName(converter); 
        Constructor<?> constructor = 
                converterClass.getConstructor(this.getClass());
        this.converter = (Converter) constructor.newInstance(this); 
     }
     
-    /**
-     * Utility method to return the string value of a JsonNode.
-     * @param node
-     * @param key
-     * @return stringValue - the string value if non-null
-     */
-    private String getJsonStringValue(JsonNode node, Key key) {
-        
-        String keyString = key.string;
-        
-        // Key is missing
-        if (! node.has(key.string)) {
-            throw new RequiredKeyMissingException(key);
-        }
-        
-        // Value is null - "key": null
-        if (! node.hasNonNull(keyString)) {
-            throw new RequiredValueNullException(key);
-        }
-        
-        JsonNode valueNode = node.get(keyString);
-        
-        // Value is not a string
-        if (! valueNode.isTextual()) {
-            throw new InvalidTypeException(key);
-        }
-
-        String value = valueNode.textValue();
-        
-        // Value is empty - "key": ""   
-        if (value.equals("")) {
-            throw new RequiredValueEmptyException(key);
-        }
-        
-        return value;       
-    }
-
+ 
 }
