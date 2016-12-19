@@ -2,7 +2,6 @@ package org.ld4l.bib2lod.conversion.to_rdf;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;

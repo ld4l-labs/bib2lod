@@ -1,10 +1,9 @@
-package org.ld4l.bib2lod.configuration;
+package org.ld4l.bib2lod.configuration.options;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Iterator;
 import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
@@ -13,7 +12,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,24 +19,19 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Reads commandline arguments and gets configuration option values from either
- * these or the configuration file.
- * Currently the only commandline arguments supported is the configuration file
- * path. Other values must be defined in the file.
- * @author rjy7
- *
+ * Get configuration values from a JSON config file. The location of the config
+ * file is required as a commandline argument.
  */
-public class OptionsReader {
+public class JsonOptionsReader extends AbstractOptionsReader {
 
     private static final Logger LOGGER = 
-            LogManager.getLogger(OptionsReader.class); 
+            LogManager.getLogger(JsonOptionsReader.class); 
 
     protected String[] args;
     
-    public OptionsReader(String[] args)  {
+    public JsonOptionsReader(String[] args)  {
         this.args = Objects.requireNonNull(args);
     }
     
@@ -59,10 +52,7 @@ public class OptionsReader {
         CommandLine cmd = parseCommandLineArgs(options, args); 
         
         // Parse the config file
-        JsonNode jsonNode = parseConfigFile(cmd);
-
-        // Commandline option values override config file values
-        return applyCommandLineOverrides(jsonNode, cmd);      
+        return parseConfigFile(cmd);    
     }
 
     /**
@@ -155,31 +145,5 @@ public class OptionsReader {
         
     }
     
-    /**
-     * Override config file values with commandline option values.
-     * @param jsonNode
-     * @param cmd
-     * @return objNode - a JsonNode built by overriding config file values with
-     * corresponding commandline values
-     */
-    JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
-            
-        // A JsonNode is immutable, so cast to mutable ObjectNode
-        ObjectNode objNode = (ObjectNode) jsonNode;
-        
-        // Give preference to commandline option value over config option value.
-        Iterator<Option> it = cmd.iterator();
-        while (it.hasNext()) {
-            Option opt = it.next();
-            String optName = opt.getLongOpt();
-            LOGGER.debug("arg name = " + optName);
-            // Makes no sense for config file to specify config file!
-            if (! optName.equals("config")) {
-                objNode.put(optName, cmd.getOptionValue(optName));
-            } 
-        }
-        
-        return objNode;  
-    }
 
 }

@@ -1,15 +1,11 @@
-package org.ld4l.bib2lod.configuration;
+package org.ld4l.bib2lod.configuration.options;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.MissingArgumentException;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -19,21 +15,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Tests for org.ld4l.bib2lod.configuration.OptionsReader
+ * Tests for org.ld4l.bib2lod.configuration.JsonConfigOptionsReader
  * 
  * @author rjy7
  *
  */
-public class OptionsReaderTest extends AbstractTestClass {
-    
-    private static final String LOCAL_NAMESPACE = 
-            "http://local.namespace.org/test/";
-    
-    private static final String VALID_CONFIG_FILENAME = 
-            "src/main/resources/config.json";
-    
+public class JsonOptionsReaderTest extends AbstractTestClass {
+
     private static final String TEST_CONFIG_DIR = 
             "src/test/resources/options_reader/";
+    
+    private static final String VALID_CONFIG_FILENAME = 
+            TEST_CONFIG_DIR + "valid_config.json";
     
     private static final String MISSING_CONFIG_FILENAME = 
             TEST_CONFIG_DIR + "no_config.json";
@@ -53,14 +46,14 @@ public class OptionsReaderTest extends AbstractTestClass {
             "invalid option value";
     
     private JsonNode configureOptionsReader(String[] args) throws Exception {
-        OptionsReader reader = new OptionsReader(args);
+        OptionsReader reader = new JsonOptionsReader(args);
         JsonNode node = reader.configure();
         return node;
     }
 
     @Test (expected = NullPointerException.class)
     public void argsIsNull_ThrowsException() {
-        new OptionsReader(null);
+        new JsonOptionsReader(null);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -95,7 +88,7 @@ public class OptionsReaderTest extends AbstractTestClass {
     
     @Test (expected = FileNotFoundException.class)
     public void configFileNotReadable_ThrowsException() throws Exception {
-        OptionsReader reader = new OptionsReader(
+        JsonOptionsReader reader = new JsonOptionsReader(
                 new String[] {"--config", UNREADABLE_CONFIG_FILENAME});
         File file = new File(UNREADABLE_CONFIG_FILENAME);
         file.setReadable(false);
@@ -149,37 +142,7 @@ public class OptionsReaderTest extends AbstractTestClass {
         configureOptionsReader(new String[] {INVALID_OPTION}); 
     }
     
-    @Test 
-    public void commandLineOverridesConfigFile() throws Exception { 
- 
-        String[] args = new String[] {"-c", VALID_CONFIG_FILENAME, 
-                "--localNamespace", LOCAL_NAMESPACE};
-        
-        OptionsReader reader = new OptionsReader(args);
-        
-        Options options = reader.buildOptions();
-        
-        options.addOption(Option.builder("l")
-                .longOpt("localNamespace")
-                .required(false)
-                .hasArg()
-                .argName("localNamespace")
-                .desc("Local namespace used to build URIs")
-                .build());    
-        
-        // Get the commandline values for these options
-        CommandLine cmd = reader.parseCommandLineArgs(options, args); 
-        
-        // Parse the config file
-        JsonNode jsonNode = reader.parseConfigFile(cmd);
 
-        // Commandline option values override config file values
-        JsonNode node = reader.applyCommandLineOverrides(jsonNode, cmd);
-        String localNamespace = node.get("localNamespace").textValue();
-        assertEquals(LOCAL_NAMESPACE, localNamespace);
-              
-    }
-       
     
 //    Start the test this way.
 //    @Test
