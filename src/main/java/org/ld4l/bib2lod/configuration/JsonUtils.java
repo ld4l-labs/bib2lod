@@ -47,7 +47,9 @@ final class JsonUtils {
     }
     
     /**
-     * Utility method to return an optional string value in a JsonNode.
+     * Utility method to return an optional string value in a JsonNode. Missing,
+     * null, and empty values succeed; only non-empty non-string values throw
+     * an error.
      * @param node - the enclosing JsonNode
      * @param key - the key in the JsonNode
      * @return stringValue - the string value 
@@ -59,19 +61,17 @@ final class JsonUtils {
         
         String keyString = key.string;
         
+        String value = null;
+        
         // Value is absent or null - i.e., "key": null
-        if (! node.hasNonNull(keyString)) {
-            return null;
+        if (node.hasNonNull(keyString)) {
+            JsonNode valueNode = node.get(keyString);
+            if (valueNode.isTextual()) {
+                value = valueNode.textValue();
+            } else {
+                throw new InvalidTypeException(key);
+            }
         }
-        
-        JsonNode valueNode = node.get(keyString);
-        
-        // Value is not a string
-        if (! valueNode.isTextual()) {
-            throw new InvalidTypeException(key);
-        }
-
-        String value = valueNode.textValue();
 
         return value;          
     }
