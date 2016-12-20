@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
 import java.util.Objects;
 
 import org.apache.commons.cli.CommandLine;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Get configuration values from a JSON config file. The location of the config
@@ -33,8 +35,7 @@ public class JsonOptionsReader implements OptionsReader {
     public JsonOptionsReader(String[] args)  {
         this.args = Objects.requireNonNull(args);
     }
-    
-    
+      
     /**
      * Gets the defined options, gets the configuration file from the program
      * arguments, and reads the file into a JSON object.
@@ -50,15 +51,20 @@ public class JsonOptionsReader implements OptionsReader {
         // Get the commandline values for these options
         CommandLine cmd = parseCommandLineArgs(options, args); 
         
-        // Parse the config file
-        return parseConfigFile(cmd);    
+        // Parse the config file 
+        JsonNode node = parseConfigFile(cmd);
+
+        // Add this when we accept other commandline arguments
+        // node = applyCommandLineOverrides(node, cmd);
+        
+        return node;
     }
 
     /**
      * Defines the commandline options accepted by the program.
      * @return options - the program options
      */
-    Options buildOptions() {
+    private Options buildOptions() {
         
         Options options = new Options();
 
@@ -80,7 +86,7 @@ public class JsonOptionsReader implements OptionsReader {
      * @return the list of options and commandline values
      * @throws ParseException
      */
-    CommandLine parseCommandLineArgs(Options options, String[] args) 
+    private CommandLine parseCommandLineArgs(Options options, String[] args) 
             throws ParseException {
         
         // parser.parse() throws UnrecognizedOptionException for unsupported 
@@ -98,7 +104,7 @@ public class JsonOptionsReader implements OptionsReader {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    JsonNode parseConfigFile(CommandLine cmd) 
+    private JsonNode parseConfigFile(CommandLine cmd) 
             throws ParseException, JsonParseException, JsonProcessingException, 
             IOException {
         
@@ -144,5 +150,33 @@ public class JsonOptionsReader implements OptionsReader {
         
     }
     
-
+    /**
+     * Override config file values with commandline option values.
+     * @param jsonNode
+     * @param cmd
+     * @return objNode - a JsonNode built by overriding config file values with
+     * corresponding commandline values
+     */ 
+    /*
+    private JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
+            
+        // A JsonNode is immutable, so cast to mutable ObjectNode
+        ObjectNode objNode = (ObjectNode) jsonNode;
+        
+        // Give preference to commandline option value over config option value.
+        Iterator<Option> it = cmd.iterator();
+        while (it.hasNext()) {
+            Option opt = it.next();
+            String optName = opt.getLongOpt();
+            LOGGER.debug("arg name = " + optName);
+            // Makes no sense for config file to specify config file!
+            if (! optName.equals("config")) {
+                objNode.put(optName, cmd.getOptionValue(optName));
+            } 
+        }
+        
+        return objNode;  
+    }
+    */
+    
 }
