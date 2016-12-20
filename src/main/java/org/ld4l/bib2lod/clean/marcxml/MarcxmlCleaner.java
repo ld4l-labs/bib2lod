@@ -7,9 +7,8 @@ import org.w3c.dom.Node;
 
 public class MarcxmlCleaner extends BaseCleaner {
  
-    private static final Logger LOGGER = 
-            LogManager.getLogger(MarcxmlCleaner.class);
-    
+    private static final Logger LOGGER = LogManager.getLogger();
+            
     public Node clean(Node record) {
         return record;
     }

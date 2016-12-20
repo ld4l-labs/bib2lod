@@ -11,8 +11,7 @@ import org.w3c.dom.Element;
 
 public abstract class BaseResourceBuilder implements ResourceBuilder {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(BaseResourceBuilder.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     protected UriMinter uriMinter;
     

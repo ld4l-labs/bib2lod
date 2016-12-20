@@ -12,8 +12,7 @@ import org.w3c.dom.Element;
 
 public class InstanceBuilder extends BaseResourceBuilder {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(InstanceBuilder.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
 
     private static String DEFAULT_TYPE_URI = 
             "http://id.loc.gov/ontologies/bibframe/Instance";

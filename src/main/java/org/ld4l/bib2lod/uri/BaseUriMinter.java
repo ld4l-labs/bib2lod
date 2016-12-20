@@ -5,8 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class BaseUriMinter implements UriMinter {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(BaseUriMinter.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     private String localNamespace;
 

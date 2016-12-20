@@ -26,8 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonOptionsReader implements OptionsReader {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(JsonOptionsReader.class); 
+    private static final Logger LOGGER = LogManager.getLogger(); 
 
     protected String[] args;
     

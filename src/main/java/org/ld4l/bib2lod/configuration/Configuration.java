@@ -28,9 +28,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class Configuration {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(Configuration.class);
-    
+    private static final Logger LOGGER = LogManager.getLogger(); 
 
     private String localNamespace;
     private UriMinter uriMinter;

@@ -23,10 +23,8 @@ public class JsonWithCommandLineOverridesOptionsReader
         extends JsonOptionsReader {
         
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(
-                    JsonWithCommandLineOverridesOptionsReaderTest.class); 
-
+    private static final Logger LOGGER = LogManager.getLogger(); 
+            
     protected String[] args;
     
     public JsonWithCommandLineOverridesOptionsReader(String[] args)  {

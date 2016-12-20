@@ -9,8 +9,7 @@ import org.ld4l.bib2lod.uri.UriMinter;
 
 public class IdentifierBuilder extends BaseResourceBuilder {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(IdentifierBuilder.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     private static String DEFAULT_TYPE_URI = 
             "http://id.loc.gov/ontologies/bibframe/Instance";
