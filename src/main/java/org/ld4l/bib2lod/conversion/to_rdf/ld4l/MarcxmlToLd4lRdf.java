@@ -20,8 +20,7 @@ import org.w3c.dom.NodeList;
 
 public class MarcxmlToLd4lRdf extends MarcxmlToRdf {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(MarcxmlToLd4lRdf.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     public MarcxmlToLd4lRdf(Configuration configuration) {
         super(configuration);
