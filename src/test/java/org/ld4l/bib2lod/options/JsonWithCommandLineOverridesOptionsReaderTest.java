@@ -7,13 +7,13 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.junit.Test;
 import org.ld4l.bib2lod.options.JsonOptionsReader;
-import org.ld4l.bib2lod.options.JsonOptionsReaderWithCommandLineOverrides;
+import org.ld4l.bib2lod.options.JsonWithCommandLineOverridesOptionsReader;
 import org.ld4l.bib2lod.options.OptionsReader;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class JsonOptionsReaderWithCommandLineOverridesTest 
+public class JsonWithCommandLineOverridesOptionsReaderTest 
         extends AbstractTestClass{
     
     private static final String TEST_CONFIG_DIR = 
@@ -33,9 +33,9 @@ public class JsonOptionsReaderWithCommandLineOverridesTest
                 "--local_namespace", LOCAL_NAMESPACE};
       
         OptionsReader reader = 
-                new JsonOptionsReaderWithCommandLineOverrides(args);
+                new JsonWithCommandLineOverridesOptionsReader(args);
       
-        Options options = ((JsonOptionsReaderWithCommandLineOverrides) reader)
+        Options options = ((JsonWithCommandLineOverridesOptionsReader) reader)
                 .buildOptions();
       
         // Get the commandline values for these options
@@ -47,7 +47,7 @@ public class JsonOptionsReaderWithCommandLineOverridesTest
 
         // Commandline option values override config file values
         // Only applies to JsonConfigWithCommandLineOverrides
-        JsonNode node = ((JsonOptionsReaderWithCommandLineOverrides) reader)
+        JsonNode node = ((JsonWithCommandLineOverridesOptionsReader) reader)
                 .applyCommandLineOverrides(jsonNode, cmd);
       
         String localNamespace = jsonNode.get("local_namespace").textValue();

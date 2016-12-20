@@ -46,7 +46,7 @@ public class Configuration {
     // private ErrorHandler errorHandler;
     // private Logger logger;
     
-    public enum Key {
+    protected enum Key {
         
         CONVERTER("converter"),
         INPUT("input"),
@@ -144,14 +144,14 @@ public class Configuration {
         
         String localNamespace = 
                 JsonUtils.getRequiredJsonStringValue(
-                        config, Key.LOCAL_NAMESPACE);
+                        config, Key.LOCAL_NAMESPACE.string);
         
         // Throws an error if the localNamespace is malformed.
         org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
 
         // Require the final slash, otherwise it could be a web page address
         if (!localNamespace.endsWith("/")) {
-            throw new InvalidValueException(Key.LOCAL_NAMESPACE, 
+            throw new InvalidValueException(Key.LOCAL_NAMESPACE.string, 
                     "Local namespace must end in a forward slash.");
         }
                
@@ -171,7 +171,7 @@ public class Configuration {
         LOGGER.debug(services.toString());   
     
         makeUriMinter(JsonUtils.getRequiredJsonStringValue(
-                services, Key.URI_MINTER));
+                services, Key.URI_MINTER.string));
         
         // TODO Add same for other services...
        
@@ -206,7 +206,7 @@ public class Configuration {
         // TODO Throw error if not defined
         JsonNode inputNode = config.get(Key.INPUT.string);
         String inputPath = JsonUtils.getRequiredJsonStringValue(
-                inputNode, Key.INPUT_LOCATION);
+                inputNode, Key.INPUT_LOCATION.string);
 //        String inputFormat = getJsonStringValue(inputNode, "format");
 //        String fileExtension = getJsonStringValue(inputNode, "extension");
         
@@ -256,7 +256,7 @@ public class Configuration {
         // TypeReference ref = new TypeReference<List<Converter>>() {};
         // converters = mapper.readValue(converterList, ref);
        String converter = JsonUtils.getRequiredJsonStringValue(
-               config, Key.CONVERTER);
+               config, Key.CONVERTER.string);
        Class<?> converterClass = Class.forName(converter); 
        Constructor<?> constructor = 
                converterClass.getConstructor(this.getClass());

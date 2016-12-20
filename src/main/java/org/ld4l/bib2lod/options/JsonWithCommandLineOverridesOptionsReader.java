@@ -7,7 +7,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.options.JsonOptionsReaderWithCommandLineOverridesTest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,17 +18,17 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * path. Other values must be defined in the file.
  *
  */
-public class JsonOptionsReaderWithCommandLineOverrides 
+public class JsonWithCommandLineOverridesOptionsReader 
         extends JsonOptionsReader {
         
 
     private static final Logger LOGGER = 
             LogManager.getLogger(
-                    JsonOptionsReaderWithCommandLineOverridesTest.class); 
+                    JsonWithCommandLineOverridesOptionsReaderTest.class); 
 
     protected String[] args;
     
-    public JsonOptionsReaderWithCommandLineOverrides(String[] args)  {
+    public JsonWithCommandLineOverridesOptionsReader(String[] args)  {
         super(args);
     }
     
@@ -51,6 +50,8 @@ public class JsonOptionsReaderWithCommandLineOverrides
                 .argName("local_namespace")
                 .desc("Local namespace for minting URIs")
                 .build()); 
+        
+        // TODO Add options for remaining config properties
 
         return options;
     }
