@@ -4,11 +4,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.options.InvalidTypeException;
-import org.ld4l.bib2lod.configuration.options.InvalidValueException;
-import org.ld4l.bib2lod.configuration.options.RequiredKeyMissingException;
-import org.ld4l.bib2lod.configuration.options.RequiredValueEmptyException;
-import org.ld4l.bib2lod.configuration.options.RequiredValueNullException;
+
+import org.ld4l.bib2lod.configuration.Configuration.InvalidValueException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.InvalidTypeException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredKeyMissingException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredValueEmptyException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredValueNullException;
+
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /*
