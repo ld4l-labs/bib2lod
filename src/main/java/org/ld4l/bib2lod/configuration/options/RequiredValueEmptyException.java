@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.options;
+package org.ld4l.bib2lod.configuration.options;
 
 public class RequiredValueEmptyException extends RuntimeException {
 

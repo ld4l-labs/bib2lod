@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.options;
+package org.ld4l.bib2lod.configuration.options;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -8,8 +8,8 @@ import java.io.FileNotFoundException;
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
-import org.ld4l.bib2lod.options.JsonOptionsReader;
-import org.ld4l.bib2lod.options.OptionsReader;
+import org.ld4l.bib2lod.configuration.options.JsonOptionsReader;
+import org.ld4l.bib2lod.configuration.options.OptionsReader;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.core.JsonParseException;
