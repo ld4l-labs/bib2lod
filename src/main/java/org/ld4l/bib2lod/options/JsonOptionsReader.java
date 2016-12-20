@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.configuration.options;
+package org.ld4l.bib2lod.options;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

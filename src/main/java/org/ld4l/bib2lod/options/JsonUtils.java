@@ -1,10 +1,11 @@
-package org.ld4l.bib2lod.configuration;
+package org.ld4l.bib2lod.options;
 
+import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.Configuration.Key;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-final class JsonUtils {
+public final class JsonUtils {
     
     /**
      * Utility method to return a required string value in a JsonNode.
@@ -12,15 +13,15 @@ final class JsonUtils {
      * @param key - the key in the JsonNode
      * @return stringValue - the string value if non-null and non-empty
      */
-    static String getRequiredJsonStringValue(JsonNode node, Key key) {
+    public static String getRequiredJsonStringValue(JsonNode node, Key key) {
         
         // Seems too much of a mess to try to combine
         // return getJsonStringValue(node, key, true);
         
-        String keyString = key.string;
+        String keyString = key.string();
         
         // Key is missing
-        if (! node.has(key.string)) {
+        if (! node.has(key.string())) {
             throw new RequiredKeyMissingException(key);
         }
         
@@ -55,12 +56,12 @@ final class JsonUtils {
      * @param key - the key in the JsonNode
      * @return stringValue - the string value 
      */
-    static String getOptionalJsonStringValue(JsonNode node, Key key) {
+    public static String getOptionalJsonStringValue(JsonNode node, Key key) {
         
         // Seems too much of a mess to try to combine
         // return getJsonStringValue(node, key, true);
         
-        String keyString = key.string;
+        String keyString = key.string();
         
         String value = null;
         

@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.configuration.options;
+package org.ld4l.bib2lod.options;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.junit.Test;
+import org.ld4l.bib2lod.options.JsonOptionsReader;
+import org.ld4l.bib2lod.options.JsonOptionsReaderWithCommandLineOverrides;
+import org.ld4l.bib2lod.options.OptionsReader;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.JsonNode;
