@@ -8,8 +8,7 @@ import org.apache.logging.log4j.Logger;
 //the input type (Node for XML, etc.)
 public abstract class BaseCleaner implements Cleaner {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(BaseCleaner.class);
+    private static final Logger LOGGER = LogManager.getLogger();
     
     public BaseCleaner() {
         // TODO Auto-generated constructor stub

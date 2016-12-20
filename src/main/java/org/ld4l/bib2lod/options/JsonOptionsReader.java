@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Get configuration values from a JSON config file. The location of the config
  * file is required as a commandline argument.
  */
-public class JsonOptionsReader extends AbstractOptionsReader {
+public class JsonOptionsReader implements OptionsReader {
 
     private static final Logger LOGGER = 
             LogManager.getLogger(JsonOptionsReader.class); 
