@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public final class JsonUtils {
     
-   
     public static class RequiredKeyMissingException extends RuntimeException {
         
         private static final long serialVersionUID = 1L;
@@ -43,59 +42,49 @@ public final class JsonUtils {
 
     
     /**
-     * Utility method to return a required string value in a JsonNode.
+     * Utility method to return a required string value in a JsonNode. Throws
+     * an error if value is null or empty. 
      * @param node - the enclosing JsonNode
      * @param key - the key in the JsonNode
-     * @return stringValue - the string value if non-null and non-empty
+     * @return value - the string value if non-null and non-empty
+     * @throw RequiredKeyMissingException 
+     * @throw RequiredValueNullException
+     * @throw RequiredValueEmptyException
      */
     public static String getRequiredJsonStringValue(JsonNode node, String key) {
-        
-        // Seems too much of a mess to try to combine
-        // return getJsonStringValue(node, key, true);
-        
-        
+
         // Key is missing
         if (! node.has(key)) {
             throw new RequiredKeyMissingException(key);
         }
         
-        // Value is null - "key": null
-        if (! node.hasNonNull(key)) {
+        String value = getOptionalJsonStringValue(node, key);
+        
+        // Key is missing or value is null - i.e., "key": null
+        if (value == null) {
             throw new RequiredValueNullException(key);
         }
-        
-        JsonNode valueNode = node.get(key);
-        
-        // Value is not a string
-        if (! valueNode.isTextual()) {
-            throw new InvalidTypeException(key);
-        }
-
-        String value = valueNode.textValue();
         
         // Value is empty - "key": ""   
         if (value.equals("")) {
             throw new RequiredValueEmptyException(key);
         }
         
-        return value;            
+        return value;                
     }
     
     /**
-     * Utility method to return an optional string value in a JsonNode. Missing,
+     * Utility method to return a string value in a JsonNode. Missing,
      * null, and empty values succeed; only non-empty non-string values throw
      * an error. Generally a defined value is expected to work; this provides
      * an alert that it does not.
-     * @param node - the enclosing JsonNode
+     * @param node - the JsonNode
      * @param key - the key in the JsonNode
      * @return stringValue - the string value 
+     * @throw InvalidTypeException
      */
     public static String getOptionalJsonStringValue(JsonNode node, String key) {
-        
-        // Seems too much of a mess to try to combine
-        // return getJsonStringValue(node, key, true);
-        
-        
+
         String value = null;
         
         // Value is present and non-null - i.e., not "key": null
