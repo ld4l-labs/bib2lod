@@ -1,61 +1,109 @@
 package org.ld4l.bib2lod.configuration.options;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.options.JsonUtils.InvalidTypeException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredKeyMissingException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredValueEmptyException;
+import org.ld4l.bib2lod.configuration.options.JsonUtils.RequiredValueNullException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class JsonUtilsTest extends AbstractTestClass {
+    
+    private enum Key {
+        
+        MISSING("key_missing"),
+        TO_NULL("key_to_null"),
+        TO_EMPTY_STRING("key_to_empty_string"),
+        TO_TEXT("key_to_text"),
+        TO_BOOLEAN("key_to_boolean");
+        
+        final private String string;
+        
+        Key(String string) {
+            this.string = string;
+        }
+    }
+    
+    private final String TEXT_VALUE = "text";
+     
+    private ObjectNode node;
+    
+    @Before
+    public void setup() {
+        node = jsonObject();
+        node.put(Key.TO_TEXT.string, TEXT_VALUE);
+        node.set(Key.TO_NULL.string, null);
+        node.put(Key.TO_BOOLEAN.string, true);
+        node.put(Key.TO_EMPTY_STRING.string, "");
+    }
+    
+    
+    /*
+     * Optional value tests
+     */
 
     @Test
     public void optionalKeyMissing_Succeeds() {
-        fail("optionalKeyMissing_Succeeds not implemented");
+        assertSame(null, JsonUtils.getOptionalJsonStringValue(
+                node, Key.MISSING.string));
     }
     
     @Test
     public void optionalStringValueNull_Succeeds() {
-        fail("optionalStringValueNull_Succeeds not implemented");
+        assertSame(null, JsonUtils.getOptionalJsonStringValue(
+                node, Key.TO_NULL.string));
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void optionalStringValueInvalidType_ThrowsException() {
+        JsonUtils.getOptionalJsonStringValue(node, Key.TO_BOOLEAN.string);
     }
     
     @Test
     public void optionalStringValueEmpty_Succeeds() {
-        fail("optionalStringValueEmpty_Succeeds not implemented");
+        assertSame("", JsonUtils.getOptionalJsonStringValue(
+                node, Key.TO_EMPTY_STRING.string));
     }
-    
-    @Test
-    public void optionalStringValueInvalidType_ThrowsException() {
-        fail("optionalStringValueInvalidType_ThrowsException not implemented");
-    }
-    
+   
     @Test
     public void optionalStringValueValid_Succeeds() {
-        fail("optionalStringValueValid_Succeeds not implemented");
+        assertSame(TEXT_VALUE, JsonUtils.getOptionalJsonStringValue(
+                node, Key.TO_TEXT.string));
     }
     
-    @Test
+    /*
+     * Required value tests
+     */
+    
+    @Test (expected = RequiredKeyMissingException.class)
     public void requiredKeyMissing_ThrowsException() {
-        fail("requiredKeyMissing_ThrowsException not implemented");
+        JsonUtils.getRequiredJsonStringValue(node, Key.MISSING.string);
     }
     
-    @Test
+    @Test (expected = RequiredValueNullException.class)
     public void requiredStringValueNull_ThrowsException() {
-        fail("requiredStringValueNull_ThrowsException not implemented");
+        JsonUtils.getRequiredJsonStringValue(node, Key.TO_NULL.string);
     }
-    
-    @Test
-    public void requiredStringValueEmpty_ThrowsException() {
-        fail("requiredStringValueEmpty_ThrowsException not implemented");
-    }
-    
-    @Test
+  
+    @Test (expected = InvalidTypeException.class)
     public void requiredStringValueInvalidType_ThrowsException() {
-        fail("requiredStringValueInvalidType_ThrowsException not implemented");
+        JsonUtils.getRequiredJsonStringValue(node, Key.TO_BOOLEAN.string);
     }
     
+    @Test (expected = RequiredValueEmptyException.class)
+    public void requiredStringValueEmpty_ThrowsException() {
+        JsonUtils.getRequiredJsonStringValue(node, Key.TO_EMPTY_STRING.string);
+    }
+  
     @Test
     public void requiredStringValueValid_Succeeds() {
-        fail("requiredStringValueValid_Succeeds not implemented");
+        assertSame(TEXT_VALUE, JsonUtils.getRequiredJsonStringValue(
+                node, Key.TO_TEXT.string));
     }
 
 }
