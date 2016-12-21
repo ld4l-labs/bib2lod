@@ -23,8 +23,7 @@ import org.xml.sax.SAXException;
 // can be in FromXml. FromMarcxml specifies tag name "record"
 public abstract class MarcxmlToRdf extends BaseConverter {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(MarcxmlToRdf.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     public MarcxmlToRdf(Configuration configuration) {
         super(configuration);

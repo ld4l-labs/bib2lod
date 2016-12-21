@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * TODO
  */
 public class DeleteMe {
-	private static final Logger log = LogManager.getLogger(DeleteMe.class);
+	private static final Logger log = LogManager.getLogger();
 
 	/**
 	 * @param args

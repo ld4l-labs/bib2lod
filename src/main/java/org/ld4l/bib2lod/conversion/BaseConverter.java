@@ -9,8 +9,7 @@ public abstract class BaseConverter implements Converter {
     
     protected UriMinter uriMinter;
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(BaseConverter.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     // NB Is it possible to store the configuration as an instance variable, 
     // which creates cirular references (config points to converter, which 

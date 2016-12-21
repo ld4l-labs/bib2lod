@@ -10,15 +10,13 @@ import org.ld4l.bib2lod.configuration.Configuration;
 
 
 /** 
- * Simple manager to orchestrate conversion of a directory of files or a single
+ * Simple manager orchestrates conversion of a directory of files or a single
  * file.
  *
  */
 public final class SimpleManager {
 
-    private static final Logger LOGGER = 
-            LogManager.getLogger(SimpleManager.class);
-
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     /** 
      * Main method: gets a Configuration object and calls conversion method.

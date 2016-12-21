@@ -15,8 +15,7 @@ import org.w3c.dom.NodeList;
 
 public class TitleBulder extends BaseResourceBuilder {
     
-    private static final Logger LOGGER = 
-            LogManager.getLogger(TitleBulder.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     private static String DEFAULT_TYPE_URI = 
             "http://www.loc.gov/mads/rdf/v1#Title";

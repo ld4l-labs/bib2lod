@@ -8,8 +8,7 @@ import org.ld4l.bib2lod.util.MurmurHash;
 
 public class RandomUriMinter extends BaseUriMinter {
     
-    private static final Logger LOGGER = 
-            LogManager.getLogger(RandomUriMinter.class);
+    private static final Logger LOGGER = LogManager.getLogger(); 
 
     private String LOCAL_NAME_ALPHA_PREFIX = "n";
     

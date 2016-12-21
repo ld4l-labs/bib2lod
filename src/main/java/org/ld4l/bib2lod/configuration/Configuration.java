@@ -13,10 +13,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.jena.iri.IRIException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.options.JsonOptionsReader;
+import org.ld4l.bib2lod.configuration.options.JsonUtils;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.options.InvalidValueException;
-import org.ld4l.bib2lod.options.JsonOptionsReader;
-import org.ld4l.bib2lod.options.JsonUtils;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,10 +26,21 @@ import com.fasterxml.jackson.databind.JsonNode;
  *
  */
 public class Configuration {
-
-    private static final Logger LOGGER = 
-            LogManager.getLogger(Configuration.class);
     
+    public static class InvalidValueException extends RuntimeException {         
+        private static final long serialVersionUID = 1L;
+        
+        protected InvalidValueException(String key) {
+            super("Value of configuration key '" + key + "' is invalid.");                 
+        }
+        
+        public InvalidValueException(String key, String msg) {
+            super("Value of configuration key '" + key + 
+                    "' is invalid: " + msg + ".");
+        }
+    }
+
+    private static final Logger LOGGER = LogManager.getLogger(); 
 
     private String localNamespace;
     private UriMinter uriMinter;
