@@ -4,21 +4,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public final class JsonUtils {
     
-    public static class InvalidTypeException extends RuntimeException {  
-        
-        private static final long serialVersionUID = 1L;
-        
-        protected InvalidTypeException(String key) {
-            super("Value of configuration key '" + key + " is of invalid type.'");                
-        }
-    }
-    
+   
     public static class RequiredKeyMissingException extends RuntimeException {
         
         private static final long serialVersionUID = 1L;
         
         protected RequiredKeyMissingException(String key) {
             super("Configuration is missing required key '" + key  + ".'");              
+        }
+    }
+   
+    public static class RequiredValueNullException extends RuntimeException {
+        
+        private static final long serialVersionUID = 1L;
+        
+        protected RequiredValueNullException(String key) {
+            super("Value of required configuration key '" + key + " is null.'");                  
+        }
+    }
+    
+    public static class InvalidTypeException extends RuntimeException {  
+        
+        private static final long serialVersionUID = 1L;
+        
+        protected InvalidTypeException(String key) {
+            super("Value of configuration key '" + key + " is of invalid type.'");                
         }
     }
     
@@ -30,15 +40,7 @@ public final class JsonUtils {
             super("Value of required configuration key '" + key + " is empty.'");                   
         }
     }
-    
-    public static class RequiredValueNullException extends RuntimeException {
-        
-        private static final long serialVersionUID = 1L;
-        
-        protected RequiredValueNullException(String key) {
-            super("Value of required configuration key '" + key + " is null.'");                  
-        }
-    }
+
     
     /**
      * Utility method to return a required string value in a JsonNode.
