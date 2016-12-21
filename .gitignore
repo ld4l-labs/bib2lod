@@ -1,4 +1,7 @@
 /.project
 /target/
 
-log4j2-test.properties
+/src/main/resources/config.json
+/src/main/resources/log4j2-test.properties
+
+
