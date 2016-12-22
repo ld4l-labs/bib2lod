@@ -43,7 +43,7 @@ public final class JsonUtils {
     
     /**
      * Utility method to return a required string value in a JsonNode. Throws
-     * an error if value is null or empty. 
+     * an error if value is null, empty, or an invalid type.
      * @param node - the enclosing JsonNode
      * @param key - the key in the JsonNode
      * @return value - the string value if non-null and non-empty
@@ -75,9 +75,10 @@ public final class JsonUtils {
     
     /**
      * Utility method to return a string value in a JsonNode. Missing,
-     * null, and empty values succeed; only non-empty non-string values throw
-     * an error. Generally a defined value is expected to work; this provides
-     * an alert that it does not.
+     * null, and empty string values succeed; only non-string values (including
+     * empty objects and arrays) throw an error. The assumption is that if the 
+     * user has defined a value it is expected to work, and an alert should be 
+     * issued when the value is bad.
      * @param node - the JsonNode
      * @param key - the key in the JsonNode
      * @return stringValue - the string value 
