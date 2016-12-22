@@ -20,6 +20,8 @@ public class JsonUtilsTest extends AbstractTestClass {
         TO_NULL("key_to_null"),
         TO_EMPTY_STRING("key_to_empty_string"),
         TO_TEXT("key_to_text"),
+        TO_EMPTY_ARRAY("key_to_empty_array"),
+        TO_EMPTY_OBJECT("key_to_empty_object"),
         TO_BOOLEAN("key_to_boolean");
         
         final private String string;
@@ -39,6 +41,8 @@ public class JsonUtilsTest extends AbstractTestClass {
         node.put(Key.TO_TEXT.string, TEXT_VALUE);
         node.set(Key.TO_NULL.string, null);
         node.put(Key.TO_BOOLEAN.string, true);
+        node.putObject(Key.TO_EMPTY_ARRAY.string);
+        node.putArray(Key.TO_EMPTY_OBJECT.string);
         node.put(Key.TO_EMPTY_STRING.string, "");
     }
     
@@ -62,6 +66,16 @@ public class JsonUtilsTest extends AbstractTestClass {
     @Test (expected = InvalidTypeException.class)
     public void optionalStringValueInvalidType_ThrowsException() {
         JsonUtils.getOptionalJsonStringValue(node, Key.TO_BOOLEAN.string);
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void optionalStringValueEmptyArray_ThrowsException() {
+        JsonUtils.getOptionalJsonStringValue(node, Key.TO_EMPTY_ARRAY.string);
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void optionalStringValueEmptyObject_ThrowsException() {
+        JsonUtils.getOptionalJsonStringValue(node, Key.TO_EMPTY_OBJECT.string);
     }
     
     @Test
@@ -93,6 +107,16 @@ public class JsonUtilsTest extends AbstractTestClass {
     @Test (expected = InvalidTypeException.class)
     public void requiredStringValueInvalidType_ThrowsException() {
         JsonUtils.getRequiredJsonStringValue(node, Key.TO_BOOLEAN.string);
+    }
+
+    @Test (expected = InvalidTypeException.class)
+    public void requiredStringValueEmptyArray_ThrowsException() {
+        JsonUtils.getOptionalJsonStringValue(node, Key.TO_EMPTY_ARRAY.string);
+    }
+    
+    @Test (expected = InvalidTypeException.class)
+    public void requiredStringValueEmptyObject_ThrowsException() {
+        JsonUtils.getOptionalJsonStringValue(node, Key.TO_EMPTY_OBJECT.string);
     }
     
     @Test (expected = RequiredValueEmptyException.class)
