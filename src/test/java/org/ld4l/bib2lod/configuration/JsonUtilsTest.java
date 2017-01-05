@@ -15,6 +15,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
+/**
+ * Tests of org.ld4l.bib2lod.configuration.JsonUtils
+ */
 public class JsonUtilsTest extends AbstractTestClass {
     
     private enum Key {

@@ -2,32 +2,26 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.DefaultConfiguration.InvalidValueException;
 import org.ld4l.bib2lod.test.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /*
- * NOTE: missing, null, empty, and wrong type string values all tested in
- * JsonUtilsTest
- * ADD same for objects and arrays
+ * Test plan
  * 
- * DefaultConfigurationTest plan: 
+ * Which go here, which in BaseConfigurationTest?
  * 
- * Local namespace:
- * - no final slash - InvalidValueException
- * - malformed URI - Jena MalformedURIException
- * - well-formed - succeed
+ * Missing/empty/null required node/value - Exception
+ * Missing/empty/null optional node/value - succeeds
  * 
  * Input
  * Input location
- *    - doesn't exist (move from OptionsReader) - Exception
- *    - not readable (move from OptionsReader) - Exception
+ *    - doesn't exist - Exception
+ *    - not readable - Exception
  *    - 
  * Input serialization
  *    - doesn't exist: succeed
@@ -39,30 +33,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  *    - 
  * 
  * Output location
- *      - doesn't exist and can't create - Exception
+ *    - doesn't exist and can't create - Exception
  *    - not readable (move from OptionsReader) - Exception
  *    - exists - success
  *    - doesn't exist but can create - success
  * Format - invalid - InvalidNodeTypeException
  * Valid output - succeed
  * 
- * Add later:
- * Converters
- * - none specified - success
- * Class not found or can't instantiate - not done here
- * 
- * Reconcilers
- * - none specified - success
- * Class not found or can't instantiate - not done here
- * 
- *  * Add others as created: writer, reader, logger
- * 
- * Services:
- * UriMinter
- * - Not specified
- * - Class not found - ClassNotFound exception (exists in Java?)
- * Add others as created: writer, reader, logger
- * 
+ * Classes not found or can't instantiate - not done here, do in tests for 
+ * those classes (testing instantiation methods)
+
 
 
  * 
@@ -120,7 +100,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * reconciler an empty array - succeed and do nothing 
  * 
  */
-public class DefaultConfigurationTest extends AbstractTestClass {
+
+/**
+ * Tests of org.ld4l.bib2lod.configuration.ConfigurationFromJson
+ */
+public class ConfigurationFromJsonTest extends AbstractTestClass {
+    
     private MockBib2LodObjectFactory factory;
     private Configuration config;
     private ObjectNode optionsNode;
@@ -128,8 +113,11 @@ public class DefaultConfigurationTest extends AbstractTestClass {
     @Before
     public void setupForSuccess() {
         optionsNode = jsonObject();
-        optionsNode.put("input",
-                "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml");
+        optionsNode.set("input",
+                jsonObject()
+                        .put("location",
+                                "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml")
+                        .put("serialization", "RDF/XML"));
         optionsNode.set("output",
                 jsonObject()
                         .put("location",
@@ -148,84 +136,18 @@ public class DefaultConfigurationTest extends AbstractTestClass {
         factory = new MockBib2LodObjectFactory();
         factory.setOptionsReader(new MockOptionsReader(optionsNode));
     }
-
+    
     /*
-     * Local namespace tests
+     * Required node missing
      */
 
-    @Test
-    public void localNamespaceMissing_ThrowsException() {
-        setNamespace(JSON_REMOVE);
-        //instantiateAndExpectException(RequiredNodeMissingException.class);
+    @Test 
+    public void requiredNodeMissing_ThrowsException() throws Exception {
+        fail("requiredNodeMissing_ThrowsException not yet implemented");
+//        setNamespace(JSON_REMOVE);
+//        instantiateAndExpectException(RequiredNodeMissingException.class);
     }
-
-    @Test
-    public void localNamespaceNull_ThrowsException() {
-        setNamespace(null);
-        //instantiateAndExpectException(RequiredNodeNullException.class);
-    }
-
-    // Next three could be combined into a single test localNamespaceEmpty
-    @Test
-    public void localNamespaceEmptyString_ThrowsException() {
-        setNamespace("");
-        //instantiateAndExpectException(RequiredNodeEmptyException.class);
-    }
-
-    @Test
-    public void localNamespaceEmptyArray_ThrowsException() {
-        setNamespace(jsonArray());
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    @Test
-    public void localNamespaceEmptyObject_ThrowsException() {
-        setNamespace(jsonObject());
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    // Next four tests could be a single test for invalid type
-    @Test
-    public void localNamespaceNonEmptyArray_ThrowsException() {
-        setNamespace(jsonArray().add("a").add("b"));
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    @Test
-    public void localNamespaceNonEmptyObject_ThrowsException() {
-        setNamespace(jsonObject().put("a", 1));
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    @Test
-    public void localNamespaceBoolean_ThrowsException() {
-        optionsNode.put("local_namespace", true);
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    @Test
-    public void localNamespaceNumber_ThrowsException() {
-        setNamespace(1);
-        //instantiateAndExpectException(InvalidNodeTypeException.class);
-    }
-
-    @Test
-    public void localNamespaceNoFinalSlash_ThrowsException() {
-        setNamespace("http://ld4l.org/cornell");
-        instantiateAndExpectException(InvalidValueException.class);
-    }
-
-    @Test
-    public void localNamespaceMalformedUri_ThrowsException() {
-        setNamespace("this_is_not_a_well_formed_uri");
-        instantiateAndExpectException(InvalidValueException.class);
-    }
-
-    @Test
-    public void localNamespaceValidUri_Succeeds() throws Exception {
-        config = Configuration.instance(new String[0]);
-        assertEquals("http://ld4l.org/cornell/", config.getLocalNamespace());
-    }
+ 
 
     /*
      * Helper methods
@@ -235,7 +157,6 @@ public class DefaultConfigurationTest extends AbstractTestClass {
         setFieldValue(optionsNode, "local_namespace", newValue);
     }
 
-    // Move to AbstractTestClass - pass class to instantiate and exception class
     private void instantiateAndExpectException(
             Class<? extends Exception> expected) {
         try {

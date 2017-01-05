@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 
 /**
- * Tests for org.ld4l.bib2lod.configuration.JsonOptionsReader
+ * Tests of org.ld4l.bib2lod.configuration.JsonOptionsReader
  */
 public class JsonOptionsReaderTest extends AbstractTestClass {
    

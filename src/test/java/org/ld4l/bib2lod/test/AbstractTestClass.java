@@ -30,16 +30,13 @@ public abstract class AbstractTestClass {
     }
 
     
-    // TODO Not sure if needed
     private enum SpecialJsonValue {
         REMOVE
     }
 
-    // TODO Not sure if needed
     protected static final SpecialJsonValue JSON_REMOVE = 
             SpecialJsonValue.REMOVE;
 
-    // TODO Not sure if needed
     protected void setFieldValue(ObjectNode node, String fieldName,
             Object newValue) {
         if (newValue == null) {

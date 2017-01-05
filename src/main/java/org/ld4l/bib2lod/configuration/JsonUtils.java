@@ -20,7 +20,7 @@ public final class JsonUtils {
         private static final long serialVersionUID = 1L;
         
         protected RequiredNodeMissingException(String key) {
-            super("DefaultConfiguration is missing required key '" + key  + ".'");              
+            super("ConfigurationFromJson is missing required key '" + key  + ".'");              
         }
     }
    
