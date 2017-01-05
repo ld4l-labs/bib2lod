@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.configuration.DefaultConfiguration;
 
 
 /** 
@@ -19,7 +18,7 @@ public final class SimpleManager {
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     /** 
-     * Main method: gets a DefaultConfiguration object and calls conversion method.
+     * Main method: gets a Configuration object and calls conversion method.
      * @param args - commandline arguments
      */
     public static void main(String[] args) {
@@ -40,7 +39,7 @@ public final class SimpleManager {
     
     /**
      * Converts a list of input files.
-     * @param configuration - the DefaultConfiguration object
+     * @param configuration - the Configuration object
      */
     private static void convertFiles(Configuration configuration) {
 
