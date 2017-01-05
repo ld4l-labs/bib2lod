@@ -1,4 +1,6 @@
-package org.ld4l.bib2lod.configuration.options;
+/* $This file is distributed under the terms of the license in /doc/license.txt$ */
+
+package org.ld4l.bib2lod.configuration;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,48 +25,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Get configuration values from a JSON config file. The location of the config
- * file is required as a commandline argument.
+ * Reads commandline arguments, reads in the config file, and sets configuration 
+ * options. Any supported commandline option values override those specified in 
+ * the config file.
+ * 
+ * Currently the only commandline argument supported is the config file path.
+ * All others must be defined in the config file.
  */
 public class JsonOptionsReader implements OptionsReader {
 
-    private static final Logger LOGGER = LogManager.getLogger(); 
-
+    private static final Logger LOGGER = LogManager.getLogger();
+             
     protected String[] args;
     
+    /**
+     * Constructor. 
+     * @param args - the program arguments
+     */
     public JsonOptionsReader(String[] args)  {
         this.args = Objects.requireNonNull(args);
     }
-      
+    
     /**
      * Gets the defined options, gets the configuration file from the program
-     * arguments, and reads the file into a JSON object.
+     * arguments, reads the file into a JSON object, and applies any overrides
+     * from commandline values.
      * @return a JsonNode built from config file plus commandline arguments
      * @throws IOException
      * @throws ParseException
      */
+    @Override
     public JsonNode configure() throws IOException, ParseException {
         
         // Get the defined options
-        Options options = buildOptions();
+        Options options = defineOptions();
 
-        // Get the commandline values for these options
+        // Get the commandline values for the defined options options
         CommandLine cmd = parseCommandLineArgs(options, args); 
         
-        // Parse the config file 
+        // Parse the config file
         JsonNode node = parseConfigFile(cmd);
 
-        // Add this when we accept other commandline arguments
-        // node = applyCommandLineOverrides(node, cmd);
-        
-        return node;
+        // Commandline option values override config file values
+        return applyCommandLineOverrides(node, cmd);      
     }
 
     /**
      * Defines the commandline options accepted by the program.
      * @return options - the program options
      */
-    private Options buildOptions() {
+    Options defineOptions() {
         
         Options options = new Options();
 
@@ -86,7 +96,7 @@ public class JsonOptionsReader implements OptionsReader {
      * @return the list of options and commandline values
      * @throws ParseException
      */
-    private CommandLine parseCommandLineArgs(Options options, String[] args) 
+    CommandLine parseCommandLineArgs(Options options, String[] args) 
             throws ParseException {
         
         // parser.parse() throws UnrecognizedOptionException for unsupported 
@@ -104,7 +114,7 @@ public class JsonOptionsReader implements OptionsReader {
      * @throws JsonProcessingException
      * @throws IOException
      */
-    private JsonNode parseConfigFile(CommandLine cmd) 
+    JsonNode parseConfigFile(CommandLine cmd) 
             throws ParseException, JsonParseException, JsonProcessingException, 
             IOException {
         
@@ -121,13 +131,13 @@ public class JsonOptionsReader implements OptionsReader {
     private Reader findConfigFile(CommandLine cmd) 
             throws ParseException, FileNotFoundException {
         
-        String configFilename = cmd.getOptionValue("config");
+        String configFileName = cmd.getOptionValue("config");
         
-        if (configFilename == null) {
+        if (configFileName == null) {
             throw new IllegalArgumentException();
         } 
         
-        Reader reader = new FileReader(configFilename);
+        Reader reader = new FileReader(configFileName);
         return reader;
     }
     
@@ -151,14 +161,13 @@ public class JsonOptionsReader implements OptionsReader {
     }
     
     /**
-     * Override config file values with commandline option values.
-     * @param jsonNode
-     * @param cmd
+     * Overrides config file values with commandline option values.
+     * @param jsonNode - the JSON node containing config file values
+     * @param cmd - the commandline options
      * @return objNode - a JsonNode built by overriding config file values with
      * corresponding commandline values
-     */ 
-    /*
-    private JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
+     */
+    JsonNode applyCommandLineOverrides(JsonNode jsonNode, CommandLine cmd) {
             
         // A JsonNode is immutable, so cast to mutable ObjectNode
         ObjectNode objNode = (ObjectNode) jsonNode;
@@ -177,6 +186,5 @@ public class JsonOptionsReader implements OptionsReader {
         
         return objNode;  
     }
-    */
-    
+
 }

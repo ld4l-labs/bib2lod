@@ -11,7 +11,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.DefaultConfiguration;
 import org.ld4l.bib2lod.conversion.BaseConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,7 +25,7 @@ public abstract class MarcxmlToRdf extends BaseConverter {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    public MarcxmlToRdf(Configuration configuration) {
+    public MarcxmlToRdf(DefaultConfiguration configuration) {
         super(configuration);
     }
 

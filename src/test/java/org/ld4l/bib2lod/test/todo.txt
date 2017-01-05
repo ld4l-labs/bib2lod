@@ -1,3 +1,0 @@
-Adapt Jim's AbstractTestClass from Vitro.
-
-Note: junit requires hamcrest, so not sure what the problem is.

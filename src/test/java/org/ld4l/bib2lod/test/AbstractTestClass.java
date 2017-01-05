@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.testing;
+package org.ld4l.bib2lod.test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -8,9 +8,6 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 public abstract class AbstractTestClass {
 
-    public AbstractTestClass() {
-        // TODO Auto-generated constructor stub
-    }
 
     // ----------------------------------------------------------------------
     // JSON utility methods
@@ -18,6 +15,10 @@ public abstract class AbstractTestClass {
 
     protected TextNode jsonText(String text) {
         return JsonNodeFactory.instance.textNode(text);
+    }
+    
+    protected TextNode emptyJsonText() {
+        return JsonNodeFactory.instance.textNode("");
     }
     
     protected ArrayNode jsonArray() {
@@ -28,13 +29,17 @@ public abstract class AbstractTestClass {
         return JsonNodeFactory.instance.objectNode();
     }
 
-
+    
+    // TODO Not sure if needed
     private enum SpecialJsonValue {
         REMOVE
     }
 
-    protected static final SpecialJsonValue JSON_REMOVE = SpecialJsonValue.REMOVE;
+    // TODO Not sure if needed
+    protected static final SpecialJsonValue JSON_REMOVE = 
+            SpecialJsonValue.REMOVE;
 
+    // TODO Not sure if needed
     protected void setFieldValue(ObjectNode node, String fieldName,
             Object newValue) {
         if (newValue == null) {
@@ -49,4 +54,5 @@ public abstract class AbstractTestClass {
             node.put(fieldName, String.valueOf(newValue));
         }
     }    
+      
 }

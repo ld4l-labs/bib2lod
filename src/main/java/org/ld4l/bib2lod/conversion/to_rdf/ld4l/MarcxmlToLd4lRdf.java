@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.clean.Cleaner;
 import org.ld4l.bib2lod.clean.marcxml.MarcxmlCleaner;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.DefaultConfiguration;
 import org.ld4l.bib2lod.conversion.to_rdf.MarcxmlToRdf;
 import org.ld4l.bib2lod.conversion.to_rdf.ResourceBuilder;
 import org.ld4l.bib2lod.util.rdf.RdfUtil;
@@ -22,7 +22,7 @@ public class MarcxmlToLd4lRdf extends MarcxmlToRdf {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    public MarcxmlToLd4lRdf(Configuration configuration) {
+    public MarcxmlToLd4lRdf(DefaultConfiguration configuration) {
         super(configuration);
     }
     
