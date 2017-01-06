@@ -27,7 +27,7 @@ public class ConfigurationFromJson extends BaseConfiguration {
         
         CONVERTER("converter"),
         INPUT("input"),
-        INPUT_LOCATION("location"),
+        INPUT_SOURCE("source"),
         LOCAL_NAMESPACE("local_namespace"),
         URI_MINTER("uri_minter");
         
@@ -39,8 +39,6 @@ public class ConfigurationFromJson extends BaseConfiguration {
     }
 
 
-
-    
     /**
      * Constructor
      * @param args - the program arguments
@@ -131,7 +129,7 @@ public class ConfigurationFromJson extends BaseConfiguration {
 //        // TODO Throw error if not defined
 //        JsonNode inputNode = config.get(Key.INPUT.string);
 //        String inputPath = JsonUtils.getRequiredJsonStringValue(
-//                inputNode, Key.INPUT_LOCATION.string);
+//                inputNode, Key.INPUT_SOURCE.string);
 ////        String inputFormat = getJsonStringValue(inputNode, "format");
 ////        String fileExtension = getJsonStringValue(inputNode, "extension");
 //        
@@ -140,7 +138,7 @@ public class ConfigurationFromJson extends BaseConfiguration {
 //        File path = new File(inputPath);
 //        
 //        if (! path.exists()) {
-//            throw new FileNotFoundException("Input location not found.");            
+//            throw new FileNotFoundException("Input source not found.");            
 //        }
 //
 //        // TODO - Add filter to path.listFiles() so that we get only the

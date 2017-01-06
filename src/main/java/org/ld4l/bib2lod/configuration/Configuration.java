@@ -28,21 +28,51 @@ public interface Configuration {
      * @return localNamespace - the local namespace
      */
     String getLocalNamespace();
+    
+    /**
+     * Gets the configured input source (file or directory).
+     * @return
+     */
+    // TODO Perhaps shouldn't be part of the interface. It's only used for
+    // the toString() method for logging.
+    File getInputSource();
+
+    /**
+     * Gets the configured list of input files.
+     * @return input - the list of input files
+     */
+    List<File> getInputFiles();
+
+    /**
+     * Gets the configured input format.
+     * @return format - the input format
+     */
+    String getInputFormat();
+    
+    /**
+     * Gets the configured output directory.
+     * @return the output directory
+     */
+    File getOutputDirectory();
+      
+    /**
+     * Gets the configured output format.
+     * @return the output format
+     */
+    String getOutputFormat();
 
     /**
      * Gets the class name of the UriMinter specified in the configuration
      * @return uriMinter - the class name of the UriMinter
      */
     String getUriMinter();
-
+    
     /**
-     * Gets the configured list of input files.
-     * @return input - the list of input files
+     * Gets the class name of the Writer specified in the configuration
+     * @return writer - the class name of the Writer
      */
-    // TODO Or just return the input string from config file? Still want to 
-    // check the validity of the path here.
-    List<File> getInput();
-
+    String getWriter();   
+    
     /**
      * Gets the list of class names of the converters specified in the 
      * configuration.
@@ -57,5 +87,10 @@ public interface Configuration {
      * @return reconcilers - the ordered class names of the reconcilers
      */
     List<String> getReconcilers();
-
+    
+    /**
+     * Override toString() for debugging and logging.
+     * @return string representation of the Configuration object
+     */
+    public String toString();
 }

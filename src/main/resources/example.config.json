@@ -3,12 +3,12 @@
         "location": "/usr/local/bib2lod/logs"
     },
     "input": {
-        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
+        "source": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
         "format": "marcxml",
         "extension": "xml"
     },
     "output": {
-        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
+        "destination": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "ntriples"
     },
     "local_namespace": "http://data.ld4l.org/cornell/",
@@ -16,9 +16,10 @@
         "logger": "org.ld4l.bib2lod.log.SimpleLogger",
         "error_handler": "org.ld4l.bib2lod.errors.SimpleErrorHandler",
         "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
-        "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter",
-        "reader": "org.ld4l.bib2lod.io.SimpleFileReader"
+        "writer": "org.ld4l.bib2lod.io.write.SimpleRdfWriter"
     },
-    "converter": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf",
+    "converters": [
+        "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"
+    ],
     "reconcilers": []
 }                                                                                             

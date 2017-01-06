@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.configuration.ConfigurationFromJson;
 import org.ld4l.bib2lod.configuration.JsonOptionsReader;
 import org.ld4l.bib2lod.configuration.OptionsReader;
+import org.ld4l.bib2lod.configuration.StubConfiguration;
 
 /**
  * A simple implementation.
@@ -20,8 +20,8 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, FileNotFoundException, IOException,
             ParseException {
-        return new ConfigurationFromJson(args);
-        //return new StubConfiguration();
+        // return new ConfigurationFromJson(args);
+        return new StubConfiguration();
     }
     
     @Override

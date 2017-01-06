@@ -27,6 +27,7 @@ public final class SimpleManager {
 
         try {
             Configuration configuration = Configuration.instance(args);
+            
             // convertFiles(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
@@ -43,9 +44,9 @@ public final class SimpleManager {
      */
     private static void convertFiles(Configuration configuration) {
 
-        List<File> inputFiles = configuration.getInput();
-
-        for (File file : inputFiles) {
+//        List<File> inputFiles = configuration.getInput();
+//
+//        for (File file : inputFiles) {
             
             // TODO Make work as a loop for a chain of converters?
             // Then need to first convert to string, so each converter takes a
@@ -76,7 +77,7 @@ public final class SimpleManager {
                 
  //           } // continue to next record
 
-        }       
+//        }       
     }
       
 }

@@ -1,13 +1,13 @@
 {
     "input": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
     "output": {
-        "location": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
+        "destination": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "ntriples"
     },
     "local_namespace": "http://data.ld4l.org/cornell/",
     "services": {
         "uri_minter": "org.ld4l.bib2lod.uri.RandomUriMinter",
-        "writer": "org.ld4l.bib2lod.io.SimpleRdfWriter"
+        "writer": "org.ld4l.bib2lod.io.write.SimpleRdfWriter"
     },
     "converters": [
         "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"
