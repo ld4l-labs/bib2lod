@@ -2,6 +2,9 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -11,6 +14,8 @@ import com.fasterxml.jackson.databind.node.TextNode;
  * Utility methods for handling JSON objects.
  */
 public final class JsonUtils {
+    
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     /**
      * Signals that a required node is absent in the JSON object.

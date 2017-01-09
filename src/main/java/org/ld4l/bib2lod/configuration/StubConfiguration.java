@@ -23,7 +23,8 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String OUTPUT_FORMAT = "ntriples";
     private static final String URI_MINTER = "org.ld4l.bib2lod.uri.RandomUriMinter";  
     private static final String WRITER = "org.ld4l.bib2lod.io.write.SimpleRdfWriter";
-    private static final String[] CONVERTERS = {"org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"};
+    private static final String CLEANER = "org.ld4l.bib2lod.clean.MarcxmlCleaner";
+    private static final String CONVERTER = "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf";
     private static final String[] RECONCILERS = {};
 
     /**
@@ -42,7 +43,8 @@ public class StubConfiguration extends BaseConfiguration {
         setUriMinter(URI_MINTER);
         setWriter(WRITER);
         
-        setConverters(CONVERTERS);        
+        setCleaner(CLEANER);
+        setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);
         
         if (LOGGER.isDebugEnabled()) {

@@ -1,22 +1,28 @@
+/* $This file is distributed under the terms of the license in /doc/license.txt$ */
+
 package org.ld4l.bib2lod.conversion;
 
-import java.io.File;
-import java.io.IOException;
+import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configuration;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.jena.rdf.model.Model;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
+/**
+ * An object that orchestrates the conversion of an input stream containing one
+ * or more records.
+ */
 public interface Converter {
 
-    public String convertFile(File file) 
-            throws ParserConfigurationException, SAXException, IOException;
+    /**
+     * Factory method
+     */
+    static Converter instance(Configuration configuration) {
+        return Bib2LodObjectFactory.instance().createConverter(configuration);
+    }
     
-    // Would create file from path and call convertFile(File). Not sure if
-    // needed.
-    // public String convertFile(String path);
-  
-    public Model convertRecord(Element record);
+    /**
+     * Converts input and writes to output destination specified in
+     * configuration.
+     */
+    // TODO This will take a file as input - but should be a stream/reader
+    // rather than a file.
+    public void convert();
 }

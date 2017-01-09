@@ -4,10 +4,18 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 
+/**
+ * A utility class for working with RDF.
+ */
 // TODO Can we put these as static methods in one of the conversion classes?
 public final class RdfUtil {
 
-    // For development/debugging
+    /**
+     * Output a string representation of a Model for logging and debugging.
+     * @param model - the Model
+     * @param msg - a message to prefix to the output
+     * @return the string representation of the prefix and Model
+     */
     public static String printModel(Model model, String msg) {
  
         StringBuilder sb = new StringBuilder();
@@ -26,9 +34,14 @@ public final class RdfUtil {
         return sb.toString();
     }
     
-    public static String appendLine(StringBuilder sb, String value) {
-        sb.append(value + System.getProperty("line.separator"));
-        return sb.toString();
+    /**
+     * Append a line to a StringBuilder, using the system-dependent line
+     * separator.
+     * @param sb - the StringBuilder
+     * @param line - the line to append to the StringBuilder
+     */
+    private static void appendLine(StringBuilder sb, String line) {
+        sb.append(line + System.getProperty("line.separator"));
     }
 
 

@@ -27,8 +27,7 @@ public final class SimpleManager {
 
         try {
             Configuration configuration = Configuration.instance(args);
-            
-            // convertFiles(configuration);
+            convertFiles(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -44,40 +43,15 @@ public final class SimpleManager {
      */
     private static void convertFiles(Configuration configuration) {
 
-//        List<File> inputFiles = configuration.getInput();
-//
-//        for (File file : inputFiles) {
+        List<File> inputFiles = configuration.getInputFiles();
+        
+        //Converter converter = configuration.getConverter();
+
+        for (File file : inputFiles) {
             
-            // TODO Make work as a loop for a chain of converters?
-            // Then need to first convert to string, so each converter takes a
-            // string as input and returns a string, which is input to next
-            // converter.
-//            try {
-                
-                //*** TODO - Need to get constructor and pass in arg
-                //LOGGER.debug(configuration.getConverter().getClass().getName());
-                // configuration.getConverter().convertFile(file); 
 
-                
-            // TODO Log record/id to error file to pass to LTS. Ideally log
-            // bib id and the line or field where error occurred.
-//            } catch (ParserConfigurationException e) {
-//                LOGGER.error(e.getMessage());
-//                e.printStackTrace();       
-//                
-//            // TODO Log record/id to error file to pass to LTS. Ideally log
-//            // bib id and the line or field where error occurred.
-//            } catch (SAXException e) {
-//                LOGGER.error(e.getMessage());
-//                e.printStackTrace();
-//                
-//            } catch (IOException e) {
-//                LOGGER.error(e.getMessage());
-//                e.printStackTrace();
-                
- //           } // continue to next record
 
-//        }       
+        }       
     }
       
 }

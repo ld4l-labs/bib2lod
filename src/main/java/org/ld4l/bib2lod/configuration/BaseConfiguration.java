@@ -44,6 +44,7 @@ public abstract class BaseConfiguration implements Configuration {
     // method.
     protected File inputSource;
     protected String inputFileExtension;
+    
     protected List<File> inputFiles;  
     protected String inputFormat;
     
@@ -52,8 +53,9 @@ public abstract class BaseConfiguration implements Configuration {
     
     protected String uriMinter;
     protected String writer;
-    
-    protected List<String> converters;
+
+    protected String converter;
+    protected String cleaner;
     protected List<String> reconcilers;
 
     
@@ -118,15 +120,22 @@ public abstract class BaseConfiguration implements Configuration {
      */
     @Override
     public String getWriter() {
-        // TODO Auto-generated method stub
+        return writer;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.configuration.Configuration#getCleaner()
+     */
+    @Override
+    public String getCleaner() {
         return writer;
     }
 
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getConverters()
+     * @see org.ld4l.bib2lod.configuration.Configuration#getConverter()
      */
     @Override
-    public List<String> getConverters() {
+    public String getConverter() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -296,13 +305,21 @@ public abstract class BaseConfiguration implements Configuration {
         this.writer = writer;
     }
     
+    /**
+     * Sets Cleaner.
+     * @param writer - name of Cleaner class
+     * @return void
+     */
+    protected void setCleaner(String cleaner) {
+        this.cleaner = cleaner;
+    }
     
     /**
-     * Sets Converters.
-     * @param converters - array of Converter class names
+     * Sets Converter.
+     * @param converter - name of Converter class
      */
-    protected void setConverters(String[] converters) {
-        this.converters = Arrays.asList(converters);
+    protected void setConverter(String converter) {
+        this.converter = converter;
     }
     
     /**
@@ -350,11 +367,9 @@ public abstract class BaseConfiguration implements Configuration {
         
         sb.append("Writer: " + writer + "\n\n");
         
-        sb.append("Converters:\n");
-        for (String converter : converters) {
-            sb.append(converter + "\n");
-        }
-        sb.append("\n");
+        sb.append("Converter: " + converter + "\n\n");
+        
+        sb.append("Cleaner: " + cleaner + "\n\n");
 
         sb.append("Reconcilers:");
         if (reconcilers.isEmpty()) {

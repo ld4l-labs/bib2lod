@@ -8,6 +8,9 @@ import java.lang.reflect.Field;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.clean.Cleaner;
+import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * When created, sets itself as a wrapper for the default factory instance.
@@ -51,18 +54,51 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     // Mocked methods
     // ----------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createOptionsReader(org.ld4l.bib2lod.configuration.Configuration)
+     */
     @Override
     public OptionsReader createOptionsReader(String[] args) {
         return (optionsReader != null) ? optionsReader
                 : defaultFactory.createOptionsReader(args);
     }
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConfiguration(org.ld4l.bib2lod.configuration.Configuration)
+     */
     @Override
     public Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, FileNotFoundException, IOException,
             ParseException {
         return (configuration != null) ? configuration
                 : defaultFactory.createConfiguration(args);
+    }
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.configuration.Configuration)
+     */
+    @Override
+    public Cleaner createCleaner(Configuration configuration) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConverter(org.ld4l.bib2lod.configuration.Configuration)
+     */
+    @Override
+    public Converter createConverter(Configuration configuration) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.configuration.Configuration)
+     */
+    @Override
+    public UriMinter createUriMinter(Configuration configuration) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

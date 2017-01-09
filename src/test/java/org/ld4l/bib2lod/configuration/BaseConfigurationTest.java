@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 
 import org.apache.jena.iri.impl.IRIImplException;
 import org.junit.Test;
-import org.ld4l.bib2lod.test.AbstractTestClass;
 import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidValueException;
+import org.ld4l.bib2lod.test.AbstractTestClass;
 
 /*                
  * Test plan

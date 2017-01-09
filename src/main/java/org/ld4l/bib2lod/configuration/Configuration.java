@@ -29,6 +29,8 @@ public interface Configuration {
      */
     String getLocalNamespace();
     
+    //********* TODO Needs to be an input stream/reader. Not all input will
+    // be file-based *******//
     /**
      * Gets the configured input source (file or directory).
      * @return
@@ -62,24 +64,28 @@ public interface Configuration {
     String getOutputFormat();
 
     /**
-     * Gets the class name of the UriMinter specified in the configuration
+     * Gets the class name of the UriMinter specified in the configuration.
      * @return uriMinter - the class name of the UriMinter
      */
     String getUriMinter();
     
     /**
-     * Gets the class name of the Writer specified in the configuration
+     * Gets the class name of the Writer specified in the configuration.
      * @return writer - the class name of the Writer
      */
     String getWriter();   
     
     /**
-     * Gets the list of class names of the converters specified in the 
-     * configuration.
-     * @return converters - the ordered class names of the converters
+     * Gets the class name of the Cleaner specified in the configuration.
+     * @return
      */
-    // TODO Change to List (ordered) of converter classnames, getConverters()
-    List<String> getConverters();
+    String getCleaner();
+    
+    /**
+     * Gets the class name of the Converter specified in the configuration.
+     * @return converter - the class name of the converter
+     */
+    String getConverter();
     
     /**
      * Gets the list of class names of the reconcilers specified in the 
