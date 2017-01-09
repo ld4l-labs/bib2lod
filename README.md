@@ -6,5 +6,5 @@
 
 Converts bibliographic records to RDF.
 
-To build: mvn install  
-To execute: java -cp target/Bib2Lod-1.0-SNAPSHOT-jar-with-dependencies.jar org.ld4l.bib2lod.manager.SimpleManager
+Build: mvn install  
+Execute: java -jar target/Bib2Lod-1.0-SNAPSHOT-jar-with-dependencies.jar 

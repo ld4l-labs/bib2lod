@@ -349,7 +349,7 @@ public abstract class BaseConfiguration implements Configuration {
             e.printStackTrace();
         }  
         
-        sb.append("Input file extension:" + inputFileExtension + "\n\n");
+        sb.append("Input file extension: " + inputFileExtension + "\n\n");
         
         sb.append("Input format: " + inputFormat + "\n\n");
         
