@@ -52,8 +52,8 @@
 			<version>2.8.4</version>
 		</dependency>
 
-		<!-- Added slf4j dependencies to prevent "Failed to load class  
-			"org.slf4j.impl.StaticLoggerBinder" error.  -->
+		<!-- Added slf4j dependencies to prevent "Failed to load class "org.slf4j.impl.StaticLoggerBinder" 
+			error. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
@@ -123,6 +123,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<finalName>bib2lod</finalName>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
@@ -131,6 +132,7 @@
 							<mainClass>org.ld4l.bib2lod.manager.SimpleManager</mainClass>
 						</manifest>
 					</archive>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>
