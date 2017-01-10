@@ -6,5 +6,7 @@
 
 Converts bibliographic records to RDF.
 
+Nothing relevant on master branch as of 2017-01-10. Development is on develop and feature branches.
+
 Build: mvn install  
 Execute: java -jar target/bib2lod.jar 
