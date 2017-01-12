@@ -4,6 +4,9 @@ package org.ld4l.bib2lod.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
 
 /**
- *
+ * An abstract implementation providing shared methods.
  */
 public abstract class BaseConfiguration implements Configuration {
     
@@ -37,15 +40,27 @@ public abstract class BaseConfiguration implements Configuration {
                     "' is invalid: " + msg + ".");
         }
     }
+    
+    /**
+     * Signals that the specified input source is invalid or non-existent.
+     */
+    public static class InvalidInputSourceException extends RuntimeException {
+        
+        private static final long serialVersionUID = 1L;
+        
+        protected InvalidInputSourceException(String msg) {
+            super(msg);
+        }
+    }
 
     protected String localNamespace;
 
     // inputSource and inputFileExtension are only stored for the toString()
     // method.
-    protected File inputSource;
+    protected String inputSource;
     protected String inputFileExtension;
     
-    protected List<File> inputFiles;  
+    protected List<Reader> input;  
     protected String inputFormat;
     
     protected File outputDirectory; 
@@ -71,7 +86,7 @@ public abstract class BaseConfiguration implements Configuration {
      * @see org.ld4l.bib2lod.configuration.Configuration#getInputSource()
      */
     @Override
-    public File getInputSource() {
+    public String getInputSource() {
         return inputSource;
     }
 
@@ -79,8 +94,8 @@ public abstract class BaseConfiguration implements Configuration {
      * @see org.ld4l.bib2lod.configuration.Configuration#getInputFiles()
      */
     @Override
-    public List<File> getInputFiles() {
-        return inputFiles;
+    public List<Reader> getInput() {
+        return input;
     }
 
     /* (non-Javadoc)
@@ -156,6 +171,8 @@ public abstract class BaseConfiguration implements Configuration {
      * 
      */
     protected void setLocalNamespace(String localNamespace) {
+        
+        // TODO Test for empty/null/missing/invalid value. See issue #14.
         if (isValidLocalNamespace(localNamespace)) {
             this.localNamespace = localNamespace; 
         }
@@ -182,65 +199,117 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets input source from configuration (file or directory). Throws an
+     * Sets input source from configuration. Throws an
      * exception if the specified source does not exist or is not readable.
      * Builds list of input files from a valid source. 
      * @param source - input source (string)
      * @return void
      */
-    protected void setInputSource(String source) {
-        
-        // TODO Test for existence, readability, etc.
-        // If doesn't exist, throw exception
-        // If not readable, throw exception
-        
-        setInputSource(source, null);
+    protected void buildInputList(String source) {
+
+        buildInputList(source, null);
     }
     
     /**
      * Sets input source from configuration (file or directory). Throws an
      * exception if the specified source does not exist or is not readable.
-     * Builds list of input files from a valid source. If source is a directory
-     * and extension is non-null, only files with the specified extension are
-     * included in the list.
      * @param source - input source (string)
      * @param extension - input file extension
      * @return void
      */
-    protected void setInputSource(String source, String extension) {
+    protected void buildInputList(String source, String extension) {
         
-        // TODO Test for existence, readability, etc.
-        // If doesn't exist, throw exception
-        // If not readable, throw exception
+        this.inputSource = source;
+        this.inputFileExtension = extension;        
+        this.input = buildInputReaderList();
         
-        this.inputSource = new File(source);
-        this.inputFileExtension = extension;
-        this.inputFiles = buildInputFileList();
+        if (this.input == null) {
+            throw new InvalidInputSourceException(source);
+        }
+    }
+    
+    // ****** TODO Move all reader methods to a Reader class ******* //
+    // Also move the InvalidInputSourceException there
+    
+    /**
+     * Builds the list of input readers. 
+     * @return void
+     */
+    private List<Reader> buildInputReaderList() {
+        
+        List<Reader> readers = null;
+
+        readers = buildInputReadersFromFiles();
+
+        if (readers == null) {
+            return readers;
+        }
+        
+        // Else handle other types of input
+  
+        return readers;
+      
     }
     
     /**
-     * Builds input file list. If passed a directory, creates a list
-     * of files in the directory. If source is a file, wraps the file in a list.
-     * If source is a directory and the input extension is non-null, the list
-     * contains only files with the specified extension.
-     * Tests for existence, readability, etc. have been performed in the 
-     * caller setInputSource().
-     * @return list of input files
+     * Builds the list of input readers from a source on the file system. 
+     * Returns null if the source doesn't exist.
+     * @return List of readers, or null if the source doesn't exist
      */
-    private List<File> buildInputFileList() {
+    private List<Reader> buildInputReadersFromFiles() {
         
-        List<File> files = new ArrayList<File>();
+        File source = new File(inputSource);
         
-        if (inputSource.isDirectory()) {
-            // TODO If input extension is non-null, get only files with that
-            // extension
-            files = Arrays.asList(inputSource.listFiles());
-        } else {
-            files.add(inputSource);
+        // Source doesn't exist on the file system
+        // TODO How can we differentiate a source that is intended to be a file
+        // but doesn't exist, from one that is non-file-based? Perhaps we can't,
+        // and the caller will just have to throw the same exception in both
+        // cases.
+        if (! source.exists()) {
+            return null;
         }
         
-        return files;
+        if (!source.canRead()) {
+            throw new InvalidInputSourceException(
+                    "Can't read input source " + inputSource);
+        }     
+        
+        // Create a list of input files
+        // TODO Create the list of readers directly, without the intermediate
+        // list of files?
+        List<File> inputFiles = new ArrayList<File>();
+
+        if (source.isDirectory()) {     
+            // TODO Use filters to make sure files are readable, and if an 
+            // extension is defined, only with that extension. See issue #16.
+            inputFiles = Arrays.asList(source.listFiles());
+        } else if (source.isFile()) {
+            // Wrap the input file in a List
+            inputFiles.add(source);
+        }
+
+        // Create a list of readers from the list of input files
+        List<Reader> readers = new ArrayList<Reader>();
+        for (File file : inputFiles) {
+            Path path = null;
+            try {
+                path = file.toPath();
+                readers.add(Files.newBufferedReader(path));
+                LOGGER.debug("Adding input file " + path.toString());
+            } catch (IOException e) {
+                LOGGER.warn(
+                        "IOException: can't add input file " + path.toString());
+            }
+        }
+  
+        if (readers.isEmpty()) {
+            LOGGER.warn("No readable input files found");
+            return null;
+        }
+        return readers;
     }
+    
+    // ***** End of reader methods to be moved to a Reader class **** //
     
     /**
      * Sets the input format.
@@ -266,6 +335,8 @@ public abstract class BaseConfiguration implements Configuration {
     protected void setOutputDestination(String destination) {
         
         // TODO:
+        // Handle non-file-based output destination (e.g., stdout)
+        
         // If destination is a file: throw exception
         // If destination is a directory but unreadable: throw exception
         // If destination doesn't exist and can't be created: throw exception
@@ -339,17 +410,11 @@ public abstract class BaseConfiguration implements Configuration {
         sb.append("\n\nConfiguration values:\n\n");
         sb.append("Local namespace: " + localNamespace + "\n\n");
            
-        // Printing source and extension only because the file list may be
-        // unmanageably long.
-        try {
-            sb.append("Input source: " + inputSource.getCanonicalPath() + 
-                    "\n\n");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }  
-        
-        sb.append("Input file extension: " + inputFileExtension + "\n\n");
+        sb.append("Input source: " + inputSource + "\n\n");
+
+        if (inputFileExtension != null) {
+            sb.append("Input file extension: " + inputFileExtension + "\n\n");
+        }
         
         sb.append("Input format: " + inputFormat + "\n\n");
         

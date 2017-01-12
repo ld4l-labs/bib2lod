@@ -71,119 +71,16 @@ public class ConfigurationFromJson extends BaseConfiguration {
      */
     protected void setLocalNamespace(JsonNode config) {
         
+        // TODO BaseConfiguration.setLocalNamespace will need to test for
+        // non-existent/empty/null values, to apply to any type of Configuration.
+        // So this test is redundant. Should we eliminate the JsonUtils tests
+        // and just get the value? The move JsonUtilsTest tests to 
+        // BaseConfigurationTest.
+
         String localNamespace = JsonUtils.getRequiredStringValue(
                 config, Key.LOCAL_NAMESPACE.string);
         
         super.setLocalNamespace(localNamespace);                       
     }
-
-
- 
-// TODO - these will all go in the factory methods and factory
-//    /**
-//     * Builds the services specified in the config file
-//     * @param config
-//     * @throws ClassNotFoundException
-//     * @throws ReflectiveOperationException
-//     */
-//    protected void buildServices(JsonNode config) 
-//            throws ClassNotFoundException, ReflectiveOperationException {   
-//        
-//        JsonNode services = config.get("services");       
-//        LOGGER.debug(services.toString());   
-//    
-//        makeUriMinter(JsonUtils.getRequiredJsonStringValue(
-//                services, Key.URI_MINTER.string));
-//        
-//        // TODO Add same for other services...
-//       
-//    }
-//    
-//    /**
-//     * Builds the UriMinter service
-//     * @param minterClassName
-//     * @throws ClassNotFoundException
-//     * @throws ReflectiveOperationException
-//     */
-//    protected void makeUriMinter(String minterClassName) 
-//            throws ClassNotFoundException, ReflectiveOperationException {
-//        
-//        Class<?> c = Class.forName(minterClassName);
-//        this.uriMinter = (UriMinter) c.getConstructor(String.class)
-//                                        .newInstance(localNamespace);         
-//    }
-//    
-//    /**
-//     * Builds list of input files from the input path
-//     * @param input
-//     * @return 
-//     * @return
-//     * @throws FileNotFoundException 
-//     */
-//    // TODO Also pass in file type and make sure we get only the files of this
-//    // type
-//    protected void buildInputFileList(JsonNode config) 
-//            throws FileNotFoundException {
-//
-//        // TODO Throw error if not defined
-//        JsonNode inputNode = config.get(Key.INPUT.string);
-//        String inputPath = JsonUtils.getRequiredJsonStringValue(
-//                inputNode, Key.INPUT_SOURCE.string);
-////        String inputFormat = getJsonStringValue(inputNode, "format");
-////        String fileExtension = getJsonStringValue(inputNode, "extension");
-//        
-//        this.input = new ArrayList<File>(); 
-//        
-//        File path = new File(inputPath);
-//        
-//        if (! path.exists()) {
-//            throw new FileNotFoundException("Input source not found.");            
-//        }
-//
-//        // TODO - Add filter to path.listFiles() so that we get only the
-//        // files with the right extension. See FilenameFilter or FileFilter.
-//        if (path.isDirectory()) {
-//            this.input = Arrays.asList(path.listFiles());
-//        } else {
-//            this.input.add(path);
-//        }        
-//    }
-//    
-//    /**
-//     * Builds the converter specified in the config file
-//     * @param config
-//     * @throws ClassNotFoundException
-//     * @throws InstantiationException
-//     * @throws IllegalAccessException
-//     * @throws IllegalArgumentException
-//     * @throws InvocationTargetException
-//     * @throws NoSuchMethodException
-//     * @throws SecurityException
-//     */
-//    protected void buildConverter(JsonNode config) 
-//            throws ClassNotFoundException, InstantiationException, 
-//                IllegalAccessException, IllegalArgumentException, 
-//                InvocationTargetException, NoSuchMethodException, 
-//                SecurityException {
-//
-//        // ObjectMapper mapper = new ObjectMapper();
-//        
-//        // JsonNode converterList = config.get("converters"); 
-//        // TODO Should be an array of strings or a string. For now just handle
-//        // an array.
-//        // if string...convert to list
-//        // else
-//        
-//        // TODO Get this to work. Hard-coding as a single converter for now
-//        // TypeReference ref = new TypeReference<List<Converter>>() {};
-//        // converters = mapper.readValue(converterList, ref);
-//       String converter = JsonUtils.getRequiredJsonStringValue(
-//               config, Key.CONVERTER.string);
-//       Class<?> converterClass = Class.forName(converter); 
-//       Constructor<?> constructor = 
-//               converterClass.getConstructor(this.getClass());
-//       this.converter = (Converter) constructor.newInstance(this); 
-//    }
-    
  
 }

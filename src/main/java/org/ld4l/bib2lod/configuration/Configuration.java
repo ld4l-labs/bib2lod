@@ -5,6 +5,7 @@ package org.ld4l.bib2lod.configuration;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
@@ -32,18 +33,18 @@ public interface Configuration {
     //********* TODO Needs to be an input stream/reader. Not all input will
     // be file-based *******//
     /**
-     * Gets the configured input source (file or directory).
+     * Gets the configured input source.
      * @return
      */
     // TODO Perhaps shouldn't be part of the interface. It's only used for
     // the toString() method for logging.
-    File getInputSource();
+    String getInputSource();
 
     /**
-     * Gets the configured list of input files.
-     * @return input - the list of input files
+     * Gets the configured list of input readers.
+     * @return input - the list of input readers
      */
-    List<File> getInputFiles();
+    List<Reader> getInput();
 
     /**
      * Gets the configured input format.

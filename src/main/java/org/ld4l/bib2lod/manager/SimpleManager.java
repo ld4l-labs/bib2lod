@@ -2,7 +2,7 @@
 
 package org.ld4l.bib2lod.manager;
 
-import java.io.File;
+import java.io.Reader;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -38,18 +38,25 @@ public final class SimpleManager {
     
     
     /**
-     * Converts a list of input files.
+     * Converts a list of input readers.
      * @param configuration - the Configuration object
      */
     private static void convertFiles(Configuration configuration) {
-
-        List<File> inputFiles = configuration.getInputFiles();
         
-        //Converter converter = configuration.getConverter();
+        // Converter converter = configuration.getConverter();
 
-        for (File file : inputFiles) {
+        List<Reader> input = configuration.getInput();
+
+        for (Reader reader : input) {
             
-
+            // create Reader and send to converter
+            // Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            // NO - reader must be created in Configuration, so its getInput method 
+            // (change from getInputFiles) is neutral as to input type (file, stream, etc.)
+            
+            // Converter returns a Writer
+            // Manager writes to output file (other managers would output in
+            // other ways).
 
         }       
     }
