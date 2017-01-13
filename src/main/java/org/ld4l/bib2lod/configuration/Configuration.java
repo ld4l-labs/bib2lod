@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,15 +13,24 @@ import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 
 /**
- * An object providing program configuration values
+ * Provides program configuration values.
  */
 public interface Configuration {
     
     /**
      * Factory method
+     * @param args
+     * @return
+     * @throws ClassNotFoundException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ParseException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
      */
     static Configuration instance(String[] args) throws ClassNotFoundException,
-            FileNotFoundException, IOException, ParseException {
+            FileNotFoundException, IOException, ParseException, 
+            InstantiationException, IllegalAccessException {
         return Bib2LodObjectFactory.instance().createConfiguration(args);
     }
 
@@ -29,34 +39,19 @@ public interface Configuration {
      * @return localNamespace - the local namespace
      */
     String getLocalNamespace();
-    
-    //********* TODO Needs to be an input stream/reader. Not all input will
-    // be file-based *******//
-    /**
-     * Gets the configured input source.
-     * @return
-     */
-    // TODO Perhaps shouldn't be part of the interface. It's only used for
-    // the toString() method for logging.
-    String getInputSource();
 
     /**
      * Gets the configured list of input readers.
      * @return input - the list of input readers
      */
-    List<Reader> getInput();
-
-    /**
-     * Gets the configured input format.
-     * @return format - the input format
-     */
-    String getInputFormat();
+    // TODO Generalize to List<Reader>?
+    List<BufferedReader> getInput();
     
     /**
-     * Gets the configured output directory.
-     * @return the output directory
+     * Gets the configured output destination.
+     * @return the output destination
      */
-    File getOutputDirectory();
+    File getOutputDestination();
       
     /**
      * Gets the configured output format.

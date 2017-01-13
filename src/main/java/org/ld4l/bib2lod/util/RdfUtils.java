@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.util.rdf;
+package org.ld4l.bib2lod.util;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Statement;
@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.StmtIterator;
  * A utility class for working with RDF.
  */
 // TODO Can we put these as static methods in one of the conversion classes?
-public final class RdfUtil {
+public final class RdfUtils {
 
     /**
      * Output a string representation of a Model for logging and debugging.

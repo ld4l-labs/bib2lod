@@ -2,12 +2,18 @@
 
 package org.ld4l.bib2lod.manager;
 
-import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.conversion.Converter;
 
 
 /** 
@@ -40,24 +46,31 @@ public final class SimpleManager {
     /**
      * Converts a list of input readers.
      * @param configuration - the Configuration object
+     * @throws IOException 
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    private static void convertFiles(Configuration configuration) {
+    private static void convertFiles(Configuration configuration) throws 
+            IOException, InstantiationException, IllegalAccessException, 
+            ClassNotFoundException {
         
-        // Converter converter = configuration.getConverter();
+        Converter converter = Converter.instance(configuration);
 
-        List<Reader> input = configuration.getInput();
+        List<BufferedReader> input = configuration.getInput();
+         
+        File destination = configuration.getOutputDestination();
 
-        for (Reader reader : input) {
+        int count = 0;
+        for (BufferedReader reader : input) {
+            count++;
+            StringBuffer buffer = converter.convert(reader); 
+            File file = new File(destination, "output-" + count);
+            Writer writer = new PrintWriter(file);
+            writer.write(buffer.toString());
             
-            // create Reader and send to converter
-            // Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            // NO - reader must be created in Configuration, so its getInput method 
-            // (change from getInputFiles) is neutral as to input type (file, stream, etc.)
-            
-            // Converter returns a Writer
-            // Manager writes to output file (other managers would output in
-            // other ways).
-
+            reader.close();
+            writer.close();
         }       
     }
       

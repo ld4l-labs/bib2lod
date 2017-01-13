@@ -39,14 +39,22 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Configuration createConfiguration(String[] args)
-            throws ClassNotFoundException, FileNotFoundException, IOException,
-            ParseException {
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        
         // return new ConfigurationFromJson(args);
         return new StubConfiguration();
     }
 
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.configuration.Configuration)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConverter(org.ld4l.bib2lod.configuration.Converter)
+     */
+    @Override
+    public Converter createConverter(Configuration configuration) {
+        return new MarcxmlToLd4lRdfConverter(configuration);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.clean.Cleaner)
      */
     @Override
     public Cleaner createCleaner(Configuration configuration) {
@@ -54,22 +62,11 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConverter(org.ld4l.bib2lod.configuration.Configuration)
-     */
-    @Override
-    public Converter createConverter(Configuration configuration) {
-        // TODO Auto-generated method stub
-        return new MarcxmlToLd4lRdfConverter(configuration);
-    }
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.configuration.Configuration)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.uri.UriMinter)
      */
     @Override
     public UriMinter createUriMinter(Configuration configuration) {
         return new RandomUriMinter(configuration);
     }
-    
-
 
 }

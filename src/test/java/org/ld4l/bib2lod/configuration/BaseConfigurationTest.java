@@ -2,26 +2,29 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.jena.iri.impl.IRIImplException;
+import org.junit.Before;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidValueException;
+import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidInputSourceException;
 import org.ld4l.bib2lod.test.AbstractTestClass;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /*                
  * Test plan
  * 
- * Input source - Postpone. Will just assume correct value for now
- *    - doesn't exist - Exception
+ * Input source 
+ *    - doesn't exist - Exception - for now - until we handle other types of input
  *    - not readable - Exception
- *    - empty directory - succeeds
- *    - a directory - succeeds
- *    - a file - succeeds
- *    - empty file - succeeds
- *    - valid non-empty file - succeeds
- *    - valid non-empty directory - succeeds
+ *    - empty directory - succeed
+ *    - a readable directory with no readable files - succeed
+ *    - a readable directory - succeeds
+ *    - a readable file - succeeds
+
  *    
  * Input format - Postpone. Will just hard-code correct value for now
  *    - doesn't exist: succeeds - base on file contents
@@ -62,17 +65,37 @@ import org.ld4l.bib2lod.test.AbstractTestClass;
  */
 public class BaseConfigurationTest extends AbstractTestClass {
 
+    private MockBib2LodObjectFactory factory;
+    private Configuration config;
+    private ObjectNode optionsNode;
 
-    private final String MALFORMED_URI = "this is not a valid uri";
-    private final String WEB_PAGE_URL = 
-            "http://data.ld4l.org/cornell/index.html";
-    private final String LOCAL_NAMESPACE_NO_FINAL_SLASH = 
-            "http://data.ld4l.org/cornell";
-    private final String VALID_LOCAL_NAMESPACE = 
-            "http://data.ld4l.org/cornell/";
-           
+    @Before
+    public void setupForSuccess() {
+        optionsNode = jsonObject();
+        optionsNode.set("input",
+                jsonObject() 
+                        .put("source", 
+                                "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml"));
+        optionsNode.set("output",
+                jsonObject()
+                        .put("destination",
+                                "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/")
+                        .put("format", "ntriples"));
+        optionsNode.put("local_namespace", "http://data.ld4l.org/cornell/");
+        optionsNode.put("uri_minter", "org.ld4l.bib2lod.uri.RandomUriMinter");                        
+        optionsNode.put("writer", "org.ld4l.bib2lod.io.SimpleRdfWriter");
+        optionsNode.set("converters", jsonArray().add(
+                "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"));
+        optionsNode.set("reconcilers", jsonArray());
+
+        factory = new MockBib2LodObjectFactory();
+        factory.setOptionsReader(new MockOptionsReader(optionsNode));
+    }
+    
     /*
-     * Optional value missing/null/empty/invalid type/invalid value/valid value                              
+     * Optional value missing/null/empty/invalid type/invalid value/valid value   
+     * TODO Not sure if these are needed, or if we want tests for all the
+     * specific values.                           
      */
     @Test
     public void optionalValueMissing_Succeeds() {
@@ -148,63 +171,125 @@ public class BaseConfigurationTest extends AbstractTestClass {
     }
     
 
-
-    /*
-     * Local namespace tests - alternate implementations
-     */
-    /*
-    @Test (expected = IRIImplException.class)
-    public void localNamespaceMalformedUri_ThrowsException() throws Exception {
-        BaseConfiguration.isValidLocalNamespace(MALFORMED_URI);
-    }
-    
-    @Test (expected = InvalidValueException.class)
-    public void localNamespaceWebPageUrl_ThrowsException() throws Exception {
-        BaseConfiguration.isValidLocalNamespace(WEB_PAGE_URL);
-    }
-                                                                 
-    @Test (expected = InvalidValueException.class)
-    public void localNamespaceNoFinalSlash_ThrowsException() {
-        BaseConfiguration.isValidLocalNamespace(LOCAL_NAMESPACE_NO_FINAL_SLASH);
-    }
-    */
     
     /*
      * Local namespace tests 
      */
     
-    @Test 
+//    @Test
+//    public void localNamespaceMissing_ThrowsException() {
+//        setNamespace(JSON_REMOVE);
+//        instantiateAndExpectException(RequiredKeyMissingException.class);
+//    }
+//
+//    @Test
+//    public void localNamespaceNull_ThrowsException() {
+//        setNamespace(null);
+//        instantiateAndExpectException(RequiredValueNullException.class);
+//    }
+//
+//    @Test
+//    public void localNamespaceEmptyString_ThrowsException() {
+//        setNamespace("");
+//        instantiateAndExpectException(RequiredValueEmptyException.class);
+//    }
+//
+//    @Test
+//    public void localNamespaceEmptyArray_ThrowsException() {
+//        setNamespace(jsonArray());
+//        instantiateAndExpectException(InvalidTypeException.class);
+//    }
+//
+//    @Test
+//    public void localNamespaceEmptyObject_ThrowsException() {
+//        setNamespace(jsonObject());
+//        instantiateAndExpectException(InvalidTypeException.class);
+//    }
+//
+//    @Test
+//    public void localNamespaceInvalidType_ThrowsException() {
+//        optionsNode.put("local_namespace", true);
+//        instantiateAndExpectException(InvalidTypeException.class);
+//    }
+    
+    @Test
     public void localNamespaceMalformedUri_ThrowsException() {
-        validateLocalNamespaceAndExpectException(
-                MALFORMED_URI, IRIImplException.class);
+        setNamespace("http://mal formed uri.org");
+        instantiateAndExpectException(IRIImplException.class);
     }
     
     @Test
-    public void localNamespaceWebPageUrl_ThrowsException() {
-        validateLocalNamespaceAndExpectException(
-                WEB_PAGE_URL, InvalidValueException.class);
-    }
-                                                                 
-    @Test 
     public void localNamespaceNoFinalSlash_ThrowsException() {
-        validateLocalNamespaceAndExpectException(
-                LOCAL_NAMESPACE_NO_FINAL_SLASH, InvalidValueException.class);
+        setNamespace("http://data.ld4l.org/cornell");
+        instantiateAndExpectException(InvalidValueException.class);
     }
     
+    @Test 
+    public void localNamespaceIsWebPage_ThrowsException() {
+        setNamespace("http://data.ld4l.org/cornell/index.html");
+        instantiateAndExpectException(InvalidValueException.class);
+    }
+
     @Test
-    public void localNamespaceValidUri_Succeeds() {
-        assertTrue(BaseConfiguration.isValidLocalNamespace(
-                VALID_LOCAL_NAMESPACE));       
+    public void localNamespaceValidUri_Succeeds() throws Exception {
+        config = Configuration.instance(new String[0]);
+        assertEquals("http://data.ld4l.org/cornell/", 
+                config.getLocalNamespace());
+    }
+    
+    /*
+     * Input source tests
+     */
+
+    @Test 
+    public void inputSourceDoesntExist_ThrowsException() {
+//        fail("inputSourceDoesntExist_ThrowsException not yet implemented");
+//        setInputSource("non_existent_source");
+//        instantiateAndExpectException(InvalidInputSourceException.class);     
+    }
+    
+    @Test 
+    public void inputSourceNotReadable_ThrowsException() {
+//        fail("inputSourceNotReadable_ThrowsException not yet implemented");
+    }
+    
+    @Test 
+    public void inputDirectoryEmpty_Succeeds() {
+//        fail("inputDirectoryEmpty_Succeeds not yet implemented");
+    }
+    
+    @Test 
+    public void allInputFilesUnreadable_Succeeds() {
+//        fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
+    }
+    
+    @Test 
+    public void readableInputFile_Succeeds() {
+//       fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
     }
 
     
     /*
      * Helper methods
      */
-    private void validateLocalNamespaceAndExpectException(String localNamespace,
+    
+    private void setNamespace(Object newValue) {
+        setFieldValue(optionsNode, "local_namespace", newValue);
+    }
+    
+    private void setInputSource(Object newValue) {
+        ObjectNode source = jsonObject();
+        setFieldValue(source, "source", newValue);
+        setFieldValue(optionsNode, "input", source);
+    }
+    
+    private void instantiateAndExpectException(
             Class<? extends Exception> expected) {
         try {
-            BaseConfiguration.isValidLocalNamespace(localNamespace);
+            // Or just instantiate the MockConfiguration instance directly for
+            // testing BaseConfiguration methods? 
+            // config = new MockConfiguration(new String[0]);
+            config = Configuration.instance(new String[0]);
             fail("Expected exception '" + expected.getSimpleName());
         } catch (Exception e) {
             if (!e.getClass().equals(expected)) {

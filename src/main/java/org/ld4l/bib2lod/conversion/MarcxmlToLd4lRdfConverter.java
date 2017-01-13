@@ -2,6 +2,10 @@
 
 package org.ld4l.bib2lod.conversion;
 
+import java.io.Reader;
+import java.io.Writer;
+
+import org.apache.commons.io.LineIterator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -25,9 +29,18 @@ public class MarcxmlToLd4lRdfConverter extends BaseConverter {
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
      */
     @Override
-    public void convert() {
-        // TODO Auto-generated method stub
+    public StringBuffer convert(Reader reader) {
         
+        // Stub - just read input into buffer and return
+        StringBuffer buffer = new StringBuffer();
+        LineIterator lines = new LineIterator(reader);
+        String lineSeparator = System.getProperty("line.separator");
+        while (lines.hasNext()) {
+            String line = lines.nextLine();
+            LOGGER.debug(line);
+            buffer.append(lines + lineSeparator);
+        }
+        return buffer;
     }
 
 }

@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,42 +17,41 @@ public class StubConfiguration extends BaseConfiguration {
     
     private static final String LOCAL_NAMESPACE = 
             "http://data.ld4l.org/cornell/";
-    // TODO Handle non-file based input: e.g., stdin, input stream
+    private static final String INPUT_BUILDER = 
+            "org.ld4l.bib2lod.configuration.FileInputBuilder";
     private static final String INPUT_SOURCE = 
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml";
     private static final String INPUT_FORMAT = "MARCXML";
     private static final String OUTPUT_DESTINATION = 
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/";
     private static final String OUTPUT_FORMAT = "ntriples";
-    private static final String URI_MINTER = "org.ld4l.bib2lod.uri.RandomUriMinter";  
-    private static final String WRITER = "org.ld4l.bib2lod.io.write.SimpleRdfWriter";
-    private static final String CLEANER = "org.ld4l.bib2lod.clean.MarcxmlCleaner";
-    private static final String CONVERTER = "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf";
+    private static final String URI_MINTER = 
+            "org.ld4l.bib2lod.uri.RandomUriMinter";  
+    private static final String WRITER = "java.io.PrintWriter";
+    private static final String CLEANER = 
+            "org.ld4l.bib2lod.clean.MarcxmlCleaner";
+    private static final String CONVERTER = 
+            "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf";
     private static final String[] RECONCILERS = {};
 
     /**
-     * 
+     * Constructor.
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ClassNotFoundException 
      */              
-    public StubConfiguration() {
+    public StubConfiguration() throws ClassNotFoundException, 
+            InstantiationException, IllegalAccessException  {
         
-        setLocalNamespace(LOCAL_NAMESPACE);
-        
-        buildInputList(INPUT_SOURCE);
-        setInputFormat(INPUT_FORMAT);
-        
+        setLocalNamespace(LOCAL_NAMESPACE);     
+        buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);     
         setOutputDestination(OUTPUT_DESTINATION);
-        setOutputFormat(OUTPUT_FORMAT);
-        
+        setOutputFormat(OUTPUT_FORMAT);      
         setUriMinter(URI_MINTER);
-        setWriter(WRITER);
-        
+        setWriter(WRITER);     
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);
-        
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(this.toString());
-        }
 
     }
 

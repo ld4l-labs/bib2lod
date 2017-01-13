@@ -2,7 +2,9 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
@@ -53,22 +56,13 @@ public abstract class BaseConfiguration implements Configuration {
         }
     }
 
-    protected String localNamespace;
-
-    // inputSource and inputFileExtension are only stored for the toString()
-    // method.
-    protected String inputSource;
-    protected String inputFileExtension;
-    
-    protected List<Reader> input;  
-    protected String inputFormat;
-    
-    protected File outputDirectory; 
-    protected String outputFormat;
-    
+    protected String localNamespace;  
+    protected List<BufferedReader> input;  
+    protected String inputFormat;    
+    protected File outputDestination; 
+    protected String outputFormat;    
     protected String uriMinter;
     protected String writer;
-
     protected String converter;
     protected String cleaner;
     protected List<String> reconcilers;
@@ -83,35 +77,19 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getInputSource()
-     */
-    @Override
-    public String getInputSource() {
-        return inputSource;
-    }
-
-    /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.Configuration#getInputFiles()
      */
     @Override
-    public List<Reader> getInput() {
+    public List<BufferedReader> getInput() {
         return input;
-    }
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getInputFormat()
-     */
-    @Override
-    public String getInputFormat() {
-        return inputFormat;
     }
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.Configuration#getOutputDirectory()
      */
     @Override
-    public File getOutputDirectory() {
-        return outputDirectory;
+    public File getOutputDestination() {
+        return outputDestination;
     }
 
     /* (non-Javadoc)
@@ -199,130 +177,56 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets input source from configuration. Throws an
-     * exception if the specified source does not exist or is not readable.
-     * Builds list of input files from a valid source. 
+     * Builds input list. Instantiates an InputBuilder from the configuration,
+     * calls its buildInputList() method, and assigns the result to the
+     * member variable input.
+     * @param builder - the class name of the input builder to invoke
      * @param source - input source (string)
+     * @param 
      * @return void
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ParseException 
+     * @throws FileNotFoundException 
+     * @throws IOException 
      */
-    protected void buildInputList(String source) {
-
-        buildInputList(source, null);
+    protected void buildInput(String builder, String source) throws
+            InstantiationException, IllegalAccessException, 
+            ClassNotFoundException, ParseException, FileNotFoundException, 
+            IOException {
+                  
+        // Instantiate builder
+        InputBuilder inputBuilder = InputBuilder.instance(builder);
+        
+        // Pass source and extension to builder, get back list of readers
+        this.input = inputBuilder.buildInputList(source); 
     }
     
     /**
-     * Sets input source from configuration (file or directory). Throws an
-     * exception if the specified source does not exist or is not readable.
+     * Builds input list.
+     * @param builder - the class name of the input builder to invoke
      * @param source - input source (string)
-     * @param extension - input file extension
+     * @param extension - input file extension (for input source on file system)
+     * @param 
      * @return void
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    protected void buildInputList(String source, String extension) {
+    protected void buildInput(String builder, String source, String extension) 
+            throws ClassNotFoundException, InstantiationException, 
+            IllegalAccessException {
         
-        this.inputSource = source;
-        this.inputFileExtension = extension;        
-        this.input = buildInputReaderList();
+        // Instantiate builder
+        InputBuilder inputBuilder = 
+                (InputBuilder) Class.forName(builder).newInstance();
         
-        if (this.input == null) {
-            throw new InvalidInputSourceException(source);
-        }
+        // Pass source and extension to builder, get back list of readers
+        this.input = inputBuilder.buildInputList(source, extension); 
+        
     }
-    
-    // ****** TODO Move all reader methods to a Reader class ******* //
-    // Also move the InvalidInputSourceException there
-    
-    /**
-     * Builds the list of input readers. 
-     * @return void
-     */
-    private List<Reader> buildInputReaderList() {
-        
-        List<Reader> readers = null;
-
-        readers = buildInputReadersFromFiles();
-
-        if (readers == null) {
-            return readers;
-        }
-        
-        // Else handle other types of input
-  
-        return readers;
-      
-    }
-    
-    /**
-     * Builds the list of input readers from a source on the file system. 
-     * Returns null if the source doesn't exist.
-     * @return List of readers, or null if the source doesn't exist
-     */
-    private List<Reader> buildInputReadersFromFiles() {
-        
-        File source = new File(inputSource);
-        
-        // Source doesn't exist on the file system
-        // TODO How can we differentiate a source that is intended to be a file
-        // but doesn't exist, from one that is non-file-based? Perhaps we can't,
-        // and the caller will just have to throw the same exception in both
-        // cases.
-        if (! source.exists()) {
-            return null;
-        }
-        
-        if (!source.canRead()) {
-            throw new InvalidInputSourceException(
-                    "Can't read input source " + inputSource);
-        }     
-        
-        // Create a list of input files
-        // TODO Create the list of readers directly, without the intermediate
-        // list of files?
-        List<File> inputFiles = new ArrayList<File>();
-
-        if (source.isDirectory()) {     
-            // TODO Use filters to make sure files are readable, and if an 
-            // extension is defined, only with that extension. See issue #16.
-            inputFiles = Arrays.asList(source.listFiles());
-        } else if (source.isFile()) {
-            // Wrap the input file in a List
-            inputFiles.add(source);
-        }
-
-        // Create a list of readers from the list of input files
-        List<Reader> readers = new ArrayList<Reader>();
-        for (File file : inputFiles) {
-            Path path = null;
-            try {
-                path = file.toPath();
-                readers.add(Files.newBufferedReader(path));
-                LOGGER.debug("Adding input file " + path.toString());
-            } catch (IOException e) {
-                LOGGER.warn(
-                        "IOException: can't add input file " + path.toString());
-            }
-        }
-  
-        if (readers.isEmpty()) {
-            LOGGER.warn("No readable input files found");
-            return null;
-        }
-        return readers;
-    }
-    
-    // ***** End of reader methods to be moved to a Reader class **** //
-    
-    /**
-     * Sets the input format.
-     * @param format - the input format
-     * @return void
-     */
-    protected void setInputFormat(String format) {
-        // TODO check for valid formats (from a list)?
-        // But individual converters will still have to check that the input 
-        // format is one of the expected formats, so maybe don't do here.
-        this.inputFormat = format;
-    }
-       
+     
     /**
      * Sets output directory. Throws an exception if: the destination is a file;
      * the destination is unreadable; the destination doesn't exist and cannot
@@ -341,12 +245,15 @@ public abstract class BaseConfiguration implements Configuration {
         // If destination is a directory but unreadable: throw exception
         // If destination doesn't exist and can't be created: throw exception
         // If destination doesn't exist but can be created, create it.
-        
-        this.outputDirectory = new File(destination);
+
         // TODO Convert string to directory    
         // Test for nonexistent but can create, nonexistent but can't create,
         // exists but unreadable
+        // For now we assume everything is correct
+        
+        this.outputDestination = new File(destination);
     }
+
     
     /**
      * Sets output format.
@@ -400,54 +307,5 @@ public abstract class BaseConfiguration implements Configuration {
     protected void setReconcilers(String[] reconcilers) {
         this.reconcilers = Arrays.asList(reconcilers);
     }
-    
-    /**
-     * Provide a string representation for logging and debugging. 
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n\nConfiguration values:\n\n");
-        sb.append("Local namespace: " + localNamespace + "\n\n");
-           
-        sb.append("Input source: " + inputSource + "\n\n");
-
-        if (inputFileExtension != null) {
-            sb.append("Input file extension: " + inputFileExtension + "\n\n");
-        }
-        
-        sb.append("Input format: " + inputFormat + "\n\n");
-        
-        try {
-            sb.append("Output destination: " + 
-                    outputDirectory.getCanonicalPath() + "\n\n");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        sb.append("Output format: " + outputFormat + "\n\n");
-
-        sb.append("Uri minter: " + uriMinter + "\n\n");
-        
-        sb.append("Writer: " + writer + "\n\n");
-        
-        sb.append("Converter: " + converter + "\n\n");
-        
-        sb.append("Cleaner: " + cleaner + "\n\n");
-
-        sb.append("Reconcilers:");
-        if (reconcilers.isEmpty()) {
-            sb.append(" none\n");
-        } else {
-            for (String reconciler : reconcilers) {
-                sb.append(reconciler + "\n");        
-            }
-        }
-        sb.append("\n");
-        
-        return sb.toString();       
-    }
-
     
 }

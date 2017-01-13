@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -57,7 +58,7 @@ public class ConfigurationFromJson extends BaseConfiguration {
         LOGGER.debug(config.toString());
         
         setLocalNamespace(config);
-    
+        
         // TODO Add same for other config elements...
 
     }
@@ -82,5 +83,5 @@ public class ConfigurationFromJson extends BaseConfiguration {
         
         super.setLocalNamespace(localNamespace);                       
     }
- 
+
 }

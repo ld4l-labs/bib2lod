@@ -70,8 +70,12 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, FileNotFoundException, IOException,
             ParseException {
-        return (configuration != null) ? configuration
-                : defaultFactory.createConfiguration(args);
+        // Currently the default configuration is StubConfiguration, which 
+        // doesn't work to test the abstract BaseConfiguration because it  
+        // doesn't use a JsonNode, and isn't useful to build tests on because it
+        // is only temporary. Could rename this to createMockConfiguration if 
+        // we need createConfiguration to test a different Configuration type.
+        return new MockConfiguration(args);
     }
 
     /* (non-Javadoc)

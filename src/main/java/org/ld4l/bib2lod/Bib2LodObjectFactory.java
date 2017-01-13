@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.clean.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.InputBuilder;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.uri.UriMinter;
@@ -53,18 +54,13 @@ public abstract class Bib2LodObjectFactory {
      * @throws FileNotFoundException
      * @throws IOException
      * @throws ParseException
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
     public abstract Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, FileNotFoundException, IOException,
-            ParseException;
-    
-    /**
-     * Returns a Cleaner instance.
-     * @param configuration - the Configuration instance 
-     * @return the Cleaner instance
-     */
-    public abstract Cleaner createCleaner(Configuration configuration);
-    
+            ParseException, InstantiationException, IllegalAccessException;
+ 
     /**
      * Returns a Converter instance.
      * @param configuration - the Configuration instance 
@@ -72,6 +68,26 @@ public abstract class Bib2LodObjectFactory {
      */
     public abstract Converter createConverter(Configuration configuration);
     
+    /**
+     * Returns an InputBuilder instance.
+     * @return the InputBuilder instance.
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    public InputBuilder createInputBuilder(String className) throws 
+            InstantiationException, IllegalAccessException, 
+            ClassNotFoundException {
+        return (InputBuilder) Class.forName(className).newInstance();
+    }
+    
+    /**
+     * Returns a Cleaner instance.
+     * @param configuration - the Configuration instance 
+     * @return the Cleaner instance
+     */
+    public abstract Cleaner createCleaner(Configuration configuration);
+
     /**
      * Returns a UriMinter instance.
      * @param configuration - the Configuration instance 
