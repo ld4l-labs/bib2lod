@@ -10,9 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.clean.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.configuration.InputBuilder;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 /**

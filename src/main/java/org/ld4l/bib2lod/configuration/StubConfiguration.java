@@ -18,7 +18,7 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String LOCAL_NAMESPACE = 
             "http://data.ld4l.org/cornell/";
     private static final String INPUT_BUILDER = 
-            "org.ld4l.bib2lod.configuration.FileInputBuilder";
+            "org.ld4l.bib2lod.io.FileInputBuilder";
     private static final String INPUT_SOURCE = 
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml";
     private static final String INPUT_FORMAT = "MARCXML";
