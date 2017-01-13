@@ -6,10 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * An abstract implementation providing shared methods.
@@ -61,7 +58,7 @@ public abstract class BaseConfiguration implements Configuration {
     protected String inputFormat;    
     protected File outputDestination; 
     protected String outputFormat;    
-    protected String uriMinter;
+    protected List<String> uriMinters;
     protected String writer;
     protected String converter;
     protected String cleaner;
@@ -101,11 +98,11 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getUriMinter()
+     * @see org.ld4l.bib2lod.configuration.Configuration#getUriMinters()
      */
     @Override
-    public String getUriMinter() {
-        return uriMinter;
+    public List<String> getUriMinters() {
+        return uriMinters;
     }
     
     /* (non-Javadoc)
@@ -270,8 +267,8 @@ public abstract class BaseConfiguration implements Configuration {
      * @param uriMinter - name of UriMinter class
      * @return void
      */
-    protected void setUriMinter(String uriMinter) {
-        this.uriMinter = uriMinter;
+    protected void setUriMinters(String[] uriMinters) {
+        this.uriMinters = Arrays.asList(uriMinters);
     }
     
     /**

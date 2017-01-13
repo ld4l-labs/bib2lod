@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * Provides program configuration values.
@@ -60,10 +61,10 @@ public interface Configuration {
     String getOutputFormat();
 
     /**
-     * Gets the class name of the UriMinter specified in the configuration.
-     * @return uriMinter - the class name of the UriMinter
+     * Gets a list of class names of UriMinter specified in the configuration.
+     * @return List<UriMinter> - the list of UriMinter class names
      */
-    String getUriMinter();
+    List<String> getUriMinters();
     
     /**
      * Gets the class name of the Writer specified in the configuration.

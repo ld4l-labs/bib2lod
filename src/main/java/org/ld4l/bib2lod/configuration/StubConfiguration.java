@@ -25,8 +25,8 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String OUTPUT_DESTINATION = 
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/";
     private static final String OUTPUT_FORMAT = "ntriples";
-    private static final String URI_MINTER = 
-            "org.ld4l.bib2lod.uri.RandomUriMinter";  
+    private static final String[] URI_MINTERS = {
+        "org.ld4l.bib2lod.uri.RandomUriMinter"};  
     private static final String WRITER = "java.io.PrintWriter";
     private static final String CLEANER = 
             "org.ld4l.bib2lod.clean.MarcxmlCleaner";
@@ -47,7 +47,7 @@ public class StubConfiguration extends BaseConfiguration {
         buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);     
         setOutputDestination(OUTPUT_DESTINATION);
         setOutputFormat(OUTPUT_FORMAT);      
-        setUriMinter(URI_MINTER);
+        setUriMinters(URI_MINTERS);
         setWriter(WRITER);     
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
