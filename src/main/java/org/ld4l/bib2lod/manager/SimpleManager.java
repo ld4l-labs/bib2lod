@@ -66,6 +66,12 @@ public final class SimpleManager {
             count++;
             StringBuffer buffer = converter.convert(reader); 
             File file = new File(destination, "output-" + count);
+            
+            // Should get this from configuration? Or can each manager just
+            // hard-code the writer? In that case, probably remove writer 
+            // specification from configuration. Maybe also rename this class 
+            // something like FileOutputManager. Or do the same for the
+            // InputBuilder type, and call this FileIOManager?
             Writer writer = new PrintWriter(file);
             writer.write(buffer.toString());
             
