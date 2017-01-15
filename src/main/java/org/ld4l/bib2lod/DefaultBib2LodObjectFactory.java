@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.configuration.JsonOptionsReader;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.conversion.MarcxmlToLd4lRdfConverter;
+import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
 import org.ld4l.bib2lod.uri.RandomUriMinter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
@@ -50,7 +50,7 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Converter createConverter(Configuration configuration) {
-        return new MarcxmlToLd4lRdfConverter(configuration);
+        return new MarcxmlToRdf(configuration);
     }
     
     /* (non-Javadoc)

@@ -19,7 +19,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
 /**
  * An implementation that converts MARCXML to LD4L RDF.
  */
-public class MarcxmlToLd4lRdfConverter extends BaseConverter {
+public class MarcxmlToRdf extends BaseConverter {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -27,7 +27,7 @@ public class MarcxmlToLd4lRdfConverter extends BaseConverter {
      * Constructor
      * @param configuration - the Configuration object
      */
-    public MarcxmlToLd4lRdfConverter(Configuration configuration) {
+    public MarcxmlToRdf(Configuration configuration) {
         super(configuration);
     }
 
