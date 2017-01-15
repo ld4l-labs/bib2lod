@@ -20,18 +20,6 @@ import org.apache.logging.log4j.Logger;
 public class FileInputBuilder extends BaseInputBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
-
-    /**
-     * Signals that the specified input source is unreadable.
-     */
-    public static class UnreadableInputSourceException extends RuntimeException {
-        
-        private static final long serialVersionUID = 1L;
-        
-        protected UnreadableInputSourceException(String msg) {
-            super(msg);
-        }
-    }
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.InputBuilder#buildInputList(org.ld4l.bib2lod.configuration.Configuration)
@@ -42,20 +30,16 @@ public class FileInputBuilder extends BaseInputBuilder {
 
         File source = new File(inputSource);
         
-        // Source doesn't exist on the file system
-        // TODO How can we differentiate a source that is intended to be a file
-        // but doesn't exist, from one that is non-file-based? Perhaps we can't,
-        // and the caller will just have to throw the same exception in both
-        // cases.
-        
 // Ignore this case for now
 //        if (! source.exists()) {
-//            return null;
+//        // try to create - else
+//            throw new IOException(
+//              "Input source " + inputSource + " doesn't exist and can't create");
 //        }
   
 // Ignore this case for now
 //        if (!source.canRead()) {
-//            throw new UnreadableInputSourceException(
+//            throw new IOException(
 //                    "Can't read input source " + inputSource);
 //        }     
         

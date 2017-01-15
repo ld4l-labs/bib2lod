@@ -2,7 +2,7 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.File;
+import java.io.OutputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +26,8 @@ public class StubConfiguration extends BaseConfiguration {
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/";
     private static final String OUTPUT_FORMAT = "ntriples";
     private static final String[] URI_MINTERS = {
-        "org.ld4l.bib2lod.uri.RandomUriMinter"};  
-    private static final String WRITER = "java.io.PrintWriter";
+        "org.ld4l.bib2lod.uri.RandomUriMinter"};
+    private static final String OUTPUT_WRITER = "org.ld4l.bib2lod.io.FileOutputWriter";
     private static final String CLEANER = 
             "org.ld4l.bib2lod.clean.MarcxmlCleaner";
     private static final String CONVERTER = 
@@ -48,7 +48,7 @@ public class StubConfiguration extends BaseConfiguration {
         setOutputDestination(OUTPUT_DESTINATION);
         setOutputFormat(OUTPUT_FORMAT);      
         setUriMinters(URI_MINTERS);
-        setWriter(WRITER);     
+        setOutputWriter(OUTPUT_WRITER);   
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);

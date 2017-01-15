@@ -4,6 +4,8 @@ package org.ld4l.bib2lod;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputBuilder;
+import org.ld4l.bib2lod.io.OutputWriter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
@@ -79,6 +82,18 @@ public abstract class Bib2LodObjectFactory {
             InstantiationException, IllegalAccessException, 
             ClassNotFoundException {
         return (InputBuilder) Class.forName(className).newInstance();
+    }
+    
+    public OutputWriter createOutputWriter(Configuration configuration) throws 
+            ClassNotFoundException, NoSuchMethodException, 
+            SecurityException, InstantiationException, 
+            IllegalAccessException, IllegalArgumentException, 
+            InvocationTargetException {
+        
+        Class<?> writerClass = Class.forName(configuration.getOutputWriter());
+        return (OutputWriter) writerClass
+                .getConstructor(Configuration.class)
+                .newInstance(configuration);
     }
     
     /**

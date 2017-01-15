@@ -37,15 +37,15 @@ public interface Configuration {
 
     /**
      * Gets the configured local namespace.
-     * @return localNamespace - the local namespace
+     * @return the local namespace
      */
     String getLocalNamespace();
 
     /**
      * Gets the configured list of input readers.
-     * @return input - the list of input readers
+     * @return the list of input readers
      */
-    // TODO Generalize to List<Reader>?
+    // TODO Try to generalize to List<Reader>? There were problems doing so.
     List<BufferedReader> getInput();
     
     /**
@@ -62,32 +62,33 @@ public interface Configuration {
 
     /**
      * Gets a list of class names of UriMinter specified in the configuration.
-     * @return List<UriMinter> - the list of UriMinter class names
+     * @return the list of UriMinter class names
      */
     List<String> getUriMinters();
     
     /**
-     * Gets the class name of the Writer specified in the configuration.
-     * @return writer - the class name of the Writer
+     * Returns the class name of the OutputWriter specified in the 
+     * configuration.
+     * @return the class name of the OutputWriter
      */
-    String getWriter();   
+    String getOutputWriter();
     
     /**
      * Gets the class name of the Cleaner specified in the configuration.
-     * @return
+     * @return the class name of the cleaner
      */
     String getCleaner();
     
     /**
      * Gets the class name of the Converter specified in the configuration.
-     * @return converter - the class name of the converter
+     * @return the class name of the converter
      */
     String getConverter();
     
     /**
      * Gets the list of class names of the reconcilers specified in the 
      * configuration.
-     * @return reconcilers - the ordered class names of the reconcilers
+     * @return the ordered class names of the reconcilers
      */
     List<String> getReconcilers();
     

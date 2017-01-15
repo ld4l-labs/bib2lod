@@ -2,9 +2,13 @@
 
 package org.ld4l.bib2lod.conversion;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
 
@@ -22,10 +26,23 @@ public interface Converter {
     }
     
     /**
-     * Converts input and returns a StringBuffer
+     * Converts input 
      * @param reader - the reader containing the input
-     * @return a StringBuffer
-     *
+     * @throws FileNotFoundException 
+     * @throws ParseException 
+     * @throws IOException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ClassNotFoundException 
      */
-    public StringBuffer convert(Reader reader);
+    public void convert(Reader reader) throws FileNotFoundException, 
+            ClassNotFoundException, InstantiationException, 
+            IllegalAccessException, NoSuchMethodException, SecurityException, 
+            IllegalArgumentException, InvocationTargetException, IOException, 
+            ParseException;
+    
 }

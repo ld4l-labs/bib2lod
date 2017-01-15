@@ -59,7 +59,8 @@ public abstract class BaseConfiguration implements Configuration {
     protected File outputDestination; 
     protected String outputFormat;    
     protected List<String> uriMinters;
-    protected String writer;
+    protected String outputWriter;
+    protected String outputStream;
     protected String converter;
     protected String cleaner;
     protected List<String> reconcilers;
@@ -106,11 +107,11 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getWriter()
+     * @see org.ld4l.bib2lod.configuration.Configuration#getOutputWriter()
      */
     @Override
-    public String getWriter() {
-        return writer;
+    public String getOutputWriter() {
+        return outputWriter;
     }
     
     /* (non-Javadoc)
@@ -118,7 +119,7 @@ public abstract class BaseConfiguration implements Configuration {
      */
     @Override
     public String getCleaner() {
-        return writer;
+        return cleaner;
     }
 
     /* (non-Javadoc)
@@ -263,8 +264,8 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets UriMinter.
-     * @param uriMinter - name of UriMinter class
+     * Sets list of class names of UriMinters.
+     * @param uriMinter - list of names of UriMinter classes
      * @return void
      */
     protected void setUriMinters(String[] uriMinters) {
@@ -272,16 +273,20 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets Writer.
-     * @param writer - name of Writer class
+     * Sets class name of OutputWriter.
+     * @param writer - name of OutputWriter class
      * @return void
      */
-    protected void setWriter(String writer) {
-        this.writer = writer;
+    protected void setOutputWriter(String writer) {
+        this.outputWriter = writer;
+    }
+    
+    protected void setOutputStream(String outputStream) {
+        this.outputStream = outputStream;
     }
     
     /**
-     * Sets Cleaner.
+     * Sets class name of Cleaner.
      * @param writer - name of Cleaner class
      * @return void
      */
@@ -290,7 +295,7 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets Converter.
+     * Sets class name of Converter.
      * @param converter - name of Converter class
      */
     protected void setConverter(String converter) {
@@ -298,7 +303,7 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets Reconcilers.
+     * Sets list of class names of Reconcilers.
      * @param reconcilers - array of Reconciler class names
      */
     protected void setReconcilers(String[] reconcilers) {

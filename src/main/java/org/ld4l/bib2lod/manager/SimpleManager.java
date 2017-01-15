@@ -4,12 +4,14 @@ package org.ld4l.bib2lod.manager;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -50,33 +52,26 @@ public final class SimpleManager {
      * @throws ClassNotFoundException 
      * @throws IllegalAccessException 
      * @throws InstantiationException 
+     * @throws ParseException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
      */
     private static void convertFiles(Configuration configuration) throws 
             IOException, InstantiationException, IllegalAccessException, 
-            ClassNotFoundException {
+            ClassNotFoundException, NoSuchMethodException, SecurityException, 
+            IllegalArgumentException, InvocationTargetException, 
+            ParseException {
         
         Converter converter = Converter.instance(configuration);
 
         List<BufferedReader> input = configuration.getInput();
-         
-        File destination = configuration.getOutputDestination();
 
-        int count = 0;
         for (BufferedReader reader : input) {
-            count++;
-            StringBuffer buffer = converter.convert(reader); 
-            File file = new File(destination, "output-" + count);
-            
-            // Should get this from configuration? Or can each manager just
-            // hard-code the writer? In that case, probably remove writer 
-            // specification from configuration. Maybe also rename this class 
-            // something like FileOutputManager. Or do the same for the
-            // InputBuilder type, and call this FileIOManager?
-            Writer writer = new PrintWriter(file);
-            writer.write(buffer.toString());
-            
+            // Converter writes its own output
+            converter.convert(reader);            
             reader.close();
-            writer.close();
         }       
     }
       
