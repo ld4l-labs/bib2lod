@@ -52,7 +52,7 @@ public interface Configuration {
      * Gets the configured output destination.
      * @return the output destination
      */
-    File getOutputDestination();
+    String getOutputDestination();
       
     /**
      * Gets the configured output format.

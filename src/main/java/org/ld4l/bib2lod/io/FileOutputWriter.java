@@ -31,6 +31,16 @@ public class FileOutputWriter extends BaseOutputWriter {
      */
     @Override
     public void write(StringBuffer buffer) throws FileNotFoundException {
+        
+        // If destination is a file: throw exception
+        // If destination is a directory but unreadable: throw exception
+        // If destination doesn't exist and can't be created: throw exception
+        // If destination doesn't exist but can be created, create it.
+
+        // TODO Convert string to directory    
+        // Test for nonexistent but can create, nonexistent but can't create,
+        // exists but unreadable
+        // For now we assume everything is correct
        
       // Temporary: increment counter to create a unique filename.
       // TODO Ideally create output filename from input filename, but how???

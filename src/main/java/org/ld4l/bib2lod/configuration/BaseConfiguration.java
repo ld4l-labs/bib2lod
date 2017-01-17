@@ -56,7 +56,7 @@ public abstract class BaseConfiguration implements Configuration {
     protected String localNamespace;  
     protected List<BufferedReader> input;  
     protected String inputFormat;    
-    protected File outputDestination; 
+    protected String outputDestination; 
     protected String outputFormat;    
     protected List<String> uriMinters;
     protected String outputWriter;
@@ -86,7 +86,7 @@ public abstract class BaseConfiguration implements Configuration {
      * @see org.ld4l.bib2lod.configuration.Configuration#getOutputDirectory()
      */
     @Override
-    public File getOutputDestination() {
+    public String getOutputDestination() {
         return outputDestination;
     }
 
@@ -226,11 +226,7 @@ public abstract class BaseConfiguration implements Configuration {
     }
      
     /**
-     * Sets output directory. Throws an exception if: the destination is a file;
-     * the destination is unreadable; the destination doesn't exist and cannot
-     * be created. Succeeds if the destination is a directory which either 
-     * exists or doesn't exist but can be created. Creates the directory if it
-     * doesn't exist.
+     * Sets output destination. 
      * @param destination - the output directory 
      * @return void
      */
@@ -239,17 +235,7 @@ public abstract class BaseConfiguration implements Configuration {
         // TODO:
         // Handle non-file-based output destination (e.g., stdout)
         
-        // If destination is a file: throw exception
-        // If destination is a directory but unreadable: throw exception
-        // If destination doesn't exist and can't be created: throw exception
-        // If destination doesn't exist but can be created, create it.
-
-        // TODO Convert string to directory    
-        // Test for nonexistent but can create, nonexistent but can't create,
-        // exists but unreadable
-        // For now we assume everything is correct
-        
-        this.outputDestination = new File(destination);
+        this.outputDestination = destination;
     }
 
     
