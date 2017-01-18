@@ -54,8 +54,12 @@ public abstract class BaseConfiguration implements Configuration {
     }
 
     protected String localNamespace;  
+    protected String inputBuilder;
+    // TODO Just have the converter create the list of readers, not the configuration
     protected List<BufferedReader> input;  
-    protected String inputFormat;    
+    protected String inputFormat;  
+    protected String inputSource;
+    protected String inputFileExtension;
     protected String outputDestination; 
     protected String outputFormat;    
     protected List<String> uriMinters;
@@ -72,6 +76,26 @@ public abstract class BaseConfiguration implements Configuration {
     @Override
     public String getLocalNamespace() {
         return localNamespace;
+    }
+    
+    @Override
+    public String getInputSource() {
+        return inputSource;
+    }
+    
+    @Override
+    public String getInputFileExtension() {
+        return inputFileExtension;
+    }
+    
+    @Override
+    public String getInputFormat() {
+        return inputFormat;
+    }
+    
+    @Override
+    public String getInputBuilder() {
+        return this.inputBuilder;
     }
     
     /* (non-Javadoc)
@@ -195,10 +219,10 @@ public abstract class BaseConfiguration implements Configuration {
             IOException {
                   
         // Instantiate builder
-        InputBuilder inputBuilder = InputBuilder.instance(builder);
+        InputBuilder inputBuilder = InputBuilder.instance(this);
         
         // Pass source and extension to builder, get back list of readers
-        this.input = inputBuilder.buildInputList(source); 
+        this.input = inputBuilder.buildInputList(); 
     }
     
     /**
@@ -212,18 +236,31 @@ public abstract class BaseConfiguration implements Configuration {
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      * @throws IOException 
+     * @throws ParseException 
      */
-    protected void buildInput(String builder, String source, String extension) 
+    protected void buildInput() 
             throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, IOException {
+            IllegalAccessException, IOException, ParseException {
         
         // Instantiate builder
-        InputBuilder inputBuilder = 
-                (InputBuilder) Class.forName(builder).newInstance();
+        InputBuilder builder = InputBuilder.instance(this);
+                
         
         // Pass source and extension to builder, get back list of readers
-        this.input = inputBuilder.buildInputList(source, extension); 
+        this.input = builder.buildInputList(); 
         
+    }
+    
+    protected void setInputSource(String inputSource) {
+        this.inputSource = inputSource;
+    }
+    
+    protected void setInputFileExtension(String inputFileExtension) {
+        this.inputFileExtension = inputFileExtension;
+    }
+    
+    protected void setInputFormat(String inputFormat) {
+        this.inputFormat = inputFormat;
     }
      
     /**

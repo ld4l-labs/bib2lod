@@ -4,6 +4,7 @@ package org.ld4l.bib2lod;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.clean.Cleaner;
@@ -14,6 +15,8 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
+import org.ld4l.bib2lod.io.FileInputBuilder;
+import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uri.RandomUriMinter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
@@ -38,7 +41,7 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, IOException {
+            IllegalAccessException, IOException, ParseException {
         
         // return new ConfigurationFromJson(args);
         return new StubConfiguration();
@@ -66,6 +69,14 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public UriMinter createUriMinter(Configuration configuration) {
         return new RandomUriMinter(configuration);
+    }
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)
+     */
+    @Override
+    public InputBuilder createInputBuilder(Configuration configuration) {
+        return new FileInputBuilder(configuration);
     }
 
 }

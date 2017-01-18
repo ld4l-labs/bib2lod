@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configuration;
 
 /**
  * Builds the list of input readers based on the input source specified in the
@@ -21,31 +22,18 @@ public interface InputBuilder {
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      */
-    static InputBuilder instance(String className) throws ClassNotFoundException,
-            FileNotFoundException, IOException, ParseException, 
-            InstantiationException, IllegalAccessException {
-        return Bib2LodObjectFactory.instance().createInputBuilder(className);
+    static InputBuilder instance(Configuration configuration) throws 
+            ClassNotFoundException, FileNotFoundException, IOException,  
+            ParseException, InstantiationException, IllegalAccessException {
+        return Bib2LodObjectFactory.instance().createInputBuilder(configuration);
     }
-    
+
     /**
      * Build list of input readers from specified source.
-     * @param source - input source
      * @return a list of readers
      * @throws IOException 
      */
-    public List<BufferedReader> buildInputList(String source) throws IOException;
-    
-    /**
-     * Build list of input readers from specified source. Used when source is 
-     * file-based and a file extension is specified.
-     * @param source
-     * @param extension
-     * @return a list of readers
-     * @throws IOException 
-     */
-    // TODO Wrong to have this in the interface, since a file extension is not
-    // relevant to non-file-based input. How to handle this?
-    public List<BufferedReader> buildInputList(String source, String extension) 
-            throws IOException;
+    public List<BufferedReader> buildInputList() throws IOException;
+
 
 }

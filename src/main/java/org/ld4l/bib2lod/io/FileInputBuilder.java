@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.io;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,37 +14,55 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.Configuration;
 
 /**
  * File-system-based input builder.
  */
 public class FileInputBuilder extends BaseInputBuilder {
 
+    /**
+     * @param configuration
+     */
+    public FileInputBuilder(Configuration configuration) {
+        super(configuration);
+    }
+
     private static final Logger LOGGER = LogManager.getLogger(); 
+    
+    private static class InputFileFilter implements FileFilter {
+
+        /* (non-Javadoc)
+         * @see java.io.FileFilter#accept(java.io.File)
+         */
+        @Override
+        public boolean accept(File pathname) {
+            
+            
+            return true;
+        }
+        
+    }
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.InputBuilder#buildInputList(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public List<BufferedReader> buildInputList(
-            String inputSource, String extension) throws IOException {
+    public List<BufferedReader> buildInputList() throws IOException {
 
-        File source = new File(inputSource);
+        File source = new File(configuration.getInputSource());
         
         if (! source.exists()) {
             throw new IOException(
-              "Input source " + inputSource + " doesn't exist.");
+              "Input source " + source.getCanonicalPath() + " doesn't exist.");
         }
   
         if (! source.canRead()) {
             throw new IOException(
-                    "Can't read input source " + inputSource);
+                    "Can't read input source " + source.getCanonicalPath());
         }     
 
-        // Create a list of input files
-        // NB Currently no recursion into subfolders 
-        // TODO Create the list of readers directly, without the intermediate
-        // list of files?
+        // Create a list of input files. Subfolders are ignored.
         List<File> inputFiles = new ArrayList<File>();
 
         if (source.isDirectory()) {     
@@ -51,7 +70,7 @@ public class FileInputBuilder extends BaseInputBuilder {
             // extension is defined, only with that extension. See issue #16.
             // Also filter out subdirectories, since there should be no
             // recursion.
-            inputFiles = Arrays.asList(source.listFiles());
+            inputFiles = Arrays.asList(source.listFiles(new InputFileFilter()));
         } else {
             // Wrap the input file in a List
             inputFiles.add(source);
@@ -79,11 +98,5 @@ public class FileInputBuilder extends BaseInputBuilder {
     }
 
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.InputBuilder#buildInputList(java.lang.String)
-     */
-    @Override
-    public List<BufferedReader> buildInputList(String source) throws IOException {
-        return buildInputList(source, null);
-    }
+
 }

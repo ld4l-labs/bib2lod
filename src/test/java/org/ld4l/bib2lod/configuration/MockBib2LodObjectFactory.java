@@ -10,6 +10,7 @@ import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.clean.Cleaner;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
@@ -103,6 +104,15 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     public UriMinter createUriMinter(Configuration configuration) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)
+     */
+    @Override
+    public InputBuilder createInputBuilder(Configuration configuration) {
+        // TODO Auto-generated method stub
+        return defaultFactory.createInputBuilder(configuration);
     }
 
 }

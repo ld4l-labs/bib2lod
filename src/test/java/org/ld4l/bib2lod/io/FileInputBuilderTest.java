@@ -34,9 +34,10 @@ public class FileInputBuilderTest extends AbstractTestClass {
         
         @Override
         protected void before() throws Exception {
+            // TODO Need to build a Configuration object to send to the constructor.
             folder.create();
-            fileInputBuilder = (FileInputBuilder) InputBuilder.instance(
-                    "org.ld4l.bib2lod.io.FileInputBuilder");
+//            fileInputBuilder = (FileInputBuilder) InputBuilder.instance(
+//                    "org.ld4l.bib2lod.io.FileInputBuilder");
         };
 
         @Override
@@ -46,43 +47,43 @@ public class FileInputBuilderTest extends AbstractTestClass {
     };
     
       
-    @Test (expected = IOException.class)
+    @Test // (expected = IOException.class)
     public void inputSourceDoesntExist_ThrowsException() throws Exception {
-        File file = new File(folder.getRoot().getCanonicalPath(), "test");
-        readers = fileInputBuilder.buildInputList(
-                file.getCanonicalPath()); 
+        fail("inputSourceDoesntExist_ThrowsException not yet implemented");
+//        File file = new File(folder.getRoot().getCanonicalPath(), "test");
+//        readers = fileInputBuilder.buildInputList(); 
     }
     
-    @Test (expected = IOException.class)
+    @Test // (expected = IOException.class)
     public void inputFileNotReadable_ThrowsException() throws Exception {
-        File file = folder.newFile();
-        file.setReadable(false);
-        readers = fileInputBuilder.buildInputList(
-                file.getCanonicalPath()); 
+        fail("inputFileNotReadable_ThrowsException not yet implemented");
+//        File file = folder.newFile();
+//        file.setReadable(false);
+//        readers = fileInputBuilder.buildInputList(); 
     }
     
-    @Test (expected = IOException.class)
+    @Test // (expected = IOException.class)
     public void inputDirectoryNotReadable_ThrowsException() throws Exception {
-        File subfolder = folder.newFolder();
-        subfolder.setReadable(false);
-        readers = fileInputBuilder.buildInputList(
-                subfolder.getCanonicalPath()); 
+        fail("inputDirectoryNotReadable_ThrowsException not yet implemented");
+//        File subfolder = folder.newFolder();
+//        subfolder.setReadable(false);
+//        readers = fileInputBuilder.buildInputList(); 
     }
     
     @Test
     public void inputDirectoryEmpty() throws Exception {
-        readers = fileInputBuilder.buildInputList(
-                folder.getRoot().getCanonicalPath()); 
-        assertTrue(readers.size() == 0);
+        fail("inputDirectoryEmpty not yet implemented");
+//        readers = fileInputBuilder.buildInputList(); 
+//        assertTrue(readers.size() == 0);
     }
     
     @Test
     public void inputDirectoryContainsTwoFiles() throws Exception {
-        folder.newFile();
-        folder.newFile();
-        readers = fileInputBuilder.buildInputList(
-                folder.getRoot().getCanonicalPath());
-        assertTrue(readers.size() == 2);
+        fail("inputDirectoryContainsTwoFiles not yet implemented");
+//        folder.newFile();
+//        folder.newFile();
+//        readers = fileInputBuilder.buildInputList();
+//        assertTrue(readers.size() == 2);
     }
     
     @Test
@@ -126,8 +127,9 @@ public class FileInputBuilderTest extends AbstractTestClass {
     
     @Test
     public void inputSourceIsFile() throws Exception {
-        File file = folder.newFile();
-        readers = fileInputBuilder.buildInputList(file.getCanonicalPath());
-        assertTrue(readers.size() == 1);
+        fail("inputSourceIsFile not yet implemented");
+//        File file = folder.newFile();
+//        readers = fileInputBuilder.buildInputList();
+//        assertTrue(readers.size() == 1);
     }
 }

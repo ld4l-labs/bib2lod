@@ -37,12 +37,17 @@ public interface Configuration {
      * @return the local namespace
      */
     String getLocalNamespace();
+    
+    /**
+     * Gets the class name  of the configured input builder.
+     * @return the class name  of the input builder
+     */
+    String getInputBuilder();
 
     /**
      * Gets the configured list of input readers.
      * @return the list of input readers
      */
-    // TODO Try to generalize to List<Reader>? There were problems doing so.
     List<BufferedReader> getInput();
     
     /**
@@ -89,9 +94,21 @@ public interface Configuration {
      */
     List<String> getReconcilers();
     
+
     /**
-     * Override toString() for debugging and logging.
-     * @return string representation of the Configuration object
+     * Gets the configured input source
+     * @return the input source
      */
-    public String toString();
+    String getInputSource();
+    
+    /**
+     * Gets the configured input file extension
+     * @return the file extension
+     */
+    String getInputFileExtension();
+
+    /**
+     * @return
+     */
+    String getInputFormat();
 }

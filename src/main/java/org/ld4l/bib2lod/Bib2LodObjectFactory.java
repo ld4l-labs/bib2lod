@@ -71,19 +71,6 @@ public abstract class Bib2LodObjectFactory {
      */
     public abstract Converter createConverter(Configuration configuration);
     
-    /**
-     * Returns an InputBuilder instance.
-     * @return the InputBuilder instance.
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     */
-    public InputBuilder createInputBuilder(String className) throws 
-            InstantiationException, IllegalAccessException, 
-            ClassNotFoundException {
-        return (InputBuilder) Class.forName(className).newInstance();
-    }
-    
     public OutputWriter createOutputWriter(Configuration configuration) throws 
             ClassNotFoundException, NoSuchMethodException, 
             SecurityException, InstantiationException, 
@@ -95,6 +82,13 @@ public abstract class Bib2LodObjectFactory {
                 .getConstructor(Configuration.class)
                 .newInstance(configuration);
     }
+    
+    /**
+     * Returns an InputBuilder instance.
+     * @param configuration - the Configuration instance 
+     * @return the InputBuilder instance instance
+     */
+    public abstract InputBuilder createInputBuilder(Configuration configuration);
     
     /**
      * Returns a Cleaner instance.
