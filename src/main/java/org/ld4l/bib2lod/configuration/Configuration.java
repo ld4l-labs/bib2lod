@@ -3,15 +3,12 @@
 package org.ld4l.bib2lod.configuration;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * Provides program configuration values.

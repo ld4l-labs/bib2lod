@@ -277,6 +277,7 @@ public class BaseConfigurationTest extends AbstractTestClass {
         setFieldValue(optionsNode, "local_namespace", newValue);
     }
     
+    /* Will use with input source tests */
     private void setInputSource(Object newValue) {
         ObjectNode source = jsonObject();
         setFieldValue(source, "source", newValue);

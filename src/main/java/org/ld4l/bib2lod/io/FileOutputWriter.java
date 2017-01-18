@@ -42,9 +42,9 @@ public class FileOutputWriter extends BaseOutputWriter {
         // exists but unreadable
         // For now we assume everything is correct
        
-      // Temporary: increment counter to create a unique filename.
-      // TODO Ideally create output filename from input filename, but how???
-      count++;
+        // Temporary: increment counter to create a unique filename.
+        // TODO Ideally create output filename from input filename, but how???
+        count++;
       File file = new File(
               configuration.getOutputDestination(), "output-" + count);
       OutputStream outputStream = new FileOutputStream(file);

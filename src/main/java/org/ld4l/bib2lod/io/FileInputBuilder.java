@@ -43,7 +43,10 @@ public class FileInputBuilder extends BaseInputBuilder {
 //                    "Can't read input source " + inputSource);
 //        }     
         
+        
+        
         // Create a list of input files
+        // NB Currently no recursion into subfolders 
         // TODO Create the list of readers directly, without the intermediate
         // list of files?
         List<File> inputFiles = new ArrayList<File>();
@@ -51,6 +54,8 @@ public class FileInputBuilder extends BaseInputBuilder {
         if (source.isDirectory()) {     
             // TODO Use filters to make sure files are readable, and if an 
             // extension is defined, only with that extension. See issue #16.
+            // Also filter out subdirectories, since there should be no
+            // recursion.
             inputFiles = Arrays.asList(source.listFiles());
         } else if (source.isFile()) {
             // Wrap the input file in a List
