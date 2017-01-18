@@ -211,10 +211,11 @@ public abstract class BaseConfiguration implements Configuration {
      * @throws ClassNotFoundException 
      * @throws IllegalAccessException 
      * @throws InstantiationException 
+     * @throws IOException 
      */
     protected void buildInput(String builder, String source, String extension) 
             throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException {
+            IllegalAccessException, IOException {
         
         // Instantiate builder
         InputBuilder inputBuilder = 

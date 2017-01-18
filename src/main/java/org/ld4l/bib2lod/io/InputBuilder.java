@@ -31,8 +31,9 @@ public interface InputBuilder {
      * Build list of input readers from specified source.
      * @param source - input source
      * @return a list of readers
+     * @throws IOException 
      */
-    public List<BufferedReader> buildInputList(String source);
+    public List<BufferedReader> buildInputList(String source) throws IOException;
     
     /**
      * Build list of input readers from specified source. Used when source is 
@@ -40,9 +41,11 @@ public interface InputBuilder {
      * @param source
      * @param extension
      * @return a list of readers
+     * @throws IOException 
      */
     // TODO Wrong to have this in the interface, since a file extension is not
     // relevant to non-file-based input. How to handle this?
-    public List<BufferedReader> buildInputList(String source, String extension);
+    public List<BufferedReader> buildInputList(String source, String extension) 
+            throws IOException;
 
 }

@@ -44,7 +44,31 @@ public class FileInputBuilderTest extends AbstractTestClass {
             folder.delete();
         };
     };
+    
       
+    @Test (expected = IOException.class)
+    public void inputSourceDoesntExist_ThrowsException() throws Exception {
+        File file = new File(folder.getRoot().getCanonicalPath(), "test");
+        readers = fileInputBuilder.buildInputList(
+                file.getCanonicalPath()); 
+    }
+    
+    @Test (expected = IOException.class)
+    public void inputFileNotReadable_ThrowsException() throws Exception {
+        File file = folder.newFile();
+        file.setReadable(false);
+        readers = fileInputBuilder.buildInputList(
+                file.getCanonicalPath()); 
+    }
+    
+    @Test (expected = IOException.class)
+    public void inputDirectoryNotReadable_ThrowsException() throws Exception {
+        File subfolder = folder.newFolder();
+        subfolder.setReadable(false);
+        readers = fileInputBuilder.buildInputList(
+                subfolder.getCanonicalPath()); 
+    }
+    
     @Test
     public void inputDirectoryEmpty() throws Exception {
         readers = fileInputBuilder.buildInputList(
@@ -59,6 +83,22 @@ public class FileInputBuilderTest extends AbstractTestClass {
         readers = fileInputBuilder.buildInputList(
                 folder.getRoot().getCanonicalPath());
         assertTrue(readers.size() == 2);
+    }
+    
+    @Test
+    public void noReadableFilesInInputDirectory_Succeeds() throws Exception {
+        fail("noReadableFilesInInputDirectory_Succeeds not yet implemented");
+    }
+    
+    @Test
+    public void testFileExtensionFilter()  {
+        fail("testFileExtensionFilter not yet implemented");
+    }
+    
+    
+    @Test
+    public void testReadabilityFilter()  {
+        fail("testReadabilityFilter not yet implemented");
     }
     
     @Test
@@ -85,7 +125,7 @@ public class FileInputBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void inputFile_Succeeds() throws Exception {
+    public void inputSourceIsFile() throws Exception {
         File file = folder.newFile();
         readers = fileInputBuilder.buildInputList(file.getCanonicalPath());
         assertTrue(readers.size() == 1);

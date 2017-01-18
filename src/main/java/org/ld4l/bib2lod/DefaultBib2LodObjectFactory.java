@@ -2,10 +2,8 @@
 
 package org.ld4l.bib2lod;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.clean.Cleaner;
@@ -39,7 +37,8 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Configuration createConfiguration(String[] args)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+            throws ClassNotFoundException, InstantiationException, 
+            IllegalAccessException, IOException {
         
         // return new ConfigurationFromJson(args);
         return new StubConfiguration();
