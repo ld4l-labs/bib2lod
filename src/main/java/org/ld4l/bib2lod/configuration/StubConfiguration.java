@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.configuration;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
@@ -46,22 +45,18 @@ public class StubConfiguration extends BaseConfiguration {
      * @throws ParseException 
      */              
     public StubConfiguration() throws ClassNotFoundException, 
-            InstantiationException, IllegalAccessException, IOException, ParseException  {
+            InstantiationException, IllegalAccessException, IOException, 
+            ParseException  {
         
         setLocalNamespace(LOCAL_NAMESPACE);
-        setInputSource(INPUT_SOURCE);
-        setInputFileExtension(INPUT_FILE_EXTENSION);
-        setInputFormat(INPUT_FORMAT);
-        setInputBuilder(INPUT_BUILDER);    
+        buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);  
         setOutputDestination(OUTPUT_DESTINATION);
         setOutputFormat(OUTPUT_FORMAT);      
         setUriMinters(URI_MINTERS);
         setOutputWriter(OUTPUT_WRITER);   
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
-        setReconcilers(RECONCILERS);
-        
-        buildInput();
+        setReconcilers(RECONCILERS);   
 
     }
 

@@ -13,14 +13,5 @@ public abstract class BaseInputBuilder implements InputBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    protected Configuration configuration;
-    
-    /**
-     * Constructor
-     * @param configuration
-     */
-    public BaseInputBuilder(Configuration configuration) {
-        this.configuration = configuration;
-    }
 
 }

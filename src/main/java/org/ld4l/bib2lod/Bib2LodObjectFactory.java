@@ -88,7 +88,22 @@ public abstract class Bib2LodObjectFactory {
      * @param configuration - the Configuration instance 
      * @return the InputBuilder instance instance
      */
-    public abstract InputBuilder createInputBuilder(Configuration configuration);
+    // This is probably how it should be done, but for now just pass in the
+    // class name.
+//    public abstract InputBuilder createInputBuilder(Configuration configuration);
+    
+    /**
+     * Returns an InputBuilder instance.
+     * @return the InputBuilder instance.
+     * @throws ClassNotFoundException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    public InputBuilder createInputBuilder(String className) throws 
+            InstantiationException, IllegalAccessException, 
+            ClassNotFoundException {
+        return (InputBuilder) Class.forName(className).newInstance();
+    }
     
     /**
      * Returns a Cleaner instance.

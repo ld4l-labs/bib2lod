@@ -105,13 +105,4 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)
-     */
-    @Override
-    public InputBuilder createInputBuilder(Configuration configuration) {
-        // TODO Auto-generated method stub
-        return defaultFactory.createInputBuilder(configuration);
-    }
-
 }

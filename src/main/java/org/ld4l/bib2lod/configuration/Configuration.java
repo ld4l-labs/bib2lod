@@ -37,12 +37,6 @@ public interface Configuration {
      * @return the local namespace
      */
     String getLocalNamespace();
-    
-    /**
-     * Gets the class name  of the configured input builder.
-     * @return the class name  of the input builder
-     */
-    String getInputBuilder();
 
     /**
      * Gets the configured list of input readers.
@@ -93,22 +87,5 @@ public interface Configuration {
      * @return the ordered class names of the reconcilers
      */
     List<String> getReconcilers();
-    
 
-    /**
-     * Gets the configured input source
-     * @return the input source
-     */
-    String getInputSource();
-    
-    /**
-     * Gets the configured input file extension
-     * @return the file extension
-     */
-    String getInputFileExtension();
-
-    /**
-     * @return
-     */
-    String getInputFormat();
 }

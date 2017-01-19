@@ -15,8 +15,6 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
-import org.ld4l.bib2lod.io.FileInputBuilder;
-import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uri.RandomUriMinter;
 import org.ld4l.bib2lod.uri.UriMinter;
 
@@ -74,9 +72,9 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)
      */
-    @Override
-    public InputBuilder createInputBuilder(Configuration configuration) {
-        return new FileInputBuilder(configuration);
-    }
+//    @Override
+//    public InputBuilder createInputBuilder(Configuration configuration) {
+//        return new FileInputBuilder(configuration);
+//    }
 
 }

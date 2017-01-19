@@ -78,25 +78,7 @@ public abstract class BaseConfiguration implements Configuration {
         return localNamespace;
     }
     
-    @Override
-    public String getInputSource() {
-        return inputSource;
-    }
-    
-    @Override
-    public String getInputFileExtension() {
-        return inputFileExtension;
-    }
-    
-    @Override
-    public String getInputFormat() {
-        return inputFormat;
-    }
-    
-    @Override
-    public String getInputBuilder() {
-        return this.inputBuilder;
-    }
+ 
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.Configuration#getInputFiles()
@@ -219,10 +201,10 @@ public abstract class BaseConfiguration implements Configuration {
             IOException {
                   
         // Instantiate builder
-        InputBuilder inputBuilder = InputBuilder.instance(this);
+        InputBuilder inputBuilder = InputBuilder.instance(builder);
         
         // Pass source and extension to builder, get back list of readers
-        this.input = inputBuilder.buildInputList(); 
+        this.input = inputBuilder.buildInputList(source); 
     }
     
     /**
@@ -238,33 +220,21 @@ public abstract class BaseConfiguration implements Configuration {
      * @throws IOException 
      * @throws ParseException 
      */
-    protected void buildInput() 
+    protected void buildInput(String builder, String source, String extension) 
             throws ClassNotFoundException, InstantiationException, 
             IllegalAccessException, IOException, ParseException {
         
         // Instantiate builder
-        InputBuilder builder = InputBuilder.instance(this);
-                
-        
+        InputBuilder inputBuilder = 
+                (InputBuilder) Class.forName(builder).newInstance();
+      
         // Pass source and extension to builder, get back list of readers
-        this.input = builder.buildInputList(); 
+        this.input = inputBuilder.buildInputList(source, extension); 
         
     }
     
     protected void setInputBuilder(String inputBuilder) {
         this.inputBuilder = inputBuilder;
-    }
-    
-    protected void setInputSource(String inputSource) {
-        this.inputSource = inputSource;
-    }
-    
-    protected void setInputFileExtension(String inputFileExtension) {
-        this.inputFileExtension = inputFileExtension;
-    }
-    
-    protected void setInputFormat(String inputFormat) {
-        this.inputFormat = inputFormat;
     }
      
     /**
