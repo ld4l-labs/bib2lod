@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -30,14 +31,29 @@ public class FileInputBuilder extends BaseInputBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    private static class InputFileFilter implements FileFilter {
+    private class InputFileFilter implements FileFilter {
+
 
         /* (non-Javadoc)
          * @see java.io.FileFilter#accept(java.io.File)
          */
         @Override
-        public boolean accept(File pathname) {
+        public boolean accept(File file) {
             
+            // File must be readable
+            if (! file.canRead()) {
+                return false;
+            }
+            
+            // File extension must match a specified extension
+            String extension = configuration.getInputFileExtension();
+            if (extension != null) {
+                String thisExtension = 
+                        FilenameUtils.getExtension(file.getName());
+                if (! extension.equals(thisExtension)) {
+                    return false;
+                }
+            }
             
             return true;
         }
@@ -70,6 +86,7 @@ public class FileInputBuilder extends BaseInputBuilder {
             // extension is defined, only with that extension. See issue #16.
             // Also filter out subdirectories, since there should be no
             // recursion.
+            // inputFiles = Arrays.asList(source.listFiles(new InputFileFilter()));
             inputFiles = Arrays.asList(source.listFiles(new InputFileFilter()));
         } else {
             // Wrap the input file in a List

@@ -251,6 +251,10 @@ public abstract class BaseConfiguration implements Configuration {
         
     }
     
+    protected void setInputBuilder(String inputBuilder) {
+        this.inputBuilder = inputBuilder;
+    }
+    
     protected void setInputSource(String inputSource) {
         this.inputSource = inputSource;
     }

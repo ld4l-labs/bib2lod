@@ -52,7 +52,7 @@ public class StubConfiguration extends BaseConfiguration {
         setInputSource(INPUT_SOURCE);
         setInputFileExtension(INPUT_FILE_EXTENSION);
         setInputFormat(INPUT_FORMAT);
-        buildInput();     
+        setInputBuilder(INPUT_BUILDER);    
         setOutputDestination(OUTPUT_DESTINATION);
         setOutputFormat(OUTPUT_FORMAT);      
         setUriMinters(URI_MINTERS);
@@ -60,6 +60,8 @@ public class StubConfiguration extends BaseConfiguration {
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);
+        
+        buildInput();
 
     }
 

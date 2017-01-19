@@ -74,8 +74,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         // Currently the default configuration is StubConfiguration, which 
         // doesn't work to test the abstract BaseConfiguration because it  
         // doesn't use a JsonNode, and isn't useful to build tests on because it
-        // is only temporary. Could rename this to createMockConfiguration if 
-        // we need createConfiguration to test a different Configuration type.
+        // is only temporary. 
         return new MockConfiguration(args);
     }
 
