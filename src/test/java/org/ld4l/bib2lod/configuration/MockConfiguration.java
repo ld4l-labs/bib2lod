@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
-import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

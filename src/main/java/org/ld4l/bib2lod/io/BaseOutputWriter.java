@@ -2,10 +2,6 @@
 
 package org.ld4l.bib2lod.io;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import org.ld4l.bib2lod.configuration.Configuration;
 
 /**

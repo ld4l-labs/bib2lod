@@ -4,7 +4,6 @@ package org.ld4l.bib2lod.conversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 

@@ -9,7 +9,6 @@ import org.apache.jena.iri.impl.IRIImplException;
 import org.junit.Before;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidValueException;
-import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidInputSourceException;
 import org.ld4l.bib2lod.test.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;

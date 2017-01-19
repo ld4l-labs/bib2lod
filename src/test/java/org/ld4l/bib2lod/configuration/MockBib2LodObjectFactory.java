@@ -10,7 +10,6 @@ import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.clean.Cleaner;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uri.UriMinter;
 
 /**

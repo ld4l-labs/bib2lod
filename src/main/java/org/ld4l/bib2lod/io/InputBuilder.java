@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
 
 /**
  * Builds the list of input readers based on the input source specified in the

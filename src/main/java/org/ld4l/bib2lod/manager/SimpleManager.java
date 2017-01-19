@@ -3,11 +3,7 @@
 package org.ld4l.bib2lod.manager;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

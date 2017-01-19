@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
