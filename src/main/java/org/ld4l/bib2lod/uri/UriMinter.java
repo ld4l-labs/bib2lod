@@ -2,40 +2,75 @@ package org.ld4l.bib2lod.uri;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity;
 
 /**
- * Provides URIs for entities built by the converter.
+ * Provides URIs for org.ld4l.bib2lod.entities built by the converter.
  */
+// TODO Change to UriGetter, UriGenerator etc - since doesn't always mint a 
+// new one
 public interface UriMinter {
     
-    // TODO Should this go here or in BaseUriMinter? Read about static methods
-    // in interfaces.
-    static List<UriMinter> minters = null;
+    /**
+     * Stores the list of UriMinters that will be used to mint URIs for 
+     * Resources.
+     */
+    static List<UriMinter> minters = new ArrayList<UriMinter>();
     
     /**
      * Factory method
+     * @param minter 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
      */
-    static UriMinter instance(Configuration configuration) 
+    static UriMinter instance(String minterClass, Configuration configuration) 
             throws ClassNotFoundException, FileNotFoundException, IOException, 
-            ParseException {         
-        return Bib2LodObjectFactory.instance().createUriMinter(configuration);
-    }
-
-    // TODO Should this go here or in BaseUriMinter? Read about static methods
-    // in interfaces.
-    static List<UriMinter> getMinters() {
-        return null;
+                ParseException, InstantiationException, IllegalAccessException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException {      
+        
+        return Bib2LodObjectFactory.instance().createUriMinter(
+                minterClass, configuration);
     }
     
-
+    public static void createMinters(String[] minterClasses,  
+            Configuration configuration) throws ClassNotFoundException, 
+                FileNotFoundException, IOException, ParseException, 
+                    InstantiationException, IllegalAccessException, 
+                        IllegalArgumentException, InvocationTargetException, 
+                            NoSuchMethodException, SecurityException {
+        
+        for (String minterClass : minterClasses) {
+            minters.add(instance(minterClass, configuration));
+        }
+    }
     
-    public String getLocalNamespace();
+    public String getUriFor(Entity entity);
     
-    public String mint();
+    // TODO Since we are using the Entity to get the URI, we might just as well 
+    // do this in building the Entity rather than the Model.
+    public static String getUri(Entity entity) {
+        
+        String uri = null;
+        Iterator<UriMinter> it = minters.iterator();
+        while (it.hasNext()) {
+            UriMinter minter = it.next();
+            uri = minter.getUriFor(entity);
+        }
+        return uri;
+    }
   
 }

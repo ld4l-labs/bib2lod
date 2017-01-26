@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.clean;
+package org.ld4l.bib2lod.cleaning;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;

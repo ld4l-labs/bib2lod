@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.clean;
+package org.ld4l.bib2lod.cleaning;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

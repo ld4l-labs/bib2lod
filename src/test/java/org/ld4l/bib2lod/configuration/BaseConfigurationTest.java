@@ -2,14 +2,12 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.apache.jena.iri.impl.IRIImplException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.BaseConfiguration.InvalidValueException;
-import org.ld4l.bib2lod.test.AbstractTestClass;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -97,76 +95,90 @@ public class BaseConfigurationTest extends AbstractTestClass {
      * specific values.                           
      */
     @Test
+    @Ignore
     public void optionalValueMissing_Succeeds() {
-//        fail("optionalValueMissing_Succeeds not yet implemented.");
+        fail("optionalValueMissing_Succeeds not yet implemented.");
     }
     
-    @Test                              
+    @Test     
+    @Ignore
     public void optionalValueNull_Succeeds() {
-//        fail("optionalValueNull_Succeeds not yet implemented.");
+        fail("optionalValueNull_Succeeds not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void optionalValueEmpty_Succeeds() {
-//        fail("optionalValueEmpty_Succeeds not yet implemented.");
+        fail("optionalValueEmpty_Succeeds not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void optionalValueInvalidType_ThrowsException() {
-//        fail("optionalValueInvalidType_ThrowsException not yet implemented.");
+        fail("optionalValueInvalidType_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void optionalValueInvalid_ThrowsException() {
-//        fail("optionalValueInvalidType_ThrowsException not yet implemented.");
+        fail("optionalValueInvalidType_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void optionalArrayEmpty_Succeeds() {
-//        fail("optionalArrayEmpty_Succeeds not yet implemented");
+        fail("optionalArrayEmpty_Succeeds not yet implemented");
     }
     
     @Test
+    @Ignore
     public void optionalObjectEmpty_Succeeds() {
-//        fail("optionalObjectEmpty_Succeeds not yet implemented");
+        fail("optionalObjectEmpty_Succeeds not yet implemented");
     }
     
     @Test
+    @Ignore
     public void optionalValueValid_Succeeds() {
-//        fail("optionalValueValid_Succeeds not yet implemented");
+        fail("optionalValueValid_Succeeds not yet implemented");
     }
     
     /*
      * Required value missing/null/empty/invalid type/invalid value/valid value
      */
     @Test
+    @Ignore
     public void requiredValueMissing_ThrowsException() {
-//        fail("requiredValueMissing_ThrowsException not yet implemented.");
+        fail("requiredValueMissing_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void requiredValueNull_ThrowsException() {
-//        fail("requiredValueNull_ThrowsException not yet implemented.");
+        fail("requiredValueNull_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void requiredValueEmpty_ThrowsException() {
-//        fail("requiredValueEmpty_ThrowsException not yet implemented.");
+        fail("requiredValueEmpty_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void requiredValueInvalidType_ThrowsException() {
-//        fail("requiredValueInvalidType_ThrowsException not yet implemented.");
+        fail("requiredValueInvalidType_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void requiredValueInvalid_ThrowsException() {
-//        fail("requiredValueInvalidType_ThrowsException not yet implemented.");
+        fail("requiredValueInvalidType_ThrowsException not yet implemented.");
     }
     
     @Test
+    @Ignore
     public void requiredValueValid_Succeeds() {
-//        fail("requiredValueValid_Succeeds not yet implemented");
+        fail("requiredValueValid_Succeeds not yet implemented");
     }
     
 
@@ -175,65 +187,84 @@ public class BaseConfigurationTest extends AbstractTestClass {
      * Local namespace tests 
      */
     
-//    @Test
-//    public void localNamespaceMissing_ThrowsException() {
+    @Test
+    @Ignore
+    public void localNamespaceMissing_ThrowsException() {
+        fail("localNamespaceMissing_ThrowsException not yet implemented.");
 //        setNamespace(JSON_REMOVE);
 //        instantiateAndExpectException(RequiredKeyMissingException.class);
-//    }
-//
-//    @Test
-//    public void localNamespaceNull_ThrowsException() {
-//        setNamespace(null);
-//        instantiateAndExpectException(RequiredValueNullException.class);
-//    }
-//
-//    @Test
-//    public void localNamespaceEmptyString_ThrowsException() {
-//        setNamespace("");
-//        instantiateAndExpectException(RequiredValueEmptyException.class);
-//    }
-//
-//    @Test
-//    public void localNamespaceEmptyArray_ThrowsException() {
-//        setNamespace(jsonArray());
-//        instantiateAndExpectException(InvalidTypeException.class);
-//    }
-//
-//    @Test
-//    public void localNamespaceEmptyObject_ThrowsException() {
-//        setNamespace(jsonObject());
-//        instantiateAndExpectException(InvalidTypeException.class);
-//    }
-//
-//    @Test
-//    public void localNamespaceInvalidType_ThrowsException() {
-//        optionsNode.put("local_namespace", true);
-//        instantiateAndExpectException(InvalidTypeException.class);
-//    }
-    
-    @Test
-    public void localNamespaceMalformedUri_ThrowsException() {
-        setNamespace("http://mal formed uri.org");
-        instantiateAndExpectException(IRIImplException.class);
-    }
-    
-    @Test
-    public void localNamespaceNoFinalSlash_ThrowsException() {
-        setNamespace("http://data.ld4l.org/cornell");
-        instantiateAndExpectException(InvalidValueException.class);
-    }
-    
-    @Test 
-    public void localNamespaceIsWebPage_ThrowsException() {
-        setNamespace("http://data.ld4l.org/cornell/index.html");
-        instantiateAndExpectException(InvalidValueException.class);
     }
 
     @Test
+    @Ignore
+    public void localNamespaceNull_ThrowsException() {
+        fail("localNamespaceNull_ThrowsException not yet implemented");
+//        setNamespace(null);
+//        instantiateAndExpectException(RequiredValueNullException.class);
+    }
+
+    @Test
+    @Ignore
+    public void localNamespaceEmptyString_ThrowsException() {
+        fail("localNamespaceEmptyString_ThrowsException not yet implemented");
+//        setNamespace("");
+//        instantiateAndExpectException(RequiredValueEmptyException.class);
+    }
+
+    @Test
+    @Ignore
+    public void localNamespaceEmptyArray_ThrowsException() {
+        fail("localNamespaceEmptyArray_ThrowsException not yet implemented");
+//        setNamespace(jsonArray());
+//        instantiateAndExpectException(InvalidTypeException.class);
+    }
+
+    @Test
+    @Ignore
+    public void localNamespaceEmptyObject_ThrowsException() {
+        fail("localNamespaceEmptyObject_ThrowsException not yet implemented");
+//        setNamespace(jsonObject());
+//        instantiateAndExpectException(InvalidTypeException.class);
+    }
+
+    @Test
+    @Ignore
+    public void localNamespaceInvalidType_ThrowsException() {
+        fail("localNamespaceInvalidType_ThrowsException not yet implemented");
+//        optionsNode.put("local_namespace", true);
+//        instantiateAndExpectException(InvalidTypeException.class);
+    }
+    
+    @Test
+    @Ignore
+    public void localNamespaceMalformedUri_ThrowsException() {
+        fail("localNamespaceMalformedUri_ThrowsException not yet implemented");
+//        setNamespace("http://mal formed uri.org");
+//        instantiateAndExpectException(IRIImplException.class);
+    }
+    
+    @Test
+    @Ignore
+    public void localNamespaceNoFinalSlash_ThrowsException() {
+        fail("localNamespaceNoFinalSlash_ThrowsException not yet implemented");
+//        setNamespace("http://data.ld4l.org/cornell");
+//        instantiateAndExpectException(InvalidValueException.class);
+    }
+    
+    @Test 
+    @Ignore
+    public void localNamespaceIsWebPage_ThrowsException() {
+//        setNamespace("http://data.ld4l.org/cornell/index.html");
+//        instantiateAndExpectException(InvalidValueException.class);
+    }
+
+    @Test
+    @Ignore
     public void localNamespaceValidUri_Succeeds() throws Exception {
-        config = Configuration.instance(new String[0]);
-        assertEquals("http://data.ld4l.org/cornell/", 
-                config.getLocalNamespace());
+        fail("localNamespaceValidUri_Succeeds not yet implemented");
+//        config = Configuration.instance(new String[0]);
+//        assertEquals("http://data.ld4l.org/cornell/", 
+//                config.getLocalNamespace());
     }
     
     /*
@@ -241,30 +272,35 @@ public class BaseConfigurationTest extends AbstractTestClass {
      */
 
     @Test 
+    @Ignore
     public void inputSourceDoesntExist_ThrowsException() {
-//        fail("inputSourceDoesntExist_ThrowsException not yet implemented");
+        fail("inputSourceDoesntExist_ThrowsException not yet implemented");
 //        setInputSource("non_existent_source");
 //        instantiateAndExpectException(InvalidInputSourceException.class);     
     }
     
     @Test 
+    @Ignore
     public void inputSourceNotReadable_ThrowsException() {
-//        fail("inputSourceNotReadable_ThrowsException not yet implemented");
+        fail("inputSourceNotReadable_ThrowsException not yet implemented");
     }
     
-    @Test 
+    @Test
+    @Ignore
     public void inputDirectoryEmpty_Succeeds() {
-//        fail("inputDirectoryEmpty_Succeeds not yet implemented");
+        fail("inputDirectoryEmpty_Succeeds not yet implemented");
     }
     
-    @Test 
+    @Test
+    @Ignore
     public void allInputFilesUnreadable_Succeeds() {
-//        fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
+        fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
     }
     
     @Test 
+    @Ignore
     public void readableInputFile_Succeeds() {
-//       fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
+       fail("inputDirectoryWithNoReadableFiles_Succeeds not yet implemented");
     }
 
     

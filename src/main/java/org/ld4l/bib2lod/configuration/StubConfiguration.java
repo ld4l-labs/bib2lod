@@ -3,10 +3,13 @@
 package org.ld4l.bib2lod.configuration;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * Stub Configuration implementation that hard-codes values without reading from 
@@ -31,7 +34,7 @@ public class StubConfiguration extends BaseConfiguration {
         "org.ld4l.bib2lod.uri.RandomUriMinter"};
     private static final String OUTPUT_WRITER = "org.ld4l.bib2lod.io.FileOutputWriter";
     private static final String CLEANER = 
-            "org.ld4l.bib2lod.clean.MarcxmlCleaner";
+            "org.ld4l.bib2lod.cleaning.MarcxmlCleaner";
     private static final String CONVERTER = 
             "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToRdf";
     private static final String[] RECONCILERS = {};
@@ -43,22 +46,33 @@ public class StubConfiguration extends BaseConfiguration {
      * @throws ClassNotFoundException 
      * @throws IOException 
      * @throws ParseException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
      */              
     public StubConfiguration() throws ClassNotFoundException, 
             InstantiationException, IllegalAccessException, IOException, 
-            ParseException  {
-        
-        setLocalNamespace(LOCAL_NAMESPACE);
+                ParseException, IllegalArgumentException, 
+                    InvocationTargetException, NoSuchMethodException, 
+                        SecurityException  {
+   
+
+        // NB Some orderings are crucial. e.g., need localNamespace before 
+        // createUriMinters. Then do in one method - set up UriMinter
+        setUpUriMinters(LOCAL_NAMESPACE, URI_MINTERS);
+
         buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);  
         setOutputDestination(OUTPUT_DESTINATION);
         setOutputFormat(OUTPUT_FORMAT);      
-        setUriMinters(URI_MINTERS);
+
         setOutputWriter(OUTPUT_WRITER);   
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);   
 
     }
+
 
 }
                      

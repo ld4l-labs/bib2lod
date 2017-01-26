@@ -5,11 +5,12 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.JsonUtils.InvalidNodeTypeException;
-import org.ld4l.bib2lod.configuration.JsonUtils.RequiredNodeEmptyException;
-import org.ld4l.bib2lod.configuration.JsonUtils.RequiredNodeMissingException;
-import org.ld4l.bib2lod.configuration.JsonUtils.RequiredNodeNullException;
-import org.ld4l.bib2lod.test.AbstractTestClass;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.utils.JsonUtils;
+import org.ld4l.bib2lod.utils.JsonUtils.InvalidNodeTypeException;
+import org.ld4l.bib2lod.utils.JsonUtils.RequiredNodeEmptyException;
+import org.ld4l.bib2lod.utils.JsonUtils.RequiredNodeMissingException;
+import org.ld4l.bib2lod.utils.JsonUtils.RequiredNodeNullException;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;

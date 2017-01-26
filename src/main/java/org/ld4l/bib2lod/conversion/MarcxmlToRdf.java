@@ -2,22 +2,33 @@
 
 package org.ld4l.bib2lod.conversion;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.LineIterator;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
+import org.ld4l.bib2lod.modelbuilders.ModelBuilder;
+import org.ld4l.bib2lod.parsing.MarcxmlParser;
+import org.ld4l.bib2lod.parsing.Parser;
+import org.w3c.dom.Element;
 
 /**
- * An implementation that converts MARCXML to LD4L RDF.
+ * An implementation that converts MARCXML to LD4L RDF
  */
-public class MarcxmlToRdf extends BaseConverter {
+public class MarcxmlToRdf extends FromMarcxml {
     
-    private static final Logger LOGGER = LogManager.getLogger(); 
+    private static final Logger LOGGER = LogManager.getLogger();
     
     /**
      * Constructor
@@ -31,22 +42,40 @@ public class MarcxmlToRdf extends BaseConverter {
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
      */  
     @Override
-    public void convert(Reader reader) throws ClassNotFoundException, 
-            InstantiationException, IllegalAccessException, 
-            NoSuchMethodException, SecurityException, IllegalArgumentException, 
-            InvocationTargetException, IOException, ParseException {
+    public void convert(Reader reader, OutputStream outputStream) throws  
+            InstantiationException,IllegalAccessException, 
+                ClassNotFoundException, EntityInstantiationException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException {
 
-        // Stub - read input into buffer and return
-        StringBuffer buffer = new StringBuffer();
-        LineIterator lines = new LineIterator(reader);
-        String lineSeparator = System.getProperty("line.separator");
-        while (lines.hasNext()) {
-            String line = lines.nextLine();
-            LOGGER.debug(line);
-            buffer.append(line + lineSeparator);
+        // This converter needs a MarcxmlParser, so can it ask for it directly
+        // rather than going through Parser.instance()?
+        // Parser parser = Parser.instance(configuration);
+        // Or call the MarcxmlParser directly?
+        // Parser parser = new MarcxmlParser(configuration);
+        // Here we use a MarcxmlParser.instance() method, but does this have 
+        // any advantages over calling the constructor directly?
+        Parser parser = MarcxmlParser.instance(configuration);
+        
+        List<Element> records =  parser.getRecords(reader);
+  
+        Model model = ModelFactory.createDefaultModel();
+        
+        for (Element record : records) {
+            // Parse the record into Entity objects.
+            List<Entity> resources = parser.parseRecord(record);
+            for (Entity resource : resources) {
+                ModelBuilder modelBuilder = 
+                        ModelBuilder.instance(resource, configuration);
+                Model resourceModel = modelBuilder.build();
+                // Are there going to be any retractions? Then need to change
+                // this to getAdditions(), getRetractions() from the builder.
+                model.add(resourceModel);
+            }  
         }
         
-        writeBuffer(buffer);
+        model.write(outputStream, "N-TRIPLE");
+
     }
-    
+   
 }

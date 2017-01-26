@@ -5,6 +5,8 @@ package org.ld4l.bib2lod.configuration;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
 import org.ld4l.bib2lod.io.InputBuilder;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * An abstract implementation providing shared methods.
@@ -20,48 +23,20 @@ import org.ld4l.bib2lod.io.InputBuilder;
 public abstract class BaseConfiguration implements Configuration {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
-    
-    /**
-     * Signals that the content of a configuration value is invalid.  Differs
-     * from empty, null, or invalid types, which are handled by JsonUtils
-     * exceptions, which are content-neutral. The ConfigurationFromJson object 
-     * evaluates the contents of the value.
-     */
-    public static class InvalidValueException extends RuntimeException {         
-        private static final long serialVersionUID = 1L;
-        
-        protected InvalidValueException(String key) {
-            super("Value of configuration key '" + key + "' is invalid.");                 
-        }
-        
-        public InvalidValueException(String key, String msg) {
-            super("Value of configuration key '" + key + 
-                    "' is invalid: " + msg + ".");
-        }
-    }
-    
-    /**
-     * Signals that the specified input source is invalid or non-existent.
-     */
-    public static class InvalidInputSourceException extends RuntimeException {
-        
-        private static final long serialVersionUID = 1L;
-        
-        protected InvalidInputSourceException(String msg) {
-            super(msg);
-        }
-    }
+   
 
+    // TODO Make some of these private if possible
     protected String localNamespace;  
     protected String inputBuilder;
-    // TODO Just have the converter create the list of readers, not the configuration
+    // NOTE The Configuration does the instantiation when it is needed for the
+    // Manager (which should not have to instantiate - e.g., readers and 
+    // outputters) or when it may need to keep state - e.g., the UriMinters
     protected List<BufferedReader> input;  
     protected String inputFormat;  
     protected String inputSource;
     protected String inputFileExtension;
     protected String outputDestination; 
     protected String outputFormat;    
-    protected List<String> uriMinters;
     protected String outputWriter;
     protected String outputStream;
     protected String converter;
@@ -76,8 +51,6 @@ public abstract class BaseConfiguration implements Configuration {
     public String getLocalNamespace() {
         return localNamespace;
     }
-    
- 
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.Configuration#getInputFiles()
@@ -101,14 +74,6 @@ public abstract class BaseConfiguration implements Configuration {
     @Override
     public String getOutputFormat() {
         return outputFormat;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getUriMinters()
-     */
-    @Override
-    public List<String> getUriMinters() {
-        return uriMinters;
     }
     
     /* (non-Javadoc)
@@ -146,6 +111,35 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
+     * Sets local namespace and builds UriMinters to be stored as static
+     * variable of UriMinter. These functions are comibined into one method
+     * because the latter depends on having a local namespace in the 
+     * configuration.
+     * @param localNamespace
+     * @param uriMinters
+     * @throws ParseException 
+     * @throws IOException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws FileNotFoundException 
+     * @throws ClassNotFoundException 
+     */
+    protected void setUpUriMinters(String localNamespace, String[] uriMinters) 
+            throws ClassNotFoundException, FileNotFoundException, 
+                InstantiationException, IllegalAccessException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException, IOException, 
+                            ParseException {
+        
+        setLocalNamespace(localNamespace);
+        createUriMinters(uriMinters);
+    }
+    
+    /**
      * Sets local namespace. Validates namespace and, if valid, sets it. Else
      * an exception is thrown.
      * @param localNamespace - the local namespace to set
@@ -177,6 +171,30 @@ public abstract class BaseConfiguration implements Configuration {
         }
         
         return true;
+    }
+
+    /**
+     * Sets list of UriMinter instances.
+     * @param uriMinter - list of names of UriMinter classes
+     * @return void
+     * @throws ParseException 
+     * @throws IOException 
+     * @throws FileNotFoundException 
+     * @throws ClassNotFoundException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    private void createUriMinters(String[] uriMinters) throws 
+            ClassNotFoundException, FileNotFoundException, IOException, 
+                ParseException, InstantiationException, IllegalAccessException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException {
+        
+        UriMinter.createMinters(uriMinters, this);
     }
     
     /**
@@ -260,14 +278,7 @@ public abstract class BaseConfiguration implements Configuration {
         this.outputFormat = format;
     }
     
-    /**
-     * Sets list of class names of UriMinters.
-     * @param uriMinter - list of names of UriMinter classes
-     * @return void
-     */
-    protected void setUriMinters(String[] uriMinters) {
-        this.uriMinters = Arrays.asList(uriMinters);
-    }
+
     
     /**
      * Sets class name of OutputWriter.

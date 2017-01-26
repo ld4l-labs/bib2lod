@@ -2,6 +2,9 @@
 
 package org.ld4l.bib2lod.io;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import org.ld4l.bib2lod.configuration.Configuration;
 
 /**
@@ -17,5 +20,11 @@ public abstract class BaseOutputWriter implements OutputWriter {
     public BaseOutputWriter(Configuration configuration) {
         this.configuration = configuration;
     }
-
+    
+    protected void print(OutputStream outputStream, StringBuffer buffer) {
+        PrintStream printStream = new PrintStream(outputStream);
+        printStream.print(buffer.toString());
+        printStream.close();  
+    }
+    
 }

@@ -36,7 +36,7 @@ public class JsonOptionsReader implements OptionsReader {
 
     private static final Logger LOGGER = LogManager.getLogger();
              
-    protected String[] args;
+    private String[] args;
     
     /**
      * Constructor. 
@@ -57,16 +57,12 @@ public class JsonOptionsReader implements OptionsReader {
     @Override
     public JsonNode configure() throws IOException, ParseException {
         
-        // Get the defined options
         Options options = defineOptions();
 
-        // Get the commandline values for the defined options options
         CommandLine cmd = parseCommandLineArgs(options, args); 
         
-        // Parse the config file
         JsonNode node = parseConfigFile(cmd);
 
-        // Commandline option values override config file values
         return applyCommandLineOverrides(node, cmd);      
     }
 

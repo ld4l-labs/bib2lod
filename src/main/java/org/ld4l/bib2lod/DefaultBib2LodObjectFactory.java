@@ -3,12 +3,13 @@
 package org.ld4l.bib2lod;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.clean.Cleaner;
-import org.ld4l.bib2lod.clean.MarcxmlCleaner;
+import org.ld4l.bib2lod.cleaning.Cleaner;
+import org.ld4l.bib2lod.cleaning.MarcxmlCleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.JsonOptionsReader;
 import org.ld4l.bib2lod.configuration.OptionsReader;
@@ -39,7 +40,9 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Configuration createConfiguration(String[] args)
             throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, IOException, ParseException {
+                IllegalAccessException, IOException, ParseException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException {
         
         // return new ConfigurationFromJson(args);
         return new StubConfiguration();
@@ -54,20 +57,26 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
     
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.clean.Cleaner)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.cleaning.Cleaner)
      */
     @Override
     public Cleaner createCleaner(Configuration configuration) {
         return new MarcxmlCleaner(configuration);
     }
+ 
+ // Removing this because the converter knows what type of parser it needs and
+ // must ask for it specifically.
+//    @Override
+//    public Parser createParser(Configuration configuration) {
+//        return new MarcxmlParser(configuration);
+//    }
+//    
+//    @Override
+//    public MarcxmlParser createMarcxmlParser(Configuration configuration) {
+//        return new MarcxmlParser(configuration);
+//    }
+    
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.uri.UriMinter)
-     */
-    @Override
-    public UriMinter createUriMinter(Configuration configuration) {
-        return new RandomUriMinter(configuration);
-    }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)

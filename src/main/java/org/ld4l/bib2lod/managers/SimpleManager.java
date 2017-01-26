@@ -1,17 +1,23 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.manager;
+package org.ld4l.bib2lod.managers;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.omg.CORBA.portable.OutputStream;
+import org.xml.sax.SAXException;
 
 
 /** 
@@ -53,22 +59,40 @@ public final class SimpleManager {
      * @throws IllegalArgumentException 
      * @throws SecurityException 
      * @throws NoSuchMethodException 
+     * @throws SAXException 
+     * @throws ParserConfigurationException 
      */
     private static void convertFiles(Configuration configuration) throws 
             IOException, InstantiationException, IllegalAccessException, 
             ClassNotFoundException, NoSuchMethodException, SecurityException, 
             IllegalArgumentException, InvocationTargetException, 
-            ParseException {
+            ParseException, ParserConfigurationException, SAXException {
         
         Converter converter = Converter.instance(configuration);
 
         List<BufferedReader> input = configuration.getInput();
+        
+        // TODO get the writer from the configuration and send to the convert()
+        // method. 
+        // some-type-of-output = converter.convert(reader, outputter);
+        // outputter.output()
+        // reader.close()
+        // outputter.close()
 
+        int count = 0;
         for (BufferedReader reader : input) {
-            // Converter writes its own output
-            converter.convert(reader);            
+            
+            // TEMPORARY till we generalize to different output streams.
+            // and implement NamedReader (see Jim's code)
+            File file = new File(
+                    configuration.getOutputDestination(), "output-" + ++count);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            
+            converter.convert(reader, outputStream);            
             reader.close();
+            outputStream.close();
         }       
     }
+    
       
 }

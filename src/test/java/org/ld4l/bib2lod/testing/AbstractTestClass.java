@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.test;
+package org.ld4l.bib2lod.testing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;

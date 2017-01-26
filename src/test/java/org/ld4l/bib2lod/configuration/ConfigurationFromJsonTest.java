@@ -5,8 +5,9 @@ package org.ld4l.bib2lod.configuration;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.test.AbstractTestClass;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -52,8 +53,9 @@ public class ConfigurationFromJsonTest extends AbstractTestClass {
      */
 
     @Test 
+    @Ignore
     public void requiredNodeMissing_ThrowsException() throws Exception {
-//        fail("requiredNodeMissing_ThrowsException not yet implemented");
+        fail("requiredNodeMissing_ThrowsException not yet implemented");
 //        setNamespace(JSON_REMOVE);
 //        instantiateAndExpectException(RequiredNodeMissingException.class);
     }

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.test.AbstractTestClass;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

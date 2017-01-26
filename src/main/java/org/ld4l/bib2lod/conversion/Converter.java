@@ -2,14 +2,13 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
 
 /**
  * An object that orchestrates the conversion of an input reader containing one
@@ -23,25 +22,24 @@ public interface Converter {
     static Converter instance(Configuration configuration) {
         return Bib2LodObjectFactory.instance().createConverter(configuration);
     }
-    
+
     /**
-     * Converts input 
-     * @param reader - the reader containing the input
-     * @throws FileNotFoundException 
-     * @throws ParseException 
-     * @throws IOException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
+     * Converts input to RDF.
+     * @param reader
+     * @param outputStream 
+     * @throws ClassNotFoundException 
      * @throws IllegalAccessException 
      * @throws InstantiationException 
-     * @throws ClassNotFoundException 
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws EntityInstantiationException 
      */
-    public void convert(Reader reader) throws FileNotFoundException, 
-            ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, NoSuchMethodException, SecurityException, 
-            IllegalArgumentException, InvocationTargetException, IOException, 
-            ParseException;
-    
+    public void convert(Reader reader, OutputStream outputStream) throws InstantiationException, 
+            IllegalAccessException, ClassNotFoundException, 
+                EntityInstantiationException, IllegalArgumentException, 
+                    InvocationTargetException, NoSuchMethodException, 
+                        SecurityException;
+
 }

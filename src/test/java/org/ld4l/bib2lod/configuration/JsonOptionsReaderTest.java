@@ -14,7 +14,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
-import org.ld4l.bib2lod.test.AbstractTestClass;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

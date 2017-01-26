@@ -5,15 +5,48 @@ package org.ld4l.bib2lod.configuration;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.uri.UriMinter;
 
 /**
  * Provides program configuration values.
  */
 public interface Configuration {
+    
+    /**
+     * Signals that the content of a configuration value is invalid.  Differs
+     * from empty, null, or invalid types, which are handled by JsonUtils
+     * exceptions, which are content-neutral. The ConfigurationFromJson object 
+     * evaluates the contents of the value.
+     */
+    public static class InvalidValueException extends RuntimeException {         
+        private static final long serialVersionUID = 1L;
+        
+        protected InvalidValueException(String key) {
+            super("Value of configuration key '" + key + "' is invalid.");                 
+        }
+        
+        public InvalidValueException(String key, String msg) {
+            super("Value of configuration key '" + key + 
+                    "' is invalid: " + msg + ".");
+        }
+    }
+    
+    /**
+     * Signals that the specified input source is invalid or non-existent.
+     */
+    public static class InvalidInputSourceException extends RuntimeException {
+        
+        private static final long serialVersionUID = 1L;
+        
+        protected InvalidInputSourceException(String msg) {
+            super(msg);
+        }
+    }
     
     /**
      * Factory method
@@ -25,10 +58,16 @@ public interface Configuration {
      * @throws ParseException
      * @throws InstantiationException
      * @throws IllegalAccessException
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
      */
     static Configuration instance(String[] args) throws ClassNotFoundException,
             FileNotFoundException, IOException, ParseException, 
-            InstantiationException, IllegalAccessException {
+                InstantiationException, IllegalAccessException, 
+                    IllegalArgumentException, InvocationTargetException, 
+                        NoSuchMethodException, SecurityException {
         return Bib2LodObjectFactory.instance().createConfiguration(args);
     }
 
@@ -55,12 +94,6 @@ public interface Configuration {
      * @return the output format
      */
     String getOutputFormat();
-
-    /**
-     * Gets a list of class names of UriMinter specified in the configuration.
-     * @return the list of UriMinter class names
-     */
-    List<String> getUriMinters();
     
     /**
      * Returns the class name of the OutputWriter specified in the 

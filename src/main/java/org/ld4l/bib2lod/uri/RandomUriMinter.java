@@ -2,10 +2,11 @@ package org.ld4l.bib2lod.uri;
 
 import java.util.UUID;
 
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.util.MurmurHash;
+import org.ld4l.bib2lod.entities.Entity;
 
 /**
  * A UriMinter that constructs a URI from the local namespace and a randomly-
@@ -33,7 +34,7 @@ public class RandomUriMinter extends BaseUriMinter {
      * APIs that do not allow or understand local names beginning with 
      * non-alphabetic characters.
      */
-    protected String mintLocalName() {
+    protected String getLocalName(Entity entity) {
         String uuid = UUID.randomUUID().toString();
         // NB A digit is not a legal initial character of a local name in 
         // RDF/XML; see http://www.w3.org/TR/xml11/#NT-NameStartChar, so 
@@ -52,5 +53,8 @@ public class RandomUriMinter extends BaseUriMinter {
         long hash64 = MurmurHash.hash64(s);
         return Long.toHexString(hash64);        
     }
+
+
+
 
 }
