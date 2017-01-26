@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.uri;
+package org.ld4l.bib2lod.uris;
 
 /** Murmur hash 2.0.
  * 

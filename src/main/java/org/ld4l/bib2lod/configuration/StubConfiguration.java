@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Stub Configuration implementation that hard-codes values without reading from 
@@ -31,7 +31,7 @@ public class StubConfiguration extends BaseConfiguration {
             "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/";
     private static final String OUTPUT_FORMAT = "ntriples";
     private static final String[] URI_MINTERS = {
-        "org.ld4l.bib2lod.uri.RandomUriMinter"};
+        "org.ld4l.bib2lod.uris.RandomUriGetter"};
     private static final String OUTPUT_WRITER = "org.ld4l.bib2lod.io.FileOutputWriter";
     private static final String CLEANER = 
             "org.ld4l.bib2lod.cleaning.MarcxmlCleaner";
@@ -59,7 +59,7 @@ public class StubConfiguration extends BaseConfiguration {
    
 
         // NB Some orderings are crucial. e.g., need localNamespace before 
-        // createUriMinters. Then do in one method - set up UriMinter
+        // createUriMinters. Then do in one method - set up UriGetter
         setUpUriMinters(LOCAL_NAMESPACE, URI_MINTERS);
 
         buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);  

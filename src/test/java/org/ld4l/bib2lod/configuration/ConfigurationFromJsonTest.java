@@ -38,7 +38,7 @@ public class ConfigurationFromJsonTest extends AbstractTestClass {
         optionsNode.set("services",
                 jsonObject()
                         .put("uri_minter",
-                                "org.ld4l.bib2lod.uri.RandomUriMinter")
+                                "org.ld4l.bib2lod.uris.RandomUriGetter")
                         .put("writer", "org.ld4l.bib2lod.io.SimpleRdfWriter"));
         optionsNode.set("converters", jsonArray().add(
                 "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"));

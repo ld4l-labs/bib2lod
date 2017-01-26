@@ -71,13 +71,6 @@ public final class SimpleManager {
         Converter converter = Converter.instance(configuration);
 
         List<BufferedReader> input = configuration.getInput();
-        
-        // TODO get the writer from the configuration and send to the convert()
-        // method. 
-        // some-type-of-output = converter.convert(reader, outputter);
-        // outputter.output()
-        // reader.close()
-        // outputter.close()
 
         int count = 0;
         for (BufferedReader reader : input) {

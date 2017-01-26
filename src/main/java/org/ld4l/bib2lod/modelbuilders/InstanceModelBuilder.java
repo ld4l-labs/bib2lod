@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Builds a model for an Instance entity.
@@ -35,7 +35,7 @@ public class InstanceModelBuilder extends BaseModelBuilder {
     @Override
     public Model build() {
         
-        Resource instance = model.createResource(UriMinter.getUri(entity));
+        Resource instance = model.createResource(UriGetter.getUri(entity));
         
         addTypes(instance);
 

@@ -36,10 +36,11 @@ public interface Converter {
      * @throws IllegalArgumentException 
      * @throws EntityInstantiationException 
      */
-    public void convert(Reader reader, OutputStream outputStream) throws InstantiationException, 
-            IllegalAccessException, ClassNotFoundException, 
-                EntityInstantiationException, IllegalArgumentException, 
-                    InvocationTargetException, NoSuchMethodException, 
-                        SecurityException;
+    public void convert(Reader reader, OutputStream outputStream) throws 
+            InstantiationException, 
+                IllegalAccessException, ClassNotFoundException, 
+                    EntityInstantiationException, IllegalArgumentException, 
+                        InvocationTargetException, NoSuchMethodException, 
+                            SecurityException;
 
 }

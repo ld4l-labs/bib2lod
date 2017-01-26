@@ -16,8 +16,8 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
-import org.ld4l.bib2lod.uri.RandomUriMinter;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.RandomUriGetter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * A simple implementation.

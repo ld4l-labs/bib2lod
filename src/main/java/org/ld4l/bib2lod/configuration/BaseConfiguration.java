@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
 import org.ld4l.bib2lod.io.InputBuilder;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * An abstract implementation providing shared methods.
@@ -28,9 +28,6 @@ public abstract class BaseConfiguration implements Configuration {
     // TODO Make some of these private if possible
     protected String localNamespace;  
     protected String inputBuilder;
-    // NOTE The Configuration does the instantiation when it is needed for the
-    // Manager (which should not have to instantiate - e.g., readers and 
-    // outputters) or when it may need to keep state - e.g., the UriMinters
     protected List<BufferedReader> input;  
     protected String inputFormat;  
     protected String inputSource;
@@ -112,7 +109,7 @@ public abstract class BaseConfiguration implements Configuration {
     
     /**
      * Sets local namespace and builds UriMinters to be stored as static
-     * variable of UriMinter. These functions are comibined into one method
+     * variable of UriGetter. These functions are comibined into one method
      * because the latter depends on having a local namespace in the 
      * configuration.
      * @param localNamespace
@@ -174,8 +171,8 @@ public abstract class BaseConfiguration implements Configuration {
     }
 
     /**
-     * Sets list of UriMinter instances.
-     * @param uriMinter - list of names of UriMinter classes
+     * Sets list of UriGetter instances.
+     * @param uriMinter - list of names of UriGetter classes
      * @return void
      * @throws ParseException 
      * @throws IOException 
@@ -194,7 +191,7 @@ public abstract class BaseConfiguration implements Configuration {
                     IllegalArgumentException, InvocationTargetException, 
                         NoSuchMethodException, SecurityException {
         
-        UriMinter.createMinters(uriMinters, this);
+        UriGetter.createMinters(uriMinters, this);
     }
     
     /**

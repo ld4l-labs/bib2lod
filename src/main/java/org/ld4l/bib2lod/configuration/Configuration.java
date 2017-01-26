@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Provides program configuration values.

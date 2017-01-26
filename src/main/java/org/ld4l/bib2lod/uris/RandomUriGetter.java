@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.uri;
+package org.ld4l.bib2lod.uris;
 
 import java.util.UUID;
 
@@ -9,12 +9,12 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
- * A UriMinter that constructs a URI from the local namespace and a randomly-
+ * A UriGetter that constructs a URI from the local namespace and a randomly-
  * generated and hashed local name. An alpha character is prefixed to support
  * serializations (e.g., RDF/XML) and APIs (e.g., Jena) that do not allow or
  * understand local names beginning with non-alphabetic characters.
  */
-public class RandomUriMinter extends BaseUriMinter {
+public class RandomUriGetter extends BaseUriGetter {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -24,7 +24,7 @@ public class RandomUriMinter extends BaseUriMinter {
      * Constructor.
      * @param configuration
      */
-    public RandomUriMinter(Configuration configuration) {
+    public RandomUriGetter(Configuration configuration) {
         super(configuration);
     }
 

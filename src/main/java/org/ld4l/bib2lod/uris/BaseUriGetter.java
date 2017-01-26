@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.uri;
+package org.ld4l.bib2lod.uris;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.ld4l.bib2lod.entities.Entity;
 /**
  * An abstract implementation.
  */
-public abstract class BaseUriMinter implements UriMinter {
+public abstract class BaseUriGetter implements UriGetter {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -25,7 +25,7 @@ public abstract class BaseUriMinter implements UriMinter {
      * Constructor.
      * @param configuration
      */
-    public BaseUriMinter(Configuration configuration) {
+    public BaseUriGetter(Configuration configuration) {
         this.configuration = configuration;
         this.localNamespace = configuration.getLocalNamespace();
     }

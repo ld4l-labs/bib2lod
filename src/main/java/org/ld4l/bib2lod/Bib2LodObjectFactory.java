@@ -20,7 +20,7 @@ import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.io.OutputWriter;
 import org.ld4l.bib2lod.modelbuilders.InstanceModelBuilder;
 import org.ld4l.bib2lod.modelbuilders.ModelBuilder;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Factory class to instantiate Bib2Lod objects.
@@ -117,10 +117,10 @@ public abstract class Bib2LodObjectFactory {
     public abstract Cleaner createCleaner(Configuration configuration);
 
     /**
-     * Returns a UriMinter instance.
+     * Returns a UriGetter instance.
      * @param className - the class name of the minter to instantiate 
      * @param configuration - the Configuration instance 
-     * @return the UriMinter instance
+     * @return the UriGetter instance
      * @throws SecurityException 
      * @throws NoSuchMethodException 
      * @throws InvocationTargetException 
@@ -129,14 +129,14 @@ public abstract class Bib2LodObjectFactory {
      * @throws InstantiationException 
      * @throws ClassNotFoundException 
      */
-    public UriMinter createUriMinter(String className, 
+    public UriGetter createUriMinter(String className, 
             Configuration configuration) throws InstantiationException, 
                 IllegalAccessException, IllegalArgumentException, 
                     InvocationTargetException, NoSuchMethodException, 
                         SecurityException, ClassNotFoundException {
         
         Class<?> minterClass = Class.forName(className);
-        return (UriMinter) minterClass                            
+        return (UriGetter) minterClass                            
                 .getConstructor(Configuration.class)
                 .newInstance(configuration);   
     }

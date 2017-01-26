@@ -10,7 +10,7 @@ import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.uri.UriMinter;
+import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * When created, sets itself as a wrapper for the default factory instance.
@@ -99,7 +99,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public UriMinter createUriMinter(String className, Configuration configuration) {
+    public UriGetter createUriMinter(String className, Configuration configuration) {
         // TODO Auto-generated method stub
         return null;
     }

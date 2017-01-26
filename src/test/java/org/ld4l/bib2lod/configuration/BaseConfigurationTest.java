@@ -79,7 +79,7 @@ public class BaseConfigurationTest extends AbstractTestClass {
                                 "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/")
                         .put("format", "ntriples"));
         optionsNode.put("local_namespace", "http://data.ld4l.org/cornell/");
-        optionsNode.put("uri_minter", "org.ld4l.bib2lod.uri.RandomUriMinter");                        
+        optionsNode.put("uri_minter", "org.ld4l.bib2lod.uris.RandomUriGetter");                        
         optionsNode.put("writer", "org.ld4l.bib2lod.io.SimpleRdfWriter");
         optionsNode.set("converters", jsonArray().add(
                 "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf"));

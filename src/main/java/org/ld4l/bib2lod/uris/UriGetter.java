@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.uri;
+package org.ld4l.bib2lod.uris;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,13 +18,13 @@ import org.ld4l.bib2lod.entities.Entity;
  */
 // TODO Change to UriGetter, UriGenerator etc - since doesn't always mint a 
 // new one
-public interface UriMinter {
+public interface UriGetter {
     
     /**
      * Stores the list of UriMinters that will be used to mint URIs for 
      * Resources.
      */
-    static List<UriMinter> minters = new ArrayList<UriMinter>();
+    static List<UriGetter> minters = new ArrayList<UriGetter>();
     
     /**
      * Factory method
@@ -36,7 +36,7 @@ public interface UriMinter {
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      */
-    static UriMinter instance(String minterClass, Configuration configuration) 
+    static UriGetter instance(String minterClass, Configuration configuration) 
             throws ClassNotFoundException, FileNotFoundException, IOException, 
                 ParseException, InstantiationException, IllegalAccessException, 
                     IllegalArgumentException, InvocationTargetException, 
@@ -65,9 +65,9 @@ public interface UriMinter {
     public static String getUri(Entity entity) {
         
         String uri = null;
-        Iterator<UriMinter> it = minters.iterator();
+        Iterator<UriGetter> it = minters.iterator();
         while (it.hasNext()) {
-            UriMinter minter = it.next();
+            UriGetter minter = it.next();
             uri = minter.getUriFor(entity);
         }
         return uri;
