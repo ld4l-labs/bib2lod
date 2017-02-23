@@ -24,11 +24,11 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String INPUT_BUILDER = 
             "org.ld4l.bib2lod.io.FileInputBuilder";
     private static final String INPUT_SOURCE = 
-            "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml";
+            "/Users/rjy7/projects/bib2lod/doc/sample-conversions/marcxml-to-ld4l/102063.min.xml";
     private static final String INPUT_FILE_EXTENSION = "xml";
     private static final String INPUT_FORMAT = "MARCXML";
     private static final String OUTPUT_DESTINATION = 
-            "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/";
+            "/Users/rjy7/projects/bib2lod/output/";
     private static final String OUTPUT_FORMAT = "ntriples";
     private static final String[] URI_MINTERS = {
         "org.ld4l.bib2lod.uris.RandomUriGetter"};

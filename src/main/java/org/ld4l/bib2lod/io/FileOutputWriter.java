@@ -45,7 +45,8 @@ public class FileOutputWriter extends BaseOutputWriter {
         // For now we assume everything is correct
        
         // Temporary: increment counter to create a unique filename.
-        // TODO Ideally create output filename from input filename, but how???
+        // TODO Implement NamedReader
+        // Add extension based on output format
         count++;
         File file = new File(
                 configuration.getOutputDestination(), "output-" + count);

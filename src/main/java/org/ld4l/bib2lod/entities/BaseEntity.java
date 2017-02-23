@@ -35,19 +35,7 @@ public abstract class BaseEntity implements Entity {
     public List<String> getTypes() {
         return types;
     }
-    
-    public void setType(String type) {
-        types.add(type);
-    }
-    
-    public void setTypes(List<String> types) {
-        types.addAll(types);
-    }
-    
-    public void setType(Namespace namespace, String localName) {
-        types.add(namespace.uri() + localName);
-    }
-    
+  
     public void setTypes(Map<Namespace, String> types) {
         for (Map.Entry<Namespace, String> entry : types.entrySet()) {
             this.types.add(entry.getKey().uri() + entry.getValue());

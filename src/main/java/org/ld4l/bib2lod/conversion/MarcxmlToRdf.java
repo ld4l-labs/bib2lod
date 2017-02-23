@@ -26,7 +26,7 @@ import org.w3c.dom.Element;
 /**
  * An implementation that converts MARCXML to LD4L RDF
  */
-public class MarcxmlToRdf extends FromMarcxml {
+public class MarcxmlToRdf extends XmlToRdf {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -63,10 +63,10 @@ public class MarcxmlToRdf extends FromMarcxml {
         
         for (Element record : records) {
             // Parse the record into Entity objects.
-            List<Entity> resources = parser.parseRecord(record);
-            for (Entity resource : resources) {
+            List<Entity> entities = parser.parseRecord(record);
+            for (Entity entity : entities) {
                 ModelBuilder modelBuilder = 
-                        ModelBuilder.instance(resource, configuration);
+                        ModelBuilder.instance(entity, configuration);
                 Model resourceModel = modelBuilder.build();
                 // Are there going to be any retractions? Then need to change
                 // this to getAdditions(), getRetractions() from the builder.

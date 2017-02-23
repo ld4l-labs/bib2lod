@@ -129,7 +129,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>org.ld4l.bib2lod.manager.SimpleManager</mainClass>
+							<mainClass>org.ld4l.bib2lod.managers.SimpleManager</mainClass>
 						</manifest>
 					</archive>
 					<appendAssemblyId>false</appendAssemblyId>

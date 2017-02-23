@@ -39,9 +39,15 @@ public abstract class XmlParser extends BaseParser {
         super(configuration);
     }
     
+    /**
+     * Parse the input reader into records. The representation of a record
+     * depends on the input format.
+     * @param reader - the input Reader
+     * @return a list of XML Elements representing the records
+     */    
     // Turning the NodeList into a List<Node> allows implementation of the
     // interface method
-    //public NodeList getRecords(Reader reader) { 
+    // public NodeList getRecords(Reader reader) { 
     // Not sure what to do about this warning: The return type List<Node> for 
     // getRecords(Reader) from the type XmlParser needs unchecked conversion to 
     // conform to List<Object> from the type Parser.
@@ -81,30 +87,10 @@ public abstract class XmlParser extends BaseParser {
     }
     
     /**
-     * Returns the name of the tag enclosing a record. Each child will define
+     * Returns the name of the tag enclosing a record. Each subclass will define
      * its own tag name; e.g., "record" in MarcxmlParser.
      * @return
      */
     protected abstract String getRecordTagName();
-
-//    /**
-//     * Parses the record into Resources.
-//     * @param record - the XML record
-//     * @return
-//     */
-//    public List<Entity> parseRecord(Element record) {
-//        
-//        List<Entity> datafields = new ArrayList<Entity>();
-//
-//        // Instance is the only field that can take ONLY a record.
-//        // TODO: Use a factory method of Entity? Should Instance be an
-//        // interface in order to apply decorators later?
-//        Entity instance = new Instance(record);
-//        datafields.add(instance);
-//        
-//        // Now loop through fields
-//        
-//        return datafields; 
-//    }
 
 }

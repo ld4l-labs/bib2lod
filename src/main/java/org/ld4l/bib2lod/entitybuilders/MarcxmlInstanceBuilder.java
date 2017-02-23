@@ -39,8 +39,11 @@ public class MarcxmlInstanceBuilder extends BaseEntityBuilder {
     @Override
     public List<Entity> build(Element record) {
         
-        List<Entity> resources = new ArrayList<Entity>();
+        // Returns a List of Entities because creating one Entity may entail
+        // creating additional Entities
+        List<Entity> entities = new ArrayList<Entity>();
         
+
         try {
             instance = (Instance) Entity.instance(Instance.class);
         } catch (InstantiationException | IllegalAccessException
@@ -48,18 +51,23 @@ public class MarcxmlInstanceBuilder extends BaseEntityBuilder {
             throw new EntityInstantiationException(e.getMessage(), e.getCause());
         }
         
-        addTypes(record);       
+        addTypes(record);
+        
+        // These need to get added to the entities returned. The current
+        // structure doesn't allow for that.
         addIdentifiers(record);
         addTitles(record);      
         addWorks(record);
         
         // TODO add others...
         
-        resources.add(instance);       
+        entities.add(instance);       
         
-        return resources;
+        return entities;
     }
     
+    // Later it will be apparent that determining the types depends on the input 
+    // format - instance subclasses will be indicated in an input-specific way.
     private void addTypes(Element record) {
         Map<Namespace, String> types = new HashMap<Namespace, String>();
         // For now, all we have is the Instance superclass

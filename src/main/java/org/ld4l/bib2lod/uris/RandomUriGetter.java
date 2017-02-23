@@ -1,8 +1,8 @@
 package org.ld4l.bib2lod.uris;
 
+import java.util.Iterator;
 import java.util.UUID;
 
-import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -26,6 +26,12 @@ public class RandomUriGetter extends BaseUriGetter {
      */
     public RandomUriGetter(Configuration configuration) {
         super(configuration);
+    }
+    
+    @Override
+    public String getUri(Entity entity, Iterator<UriGetter> it) {
+        String localName = getLocalName(entity);
+        return buildUri(localName);
     }
 
     /**
@@ -53,8 +59,5 @@ public class RandomUriGetter extends BaseUriGetter {
         long hash64 = MurmurHash.hash64(s);
         return Long.toHexString(hash64);        
     }
-
-
-
 
 }

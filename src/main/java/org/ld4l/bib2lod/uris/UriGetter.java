@@ -21,6 +21,21 @@ import org.ld4l.bib2lod.entities.Entity;
 public interface UriGetter {
     
     /**
+     * Signals that the content of a configuration value is invalid.  Differs
+     * from empty, null, or invalid types, which are handled by JsonUtils
+     * exceptions, which are content-neutral. The ConfigurationFromJson object 
+     * evaluates the contents of the value.
+     */
+    public static class NullUriException extends RuntimeException {         
+        private static final long serialVersionUID = 1L;
+        
+        protected NullUriException(Entity entity) {
+            // TODO Need to reference the Entity somehow
+            super("No URI generated for ??");                 
+        }
+    }
+    
+    /**
      * Stores the list of UriMinters that will be used to mint URIs for 
      * Resources.
      */
@@ -58,19 +73,36 @@ public interface UriGetter {
         }
     }
     
-    public String getUriFor(Entity entity);
-    
+    /**
+     * 
+     * @param entity - the Entity to build the URI for
+     * @return
+     */
     // TODO Since we are using the Entity to get the URI, we might just as well 
-    // do this in building the Entity rather than the Model.
+    // do this when d building the Entity rather than the Resource/Model.
     public static String getUri(Entity entity) {
         
         String uri = null;
+        
         Iterator<UriGetter> it = minters.iterator();
-        while (it.hasNext()) {
-            UriGetter minter = it.next();
-            uri = minter.getUriFor(entity);
+        
+        if (it.hasNext()) {
+            uri = it.next().getUri(entity, it);
         }
+     
+        if (uri == null) {
+            throw new NullUriException(entity);
+        }
+        
         return uri;
     }
+    
+    /**
+     * 
+     * @param entity
+     * @param it
+     * @return
+     */
+    String getUri(Entity entity, Iterator<UriGetter> it);
   
 }

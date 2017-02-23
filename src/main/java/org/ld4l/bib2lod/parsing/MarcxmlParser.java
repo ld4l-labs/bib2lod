@@ -56,19 +56,22 @@ public class MarcxmlParser extends XmlParser {
                 InvocationTargetException, NoSuchMethodException, 
                     SecurityException {
         
-        List<Entity> resources = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<Entity>();
 
+        // Possibly instance should be treated differently from the other
+        // Entities that will be created from this record, since everything
+        // originates from the instance (the record). As such building the 
+        // instance Entity would just be part of MarcxmlParser, whereas there 
+        // would be individual builders for other Entity types.
         try {
             
             // Again - is there a reason not to call the constructor directly,
             // when we know what kind of a builder we want?
             MarcxmlInstanceBuilder instanceBuilder = 
-                    // TODO Does the EntityBuilder need the Configuration? So 
-                    // far no.
                     (MarcxmlInstanceBuilder) EntityBuilder.instance(
                             MarcxmlInstanceBuilder.class, configuration);
 
-            resources.addAll(instanceBuilder.build(record));
+            entities.addAll(instanceBuilder.build(record));
             
         } catch (InstantiationException | IllegalAccessException
                 | ClassNotFoundException e) {
@@ -76,7 +79,7 @@ public class MarcxmlParser extends XmlParser {
                     e.getMessage(), e.getCause());
         } 
         
-        return resources;
+        return entities;
     }
 
 }

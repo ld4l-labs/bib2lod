@@ -7,19 +7,23 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 
 /**
- * Abstract converter that takes MARCXML input.
+ * Abstract converter that takes XML input.
  */
-public abstract class FromMarcxml extends FromXml {
+public abstract class XmlToRdf extends BaseConverter {
     
     private static final Logger LOGGER = LogManager.getLogger();
-
+    
     /**
      * Constructor
      * @param configuration
      */
-    public FromMarcxml(Configuration configuration) {
+    public XmlToRdf(Configuration configuration) {
         super(configuration);
     }
+
+    // See if this is needed
+    // public abstract String getRecordTagName();
     
+
 
 }
