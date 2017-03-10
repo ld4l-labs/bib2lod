@@ -9,9 +9,8 @@ import java.util.Map;
 
 import org.ld4l.bib2lod.Namespace;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
+import org.ld4l.bib2lod.entities.Instance;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -42,14 +41,8 @@ public class MarcxmlInstanceBuilder extends BaseEntityBuilder {
         // Returns a List of Entities because creating one Entity may entail
         // creating additional Entities
         List<Entity> entities = new ArrayList<Entity>();
-        
 
-        try {
-            instance = (Instance) Entity.instance(Instance.class);
-        } catch (InstantiationException | IllegalAccessException
-                | ClassNotFoundException e) {
-            throw new EntityInstantiationException(e.getMessage(), e.getCause());
-        }
+        instance = (Instance) Entity.instance(Instance.class);
         
         addTypes(record);
         

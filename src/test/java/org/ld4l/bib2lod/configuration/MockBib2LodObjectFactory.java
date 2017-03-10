@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
@@ -67,14 +66,16 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConfiguration(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public Configuration createConfiguration(String[] args)
-            throws ClassNotFoundException, FileNotFoundException, IOException,
-            ParseException {
+    public Configuration createConfiguration(String[] args) {
         // Currently the default configuration is StubConfiguration, which 
         // doesn't work to test the abstract BaseConfiguration because it  
         // doesn't use a JsonNode, and isn't useful to build tests on because it
         // is only temporary. 
-        return new MockConfiguration(args);
+        try {
+            return new MockConfiguration(args);
+        } catch (IOException | ParseException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
     }
 
     /* (non-Javadoc)

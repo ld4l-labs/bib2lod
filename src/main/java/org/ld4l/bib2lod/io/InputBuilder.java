@@ -3,11 +3,9 @@
 package org.ld4l.bib2lod.io;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 
 /**
@@ -21,9 +19,7 @@ public interface InputBuilder {
      * @throws IllegalAccessException 
      * @throws InstantiationException 
      */
-    static InputBuilder instance(String className) throws ClassNotFoundException,
-            FileNotFoundException, IOException, ParseException, 
-            InstantiationException, IllegalAccessException {
+    static InputBuilder instance(String className) {
         return Bib2LodObjectFactory.instance().createInputBuilder(className);
     }
 

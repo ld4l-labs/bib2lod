@@ -14,13 +14,26 @@ import org.w3c.dom.Element;
  * Parses input into Resources.
  */
 public interface Parser {
+    public static class ParserException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public ParserException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public ParserException(String message) {
+            super(message);
+        }
+
+        public ParserException(Throwable cause) {
+            super(cause);
+        }
+    }
     
     /**
      * Signals an exception during parsing of the input. 
      */
     public static class InputParseException extends RuntimeException {         
-        private static final long serialVersionUID = 1L;
-        
         protected InputParseException(String msg, Throwable cause) {
             super(msg, cause);                 
         }        
@@ -64,8 +77,6 @@ public interface Parser {
     //public <T> List<Entity> parseRecord(T record);
     // TEMPORARY!! Can't specify Element type here - not common to all parsers
     public List<Entity> parseRecord(Element record) throws 
-            EntityInstantiationException, IllegalArgumentException, 
-                InvocationTargetException, NoSuchMethodException, 
-                    SecurityException;
+            ParserException;
     
 }

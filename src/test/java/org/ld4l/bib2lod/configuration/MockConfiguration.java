@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
@@ -15,11 +14,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class MockConfiguration extends BaseConfiguration {
 
     /**
-     * 
+     * @throws ParseException 
+     * @throws IOException 
      */
-    public MockConfiguration(String[] args) 
-        throws ClassNotFoundException, FileNotFoundException, IOException,
-        ParseException {
+    public MockConfiguration(String[] args) throws IOException, ParseException {
             
         JsonNode config = OptionsReader.instance(args).configure();
         

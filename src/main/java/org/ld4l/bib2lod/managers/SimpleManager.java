@@ -6,18 +6,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.omg.CORBA.portable.OutputStream;
-import org.xml.sax.SAXException;
+import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 
 
 /** 
@@ -50,23 +45,10 @@ public final class SimpleManager {
     /**
      * Converts a list of input readers.
      * @param configuration - the Configuration object
+     * @throws ConverterException 
      * @throws IOException 
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws ParseException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws SAXException 
-     * @throws ParserConfigurationException 
      */
-    private static void convertFiles(Configuration configuration) throws 
-            IOException, InstantiationException, IllegalAccessException, 
-            ClassNotFoundException, NoSuchMethodException, SecurityException, 
-            IllegalArgumentException, InvocationTargetException, 
-            ParseException, ParserConfigurationException, SAXException {
+    private static void convertFiles(Configuration configuration) throws ConverterException, IOException {
         
         Converter converter = Converter.instance(configuration);
 

@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
@@ -18,20 +17,8 @@ public interface EntityBuilder {
     /**
      * Factory method
      * @param type - the type of Entity to instantiate
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
      */
-    static EntityBuilder instance(Class<?> type, Configuration configuration) 
-                throws InstantiationException, 
-                        IllegalAccessException, ClassNotFoundException, 
-                            IllegalArgumentException, InvocationTargetException, 
-                                NoSuchMethodException, SecurityException {
-        
+    static EntityBuilder instance(Class<?> type, Configuration configuration) {
         return Bib2LodObjectFactory.instance().createEntityBuilder(
                 type, configuration);
     }

@@ -1,14 +1,10 @@
 package org.ld4l.bib2lod.uris;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
-import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
@@ -43,31 +39,30 @@ public interface UriGetter {
     
     /**
      * Factory method
-     * @param minter 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
+     * 
+     * @param minter
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    static UriGetter instance(String minterClass, Configuration configuration) 
-            throws ClassNotFoundException, FileNotFoundException, IOException, 
-                ParseException, InstantiationException, IllegalAccessException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException {      
-        
-        return Bib2LodObjectFactory.instance().createUriMinter(
-                minterClass, configuration);
+    static UriGetter instance(String minterClass, Configuration configuration)
+            throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException {
+
+        return Bib2LodObjectFactory.instance().createUriMinter(minterClass,
+                configuration);
     }
     
-    public static void createMinters(String[] minterClasses,  
-            Configuration configuration) throws ClassNotFoundException, 
-                FileNotFoundException, IOException, ParseException, 
-                    InstantiationException, IllegalAccessException, 
-                        IllegalArgumentException, InvocationTargetException, 
-                            NoSuchMethodException, SecurityException {
-        
+    public static void createMinters(String[] minterClasses,
+            Configuration configuration)
+            throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException,
+            NoSuchMethodException, SecurityException {
+
         for (String minterClass : minterClasses) {
             minters.add(instance(minterClass, configuration));
         }

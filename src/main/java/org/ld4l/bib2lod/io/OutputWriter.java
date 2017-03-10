@@ -3,10 +3,8 @@
 package org.ld4l.bib2lod.io;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
 
@@ -24,13 +22,7 @@ public interface OutputWriter {
      * @throws SecurityException 
      * @throws NoSuchMethodException 
      */
-    static OutputWriter instance(Configuration configuration) 
-            throws ClassNotFoundException,
-            FileNotFoundException, IOException, ParseException, 
-            InstantiationException, IllegalAccessException, 
-            NoSuchMethodException, SecurityException, 
-            IllegalArgumentException, InvocationTargetException {
-        
+    static OutputWriter instance(Configuration configuration) {
         return Bib2LodObjectFactory.instance().createOutputWriter(
                 configuration);
     }

@@ -2,19 +2,16 @@
 
 package org.ld4l.bib2lod;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.io.OutputWriter;
@@ -31,6 +28,25 @@ import org.ld4l.bib2lod.uris.UriGetter;
  * The singleton instance may be replaced for unit tests.
  */
 public abstract class Bib2LodObjectFactory {
+    
+    /**
+     * A problem occurred when trying to create an Object in the Factory.
+     */
+    public static class Bib2LodObjectFactoryException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public Bib2LodObjectFactoryException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public Bib2LodObjectFactoryException(String message) {
+            super(message);
+        }
+
+        public Bib2LodObjectFactoryException(Exception cause) {
+            super(cause);
+        }
+    }
     
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -57,22 +73,8 @@ public abstract class Bib2LodObjectFactory {
      * Returns a Configuration instance.
      * @param args - the program arguments
      * @return the Configuration instance
-     * @throws ClassNotFoundException
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws ParseException
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
      */
-    public abstract Configuration createConfiguration(String[] args)
-            throws ClassNotFoundException, FileNotFoundException, IOException,
-                ParseException, InstantiationException, IllegalAccessException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException;
+    public abstract Configuration createConfiguration(String[] args);
  
     /**
      * Returns a Converter instance.
@@ -81,32 +83,35 @@ public abstract class Bib2LodObjectFactory {
      */
     public abstract Converter createConverter(Configuration configuration);
     
-    public OutputWriter createOutputWriter(Configuration configuration) throws 
-            ClassNotFoundException, NoSuchMethodException, 
-            SecurityException, InstantiationException, 
-            IllegalAccessException, IllegalArgumentException, 
-            InvocationTargetException {
-        
-        Class<?> writerClass = Class.forName(configuration.getOutputWriter());
-        return (OutputWriter) writerClass
-                .getConstructor(Configuration.class)
-                .newInstance(configuration);
+    public OutputWriter createOutputWriter(Configuration configuration) {
+        try {
+            Class<?> writerClass = Class
+                    .forName(configuration.getOutputWriter());
+            return (OutputWriter) writerClass
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException
+                | SecurityException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
     }
     
     /**
      * Returns an InputBuilder instance.
      * @return the InputBuilder instance.
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
      */
     // This is probably how it should be done, but for now just pass in the
     // class name.
      //    public abstract InputBuilder createInputBuilder(Configuration configuration);
-    public InputBuilder createInputBuilder(String className) throws 
-            InstantiationException, IllegalAccessException, 
-            ClassNotFoundException {
-        return (InputBuilder) Class.forName(className).newInstance();
+    public InputBuilder createInputBuilder(String className) {
+        try {
+            return (InputBuilder) Class.forName(className).newInstance();
+        } catch (InstantiationException | IllegalAccessException
+                | ClassNotFoundException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
     }
     
     /**
@@ -121,24 +126,21 @@ public abstract class Bib2LodObjectFactory {
      * @param className - the class name of the minter to instantiate 
      * @param configuration - the Configuration instance 
      * @return the UriGetter instance
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws ClassNotFoundException 
      */
     public UriGetter createUriMinter(String className, 
-            Configuration configuration) throws InstantiationException, 
-                IllegalAccessException, IllegalArgumentException, 
-                    InvocationTargetException, NoSuchMethodException, 
-                        SecurityException, ClassNotFoundException {
+            Configuration configuration) {
         
-        Class<?> minterClass = Class.forName(className);
-        return (UriGetter) minterClass                            
-                .getConstructor(Configuration.class)
-                .newInstance(configuration);   
+        try {
+            Class<?> minterClass = Class.forName(className);
+            return (UriGetter) minterClass                            
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException
+                | SecurityException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }   
     }
     
     
@@ -147,24 +149,19 @@ public abstract class Bib2LodObjectFactory {
      * @param type - the class to instantiate
      * @param configuration - the program Configuration
      * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws ClassNotFoundException
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
      */
     public EntityBuilder createEntityBuilder(
-            Class<?> minterClass, Configuration configuration) throws 
-                InstantiationException, IllegalAccessException, 
-                    ClassNotFoundException, IllegalArgumentException, 
-                        InvocationTargetException, 
-                            NoSuchMethodException, SecurityException {
+            Class<?> minterClass, Configuration configuration) {
         
-        return (EntityBuilder) minterClass                            
-                .getConstructor(Configuration.class)
-                .newInstance(configuration);   
+        try {
+            return (EntityBuilder) minterClass                            
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }   
     }
     
     /**
@@ -172,14 +169,9 @@ public abstract class Bib2LodObjectFactory {
      * @param resource - the resource for which to create the ModelBuilder
      * @param configuration 
      * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws ClassNotFoundException
      */
     public ModelBuilder createModelBuilder(
-            Entity resource, Configuration configuration) throws 
-                InstantiationException, IllegalAccessException, 
-                ClassNotFoundException {
+            Entity resource, Configuration configuration)  {
         
         ModelBuilder builder = null;
         if (resource instanceof Instance) {
@@ -192,14 +184,13 @@ public abstract class Bib2LodObjectFactory {
      * Returns an Entity of the specified type
      * @param type - the class to instantiate
      * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws ClassNotFoundException
      */
-    public Entity createEntity(Class<?> type) throws 
-            InstantiationException, IllegalAccessException, 
-            ClassNotFoundException {
-        return (Entity) type.newInstance();
+    public Entity createEntity(Class<? extends Entity> type) {
+        try {
+            return type.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
     }
 
 // Removing this because the converter knows what type of parser it needs and

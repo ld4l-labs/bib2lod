@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.parsing;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
-import org.ld4l.bib2lod.entitybuilders.MarcxmlInstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.MarcxmlInstanceBuilder;
 import org.w3c.dom.Element;
 
 /**
@@ -50,11 +48,9 @@ public class MarcxmlParser extends XmlParser {
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.parsing.Parser#parseRecord(java.lang.Object)
      */
-    //@Override
+    @Override
     public List<Entity> parseRecord(Element record) throws 
-            EntityInstantiationException, IllegalArgumentException, 
-                InvocationTargetException, NoSuchMethodException, 
-                    SecurityException {
+            ParserException {
         
         List<Entity> entities = new ArrayList<Entity>();
 
@@ -63,22 +59,15 @@ public class MarcxmlParser extends XmlParser {
         // originates from the instance (the record). As such building the 
         // instance Entity would just be part of MarcxmlParser, whereas there 
         // would be individual builders for other Entity types.
-        try {
             
-            // Again - is there a reason not to call the constructor directly,
-            // when we know what kind of a builder we want?
-            MarcxmlInstanceBuilder instanceBuilder = 
-                    (MarcxmlInstanceBuilder) EntityBuilder.instance(
-                            MarcxmlInstanceBuilder.class, configuration);
+        // Again - is there a reason not to call the constructor directly,
+        // when we know what kind of a builder we want?
+        MarcxmlInstanceBuilder instanceBuilder = 
+                (MarcxmlInstanceBuilder) EntityBuilder.instance(
+                        MarcxmlInstanceBuilder.class, configuration);
 
-            entities.addAll(instanceBuilder.build(record));
+        entities.addAll(instanceBuilder.build(record));
             
-        } catch (InstantiationException | IllegalAccessException
-                | ClassNotFoundException e) {
-            throw new EntityInstantiationException(
-                    e.getMessage(), e.getCause());
-        } 
-        
         return entities;
     }
 

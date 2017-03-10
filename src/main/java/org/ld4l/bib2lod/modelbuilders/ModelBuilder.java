@@ -16,13 +16,8 @@ public interface ModelBuilder {
      * Factory method
      * @param configuration 
      * @param type - the Entity for which to instantiate a ModelBuilder
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
      */
-    static ModelBuilder instance(Entity resource, Configuration configuration) 
-            throws  InstantiationException,IllegalAccessException, 
-                ClassNotFoundException {
+    static ModelBuilder instance(Entity resource, Configuration configuration) {
         return Bib2LodObjectFactory.instance().createModelBuilder(
                 resource, configuration);
     }

@@ -3,19 +3,33 @@
 package org.ld4l.bib2lod.configuration;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Provides program configuration values.
  */
 public interface Configuration {
+    /**
+     * Signals a problem with creating or using the Configuration.
+     */
+    public static class ConfigurationException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public ConfigurationException(String message) {
+            super(message);                 
+        }
+
+        public ConfigurationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public ConfigurationException(Throwable cause) {
+            super(cause);
+        }
+        
+    }
     
     /**
      * Signals that the content of a configuration value is invalid.  Differs
@@ -23,9 +37,9 @@ public interface Configuration {
      * exceptions, which are content-neutral. The ConfigurationFromJson object 
      * evaluates the contents of the value.
      */
-    public static class InvalidValueException extends RuntimeException {         
+    public static class InvalidValueException extends ConfigurationException {         
         private static final long serialVersionUID = 1L;
-        
+
         protected InvalidValueException(String key) {
             super("Value of configuration key '" + key + "' is invalid.");                 
         }
@@ -39,10 +53,9 @@ public interface Configuration {
     /**
      * Signals that the specified input source is invalid or non-existent.
      */
-    public static class InvalidInputSourceException extends RuntimeException {
-        
+    public static class InvalidInputSourceException extends ConfigurationException {
         private static final long serialVersionUID = 1L;
-        
+
         protected InvalidInputSourceException(String msg) {
             super(msg);
         }
@@ -52,23 +65,9 @@ public interface Configuration {
      * Factory method
      * @param args
      * @return
-     * @throws ClassNotFoundException
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws ParseException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
      */
-    static Configuration instance(String[] args) throws ClassNotFoundException,
-            FileNotFoundException, IOException, ParseException, 
-                InstantiationException, IllegalAccessException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException {
-        return Bib2LodObjectFactory.instance().createConfiguration(args);
+    static Configuration instance(String[] args) {
+            return Bib2LodObjectFactory.instance().createConfiguration(args);
     }
 
     /**

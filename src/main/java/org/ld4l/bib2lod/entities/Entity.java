@@ -27,12 +27,8 @@ public interface Entity {
     /**
      * Factory method
      * @param type - the type of Entity to instantiate
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
      */
-    static Entity instance(Class<?> type) throws InstantiationException, 
-            IllegalAccessException, ClassNotFoundException {
+    static Entity instance(Class<? extends Entity> type) {
         return Bib2LodObjectFactory.instance().createEntity(type);
     }
 

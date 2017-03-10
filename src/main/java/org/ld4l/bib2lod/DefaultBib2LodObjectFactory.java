@@ -16,8 +16,6 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
-import org.ld4l.bib2lod.uris.RandomUriGetter;
-import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * A simple implementation.
@@ -38,14 +36,16 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConfiguration(java.lang.String[])
      */
     @Override
-    public Configuration createConfiguration(String[] args)
-            throws ClassNotFoundException, InstantiationException, 
-                IllegalAccessException, IOException, ParseException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException {
-        
+    public Configuration createConfiguration(String[] args) {
         // return new ConfigurationFromJson(args);
-        return new StubConfiguration();
+        try {
+            return new StubConfiguration();
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException
+                | SecurityException | IOException | ParseException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
     }
 
     /* (non-Javadoc)
