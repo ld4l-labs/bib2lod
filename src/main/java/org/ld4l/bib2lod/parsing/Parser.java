@@ -2,12 +2,12 @@
 
 package org.ld4l.bib2lod.parsing;
 
-import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.w3c.dom.Element;
 
 /**
@@ -58,10 +58,9 @@ public interface Parser {
     
     /**
      * Parses the input into a list of records.
-     * @param reader - the input reader
      * @return a List of records
      */
-    public <T> List<T> getRecords(Reader reader);
+    public <T> List<T> getRecords(InputDescriptor input);
     
     /**
      * Parses a record into a list of Resources.

@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.parsing;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +13,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -55,7 +54,7 @@ public abstract class XmlParser extends BaseParser {
     // @SuppressWarnings("unchecked")
     @SuppressWarnings("unchecked")
     @Override
-    public List<Element> getRecords(Reader reader) {
+    public List<Element> getRecords(InputDescriptor input) {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
@@ -66,11 +65,9 @@ public abstract class XmlParser extends BaseParser {
             throw new InputParseException(e.getMessage(), e.getCause());
         }
         
-        // TODO Or convert reader to an InputStream? Does it matter?
-        InputSource inputSource = new InputSource(reader);
         Document doc;
         try {
-            doc = docBuilder.parse(inputSource);
+            doc = docBuilder.parse(input.getInputStream());
         } catch (SAXException | IOException e) {
             throw new InputParseException(e.getMessage(), e.getCause());
         } 

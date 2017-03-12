@@ -2,8 +2,7 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import java.io.OutputStream;
-import java.io.Reader;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -12,6 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.modelbuilders.ModelBuilder;
 import org.ld4l.bib2lod.parsing.MarcxmlParser;
 import org.ld4l.bib2lod.parsing.Parser;
@@ -37,7 +39,7 @@ public class MarcxmlToRdf extends XmlToRdf {
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
      */  
     @Override
-    public void convert(Reader reader, OutputStream outputStream) throws ConverterException {
+    public void convert(InputDescriptor input, OutputDescriptor output) throws ConverterException {
 
         // This converter needs a MarcxmlParser, so can it ask for it directly
         // rather than going through Parser.instance()?
@@ -48,7 +50,7 @@ public class MarcxmlToRdf extends XmlToRdf {
         // any advantages over calling the constructor directly?
         Parser parser = MarcxmlParser.instance(configuration);
         
-        List<Element> records =  parser.getRecords(reader);
+        List<Element> records =  parser.getRecords(input);
   
         Model model = ModelFactory.createDefaultModel();
         
@@ -66,8 +68,8 @@ public class MarcxmlToRdf extends XmlToRdf {
                 }  
             }
             
-            model.write(outputStream, "N-TRIPLE");
-        } catch (ParserException e) {
+            output.writeModel(model);
+        } catch (ParserException | IOException | OutputServiceException e) {
             throw new ConverterException(e);
         }
 

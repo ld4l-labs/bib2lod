@@ -4,12 +4,10 @@ package org.ld4l.bib2lod.configuration;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
  * Stub Configuration implementation that hard-codes values without reading from 
@@ -21,8 +19,7 @@ public class StubConfiguration extends BaseConfiguration {
     
     private static final String LOCAL_NAMESPACE = 
             "http://data.ld4l.org/cornell/";
-    private static final String INPUT_BUILDER = 
-            "org.ld4l.bib2lod.io.FileInputBuilder";
+    private static final String INPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileInputService";
     private static final String INPUT_SOURCE = 
             "/Users/rjy7/projects/bib2lod/doc/sample-conversions/marcxml-to-ld4l/102063.min.xml";
     private static final String INPUT_FILE_EXTENSION = "xml";
@@ -32,7 +29,7 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String OUTPUT_FORMAT = "ntriples";
     private static final String[] URI_MINTERS = {
         "org.ld4l.bib2lod.uris.RandomUriGetter"};
-    private static final String OUTPUT_WRITER = "org.ld4l.bib2lod.io.FileOutputWriter";
+    private static final String OUTPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileOutputService";
     private static final String CLEANER = 
             "org.ld4l.bib2lod.cleaning.MarcxmlCleaner";
     private static final String CONVERTER = 
@@ -62,11 +59,14 @@ public class StubConfiguration extends BaseConfiguration {
         // createUriMinters. Then do in one method - set up UriGetter
         setUpUriMinters(LOCAL_NAMESPACE, URI_MINTERS);
 
-        buildInput(INPUT_BUILDER, INPUT_SOURCE, INPUT_FORMAT);  
-        setOutputDestination(OUTPUT_DESTINATION);
-        setOutputFormat(OUTPUT_FORMAT);      
+        this.inputServiceClass = INPUT_SERVICE_CLASS;
+        this.inputSource = INPUT_SOURCE;
+        this.inputFileExtension = INPUT_FILE_EXTENSION;
+        this.inputFormat = INPUT_FORMAT;
+        this.outputServiceClass = OUTPUT_SERVICE_CLASS;
+        this.outputDestination = OUTPUT_DESTINATION;
+        this.outputFormat = OUTPUT_FORMAT;      
 
-        setOutputWriter(OUTPUT_WRITER);   
         setCleaner(CLEANER);
         setConverter(CONVERTER);        
         setReconcilers(RECONCILERS);   

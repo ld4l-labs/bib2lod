@@ -2,11 +2,9 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
-import org.ld4l.bib2lod.io.InputBuilder;
 import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
@@ -27,15 +24,13 @@ public abstract class BaseConfiguration implements Configuration {
 
     // TODO Make some of these private if possible
     protected String localNamespace;  
-    protected String inputBuilder;
-    protected List<BufferedReader> input;  
+    protected String inputServiceClass;
     protected String inputFormat;  
     protected String inputSource;
     protected String inputFileExtension;
+    protected String outputServiceClass;
     protected String outputDestination; 
     protected String outputFormat;    
-    protected String outputWriter;
-    protected String outputStream;
     protected String converter;
     protected String cleaner;
     protected List<String> reconcilers;
@@ -48,15 +43,32 @@ public abstract class BaseConfiguration implements Configuration {
     public String getLocalNamespace() {
         return localNamespace;
     }
-    
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getInputFiles()
-     */
+
     @Override
-    public List<BufferedReader> getInput() {
-        return input;
+    public String getInputServiceClass() {
+        return inputServiceClass;
     }
-    
+
+    @Override
+    public String getInputFormat() {
+        return inputFormat;
+    }
+
+    @Override
+    public String getInputSource() {
+        return inputSource;
+    }
+
+    @Override
+    public String getInputFileExtension() {
+        return inputFileExtension;
+    }
+
+    @Override
+    public String getOutputServiceClass() {
+        return outputServiceClass;
+    }
+
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.configuration.Configuration#getOutputDirectory()
      */
@@ -71,14 +83,6 @@ public abstract class BaseConfiguration implements Configuration {
     @Override
     public String getOutputFormat() {
         return outputFormat;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Configuration#getOutputWriter()
-     */
-    @Override
-    public String getOutputWriter() {
-        return outputWriter;
     }
     
     /* (non-Javadoc)
@@ -195,63 +199,6 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Builds input list. Instantiates an InputBuilder from the configuration,
-     * calls its buildInputList() method, and assigns the result to the
-     * member variable input.
-     * @param builder - the class name of the input builder to invoke
-     * @param source - input source (string)
-     * @param 
-     * @return void
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws ParseException 
-     * @throws FileNotFoundException 
-     * @throws IOException 
-     */
-    protected void buildInput(String builder, String source) throws
-            InstantiationException, IllegalAccessException, 
-            ClassNotFoundException, ParseException, FileNotFoundException, 
-            IOException {
-                  
-        // Instantiate builder
-        InputBuilder inputBuilder = InputBuilder.instance(builder);
-        
-        // Pass source and extension to builder, get back list of readers
-        this.input = inputBuilder.buildInputList(source); 
-    }
-    
-    /**
-     * Builds input list.
-     * @param builder - the class name of the input builder to invoke
-     * @param source - input source (string)
-     * @param extension - input file extension (for input source on file system)
-     * @param 
-     * @return void
-     * @throws ClassNotFoundException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws IOException 
-     * @throws ParseException 
-     */
-    protected void buildInput(String builder, String source, String extension) 
-            throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, IOException, ParseException {
-        
-        // Instantiate builder
-        InputBuilder inputBuilder = 
-                (InputBuilder) Class.forName(builder).newInstance();
-      
-        // Pass source and extension to builder, get back list of readers
-        this.input = inputBuilder.buildInputList(source, extension); 
-        
-    }
-    
-    protected void setInputBuilder(String inputBuilder) {
-        this.inputBuilder = inputBuilder;
-    }
-     
-    /**
      * Sets output destination. 
      * @param destination - the output directory 
      * @return void
@@ -274,22 +221,7 @@ public abstract class BaseConfiguration implements Configuration {
         // format is one of the expected formats, so maybe don't do here.
         this.outputFormat = format;
     }
-    
 
-    
-    /**
-     * Sets class name of OutputWriter.
-     * @param writer - name of OutputWriter class
-     * @return void
-     */
-    protected void setOutputWriter(String writer) {
-        this.outputWriter = writer;
-    }
-    
-    protected void setOutputStream(String outputStream) {
-        this.outputStream = outputStream;
-    }
-    
     /**
      * Sets class name of Cleaner.
      * @param writer - name of Cleaner class

@@ -2,11 +2,10 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import java.io.OutputStream;
-import java.io.Reader;
-
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
 /**
  * An object that orchestrates the conversion of an input reader containing one
@@ -36,12 +35,6 @@ public interface Converter {
         return Bib2LodObjectFactory.instance().createConverter(configuration);
     }
 
-    /**
-     * Converts input to RDF.
-     * @param reader
-     * @param outputStream 
-     * @throws ConverterException 
-     */
-    public void convert(Reader reader, OutputStream outputStream) throws ConverterException ;
+    public void convert(InputDescriptor input, OutputDescriptor output) throws ConverterException;
 
 }

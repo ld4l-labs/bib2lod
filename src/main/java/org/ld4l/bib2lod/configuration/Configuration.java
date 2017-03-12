@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.BufferedReader;
 import java.util.List;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
@@ -76,30 +75,21 @@ public interface Configuration {
      */
     String getLocalNamespace();
 
-    /**
-     * Gets the configured list of input readers.
-     * @return the list of input readers
-     */
-    List<BufferedReader> getInput();
     
-    /**
-     * Gets the configured output destination.
-     * @return the output destination
-     */
+    String getInputServiceClass();
+    
+    String getInputSource();
+    
+    String getInputFormat();
+    
+    String getInputFileExtension();
+    
+
+    String getOutputServiceClass();
+
     String getOutputDestination();
       
-    /**
-     * Gets the configured output format.
-     * @return the output format
-     */
     String getOutputFormat();
-    
-    /**
-     * Returns the class name of the OutputWriter specified in the 
-     * configuration.
-     * @return the class name of the OutputWriter
-     */
-    String getOutputWriter();
     
     /**
      * Gets the class name of the Cleaner specified in the configuration.

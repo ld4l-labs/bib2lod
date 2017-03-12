@@ -13,8 +13,8 @@ import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.io.InputBuilder;
-import org.ld4l.bib2lod.io.OutputWriter;
+import org.ld4l.bib2lod.io.InputService;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.modelbuilders.InstanceModelBuilder;
 import org.ld4l.bib2lod.modelbuilders.ModelBuilder;
 import org.ld4l.bib2lod.uris.UriGetter;
@@ -82,37 +82,6 @@ public abstract class Bib2LodObjectFactory {
      * @return the Converter instance
      */
     public abstract Converter createConverter(Configuration configuration);
-    
-    public OutputWriter createOutputWriter(Configuration configuration) {
-        try {
-            Class<?> writerClass = Class
-                    .forName(configuration.getOutputWriter());
-            return (OutputWriter) writerClass
-                    .getConstructor(Configuration.class)
-                    .newInstance(configuration);
-        } catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | NoSuchMethodException
-                | SecurityException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        }
-    }
-    
-    /**
-     * Returns an InputBuilder instance.
-     * @return the InputBuilder instance.
-     */
-    // This is probably how it should be done, but for now just pass in the
-    // class name.
-     //    public abstract InputBuilder createInputBuilder(Configuration configuration);
-    public InputBuilder createInputBuilder(String className) {
-        try {
-            return (InputBuilder) Class.forName(className).newInstance();
-        } catch (InstantiationException | IllegalAccessException
-                | ClassNotFoundException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        }
-    }
     
     /**
      * Returns a Cleaner instance.
@@ -189,6 +158,42 @@ public abstract class Bib2LodObjectFactory {
         try {
             return type.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
+    }
+
+    /**
+     * @param configuration
+     * @return
+     */
+    public InputService createInputService(Configuration configuration) {
+        try {
+            return (InputService) Class
+                    .forName(configuration.getInputServiceClass())
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException
+                | ClassNotFoundException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }
+    }
+
+    /**
+     * @param configuration
+     * @return
+     */
+    public OutputService createOutputService(Configuration configuration) {
+        try {
+            return (OutputService) Class
+                    .forName(configuration.getOutputServiceClass())
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException
+                | ClassNotFoundException e) {
             throw new Bib2LodObjectFactoryException(e);
         }
     }
