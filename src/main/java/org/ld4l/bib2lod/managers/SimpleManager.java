@@ -17,7 +17,7 @@ import org.ld4l.bib2lod.parsing.Parser.ParserException;
 
 
 /** 
- * Orchestrates conversion of a directory of files or a single file.
+ * Orchestrates the conversion process.
  */
 public final class SimpleManager {
 
@@ -33,7 +33,7 @@ public final class SimpleManager {
 
         try {
             Configuration configuration = Configuration.instance(args);
-            convertFiles(configuration);
+            convert(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -50,7 +50,7 @@ public final class SimpleManager {
      * @throws IOException 
      * @throws ParserException 
      */
-    private static void convertFiles(Configuration configuration) 
+    private static void convert(Configuration configuration) 
             throws ConverterException, IOException, ParserException {
         
         Converter converter = Converter.instance(configuration);
