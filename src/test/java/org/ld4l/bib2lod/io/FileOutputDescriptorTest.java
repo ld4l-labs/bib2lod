@@ -172,7 +172,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
     private String modelToCanonicalString(String rdf, String lang) {
         Writer w = new StringWriter();
         ModelFactory.createDefaultModel()
-                .read(new StringReader(rdf), null, lang).write(w, "N-TRIPLES");
+                .read(new StringReader(rdf), null, lang).write(w, "N-TRIPLE");
         return w.toString();
     }
 }

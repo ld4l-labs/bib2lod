@@ -20,7 +20,7 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class FileOutputServiceTest extends AbstractTestClass {
 
-    private static final String NTRIPLES = "NTRIPLES";
+    private static final String NTRIPLES = "N-TRIPLE";
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -66,21 +66,19 @@ public class FileOutputServiceTest extends AbstractTestClass {
         createServiceAndGetDescriptor(dest, "bogus_format", metadata("test"));
     }
 
-    @Ignore
+
     @Test(expected = NullPointerException.class)
     public void openSinkWithNoMetadata_throwsException() throws IOException {
         File dest = folder.newFolder("ok");
         createServiceAndGetDescriptor(dest, NTRIPLES, null);
     }
 
-    @Ignore
     @Test(expected = NullPointerException.class)
     public void openSinkWithNoName_throwsException() throws IOException {
         File dest = folder.newFolder("ok");
         createServiceAndGetDescriptor(dest, NTRIPLES, metadata(null));
     }
 
-    @Ignore
     @Test
     public void simpleSuccess() throws IOException {
         File dest = folder.newFolder("we_win");
