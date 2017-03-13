@@ -27,9 +27,6 @@ public abstract class BaseUriGetter implements UriGetter {
         this.localNamespace = configuration.getLocalNamespace();
     }
 
-    
-
-    
     protected abstract String getLocalName(Entity entity);
     
     protected String buildUri(String localName) {

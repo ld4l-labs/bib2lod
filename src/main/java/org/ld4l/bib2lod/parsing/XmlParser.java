@@ -62,11 +62,6 @@ public abstract class XmlParser extends BaseParser {
       
         doc.getDocumentElement().normalize();
  
-        // TODO How do we guarantee that each XmlParser implementation defines
-        // getRecordTagName()? It's not part of the public interface.
-        // Could this be pushed up to BaseParser? There must be a record in 
-        // every type of input, though not a record tag/XML element. But perhaps
-        // it won't have a string name.
         NodeList nodes = doc.getElementsByTagName(getRecordTagName());
         
         List<Record> records = new ArrayList<Record>();
@@ -77,7 +72,8 @@ public abstract class XmlParser extends BaseParser {
             try {
                 records.add(XmlRecord.instance(recordClass, recordElement));
             } catch (RecordException e) {
-                throw new ParserException(e);
+                // Skip this record
+                continue;
             }
         }
          
@@ -88,13 +84,11 @@ public abstract class XmlParser extends BaseParser {
     /**
      * Returns the name of the tag enclosing a record. Each subclass will define
      * its own tag name; e.g., "record" in MarcxmlParser.
-     * @return the XML record tag name
      */
     protected abstract String getRecordTagName();
     
     /**
      * Returns the Record class to instantiate.
-     * @return the Record class
      */
     protected abstract Class<?> getRecordClass();
 

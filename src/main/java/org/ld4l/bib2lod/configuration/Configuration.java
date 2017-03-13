@@ -69,21 +69,15 @@ public interface Configuration {
             return Bib2LodObjectFactory.instance().createConfiguration(args);
     }
 
-    /**
-     * Gets the configured local namespace.
-     * @return the local namespace
-     */
     String getLocalNamespace();
 
-    
     String getInputServiceClass();
     
     String getInputSource();
     
     String getInputFormat();
     
-    String getInputFileExtension();
-    
+    String getInputFileExtension();  
 
     String getOutputServiceClass();
 
@@ -93,20 +87,17 @@ public interface Configuration {
     
     /**
      * Gets the class name of the Cleaner specified in the configuration.
-     * @return the class name of the cleaner
      */
     String getCleaner();
     
     /**
      * Gets the class name of the Converter specified in the configuration.
-     * @return the class name of the converter
      */
     String getConverter();
     
     /**
      * Gets the list of class names of the reconcilers specified in the 
      * configuration.
-     * @return the ordered class names of the reconcilers
      */
     List<String> getReconcilers();
 

@@ -17,7 +17,7 @@ public abstract class BaseParser implements Parser {
     
     /**
      * Constructor
-     * @param configuration - the program configuration
+     * @param configuration - the program Configuration
      */
     public BaseParser(Configuration configuration) {
         this.configuration = configuration;

@@ -54,49 +54,35 @@ public abstract class Bib2LodObjectFactory {
     private static Bib2LodObjectFactory instance = 
             new DefaultBib2LodObjectFactory();
 
-    /**
-     * Return a Bib2LodObjectFactory instance.
-     * @return instance - the Bib2LodObjectFactory instance
-     */
     public static Bib2LodObjectFactory instance() {
         return instance;
     }  
     
     /**
-     * Returns an OptionsReader instance.
      * @param args - the program arguments
-     * @return the OptionsReader instance
      */
     public abstract OptionsReader createOptionsReader(String[] args);
 
     /**
-     * Returns a Configuration instance.
      * @param args - the program arguments
-     * @return the Configuration instance
      */
     public abstract Configuration createConfiguration(String[] args);
  
     /**
-     * Returns a Converter instance.
-     * @param configuration - the Configuration instance 
-     * @return the Converter instance
+     * @param configuration - the program Configuration
      */
     public abstract Converter createConverter(Configuration configuration);
     
     /**
-     * Returns a Cleaner instance.
-     * @param configuration - the Configuration instance 
-     * @return the Cleaner instance
+     * @param configuration - the program Configuration
      */
     public abstract Cleaner createCleaner(Configuration configuration);
 
     /**
-     * Returns a UriGetter instance.
      * @param className - the class name of the minter to instantiate 
-     * @param configuration - the Configuration instance 
-     * @return the UriGetter instance
+     * @param configuration - the program Configuration
      */
-    public UriGetter createUriMinter(String className, 
+    public UriGetter createUriGetter(String className, 
             Configuration configuration) {
         
         try {
@@ -114,10 +100,8 @@ public abstract class Bib2LodObjectFactory {
     
     
     /**
-     * Returns a EntityBuilder of the specified type
      * @param type - the class to instantiate
      * @param configuration - the program Configuration
-     * @return
      */
     public EntityBuilder createEntityBuilder(
             Class<?> minterClass, Configuration configuration) {
@@ -134,9 +118,8 @@ public abstract class Bib2LodObjectFactory {
     }
     
     /**
-     * Returns a ModelBuilder for the Entity
      * @param resource - the resource for which to create the ModelBuilder
-     * @param configuration 
+     * @param configuration - the program Configuration
      * @return
      */
     public ModelBuilder createModelBuilder(
@@ -150,7 +133,6 @@ public abstract class Bib2LodObjectFactory {
     }
     
     /**
-     * Returns an Entity of the specified type
      * @param type - the class to instantiate
      * @return
      */
@@ -163,8 +145,7 @@ public abstract class Bib2LodObjectFactory {
     }
 
     /**
-     * @param configuration
-     * @return
+     * @param configuration - the program Configuration
      */
     public InputService createInputService(Configuration configuration) {
         try {
@@ -181,8 +162,8 @@ public abstract class Bib2LodObjectFactory {
     }
 
     /**
-     * @param configuration
-     * @return
+     * @param configuration - the program Configuration
+     * @throws Bib2LodObjectFactoryException
      */
     public OutputService createOutputService(Configuration configuration) {
         try {
@@ -198,23 +179,6 @@ public abstract class Bib2LodObjectFactory {
         }
     }
 
-// Removing this because the converter knows what type of parser it needs and
-// must ask for it specifically.
-//    /**
-//     * Returns an input parser.
-//     * @param configuration - the Configuration instance
-//     * @return the Parser instance
-//     */
-//    public abstract Parser createParser(Configuration configuration);
-//
-//    /**
-//     * Returns a Marcxml input parser
-//     * @param configuration - the Configuration instance
-//     * @return the MarcxmlParser instance
-//     */
-//    public abstract MarcxmlParser 
-//            createMarcxmlParser(Configuration configuration);
-    
 
 }
 

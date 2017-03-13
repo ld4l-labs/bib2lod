@@ -30,7 +30,7 @@ public class MockOptionsReader implements OptionsReader {
     // ----------------------------------------------------------------------
 
     @Override
-    public JsonNode configure() throws IOException, ParseException {
+    public JsonNode configure() {
         return node.deepCopy();
     }
 

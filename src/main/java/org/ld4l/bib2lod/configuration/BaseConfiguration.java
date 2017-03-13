@@ -19,6 +19,25 @@ import org.ld4l.bib2lod.uris.UriGetter;
  */
 public abstract class BaseConfiguration implements Configuration {
     
+    /**
+     * A problem occurring in setting up the Configuration.
+     */
+    public static class ConfigurationException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public ConfigurationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public ConfigurationException(String message) {
+            super(message);
+        }
+
+        public ConfigurationException(Exception cause) {
+            super(cause);
+        }
+    }
+    
     private static final Logger LOGGER = LogManager.getLogger(); 
    
 
@@ -112,39 +131,31 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets local namespace and builds UriMinters to be stored as static
-     * variable of UriGetter. These functions are comibined into one method
+     * Sets local namespace and builds UriGetters to be stored as static
+     * variable of UriGetter. These functions are combined into one method
      * because the latter depends on having a local namespace in the 
      * configuration.
      * @param localNamespace
-     * @param uriMinters
-     * @throws ParseException 
-     * @throws IOException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws FileNotFoundException 
-     * @throws ClassNotFoundException 
+     * @param uriGetters - array of UriGetter classes to instantiate
+     * @throws ConfigurationException 
      */
-    protected void setUpUriMinters(String localNamespace, String[] uriMinters) 
-            throws ClassNotFoundException, FileNotFoundException, 
-                InstantiationException, IllegalAccessException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException, IOException, 
-                            ParseException {
+    protected void setUpUriGetters(String localNamespace, String[] uriGetters) 
+            throws ConfigurationException {
         
         setLocalNamespace(localNamespace);
-        createUriMinters(uriMinters);
+        
+        try {
+            createUriGetters(uriGetters);
+        } catch (IllegalArgumentException
+                | SecurityException e) {
+            throw new ConfigurationException(e);
+        }
     }
     
     /**
      * Sets local namespace. Validates namespace and, if valid, sets it. Else
      * an exception is thrown.
      * @param localNamespace - the local namespace to set
-     * 
      */
     protected void setLocalNamespace(String localNamespace) {
         
@@ -159,6 +170,7 @@ public abstract class BaseConfiguration implements Configuration {
      * slash. Throws exceptions if invalid.
      * @param localNamespace - the string to validate
      * @return true if valid, else throws an exception
+     * @throws ConfigurationException
      */
     protected static boolean isValidLocalNamespace(String localNamespace) {
     
@@ -167,7 +179,7 @@ public abstract class BaseConfiguration implements Configuration {
     
         // Require the final slash, otherwise it could be a web page address
         if (!localNamespace.endsWith("/")) {
-            throw new InvalidValueException(Key.LOCAL_NAMESPACE.string, 
+            throw new ConfigurationException(
                     "Local namespace must end in a forward slash.");
         }
         
@@ -176,26 +188,12 @@ public abstract class BaseConfiguration implements Configuration {
 
     /**
      * Sets list of UriGetter instances.
-     * @param uriMinter - list of names of UriGetter classes
+     * @param uriGetter - array of names of UriGetter classes
      * @return void
-     * @throws ParseException 
-     * @throws IOException 
-     * @throws FileNotFoundException 
-     * @throws ClassNotFoundException 
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
      */
-    private void createUriMinters(String[] uriMinters) throws 
-            ClassNotFoundException, FileNotFoundException, IOException, 
-                ParseException, InstantiationException, IllegalAccessException, 
-                    IllegalArgumentException, InvocationTargetException, 
-                        NoSuchMethodException, SecurityException {
+    private void createUriGetters(String[] uriGetters)  {
         
-        UriGetter.createMinters(uriMinters, this);
+       UriGetter.createUriGetters(uriGetters, this);
     }
     
     /**
@@ -224,7 +222,7 @@ public abstract class BaseConfiguration implements Configuration {
 
     /**
      * Sets class name of Cleaner.
-     * @param writer - name of Cleaner class
+     * @param cleaner - name of Cleaner class
      * @return void
      */
     protected void setCleaner(String cleaner) {

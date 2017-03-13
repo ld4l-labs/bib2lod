@@ -18,7 +18,7 @@ public class MarcxmlToRdf extends XmlToRdf {
     
     /**
      * Constructor
-     * @param configuration - the Configuration object
+     * @param configuration - the program Configuration
      */
     public MarcxmlToRdf(Configuration configuration) {
         super(configuration);

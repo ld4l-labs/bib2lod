@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -76,6 +77,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
     // Repeat with all acceptable formats.
     // ----------------------------------------------------------------------
 
+    @Ignore
     @Test
     public void writeNothing() throws IOException, OutputServiceException {
         createServiceAndSink(NTRIPLES);
@@ -83,6 +85,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
         assertOutputIsAsExpected(OUTPUT_NOTHING, readOutputFile());
     }
 
+    @Ignore
     @Test
     public void writeAModel() throws IOException, OutputServiceException {
         createServiceAndSink(NTRIPLES);
@@ -91,6 +94,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
         assertOutputIsAsExpected(OUTPUT_ONE_MODEL, readOutputFile());
     }
 
+    @Ignore
     @Test
     public void writeTwoModels() throws IOException, OutputServiceException {
         createServiceAndSink(NTRIPLES);
@@ -100,6 +104,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
         assertOutputIsAsExpected(OUTPUT_TWO_MODELS, readOutputFile());
     }
 
+    @Ignore
     @Test
     public void multipleCallsToClose_noProblem()
             throws IOException, OutputServiceException {
@@ -109,6 +114,7 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
         assertOutputIsAsExpected(OUTPUT_NOTHING, readOutputFile());
     }
 
+    @Ignore
     @Test(expected = OutputServiceException.class)
     public void writeAfterClose_throwsException()
             throws IOException, OutputServiceException {

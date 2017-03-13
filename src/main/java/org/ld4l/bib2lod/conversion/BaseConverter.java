@@ -15,6 +15,7 @@ import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
+import org.ld4l.bib2lod.parsing.Parser.ParserInstantiationException;
 import org.ld4l.bib2lod.record.Record;
 
 /**
@@ -84,7 +85,6 @@ public abstract class BaseConverter implements Converter {
     /**
      * Returns the class of the Parser to instantiate as defined by the concrete
      * Converter class.
-     * @return the Parser class
      */
     protected abstract Class<?> getParserClass();
     
@@ -92,23 +92,14 @@ public abstract class BaseConverter implements Converter {
      * Instantiates a Parser for this Converter. The Parser class is defined by
      * the concrete implementation.
      * @return the Parser
-     * @throws ParserException
      */
-    private Parser getParser() throws ParserException {
-        // This converter needs a MarcxmlParser, so can it ask for it directly
-        // rather than going through Parser.instance()?
-        // Parser parser = Parser.instance(configuration);
-        // Or call the MarcxmlParser directly?
-        // Parser parser = new MarcxmlParser(configuration);
-        // Parser parser = MarcxmlParser.instance(configuration);
+    private Parser getParser() {
         Class<?> parserClass = getParserClass();
         return Parser.instance(configuration, parserClass);        
     }
 
     /**
      * Converts a record to an RDF Model.
-     * @param record
-     * @return a Model
      */
     // protected abstract Model convertRecord(Record record);
     // TODO Not sure whether this goes here or whether it is 

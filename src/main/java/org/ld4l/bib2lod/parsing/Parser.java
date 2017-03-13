@@ -28,6 +28,22 @@ public interface Parser {
             super(cause);
         }
     }
+    
+    public static class ParserInstantiationException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public ParserInstantiationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public ParserInstantiationException(String message) {
+            super(message);
+        }
+
+        public ParserInstantiationException(Throwable cause) {
+            super(cause);
+        }        
+    }
        
 
     /**
@@ -38,7 +54,7 @@ public interface Parser {
      * @throws ParserException 
      */
     static Parser instance(Configuration configuration, Class<?> parserClass) 
-            throws ParserException {
+            throws ParserInstantiationException {
         try {
             return (Parser) parserClass
                     .getConstructor(Configuration.class)
@@ -47,7 +63,7 @@ public interface Parser {
                 | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException | NoSuchMethodException
                 | SecurityException e) {
-            throw new ParserException(e);
+            throw new ParserInstantiationException(e);
         }     
     }
 

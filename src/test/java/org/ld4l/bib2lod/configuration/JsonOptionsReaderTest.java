@@ -15,9 +15,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.configuration.OptionsReader.OptionsReaderException;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
@@ -63,12 +63,12 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
      * Args tests
      */
     
-    @Test (expected = NullPointerException.class)
+    @Test (expected = OptionsReaderException.class)
     public void argsIsNull_ThrowsException() {
         new JsonOptionsReader(null);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test (expected = OptionsReaderException.class)
     public void argsIsEmpty_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {});
     }
@@ -87,18 +87,18 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
         assertNotNull(node);
     }
     
-    @Test (expected = MissingArgumentException.class)
+    @Test (expected = OptionsReaderException.class)
     public void providingNoPath_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {"--config"});
     }
     
-    @Test (expected = ParseException.class)
+    @Test (expected = OptionsReaderException.class)
     public void invalidOption_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {INVALID_OPTION, INVALID_OPTION_VALUE});
     }
    
-    @Test (expected = ParseException.class)
+    @Test (expected = OptionsReaderException.class)
     public void invalidOptionWithValidOption_ThrowsException() 
             throws Exception {
         configureOptionsReader(new String[] {"--config", 
@@ -107,7 +107,7 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
                            
     }
     
-    @Test (expected = ParseException.class)
+    @Test (expected = OptionsReaderException.class)
     public void invalidOptionWithoutValue_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {INVALID_OPTION}); 
     }
@@ -117,13 +117,13 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
      * Config file tests
      */
     
-    @Test (expected = FileNotFoundException.class)
+    @Test (expected = OptionsReaderException.class)
     public void configFileNotFound_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {"--config", Path.MISSING_CONFIG_FILE.name});
     }
     
-    @Test (expected = FileNotFoundException.class)
+    @Test (expected = OptionsReaderException.class)
     public void configFileNotReadable_ThrowsException() throws Exception {
         JsonOptionsReader reader = new JsonOptionsReader(
                 new String[] {"--config", Path.VALID_CONFIG_FILE.name});
@@ -131,20 +131,18 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
         file.setReadable(false);
         try {
             reader.configure();
-        } catch(FileNotFoundException e) {
-            throw new FileNotFoundException();
         } finally {
             file.setReadable(true);
         }        
     }
     
-    @Test (expected = JsonProcessingException.class)
+    @Test (expected = OptionsReaderException.class)
     public void configFileEmpty_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {"--config", Path.EMPTY_CONFIG_FILE.name});
     }
     
-    @Test (expected = JsonParseException.class)
+    @Test (expected = OptionsReaderException.class)
     public void configFileMalformed_ThrowsException() throws Exception {
         configureOptionsReader(
                 new String[] {"--config", Path.MALFORMED_CONFIG_FILE.name});
@@ -156,7 +154,7 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
                 new String[] {"--config", Path.NON_JSON_EXTENSION.name});
     }
     
-    @Test (expected = FileNotFoundException.class)
+    @Test (expected = OptionsReaderException.class)
     public void configFileIsDirectory_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {"--config", Path.CONFIG_DIR.name});
     }
@@ -198,10 +196,3 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
   
 }
     
-//    Stub out the test:
-//    @Test
-//    public void sampleTest() {
-//        fail("sampleTest not implemented");
-//    }
-
-

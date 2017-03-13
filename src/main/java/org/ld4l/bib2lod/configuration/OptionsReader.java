@@ -13,6 +13,25 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Return the options as obtained from the command line and/or a config file.
  */
 public interface OptionsReader {
+    /**
+     * A problem with creating or using the OptionsReader.
+     */
+    public static class OptionsReaderException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public OptionsReaderException(String message) {
+            super(message);                 
+        }
+
+        public OptionsReaderException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public OptionsReaderException(Throwable cause) {
+            super(cause);
+        }
+        
+    }
     
     /**
      * Factory method
@@ -21,5 +40,5 @@ public interface OptionsReader {
         return Bib2LodObjectFactory.instance().createOptionsReader(args);
     }
 
-    JsonNode configure() throws IOException, ParseException;
+    JsonNode configure();
 }

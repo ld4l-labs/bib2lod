@@ -20,7 +20,7 @@ public class InstanceModelBuilder extends BaseModelBuilder {
     /**
      * Constructor
      * @param resource - the Entity from which to build the model
-     * @param configuration - the program configuration
+     * @param configuration - the program Configuration
      */
     public InstanceModelBuilder(
             Entity resource, Configuration configuration) {

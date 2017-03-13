@@ -22,7 +22,7 @@ public class RandomUriGetter extends BaseUriGetter {
     
     /**
      * Constructor.
-     * @param configuration
+     * @param configuration - the program Configuration
      */
     public RandomUriGetter(Configuration configuration) {
         super(configuration);
@@ -51,9 +51,7 @@ public class RandomUriGetter extends BaseUriGetter {
     }
 
     /**
-     * Hashes a string using the MurmurHash algorithm.
-     * @param s - the input string
-     * @return the hashed string
+     * Returns a hashed string using the MurmurHash algorithm.
      */
     protected String hash(String s) {
         long hash64 = MurmurHash.hash64(s);

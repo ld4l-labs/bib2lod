@@ -41,25 +41,18 @@ public class ConfigurationFromJson extends BaseConfiguration {
 
     /**
      * Constructor
-     * @param args - the program arguments
-     * @throws ClassNotFoundException 
-     * @throws FileNotFoundException
-     * @throws IOException 
-     * @throws ParseException 
+     * @param args - the program arguments 
      */
-    public ConfigurationFromJson(String[] args)
-            throws ClassNotFoundException, FileNotFoundException, IOException,
-            ParseException {
+    public ConfigurationFromJson(String[] args) {
         
         // Get the configuration values from the commandline values and 
         // specified config file as a JSON object.
         JsonNode config = OptionsReader.instance(args).configure();
-        
         LOGGER.debug(config.toString());
-        
         setLocalNamespace(config);
         
-        // TODO Add same for other config elements...
+        // TODO Add same for other config elements, if/when we support other
+        // commandline options...
 
     }
 

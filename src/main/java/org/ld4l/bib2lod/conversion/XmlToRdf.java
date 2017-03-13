@@ -16,7 +16,7 @@ public abstract class XmlToRdf extends BaseConverter {
     
     /**
      * Constructor
-     * @param configuration
+     * @param configuration - the program Configuration
      */
     public XmlToRdf(Configuration configuration) {
         super(configuration);

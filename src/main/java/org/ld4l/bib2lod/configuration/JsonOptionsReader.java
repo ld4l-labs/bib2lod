@@ -43,7 +43,11 @@ public class JsonOptionsReader implements OptionsReader {
      * @param args - the program arguments
      */
     public JsonOptionsReader(String[] args)  {
-        this.args = Objects.requireNonNull(args);
+        try {
+            this.args = Objects.requireNonNull(args);
+        } catch (NullPointerException e) {
+            throw new OptionsReaderException(e);
+        }
     }
     
     /**
@@ -55,20 +59,18 @@ public class JsonOptionsReader implements OptionsReader {
      * @throws ParseException
      */
     @Override
-    public JsonNode configure() throws IOException, ParseException {
+    public JsonNode configure() {
         
         Options options = defineOptions();
 
-        CommandLine cmd = parseCommandLineArgs(options, args); 
-        
+        CommandLine cmd;
+        cmd = parseCommandLineArgs(options, args);
         JsonNode node = parseConfigFile(cmd);
-
-        return applyCommandLineOverrides(node, cmd);      
+        return applyCommandLineOverrides(node, cmd);     
     }
 
     /**
      * Defines the commandline options accepted by the program.
-     * @return options - the program options
      */
     Options defineOptions() {
         
@@ -85,74 +87,62 @@ public class JsonOptionsReader implements OptionsReader {
         return options;
     }
     
-    /**
-     * 
-     * @param options - the supported options 
-     * @param args - the commandline arguments
-     * @return the list of options and commandline values
-     * @throws ParseException
-     */
-    CommandLine parseCommandLineArgs(Options options, String[] args) 
-            throws ParseException {
+
+    CommandLine parseCommandLineArgs(Options options, String[] args) {
         
-        // parser.parse() throws UnrecognizedOptionException for unsupported 
-        // options, so follow this rather than try to ignore undefined options. 
         CommandLineParser parser = new DefaultParser();    
-        return parser.parse(options, args);  
+        try {
+            return parser.parse(options, args);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            throw new OptionsReaderException(e);
+        }  
     }
     
     /**
      * Retrieves and parses the config file specified in the program arguments.
      * @param cmd - the commandline values
      * @return a JsonNode containing the config file values
-     * @throws ParseException
-     * @throws JsonParseException
-     * @throws JsonProcessingException
-     * @throws IOException
      */
-    JsonNode parseConfigFile(CommandLine cmd) 
-            throws ParseException, JsonParseException, JsonProcessingException, 
-            IOException {
+    JsonNode parseConfigFile(CommandLine cmd) {
         
-        Reader reader = findConfigFile(cmd); 
-        return parseConfigFile(reader);        
+        Reader reader;
+        reader = findConfigFile(cmd);
+        return parseConfigFile(reader);
+                      
     }
     
     /**
      * Gets the configuration file location from the commandline option values.
      * @return a Reader to the file
-     * @throws ParseException
-     * @throws FileNotFoundException
      */
-    private Reader findConfigFile(CommandLine cmd) 
-            throws ParseException, FileNotFoundException {
+    private Reader findConfigFile(CommandLine cmd) {
         
         String configFileName = cmd.getOptionValue("config");
         
         if (configFileName == null) {
-            throw new IllegalArgumentException();
+            throw new OptionsReaderException("Config file cannot be null");
         } 
         
-        Reader reader = new FileReader(configFileName);
-        return reader;
+        try {
+            return new FileReader(configFileName);
+        } catch (FileNotFoundException e) {
+            throw new OptionsReaderException(e);
+        }        
     }
     
     /**
      * Parses the configuration file into a JSON object.
-     * @param reader
-     * @return config - a JsonNode containing the config file values
-     * @throws JsonParseException
-     * @throws JsonProcessingException
-     * @throws IOException
+     * @param reader - a Reader to the configuration file
      */
-    private JsonNode parseConfigFile(Reader reader) throws JsonParseException, 
-            JsonProcessingException, IOException {
-        
-        JsonNode config = null;
+    private JsonNode parseConfigFile(Reader reader) {
         
         ObjectMapper mapper = new ObjectMapper();
-        config = mapper.readTree(reader);
-        return config;
+        try {
+            return mapper.readTree(reader);
+        } catch (IOException e) {
+            throw new OptionsReaderException(e);
+        }
         
     }
     

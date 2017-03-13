@@ -28,8 +28,21 @@ public interface Record {
             super(cause);
         }
     }
-
-
-
     
+//    public static class RecordInstantiationException extends RuntimeException {
+//        private static final long serialVersionUID = 1L;
+//
+//        public RecordInstantiationException(String message, Throwable cause) {
+//            super(message, cause);
+//        }
+//
+//        public RecordInstantiationException(String message) {
+//            super(message);
+//        }
+//
+//        public RecordInstantiationException(Throwable cause) {
+//            super(cause);
+//        }
+//    }
+   
 }

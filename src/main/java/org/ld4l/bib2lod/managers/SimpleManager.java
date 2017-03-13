@@ -48,10 +48,8 @@ public final class SimpleManager {
     /**
      * Converts all of the inputs from the InputService
      * 
-     * @param configuration
-     *            - the Configuration object
+     * @param configuration - the program Configuration 
      * @throws ConverterException
-     * @throws IOException
      */
     private static void convert(Configuration configuration)
             throws ConverterException {

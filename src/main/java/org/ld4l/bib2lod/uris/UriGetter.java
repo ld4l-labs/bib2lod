@@ -32,7 +32,7 @@ public interface UriGetter {
     }
     
     /**
-     * Stores the list of UriMinters that will be used to mint URIs for 
+     * Stores the list of UriGetters that will be used to mint URIs for 
      * Resources.
      */
     static List<UriGetter> minters = new ArrayList<UriGetter>();
@@ -40,28 +40,16 @@ public interface UriGetter {
     /**
      * Factory method
      * 
-     * @param minter
-     * @throws SecurityException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param uriGetterClass - the class name of the UriGetter to instantiate
      */
-    static UriGetter instance(String minterClass, Configuration configuration)
-            throws InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException,
-            NoSuchMethodException, SecurityException {
+    static UriGetter instance(String uriGetterClass, Configuration configuration) {
 
-        return Bib2LodObjectFactory.instance().createUriMinter(minterClass,
+        return Bib2LodObjectFactory.instance().createUriGetter(uriGetterClass,
                 configuration);
     }
     
-    public static void createMinters(String[] minterClasses,
-            Configuration configuration)
-            throws InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException,
-            NoSuchMethodException, SecurityException {
+    public static void createUriGetters(String[] minterClasses,
+            Configuration configuration) {
 
         for (String minterClass : minterClasses) {
             minters.add(instance(minterClass, configuration));
@@ -69,9 +57,8 @@ public interface UriGetter {
     }
     
     /**
-     * 
-     * @param entity - the Entity to build the URI for
-     * @return
+     * Returns a URI for an Entity
+     * @return - a URI String 
      */
     // TODO Since we are using the Entity to get the URI, we might just as well 
     // do this when d building the Entity rather than the Resource/Model.
@@ -93,10 +80,8 @@ public interface UriGetter {
     }
     
     /**
-     * 
-     * @param entity
-     * @param it
-     * @return
+     * Iterates through the specified URIs to return a URI for an Entity
+     * @return - a URI String 
      */
     String getUri(Entity entity, Iterator<UriGetter> it);
   

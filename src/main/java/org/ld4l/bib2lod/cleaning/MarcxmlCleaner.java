@@ -10,7 +10,7 @@ public class MarcxmlCleaner extends BaseCleaner {
 
     /**
      * Constructor
-     * @param configuration - the Configuration object
+     * @param configuration - the program Configuration
      */
     public MarcxmlCleaner(Configuration configuration) {
         super(configuration);

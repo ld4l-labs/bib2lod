@@ -15,7 +15,7 @@ public abstract class BaseCleaner implements Cleaner {
     
     /**
      * Constructor
-     * @param configuration - the Configuration object
+     * @param configuration - the program Configurations
      */
     public BaseCleaner(Configuration configuration) {
         this.configuration = configuration;

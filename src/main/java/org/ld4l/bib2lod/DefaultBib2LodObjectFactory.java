@@ -36,8 +36,7 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConfiguration(java.lang.String[])
      */
     @Override
-    public Configuration createConfiguration(String[] args) {
-        // return new ConfigurationFromJson(args);
+    public Configuration createConfiguration(String[] args) throws Bib2LodObjectFactoryException {
         try {
             return new StubConfiguration();
         } catch (ClassNotFoundException | InstantiationException
@@ -63,27 +62,5 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Cleaner createCleaner(Configuration configuration) {
         return new MarcxmlCleaner(configuration);
     }
- 
- // Removing this because the converter knows what type of parser it needs and
- // must ask for it specifically.
-//    @Override
-//    public Parser createParser(Configuration configuration) {
-//        return new MarcxmlParser(configuration);
-//    }
-//    
-//    @Override
-//    public MarcxmlParser createMarcxmlParser(Configuration configuration) {
-//        return new MarcxmlParser(configuration);
-//    }
-    
-
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createInputBuilder(org.ld4l.bib2lod.configuration.Configuration)
-     */
-//    @Override
-//    public InputBuilder createInputBuilder(Configuration configuration) {
-//        return new FileInputBuilder(configuration);
-//    }
 
 }

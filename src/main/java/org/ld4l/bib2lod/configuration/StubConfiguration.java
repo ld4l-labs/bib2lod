@@ -56,9 +56,7 @@ public class StubConfiguration extends BaseConfiguration {
                         SecurityException  {
    
 
-        // NB Some orderings are crucial. e.g., need localNamespace before 
-        // createUriMinters. Then do in one method - set up UriGetter
-        setUpUriMinters(LOCAL_NAMESPACE, URI_MINTERS);
+        setUpUriGetters(LOCAL_NAMESPACE, URI_MINTERS);
 
         this.inputServiceClass = INPUT_SERVICE_CLASS;
         this.inputSource = INPUT_SOURCE;

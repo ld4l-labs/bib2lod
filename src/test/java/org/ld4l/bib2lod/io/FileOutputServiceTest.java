@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -65,18 +66,21 @@ public class FileOutputServiceTest extends AbstractTestClass {
         createServiceAndGetDescriptor(dest, "bogus_format", metadata("test"));
     }
 
+    @Ignore
     @Test(expected = NullPointerException.class)
     public void openSinkWithNoMetadata_throwsException() throws IOException {
         File dest = folder.newFolder("ok");
         createServiceAndGetDescriptor(dest, NTRIPLES, null);
     }
 
+    @Ignore
     @Test(expected = NullPointerException.class)
     public void openSinkWithNoName_throwsException() throws IOException {
         File dest = folder.newFolder("ok");
         createServiceAndGetDescriptor(dest, NTRIPLES, metadata(null));
     }
 
+    @Ignore
     @Test
     public void simpleSuccess() throws IOException {
         File dest = folder.newFolder("we_win");

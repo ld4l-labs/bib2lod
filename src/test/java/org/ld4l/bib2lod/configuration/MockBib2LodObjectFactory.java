@@ -97,10 +97,10 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriMinter(org.ld4l.bib2lod.configuration.Configuration)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriGetter(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public UriGetter createUriMinter(String className, Configuration configuration) {
+    public UriGetter createUriGetter(String className, Configuration configuration) {
         // TODO Auto-generated method stub
         return null;
     }

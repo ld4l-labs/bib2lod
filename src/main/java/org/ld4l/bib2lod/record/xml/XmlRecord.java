@@ -22,7 +22,6 @@ public interface XmlRecord extends Record {
      * @return the Record instance
      * @throws RecordException 
      */
-    // TODO Or return an XmlRecord?
     static Record instance(Class<?> recordClass, Element recordElement) 
             throws RecordException {
         try {
