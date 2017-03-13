@@ -18,8 +18,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -43,11 +41,7 @@ public class JsonOptionsReader implements OptionsReader {
      * @param args - the program arguments
      */
     public JsonOptionsReader(String[] args)  {
-        try {
-            this.args = Objects.requireNonNull(args);
-        } catch (NullPointerException e) {
-            throw new OptionsReaderException(e);
-        }
+        this.args = Objects.requireNonNull(args);
     }
     
     /**
@@ -108,8 +102,7 @@ public class JsonOptionsReader implements OptionsReader {
         
         Reader reader;
         reader = findConfigFile(cmd);
-        return parseConfigFile(reader);
-                      
+        return parseConfigFile(reader);                     
     }
     
     /**
@@ -121,7 +114,7 @@ public class JsonOptionsReader implements OptionsReader {
         String configFileName = cmd.getOptionValue("config");
         
         if (configFileName == null) {
-            throw new OptionsReaderException("Config file cannot be null");
+            throw new IllegalArgumentException("Config file cannot be null");
         } 
         
         try {

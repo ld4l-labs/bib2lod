@@ -1,6 +1,5 @@
 package org.ld4l.bib2lod.uris;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

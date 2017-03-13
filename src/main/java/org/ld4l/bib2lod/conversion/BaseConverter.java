@@ -15,7 +15,6 @@ import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
-import org.ld4l.bib2lod.parsing.Parser.ParserInstantiationException;
 import org.ld4l.bib2lod.record.Record;
 
 /**

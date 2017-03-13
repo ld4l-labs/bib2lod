@@ -2,10 +2,6 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.IOException;
-
-import org.apache.commons.cli.ParseException;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**

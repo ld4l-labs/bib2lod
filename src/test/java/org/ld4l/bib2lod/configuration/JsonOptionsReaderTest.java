@@ -6,18 +6,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.junit.Test;
-import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.configuration.OptionsReader.OptionsReaderException;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
@@ -63,12 +59,12 @@ public class JsonOptionsReaderTest extends AbstractTestClass {
      * Args tests
      */
     
-    @Test (expected = OptionsReaderException.class)
+    @Test (expected = NullPointerException.class)
     public void argsIsNull_ThrowsException() {
         new JsonOptionsReader(null);
     }
 
-    @Test (expected = OptionsReaderException.class)
+    @Test (expected = IllegalArgumentException.class)
     public void argsIsEmpty_ThrowsException() throws Exception {
         configureOptionsReader(new String[] {});
     }

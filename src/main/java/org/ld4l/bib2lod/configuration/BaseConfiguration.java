@@ -2,16 +2,11 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.ConfigurationFromJson.Key;
 import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
