@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.io.InputService.InputMetadata;
  */
 public class FileOutputService implements OutputService {
     /**
-     * A list of the supported RDF formats, each with the informatino needed to
+     * A list of the supported RDF formats, each with the information needed to
      * process it.
      */
     protected enum Format {

@@ -36,7 +36,7 @@ public final class SimpleManager {
 
         try {
             Configuration configuration = Configuration.instance(args);
-            convertFiles(configuration);
+            convert(configuration);
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -53,7 +53,7 @@ public final class SimpleManager {
      * @throws ConverterException
      * @throws IOException
      */
-    private static void convertFiles(Configuration configuration)
+    private static void convert(Configuration configuration)
             throws ConverterException {
 
         try {

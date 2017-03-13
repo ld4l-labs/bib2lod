@@ -20,7 +20,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
  * If a file, then that file is used as input.
  * 
  * If a directory, then the files in that directory (not recursive) are used as
- * input. Any file in the directory is not readable, or does not match a
+ * input. Any file in the directory that is not readable, or does not match a
  * required extension, is ignored.
  */
 public class FileInputService implements InputService {

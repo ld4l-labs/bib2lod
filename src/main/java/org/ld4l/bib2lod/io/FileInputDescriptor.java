@@ -12,7 +12,7 @@ import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 
 class FileInputDescriptor implements InputDescriptor {
     /**
-     * Informatino about this particular input.
+     * Information about this particular input.
      */
     private static class FileInputMetadata implements InputMetadata {
         private final String name;
