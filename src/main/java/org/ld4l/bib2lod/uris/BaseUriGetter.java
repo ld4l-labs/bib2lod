@@ -1,7 +1,5 @@
 package org.ld4l.bib2lod.uris;
 
-import java.util.Iterator;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;

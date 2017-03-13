@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
+import org.ld4l.bib2lod.parsing.Parser.ParserException;
 
 
 /** 
@@ -47,8 +48,10 @@ public final class SimpleManager {
      * @param configuration - the Configuration object
      * @throws ConverterException 
      * @throws IOException 
+     * @throws ParserException 
      */
-    private static void convertFiles(Configuration configuration) throws ConverterException, IOException {
+    private static void convertFiles(Configuration configuration) 
+            throws ConverterException, IOException, ParserException {
         
         Converter converter = Converter.instance(configuration);
 

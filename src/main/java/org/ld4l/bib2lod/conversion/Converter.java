@@ -7,6 +7,7 @@ import java.io.Reader;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.parsing.Parser.ParserException;
 
 /**
  * An object that orchestrates the conversion of an input reader containing one
@@ -41,7 +42,10 @@ public interface Converter {
      * @param reader
      * @param outputStream 
      * @throws ConverterException 
+     * @throws ParserException 
      */
-    public void convert(Reader reader, OutputStream outputStream) throws ConverterException ;
+    public void convert(Reader reader, OutputStream outputStream) 
+            throws ConverterException, ParserException;
+    
 
 }

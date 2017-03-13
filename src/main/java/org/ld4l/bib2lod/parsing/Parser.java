@@ -6,12 +6,11 @@ import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Entity.EntityInstantiationException;
-import org.w3c.dom.Element;
+import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.record.Record;
 
 /**
- * Parses input into Resources.
+ * Parses input into Record and RecordElement objects.
  */
 public interface Parser {
     public static class ParserException extends Exception {
@@ -29,54 +28,36 @@ public interface Parser {
             super(cause);
         }
     }
-    
-    /**
-     * Signals an exception during parsing of the input. 
-     */
-    public static class InputParseException extends RuntimeException {         
-        protected InputParseException(String msg, Throwable cause) {
-            super(msg, cause);                 
-        }        
-    }
        
-// Removing this because the converter knows what type of parser it needs and
-// must ask for it specifically, so this doesn't seem to have a purpose.
-//    /**
-//     * Factory method
-//     * @param configuration - the program Configuration
-//     * @return the Parser instance
-//     * @throws ClassNotFoundException
-//     * @throws FileNotFoundException
-//     * @throws IOException
-//     * @throws ParseException
-//     * @throws InstantiationException
-//     * @throws IllegalAccessException
-//     */
-//    static Parser instance(Configuration configuration) {
-//        return Bib2LodObjectFactory.instance().createParser(configuration);
-//    }
-    
+
     /**
-     * Parses the input into a list of records.
+     * Factory method
+     * @param configuration - the program Configuration
+     * @param parserClass - the class of parser to instantiate
+     * @return the Parser instance
+     * @throws ParserException 
+     */
+    static Parser instance(Configuration configuration, Class<?> parserClass) 
+            throws ParserException {
+        try {
+            return (Parser) parserClass
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException
+                | SecurityException e) {
+            throw new ParserException(e);
+        }     
+    }
+
+    /**
+     * Parses a reader into a list of Record objects.
      * @param reader - the input reader
-     * @return a List of records
+     * @return a List of Records
+     * @throws ParserException
      */
-    public <T> List<T> getRecords(Reader reader);
-    
-    /**
-     * Parses a record into a list of Resources.
-     * @param <T> - the type of the record (varies between implementations)
-     * @param record - the record to parse
-     * @return a List of Resources
-     * @throws SecurityException 
-     * @throws NoSuchMethodException 
-     * @throws InvocationTargetException 
-     * @throws IllegalArgumentException 
-     * @throws EntityInstantiationException 
-     */
-    //public <T> List<Entity> parseRecord(T record);
-    // TEMPORARY!! Can't specify Element type here - not common to all parsers
-    public List<Entity> parseRecord(Element record) throws 
-            ParserException;
+    public List<Record> parse(Reader reader) throws ParserException;
+            
     
 }

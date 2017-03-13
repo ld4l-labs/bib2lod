@@ -2,36 +2,34 @@
 
 package org.ld4l.bib2lod.record;
 
-import java.util.List;
-
 /**
  * Represents an input record. Record objects should be immutable, providing no
  * setter methods.
  */
+// Not clear whether it serves any purpose or just
+// gets in the way. What are the methods common to XML and non-XML input?
+// But without it, we can't do List<Record> records = parser.parse(reader);
 public interface Record {
+    
+    // TODO Should this be RecordInstantiationException? See if it's used for
+    // anything other than instantiation.
+    public static class RecordException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-    /**
-     * Returns all the elements in this record.
-     * @return a list of RecordElement objects.
-     */
-    public List<RecordElement> getElements();
+        public RecordException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public RecordException(String message) {
+            super(message);
+        }
+
+        public RecordException(Throwable cause) {
+            super(cause);
+        }
+    }
+
+
+
     
-    /**
-     * Returns a list of elements in this record identified by the specified 
-     * name. The source of the name varies depending on the format. For example,
-     * in MARCXML the element name is the value of the tag attribute of the 
-     * datafield element. In FGDC it is the name of the element.
-     * @param elementName - the elementName
-     * @return a list of RecordElement objects
-     */
-    public List<RecordElement> getElements(String elementName);
-    
-    /**
-     * Returns the first element in this record identified by the specified 
-     * name. Use when only one element with the specified name is expected in
-     * the record.
-     * @param elementName
-     * @return a RecordElement
-     */
-    public RecordElement getFirstElement(String elementName);
 }

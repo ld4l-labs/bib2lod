@@ -14,6 +14,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.record.Record.RecordException;
+import org.ld4l.bib2lod.record.xml.XmlRecord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -39,58 +42,67 @@ public abstract class XmlParser extends BaseParser {
         super(configuration);
     }
     
-    /**
-     * Parse the input reader into records. The representation of a record
-     * depends on the input format.
-     * @param reader - the input Reader
-     * @return a list of XML Elements representing the records
-     */    
-    // Turning the NodeList into a List<Node> allows implementation of the
-    // interface method
-    // public NodeList getRecords(Reader reader) { 
-    // Not sure what to do about this warning: The return type List<Node> for 
-    // getRecords(Reader) from the type XmlParser needs unchecked conversion to 
-    // conform to List<Object> from the type Parser.
-    // Is return type List<T> the same as List<Object>? Temporarily added 
-    // @SuppressWarnings("unchecked")
-    @SuppressWarnings("unchecked")
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.parsing.Parser#parse(java.io.Reader)
+     */
     @Override
-    public List<Element> getRecords(Reader reader) {
+    public List<Record> parse(Reader reader) throws ParserException {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
-       
+     
         try {
             docBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new InputParseException(e.getMessage(), e.getCause());
+            throw new ParserException(e.getMessage(), e.getCause());
         }
-        
+   
         // TODO Or convert reader to an InputStream? Does it matter?
         InputSource inputSource = new InputSource(reader);
         Document doc;
         try {
             doc = docBuilder.parse(inputSource);
         } catch (SAXException | IOException e) {
-            throw new InputParseException(e.getMessage(), e.getCause());
+          throw new ParserException(e.getMessage(), e.getCause());
         } 
-        
+      
         doc.getDocumentElement().normalize();
-    
+ 
+        // TODO How do we guarantee that each XmlParser implementation defines
+        // getRecordTagName()? It's not part of the public interface.
+        // Could this be pushed up to BaseParser? There must be a record in 
+        // every type of input, though not a record tag/XML element. But perhaps
+        // it won't have a string name.
         NodeList nodes = doc.getElementsByTagName(getRecordTagName());
-        List<Element> records = new ArrayList<Element>();
-        for (int index = 0; index < nodes.getLength(); index++) {
-            records.add((Element) nodes.item(index));
-        }
         
+        List<Record> records = new ArrayList<Record>();
+        Class<?> recordClass = getRecordClass();
+        
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Element recordElement = (Element) nodes.item(i);
+            try {
+                records.add(XmlRecord.instance(recordClass, recordElement));
+            } catch (RecordException e) {
+                throw new ParserException(e);
+            }
+        }
+         
         return records;
     }
+ 
     
     /**
      * Returns the name of the tag enclosing a record. Each subclass will define
      * its own tag name; e.g., "record" in MarcxmlParser.
-     * @return
+     * @return the XML record tag name
      */
     protected abstract String getRecordTagName();
+    
+    /**
+     * Returns the Record class to instantiate.
+     * @return the Record class
+     */
+    protected abstract Class<?> getRecordClass();
 
 }
