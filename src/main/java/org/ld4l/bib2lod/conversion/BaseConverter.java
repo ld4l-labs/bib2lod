@@ -2,8 +2,7 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import java.io.OutputStream;
-import java.io.Reader;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -11,6 +10,9 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.record.Record;
@@ -36,20 +38,24 @@ public abstract class BaseConverter implements Converter {
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
      */  
     @Override
-    public void convert(Reader reader, OutputStream outputStream) 
-            throws ConverterException, ParserException {
+    public void convert(InputDescriptor input, OutputDescriptor output) throws ConverterException {
 
-        Parser parser = getParser();        
-        List<Record> records = parser.parse(reader);
-        
+        Parser parser;
+        List<Record> records;
         Model model = ModelFactory.createDefaultModel();
         
-        for (Record record : records) {
-            model.add(convertRecord(record));
-        }
-        
-        LOGGER.debug(model.toString());
-        
+        try {
+            parser = getParser();
+            records = parser.parse(input);
+            for (Record record : records) {
+                model.add(convertRecord(record));
+            }
+            output.writeModel(model);
+            LOGGER.debug(model.toString());
+        } catch (ParserException | IOException | OutputServiceException e) {
+            throw new ConverterException(e);
+        }      
+  
         // Then what do we do with it? Do we write it out here, or send it back
         // up to the Manager to write?
         

@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.parsing;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +13,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.Record.RecordException;
 import org.ld4l.bib2lod.record.xml.XmlRecord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -43,27 +42,21 @@ public abstract class XmlParser extends BaseParser {
     }
     
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.parsing.Parser#parse(java.io.Reader)
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.parsing.Parser#parse(org.ld4l.bib2lod.io.InputService.InputDescriptor)
      */
     @Override
-    public List<Record> parse(Reader reader) throws ParserException {
+    public List<Record> parse(InputDescriptor input) throws ParserException {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder;
-     
-        try {
-            docBuilder = dbFactory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new ParserException(e.getMessage(), e.getCause());
-        }
-   
-        // TODO Or convert reader to an InputStream? Does it matter?
-        InputSource inputSource = new InputSource(reader);
+
         Document doc;
         try {
-            doc = docBuilder.parse(inputSource);
-        } catch (SAXException | IOException e) {
+            docBuilder = dbFactory.newDocumentBuilder();
+            doc = docBuilder.parse(input.getInputStream());
+        } catch (SAXException | IOException | ParserConfigurationException e) {
           throw new ParserException(e.getMessage(), e.getCause());
         } 
       

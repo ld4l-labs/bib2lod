@@ -32,5 +32,5 @@ public class MarcxmlToRdf extends XmlToRdf {
     public Class<?> getParserClass() {
         return PARSER_CLASS;
     }
-   
+  
 }
