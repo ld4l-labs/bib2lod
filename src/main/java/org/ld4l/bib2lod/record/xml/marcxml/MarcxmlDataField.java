@@ -16,7 +16,7 @@ import org.w3c.dom.NodeList;
 public class MarcxmlDataField extends MarcxmlField {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
-    
+
     private String name;
     private String firstIndicator;
     private String secondIndicator;
@@ -24,19 +24,19 @@ public class MarcxmlDataField extends MarcxmlField {
     
     /**
      * Constructor
-     * @param element
+     * @param element - the XML element
      */
-    MarcxmlDataField(Element field) {
-        super(field);
-        name = field.getAttribute("tag");
+    MarcxmlDataField(Element element) {
+        super(element);
         
+        name = element.getAttribute("tag");    
         // TODO what happens if these are missing? Do we want them set to null
         // or empty?
-        firstIndicator = field.getAttribute("ind1");
-        secondIndicator = field.getAttribute("ind2");
+        firstIndicator = element.getAttribute("ind1");
+        secondIndicator = element.getAttribute("ind2");
         
         NodeList subfieldNodes = 
-                field.getElementsByTagName("subfield");
+                element.getElementsByTagName("subfield");
         subfields = new ArrayList<MarcxmlSubfield>();
         for (int i = 0; i < subfieldNodes.getLength(); i++) {
             subfields.add(new MarcxmlSubfield(

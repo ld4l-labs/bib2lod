@@ -32,7 +32,7 @@ public class FileOutputService implements OutputService {
         }
 
         private final String extension; // Append to filename with period
-        private final String language; // As required by Model.write
+        private final String language;  // As required by Model.write()
 
         private Format(String extension, String language) {
             this.extension = extension;

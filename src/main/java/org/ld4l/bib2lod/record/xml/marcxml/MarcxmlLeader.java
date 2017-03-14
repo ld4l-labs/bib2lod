@@ -11,8 +11,7 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlLeader extends MarcxmlField {
     
-    private static final Logger LOGGER = LogManager.getLogger();
-    
+    private static final Logger LOGGER = LogManager.getLogger();    
     private String value;
 
     /**
@@ -28,4 +27,6 @@ public class MarcxmlLeader extends MarcxmlField {
     public String getValue() {
         return value;
     }
+    
+
 }

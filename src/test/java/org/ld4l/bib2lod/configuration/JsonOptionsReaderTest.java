@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 
 /**
- * Tests of org.ld4l.bib2lod.configuration.JsonOptionsReader
+ * Tests class JsonOptionsReader.
  */
 public class JsonOptionsReaderTest extends AbstractTestClass {
    

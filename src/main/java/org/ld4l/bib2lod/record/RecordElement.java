@@ -8,5 +8,5 @@ package org.ld4l.bib2lod.record;
 // TODO Not clear whether it serves any purpose or just
 // gets in the way. What are the methods common to XML and non-XML input?
 public interface RecordElement {
-    
+
 }

@@ -17,9 +17,8 @@ public interface XmlRecord extends Record {
 
     /**
      * Factory method
-     * @param recordClass - the class of record to instantiate
+     * @param recordClass - the class of Record to instantiate
      * @param recordElement - the XML record element
-     * @return the Record instance
      * @throws RecordException 
      */
     static Record instance(Class<?> recordClass, Element recordElement) 
@@ -35,4 +34,5 @@ public interface XmlRecord extends Record {
             throw new RecordException(e);
         }     
     }
+    
 }

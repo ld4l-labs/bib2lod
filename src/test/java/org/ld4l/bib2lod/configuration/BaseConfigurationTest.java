@@ -58,7 +58,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
 /**
- * Tests of org.ld4l.bib2lod.configuration.BaseConfiguration
+ * Tests class BaseConfiguration.
  */
 public class BaseConfigurationTest extends AbstractTestClass {
 

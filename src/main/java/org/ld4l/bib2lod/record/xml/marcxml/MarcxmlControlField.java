@@ -11,9 +11,10 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlControlField extends MarcxmlField {
  
-    private static final Logger LOGGER = LogManager.getLogger(); 
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
-    private String name;
+    private String controlNumber;
     private String value;
     
     /**
@@ -22,17 +23,21 @@ public class MarcxmlControlField extends MarcxmlField {
      */
     MarcxmlControlField(Element controlField) {
         super(controlField);
-        name = controlField.getAttribute("tag");
+        controlNumber = controlField.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
         // TODO Error-checking - what if there is no text?
         value = controlField.getTextContent();
     }
     
-    public String getName() {
-        return name;
+    public String getControlNumber() {
+        return controlNumber;
     }
     
     public String getValue() {
         return value;
+    }
+    
+    protected static String getControlNumberAttributeName() {
+        return CONTROL_NUMBER_ATTRIBUTE_NAME;
     }
     
 

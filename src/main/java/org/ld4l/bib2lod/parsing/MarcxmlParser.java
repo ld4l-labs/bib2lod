@@ -17,7 +17,7 @@ public class MarcxmlParser extends XmlParser {
     private static final String RECORD_TAG_NAME = "record";   
     private static final Class<?> RECORD_CLASS = MarcxmlRecord.class;
 
-
+    
     /**
      * Constructor
      * @param configuration - the program configuration

@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.record.xml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Element;
 
 /**
  * An abstract implementation.
@@ -12,6 +13,18 @@ import org.apache.logging.log4j.Logger;
 // gets in the way. What are the methods common to different types of XML input?
 public abstract class BaseXmlRecord implements XmlRecord {
     
-    private static final Logger LOGGER = LogManager.getLogger(); 
+    private static final Logger LOGGER = LogManager.getLogger();
+    
+    protected Element record;
+    // protected Elements elements;
+    
+    /**
+     * Constructor
+     */
+    public BaseXmlRecord(Element record) {
+        this.record = record;
+        // elements = new ArrayList<Element>();
+    }
+    
 
 }
