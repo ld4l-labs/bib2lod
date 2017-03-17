@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class MockConfiguration extends BaseConfiguration {
 
     /**
+     * Constructor
      * @throws ParseException 
      * @throws IOException 
      */
@@ -23,11 +24,9 @@ public class MockConfiguration extends BaseConfiguration {
         
         setLocalNamespace(config);
         
-        //buildInputList(config);
     }
 
-    protected void setLocalNamespace(JsonNode config) {
-        
+    protected void setLocalNamespace(JsonNode config) {        
         super.setLocalNamespace(config.get("local_namespace").textValue());                       
     }
     

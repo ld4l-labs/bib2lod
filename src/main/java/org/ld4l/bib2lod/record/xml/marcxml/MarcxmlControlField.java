@@ -15,30 +15,44 @@ public class MarcxmlControlField extends MarcxmlField {
     private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
     private String controlNumber;
-    private String value;
     
     /**
      * Constructor
-     * @param controlField
      */
-    MarcxmlControlField(Element controlField) {
-        super(controlField);
-        controlNumber = controlField.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
-        // TODO Error-checking - what if there is no text?
-        value = controlField.getTextContent();
+    public MarcxmlControlField(Element element) {
+        super(element);
+        controlNumber = element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
     }
     
     public String getControlNumber() {
         return controlNumber;
     }
     
-    public String getValue() {
-        return value;
-    }
-    
     protected static String getControlNumberAttributeName() {
         return CONTROL_NUMBER_ATTRIBUTE_NAME;
     }
-    
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
+     */
+    @Override
+    public boolean isValid() {
+        
+        if (controlNumber == null) {
+            return false;
+        }
+        if (controlNumber.equals("")) {
+            return false;
+        }
+        if (controlNumber.length() != 3) {
+            return false;
+        }
+        if (textValue == null) {
+            return false;
+        }
+        if (textValue.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }

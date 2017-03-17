@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.parsing;
+package org.ld4l.bib2lod.parsing.xml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +43,6 @@ public class MarcxmlParser extends XmlParser {
     protected Class<?> getRecordClass() {
         return RECORD_CLASS;
     }
-
 
 
     /* (non-Javadoc)

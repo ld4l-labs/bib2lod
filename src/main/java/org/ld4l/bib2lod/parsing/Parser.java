@@ -73,6 +73,8 @@ public interface Parser {
      * @return a list of Record objects
      * @throws ParserException
      */
-    public List<Record> parse(InputDescriptor input) throws ParserException;            
+    public List<Record> parse(InputDescriptor input) throws ParserException;   
+    
+    public boolean isValidRecord(Record record);
     
 }

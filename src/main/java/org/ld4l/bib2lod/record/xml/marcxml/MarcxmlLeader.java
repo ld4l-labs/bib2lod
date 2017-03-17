@@ -12,21 +12,26 @@ import org.w3c.dom.Element;
 public class MarcxmlLeader extends MarcxmlField {
     
     private static final Logger LOGGER = LogManager.getLogger();    
-    private String value;
 
     /**
      * Constructor
-     * @param leader - the leader element
      */
     public MarcxmlLeader(Element leader) {
         super(leader);
-        // TODO Error-checking - what if there is no text?
-        value = leader.getTextContent();       
     }
-    
-    public String getValue() {
-        return value;
-    }
-    
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
+     */
+    @Override
+    public boolean isValid() {
+        if (textValue == null) {
+            return false;
+        }
+        if (textValue.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+    
 }

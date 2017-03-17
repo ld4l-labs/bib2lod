@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.parsing;
+package org.ld4l.bib2lod.parsing.xml;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.parsing.BaseParser;
+import org.ld4l.bib2lod.parsing.Parser;
+import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.Record.RecordException;
 import org.ld4l.bib2lod.record.xml.XmlRecord;
@@ -41,7 +44,6 @@ public abstract class XmlParser extends BaseParser {
         super(configuration);
     }
     
-
     /*
      * (non-Javadoc)
      * @see org.ld4l.bib2lod.parsing.Parser#parse(org.ld4l.bib2lod.io.InputService.InputDescriptor)
@@ -57,7 +59,7 @@ public abstract class XmlParser extends BaseParser {
             docBuilder = dbFactory.newDocumentBuilder();
             doc = docBuilder.parse(input.getInputStream());
         } catch (SAXException | IOException | ParserConfigurationException e) {
-          throw new ParserException(e.getMessage(), e.getCause());
+            throw new ParserException(e.getMessage(), e.getCause());
         } 
       
         doc.getDocumentElement().normalize();
@@ -70,7 +72,13 @@ public abstract class XmlParser extends BaseParser {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element recordElement = (Element) nodes.item(i);
             try {
-                records.add(XmlRecord.instance(recordClass, recordElement));
+                Record record = XmlRecord.instance(recordClass, recordElement);
+                // TODO Or do in XmlRecord.instance() method and have it return 
+                // null if not valid?
+                // Skip an invalid record.
+                if (record.isValid()) {
+                    records.add(record);
+                }
             } catch (RecordException e) {
                 // Skip this record
                 continue;
@@ -79,7 +87,6 @@ public abstract class XmlParser extends BaseParser {
          
         return records;
     }
- 
     
     /**
      * Returns the name of the tag enclosing a record. Each subclass will define

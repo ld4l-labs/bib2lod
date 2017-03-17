@@ -5,26 +5,25 @@ package org.ld4l.bib2lod.record.xml;
 import java.lang.reflect.InvocationTargetException;
 
 import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.record.Record.RecordException;
 import org.w3c.dom.Element;
 
 /**
- * Represents an XML input record. Record objects are immutable, providing no 
- * setter methods.
+ * Represents an XML record. 
  */
-// TODO Not clear whether it serves any purpose or just
-// gets in the way. What are the methods common to different types of XML input?
 public interface XmlRecord extends Record {
 
     /**
+    /**
      * Factory method
-     * @param recordClass - the class of Record to instantiate
+     * @param recordClass - the class of XmlRecord to instantiate
      * @param recordElement - the XML record element
      * @throws RecordException 
      */
-    static Record instance(Class<?> recordClass, Element recordElement) 
+    static XmlRecord instance(Class<?> recordClass, Element recordElement) 
             throws RecordException {
         try {
-            return (Record) recordClass
+            return (XmlRecord) recordClass
                     .getConstructor(Element.class)
                     .newInstance(recordElement);
         } catch (InstantiationException

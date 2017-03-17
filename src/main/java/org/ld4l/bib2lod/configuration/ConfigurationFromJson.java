@@ -25,7 +25,7 @@ public class ConfigurationFromJson extends BaseConfiguration {
         INPUT("input"),
         INPUT_SOURCE("source"),
         LOCAL_NAMESPACE("local_namespace"),
-        URI_MINTER("uri_minter");
+        URI_GETTER("uri_getter");
         
         final String string;
         

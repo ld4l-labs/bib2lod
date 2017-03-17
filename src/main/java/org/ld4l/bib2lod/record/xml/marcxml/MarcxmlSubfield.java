@@ -9,30 +9,49 @@ import org.w3c.dom.Element;
 /**
  * Represents a subfield in a MARCXML record.
  */
-// TODO TBD is there value in the interface?
 public class MarcxmlSubfield extends MarcxmlField {
-    
+
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    private String name;
-    private String value;
+    private String code;
 
     /**
-     * @param element
+     * Constructor
      */
-    MarcxmlSubfield(Element subfield) {
-        super(subfield);
-        name = subfield.getAttribute("code");
-        // TODO Error-checking - what if there is no text?
-        value = subfield.getTextContent();
+    public MarcxmlSubfield(Element element) {
+        super(element);       
+        code = element.getAttribute("code");
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
-    
-    public String getValue() {
-        return value;
+
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
+     */
+    @Override
+    public boolean isValid() {
+
+        // Here we test only the code format, not whether specific codes are
+        // valid with specific data fields.
+        if (code == null) {
+            return false;
+        }
+        if (code.equals(" ")) {
+            return false;
+        }
+        // Empty string or more than one character
+        if (code.length() != 1) {
+            return false;
+        }
+        if (textValue == null) {
+            return false;
+        }
+        if (textValue.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
 }

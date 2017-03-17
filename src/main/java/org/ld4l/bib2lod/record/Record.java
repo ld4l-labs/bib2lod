@@ -3,12 +3,9 @@
 package org.ld4l.bib2lod.record;
 
 /**
- * Represents an input record. Record objects should be immutable, providing no
- * setter methods.
+ * Represents an input record. Record objects should be immutable, providing no 
+ * public setter methods, and only final private or protected setters.
  */
-// Not clear whether it serves any purpose or just
-// gets in the way. What are the methods common to XML and non-XML input?
-// But without it, we can't do List<Record> records = parser.parse(reader);
 public interface Record {
     
     // TODO Should this be RecordInstantiationException? See if it's used for
@@ -29,20 +26,30 @@ public interface Record {
         }
     }
     
-//    public static class RecordInstantiationException extends RuntimeException {
-//        private static final long serialVersionUID = 1L;
-//
-//        public RecordInstantiationException(String message, Throwable cause) {
-//            super(message, cause);
-//        }
-//
-//        public RecordInstantiationException(String message) {
-//            super(message);
-//        }
-//
-//        public RecordInstantiationException(Throwable cause) {
-//            super(cause);
-//        }
-//    }
+    //  public static class RecordInstantiationException extends RuntimeException {
+    //  private static final long serialVersionUID = 1L;
+    //
+    //  public RecordInstantiationException(String message, Throwable cause) {
+    //      super(message, cause);
+    //  }
+    //
+    //  public RecordInstantiationException(String message) {
+    //      super(message);
+    //  }
+    //
+    //  public RecordInstantiationException(Throwable cause) {
+    //      super(cause);
+    //  }
+    //}
+    
+    /**
+     * Returns true iff the record is valid.
+     * @return
+     */
+    // TODO Change return type to String: return an error message to be logged
+    // for auditing, empty string if valid.
+    public boolean isValid();
+    
+
    
 }

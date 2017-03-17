@@ -34,7 +34,7 @@ public interface UriGetter {
      * Stores the list of UriGetters that will be used to mint URIs for 
      * Resources.
      */
-    static List<UriGetter> minters = new ArrayList<UriGetter>();
+    static List<UriGetter> uriGetters = new ArrayList<UriGetter>();
     
     /**
      * Factory method
@@ -47,11 +47,11 @@ public interface UriGetter {
                 configuration);
     }
     
-    public static void createUriGetters(String[] minterClasses,
+    public static void createUriGetters(String[] uriGetterClasses,
             Configuration configuration) {
 
-        for (String minterClass : minterClasses) {
-            minters.add(instance(minterClass, configuration));
+        for (String uriGetterClass : uriGetterClasses) {
+            uriGetters.add(instance(uriGetterClass, configuration));
         }
     }
     
@@ -65,7 +65,7 @@ public interface UriGetter {
         
         String uri = null;
         
-        Iterator<UriGetter> it = minters.iterator();
+        Iterator<UriGetter> it = uriGetters.iterator();
         
         if (it.hasNext()) {
             uri = it.next().getUri(entity, it);

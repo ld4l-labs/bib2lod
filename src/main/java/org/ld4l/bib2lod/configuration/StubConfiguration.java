@@ -28,7 +28,7 @@ public class StubConfiguration extends BaseConfiguration {
             "/Users/rjy7/projects/bib2lod/output/";
     // Change to refer to FileOutputService.Format?
     private static final String OUTPUT_FORMAT = "N-TRIPLE";
-    private static final String[] URI_MINTERS = {
+    private static final String[] URI_GETTERS = {
         "org.ld4l.bib2lod.uris.RandomUriGetter"};
     private static final String OUTPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileOutputService";
     private static final String CLEANER = 
@@ -56,7 +56,7 @@ public class StubConfiguration extends BaseConfiguration {
                         SecurityException  {
    
 
-        setUpUriGetters(LOCAL_NAMESPACE, URI_MINTERS);
+        setUpUriGetters(LOCAL_NAMESPACE, URI_GETTERS);
 
         this.inputServiceClass = INPUT_SERVICE_CLASS;
         this.inputSource = INPUT_SOURCE;
@@ -71,7 +71,5 @@ public class StubConfiguration extends BaseConfiguration {
         setReconcilers(RECONCILERS);   
 
     }
-
-
 }
                      

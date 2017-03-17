@@ -2,16 +2,40 @@
 
 package org.ld4l.bib2lod.record.xml;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.ld4l.bib2lod.record.RecordElement;
+import org.w3c.dom.Element;
 
 /**
- * Represents a field in an input record.
+ * Represents an element in an XML record.
  */
-// TODO Not clear whether it serves any purpose or just
-// gets in the way. What are the methods common to different types of XML input?
-// Should this be an abstract class instead of an interface?
 public interface XmlRecordElement extends RecordElement {
     
-
-
+    /**
+     * Factory method
+     * @param elementClass - the class of XmlRecordElement to instantiate
+     * @param element - the XML element
+     * @throws RecordElementException 
+     */
+    static XmlRecordElement instance(Class<?> elementClass, Element element) 
+            throws RecordElementException {
+        try {
+            return (XmlRecordElement) elementClass
+                    .getConstructor(Element.class)
+                    .newInstance(element);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException
+                | SecurityException e) {
+            throw new RecordElementException(e);
+        }     
+    }
+    
+    /**
+     * Returns the text value of this element, or null if the element is not a
+     * text node.
+     */
+    public String getTextValue();
+    
 }

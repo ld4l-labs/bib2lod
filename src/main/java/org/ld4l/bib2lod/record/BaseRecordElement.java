@@ -8,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 /**
  * An abstract implementation.
  */
-// TODO Not using at this point. Not clear whether it serves any purpose or just
-// gets in the way. What are the methods common to XML and non-XML input?
 public abstract class BaseRecordElement implements RecordElement {
 
     private static final Logger LOGGER = LogManager.getLogger(); 

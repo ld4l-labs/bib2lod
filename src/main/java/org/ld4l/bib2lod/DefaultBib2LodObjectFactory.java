@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.configuration.JsonOptionsReader;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.conversion.MarcxmlToRdf;
+import org.ld4l.bib2lod.conversion.xml.MarcxmlToRdf;
 
 /**
  * A simple implementation.
