@@ -2,16 +2,21 @@
 
 package org.ld4l.bib2lod.io;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.ld4l.bib2lod.configuration.BaseConfiguration;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
+import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -23,6 +28,16 @@ public class FileOutputServiceTest extends AbstractTestClass {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
+
+    private FileOutputService service;
+    private OutputDescriptor output;
+
+    @After
+    public void cleanUp() throws IOException, OutputServiceException {
+        if (output != null) {
+            output.close();
+        }
+    }
 
     // ----------------------------------------------------------------------
     // The tests
@@ -82,7 +97,16 @@ public class FileOutputServiceTest extends AbstractTestClass {
     public void simpleSuccess() throws IOException {
         File dest = folder.newFolder("we_win");
         createServiceAndGetDescriptor(dest, NTRIPLES, metadata("test"));
+        assertTrue(new File(dest, "test.nt").exists());
     }
+    @Test
+    public void checkExtensionSubstitution() throws IOException {
+        File dest = folder.newFolder("we_win");
+        createServiceAndGetDescriptor(dest, NTRIPLES, metadata("test.xml"));
+        assertTrue(new File(dest, "test.nt").exists());
+    }
+    
+
 
     // ----------------------------------------------------------------------
     // Helper methods
@@ -106,7 +130,7 @@ public class FileOutputServiceTest extends AbstractTestClass {
                 outputFormat = format;
             }
         };
-        FileOutputService service = new FileOutputService(config);
-        service.openSink(metadata);
+        service = new FileOutputService(config);
+        output = service.openSink(metadata);
     }
 }

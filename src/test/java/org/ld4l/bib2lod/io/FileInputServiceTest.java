@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.ld4l.bib2lod.configuration.BaseConfiguration;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -38,6 +40,15 @@ public class FileInputServiceTest extends AbstractTestClass {
             folder.delete();
         }
     };
+
+    @After
+    public void cleanUp() throws InputServiceException, IOException {
+        if (inputs != null) {
+            for (InputDescriptor input : inputs) {
+                input.close();
+            }
+        }
+    }
 
     // ----------------------------------------------------------------------
     // The tests
@@ -82,7 +93,7 @@ public class FileInputServiceTest extends AbstractTestClass {
     @Test
     public void inputSourceIsFile() throws Exception {
         File file = folder.newFile();
-        createServiceAndGetDescriptors(file.getCanonicalPath(), "");
+        createServiceAndGetDescriptors(file.getCanonicalPath(), null);
         assertEquals(1, inputs.size());
     }
 
@@ -132,6 +143,15 @@ public class FileInputServiceTest extends AbstractTestClass {
         createServiceAndGetDescriptors(folder.getRoot().getCanonicalPath(),
                 null);
         assertEquals(2, inputs.size());
+    }
+
+    @Test
+    public void testMetadataHasName() throws IOException {
+        folder.newFile("foo.bar");
+        createServiceAndGetDescriptors(folder.getRoot().getCanonicalPath(),
+                null);
+        assertEquals(1, inputs.size());
+        assertEquals("foo.bar", inputs.get(0).getMetadata().getName());
     }
 
     // ----------------------------------------------------------------------
