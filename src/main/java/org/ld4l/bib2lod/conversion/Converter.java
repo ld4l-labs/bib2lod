@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.conversion;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
@@ -54,7 +53,7 @@ public interface Converter {
     /**
      * Factory method
      */
-    static Converter instance(Configuration configuration) {
+    static Converter instance() {
         return Bib2LodObjectFactory.instance().createConverter();
     }
 

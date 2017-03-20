@@ -54,7 +54,7 @@ public final class SimpleManager {
     protected static void convert(Configuration configuration) {
 
         try {
-            Converter converter = Converter.instance(configuration);
+            Converter converter = Converter.instance();
             InputService inputService = InputService.instance(configuration);
             OutputService outputService = OutputService.instance(configuration);
 

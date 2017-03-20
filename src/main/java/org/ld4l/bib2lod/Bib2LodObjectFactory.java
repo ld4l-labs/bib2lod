@@ -63,13 +63,9 @@ public abstract class Bib2LodObjectFactory {
      * @param args - the program arguments
      */
     public abstract Configuration createConfiguration(String[] args);
- 
-    /**
-     */
+
     public abstract Converter createConverter();
-    
-    /**
-     */
+
     public abstract Cleaner createCleaner();
 
     /**
