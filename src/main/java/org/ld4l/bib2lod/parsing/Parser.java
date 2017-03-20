@@ -2,10 +2,8 @@
 
 package org.ld4l.bib2lod.parsing;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.record.Record;
 
@@ -48,20 +46,16 @@ public interface Parser {
 
     /**
      * Factory method
-     * @param configuration - the program Configuration
      * @param parserClass - the class of parser to instantiate
-     * @return the Parser instance
      * @throws ParserException 
      */
-    static Parser instance(Configuration configuration, Class<?> parserClass) 
+    static Parser instance(Class<?> parserClass) 
             throws ParserInstantiationException {
         try {
             return (Parser) parserClass
-                    .getConstructor(Configuration.class)
-                    .newInstance(configuration);
+                    .newInstance();
         } catch (InstantiationException
                 | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | NoSuchMethodException
                 | SecurityException e) {
             throw new ParserInstantiationException(e);
         }     

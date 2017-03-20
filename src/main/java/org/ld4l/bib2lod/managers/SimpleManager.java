@@ -70,7 +70,7 @@ public final class SimpleManager {
                 } catch (InputServiceException | OutputServiceException
                         | IOException | ConverterException e) {
                     // Log the error and continue to the next input.
-                    // TODO We may want a more sophisticated logging mechanism 
+                    // TODO We may want a more sophisticated reporting mechanism 
                     // for this type of error.
                     e.printStackTrace();
                 }

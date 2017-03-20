@@ -12,13 +12,6 @@ public class MockXmlParser extends XmlParser {
 
     private static final String RECORD_TAG_NAME = "record";   
     private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
-    
-    /**
-     * Constructor
-     */
-    public MockXmlParser(Configuration configuration) {
-        super(configuration);
-    }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.parsing.XmlParser#getRecordTagName()

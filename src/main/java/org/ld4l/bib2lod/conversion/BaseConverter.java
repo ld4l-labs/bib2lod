@@ -10,7 +10,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
@@ -28,17 +27,6 @@ import org.ld4l.bib2lod.record.Record;
 public abstract class BaseConverter implements Converter {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
-    
-    protected Configuration configuration;
-
-    /**
-     * Constructor
-     * @param configuration - the program Configuration
-     */
-    // TODO Do we need to pass in the Configuration?
-    public BaseConverter(Configuration configuration) {
-        this.configuration = configuration;
-    }
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
@@ -91,13 +79,10 @@ public abstract class BaseConverter implements Converter {
     /**
      * Instantiates a Parser for this Converter. The Parser class is defined by
      * the concrete implementation.
-     * @return the Parser
      */
-    // TODO Seems wrong to have this in the interface. Only reason is to 
-    // allow call from BaseConverterTest.
-    public Parser getParser() {
+    private Parser getParser() {
         Class<?> parserClass = getParserClass();
-        return Parser.instance(configuration, parserClass);        
+        return Parser.instance(parserClass);        
     }
 
     /**

@@ -9,13 +9,6 @@ import org.ld4l.bib2lod.configuration.Configuration;
  */
 public class MockConverter extends BaseConverter {
 
-    /**
-     * Constructor
-     */
-    public MockConverter(Configuration configuration) {
-        super(configuration);
-    }
-
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.BaseConverter#getParserClass()
      */
@@ -23,5 +16,4 @@ public class MockConverter extends BaseConverter {
     protected Class<?> getParserClass() {
         return MockXmlParser.class;
     }
-
 }

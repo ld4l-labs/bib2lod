@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.conversion.BaseConverter;
+import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
 /**
  * Testing infrastructure
  */
-public class MockConverter extends BaseConverter {
+public class MockConverter implements Converter {
     
-    private static int inputCount;
+    private int inputCount;
     private static int outputCount;
     private List<InputDescriptor> outputs;
 
@@ -23,7 +23,6 @@ public class MockConverter extends BaseConverter {
      * Constructor
      */
     public MockConverter(Configuration configuration) {
-        super(configuration);
         inputCount = 0;
         outputCount = 0;
         outputs = new ArrayList<InputDescriptor>();
@@ -45,13 +44,8 @@ public class MockConverter extends BaseConverter {
         int o = outputs.size();
         return outputCount;
     }
+    
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.conversion.BaseConverter#getParserClass()
-     */
-    @Override
-    protected Class<?> getParserClass() {
-        return null;
-    }
+
 
 }

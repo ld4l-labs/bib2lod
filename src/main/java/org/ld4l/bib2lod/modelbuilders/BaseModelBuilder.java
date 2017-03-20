@@ -9,7 +9,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
@@ -20,16 +19,13 @@ public abstract class BaseModelBuilder implements ModelBuilder {
     private static final Logger LOGGER = LogManager.getLogger();
     
     protected Entity entity;
-    protected Configuration configuration;
     protected Model model;
 
     /**
      * Constructor
-     * @param configuration 
      */
-    public BaseModelBuilder(Entity entity, Configuration configuration) {
+    public BaseModelBuilder(Entity entity) {
         this.entity = entity;
-        this.configuration = configuration;
         this.model = ModelFactory.createDefaultModel();
     }
     

@@ -51,16 +51,16 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConverter(org.ld4l.bib2lod.configuration.Converter)
      */
     @Override
-    public Converter createConverter(Configuration configuration) {
-        return new MarcxmlToRdf(configuration);
+    public Converter createConverter() {
+        return new MarcxmlToRdf();
     }
     
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.cleaning.Cleaner)
      */
     @Override
-    public Cleaner createCleaner(Configuration configuration) {
-        return new MarcxmlCleaner(configuration);
+    public Cleaner createCleaner() {
+        return new MarcxmlCleaner();
     }
 
 }

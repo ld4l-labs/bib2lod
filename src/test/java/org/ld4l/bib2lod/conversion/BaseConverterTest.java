@@ -4,18 +4,11 @@ package org.ld4l.bib2lod.conversion;
 
 import static org.junit.Assert.fail;
 
-import java.util.List;
-
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.parsing.Parser;
-import org.ld4l.bib2lod.parsing.xml.MockInputDescriptor;
-import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -28,10 +21,8 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class BaseConverterTest extends AbstractTestClass {
 
-    //private Bib2LodObjectFactory factory;
-    private Configuration configuration;
     private Parser parser;
-    private Converter converter;
+    private MockConverter converter;
 
     private static final String OPEN_ROOT_ELEMENT = "<collection>";
     private static final String CLOSE_ROOT_ELEMENT = "</collection>";
@@ -55,11 +46,7 @@ public class BaseConverterTest extends AbstractTestClass {
 
     @Before
     public void setup() {
-        //factory = new MockBib2LodObjectFactory();
-        configuration = null;
-        //converter = Converter.instance(configuration);
-        converter = new MockConverter(configuration);
-        parser = converter.getParser();     
+        converter = new MockConverter();  
     }        
    
     // ----------------------------------------------------------------------

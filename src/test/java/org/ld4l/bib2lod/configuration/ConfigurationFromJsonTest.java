@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.ld4l.bib2lod.MockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;

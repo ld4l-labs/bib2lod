@@ -71,7 +71,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createCleaner(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public Cleaner createCleaner(Configuration configuration) {
+    public Cleaner createCleaner() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -80,7 +80,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createConverter(org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public Converter createConverter(Configuration configuration) {
+    public Converter createConverter() {
         try {
             return new MockConverter(configuration);
         } catch (IllegalArgumentException | SecurityException e) {

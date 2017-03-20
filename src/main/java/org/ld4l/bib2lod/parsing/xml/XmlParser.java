@@ -12,7 +12,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.parsing.BaseParser;
 import org.ld4l.bib2lod.record.Record;
@@ -34,14 +33,6 @@ public abstract class XmlParser extends BaseParser {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
 
-    /**
-     * Constructor
-     * @param configuration - the program configuration
-     */
-    public XmlParser(Configuration configuration) {
-        super(configuration);
-    }
-    
     /*
      * (non-Javadoc)
      * @see org.ld4l.bib2lod.parsing.Parser#parse(org.ld4l.bib2lod.io.InputService.InputDescriptor)

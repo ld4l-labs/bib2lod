@@ -6,7 +6,6 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
-import org.ld4l.bib2lod.parsing.Parser;
 
 /**
  * An object that orchestrates the conversion of an input reader containing one
@@ -56,14 +55,8 @@ public interface Converter {
      * Factory method
      */
     static Converter instance(Configuration configuration) {
-        return Bib2LodObjectFactory.instance().createConverter(configuration);
+        return Bib2LodObjectFactory.instance().createConverter();
     }
-    
-    /**
-     * Instantiates a Parser for this Converter. The Parser class to instantiate
-     * is defined by the concrete implementation.
-     */
-    public Parser getParser();
 
     public void convert(InputDescriptor input, OutputDescriptor output) 
             throws ConverterException;

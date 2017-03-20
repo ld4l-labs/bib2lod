@@ -26,7 +26,6 @@ public class StubConfiguration extends BaseConfiguration {
     private static final String INPUT_FORMAT = "MARCXML";
     private static final String OUTPUT_DESTINATION = 
             "/Users/rjy7/projects/bib2lod/output/";
-    // Change to refer to FileOutputService.Format?
     private static final String OUTPUT_FORMAT = "N-TRIPLE";
     private static final String[] URI_GETTERS = {
         "org.ld4l.bib2lod.uris.RandomUriGetter"};

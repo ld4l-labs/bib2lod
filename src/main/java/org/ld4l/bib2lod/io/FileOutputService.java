@@ -77,8 +77,9 @@ public class FileOutputService implements OutputService {
 
     }
 
-    /**
-     * Create a wrapper for an output file.
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.io.OutputService#openSink(org.ld4l.bib2lod.io.InputService.InputMetadata)
      */
     @Override
     public OutputDescriptor openSink(InputMetadata metadata)

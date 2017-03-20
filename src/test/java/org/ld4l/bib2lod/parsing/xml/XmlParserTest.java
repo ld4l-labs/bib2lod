@@ -33,7 +33,7 @@ public class XmlParserTest extends AbstractTestClass {
 
     @Before
     public void setup() {
-        parser = Parser.instance(null, MockXmlParser.class);
+        parser = Parser.instance(MockXmlParser.class);
     }        
 
     

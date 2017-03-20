@@ -4,7 +4,6 @@ package org.ld4l.bib2lod.parsing.xml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
 /**
@@ -16,15 +15,6 @@ public class MarcxmlParser extends XmlParser {
               
     private static final String RECORD_TAG_NAME = "record";   
     private static final Class<?> RECORD_CLASS = MarcxmlRecord.class;
-
-    
-    /**
-     * Constructor
-     * @param configuration - the program configuration
-     */
-    public MarcxmlParser(Configuration configuration) {
-       super(configuration);
-    }
     
     /*
      * (non-Javadoc)

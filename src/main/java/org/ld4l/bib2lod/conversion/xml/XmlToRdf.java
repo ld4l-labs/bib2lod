@@ -4,7 +4,6 @@ package org.ld4l.bib2lod.conversion.xml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.BaseConverter;
 
 /**
@@ -14,13 +13,5 @@ import org.ld4l.bib2lod.conversion.BaseConverter;
 public abstract class XmlToRdf extends BaseConverter {
     
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    /**
-     * Constructor
-     * @param configuration - the program Configuration
-     */
-    public XmlToRdf(Configuration configuration) {
-        super(configuration);
-    }
 
 }

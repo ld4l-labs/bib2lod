@@ -52,7 +52,7 @@ public interface OutputService {
     }
 
     /**
-     * @return
+     * Creates a wrapper for an output file.
      */
     OutputDescriptor openSink(InputMetadata metadata)
             throws OutputServiceException, IOException;

@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.testing;
+package org.ld4l.bib2lod.record.xml;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -10,8 +10,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.ld4l.bib2lod.record.Record.RecordException;
 import org.ld4l.bib2lod.record.RecordElement.RecordElementException;
-import org.ld4l.bib2lod.record.xml.XmlRecord;
-import org.ld4l.bib2lod.record.xml.XmlRecordElement;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 

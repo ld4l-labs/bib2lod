@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,12 +11,8 @@ import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.modelbuilders.InstanceModelBuilder;
-import org.ld4l.bib2lod.modelbuilders.ModelBuilder;
 import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
@@ -68,14 +65,12 @@ public abstract class Bib2LodObjectFactory {
     public abstract Configuration createConfiguration(String[] args);
  
     /**
-     * @param configuration - the program Configuration
      */
-    public abstract Converter createConverter(Configuration configuration);
+    public abstract Converter createConverter();
     
     /**
-     * @param configuration - the program Configuration
      */
-    public abstract Cleaner createCleaner(Configuration configuration);
+    public abstract Cleaner createCleaner();
 
     /**
      * @param className - the class name of the UriGetter to instantiate 
@@ -96,35 +91,6 @@ public abstract class Bib2LodObjectFactory {
                 | SecurityException e) {
             throw new Bib2LodObjectFactoryException(e);
         }   
-    }
-
-    
-    /**
-     * @param resource - the resource for which to create the ModelBuilder
-     * @param configuration - the program Configuration
-     * @return
-     */
-    public ModelBuilder createModelBuilder(
-            Entity resource, Configuration configuration)  {
-        
-        ModelBuilder builder = null;
-        if (resource instanceof Instance) {
-            return new InstanceModelBuilder(resource, configuration);
-        }
-        return builder;
-    }
-    
-    /**
-     * @param type - the class to instantiate
-     * @return
-     */
-    // TODO - since we have the class name - move this to the interface instance() method
-    public Entity createEntity(Class<? extends Entity> type) {
-        try {
-            return type.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        }
     }
 
     /**
@@ -150,10 +116,15 @@ public abstract class Bib2LodObjectFactory {
      */
     public OutputService createOutputService(Configuration configuration) {
         try {
-            return (OutputService) Class
-                    .forName(configuration.getOutputServiceClass())
-                    .getConstructor(Configuration.class)
-                    .newInstance(configuration);
+            String className =  configuration.getOutputServiceClass();
+            Class<?> cls = Class.forName(className);
+            Constructor<?> con = cls.getConstructor(Configuration.class);
+            OutputService os = (OutputService) con.newInstance(configuration);
+            return os;
+//            return (OutputService) Class
+//                    .forName(configuration.getOutputServiceClass())
+//                    .getConstructor(Configuration.class)
+//                    .newInstance(configuration);
         } catch (InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException

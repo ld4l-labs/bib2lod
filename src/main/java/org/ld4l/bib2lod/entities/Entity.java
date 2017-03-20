@@ -4,8 +4,6 @@ package org.ld4l.bib2lod.entities;
 
 import java.util.List;
 
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
-
 /**
  * Stores the data from a record that will be converted to a single 
  * org.ld4l.bib2lod.entities.Entity.
@@ -13,15 +11,23 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 public interface Entity {
     
     /**
-     * Signals an exception during creation of a Entity. 
+     * Signals an exception during creation of an Entity. 
      */
     public static class EntityInstantiationException extends 
             RuntimeException {         
         private static final long serialVersionUID = 1L;
-        
+
         public EntityInstantiationException(String msg, Throwable cause) {
             super(msg, cause);                 
-        }        
+        }
+        
+        public EntityInstantiationException(String msg) {
+            super(msg);                 
+        }   
+        
+        public EntityInstantiationException(Throwable cause) {
+            super(cause);                 
+        }    
     }
 
     /**
@@ -29,11 +35,18 @@ public interface Entity {
      * @param type - the type of Entity to instantiate
      */
     static Entity instance(Class<? extends Entity> type) {
-        return Bib2LodObjectFactory.instance().createEntity(type);
+        try {
+            return (Entity) type
+                    .newInstance();
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException e) {
+            throw new EntityInstantiationException(e);
+        }     
     }
 
     /**
-     * @return
+     * Returns a list of the types of this Entity.
      */
     List<String> getTypes();
 

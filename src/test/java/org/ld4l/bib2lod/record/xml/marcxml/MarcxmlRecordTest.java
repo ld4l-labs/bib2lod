@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.Record.RecordException;
+import org.ld4l.bib2lod.record.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.XmlTestUtils;
 
 /**
  * Tests class MarcxmlRecord.

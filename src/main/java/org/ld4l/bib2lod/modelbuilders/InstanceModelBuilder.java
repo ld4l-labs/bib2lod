@@ -6,7 +6,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.uris.UriGetter;
 
@@ -20,11 +19,9 @@ public class InstanceModelBuilder extends BaseModelBuilder {
     /**
      * Constructor
      * @param resource - the Entity from which to build the model
-     * @param configuration - the program Configuration
      */
-    public InstanceModelBuilder(
-            Entity resource, Configuration configuration) {
-        super(resource, configuration);
+    public InstanceModelBuilder(Entity resource) {         
+        super(resource);
     }
 
     /* (non-Javadoc)
