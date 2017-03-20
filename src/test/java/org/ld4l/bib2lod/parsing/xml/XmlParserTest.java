@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.record.Record;
-
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 
@@ -25,15 +24,15 @@ public class XmlParserTest extends AbstractTestClass {
     private static final String CLOSE_ROOT_ELEMENT = "</collection>";
 
     private static final String VALID_RECORD = 
-            "<record><child>valid</child></record>";   
+            "<record><child>valid record</child></record>";   
      
-    private static final String INVALID_RECORD = "<record>invalid</record>"; 
+    private static final String INVALID_RECORD = "<record>invalid record</record>"; 
     
     private static final String RECORDS = OPEN_ROOT_ELEMENT + VALID_RECORD +
                  INVALID_RECORD + CLOSE_ROOT_ELEMENT;
 
     @Before
-    public void setUp() {
+    public void setup() {
         parser = Parser.instance(null, MockXmlParser.class);
     }        
 
@@ -48,10 +47,5 @@ public class XmlParserTest extends AbstractTestClass {
         List<Record> records = parser.parse(descriptor);
         Assert.assertEquals(1,  records.size());       
     }
-    
-    
-    // ----------------------------------------------------------------------
-    // Helper methods
-    // ----------------------------------------------------------------------
     
 }

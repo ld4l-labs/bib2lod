@@ -10,7 +10,6 @@ import java.util.Map;
  */
 public class Instance extends BaseEntity {
     
-  
     // Maybe a Map<String, String>, mapping identifier type to value
     private Map<String, String> identifiers;
     

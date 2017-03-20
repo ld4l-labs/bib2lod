@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.parsing.xml;
+package org.ld4l.bib2lod.conversion;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 
 /**
- * Test infrastructure for XmlParser tests
+ * Test infrastructure for BaseConverter tests
  */
 public class MockInputDescriptor implements InputDescriptor {
     

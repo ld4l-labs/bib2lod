@@ -2,23 +2,19 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.record.Record;
 
 /**
- *
+ * An abstract implementation.
  */
 public abstract class BaseEntityBuilder implements EntityBuilder {
-    
-    protected Configuration configuration;
 
-    /**
-     * Constructor
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.entitybuilders.EntityBuilder#build(org.ld4l.bib2lod.record.Record)
      */
-    public BaseEntityBuilder(Configuration configuration) {
-        this.configuration = configuration;
-    }
-    
-
-
+    @Override
+    public abstract Entity build(Record record) throws EntityBuilderException;
 
 }

@@ -8,7 +8,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
- * Create RDF from the Entity.
+ * Builds a Model from an Entity.
  */
 public interface ModelBuilder {
 

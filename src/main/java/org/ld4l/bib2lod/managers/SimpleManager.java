@@ -25,10 +25,9 @@ public final class SimpleManager {
     private static final Logger LOGGER = LogManager.getLogger();
 
     /**
-     * Main method: gets a Configuration object and calls conversion method.
+     * Main method: gets a Configuration object and calls the conversion method.
      * 
-     * @param args
-     *            - commandline arguments
+     * @param args - commandline arguments          
      */
     public static void main(String[] args) {
 
@@ -51,8 +50,8 @@ public final class SimpleManager {
      * @param configuration - the program Configuration 
      * @throws ConverterException
      */
-    private static void convert(Configuration configuration)
-            throws ConverterException {
+    // protected rather than private to access from SimpleManagerTest.
+    protected static void convert(Configuration configuration) {
 
         try {
             Converter converter = Converter.instance(configuration);
@@ -62,13 +61,18 @@ public final class SimpleManager {
             Iterator<InputDescriptor> inputs = inputService.getDescriptors()
                     .iterator();
             while (inputs.hasNext()) {
-                try (InputDescriptor input = inputs.next();
-                        OutputDescriptor output = outputService
-                                .openSink(input.getMetadata())) {
+                try (
+                    InputDescriptor input = inputs.next();
+                    OutputDescriptor output = outputService
+                            .openSink(input.getMetadata())
+                ) {
                     converter.convert(input, output);
                 } catch (InputServiceException | OutputServiceException
-                        | IOException e) {
-                    throw new ConverterException(e);
+                        | IOException | ConverterException e) {
+                    // Log the error and continue to the next input.
+                    // TODO We may want a more sophisticated logging mechanism 
+                    // for this type of error.
+                    e.printStackTrace();
                 }
             }
         } finally {

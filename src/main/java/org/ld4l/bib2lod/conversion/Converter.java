@@ -6,12 +6,17 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
+import org.ld4l.bib2lod.parsing.Parser;
 
 /**
  * An object that orchestrates the conversion of an input reader containing one
  * or more records.
  */
 public interface Converter {
+    
+    /**
+     * Signals a problem during conversion of an input.
+     */
     public static class ConverterException extends Exception {
         private static final long serialVersionUID = 1L;
 
@@ -27,6 +32,25 @@ public interface Converter {
             super(cause);
         }
     }
+    
+    /**
+     * Signals a problem during conversion of a single record.
+     */
+    public static class RecordConversionException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public RecordConversionException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public RecordConversionException(String message) {
+            super(message);
+        }
+
+        public RecordConversionException(Throwable cause) {
+            super(cause);
+        }
+    }
 
     /**
      * Factory method
@@ -34,7 +58,14 @@ public interface Converter {
     static Converter instance(Configuration configuration) {
         return Bib2LodObjectFactory.instance().createConverter(configuration);
     }
+    
+    /**
+     * Instantiates a Parser for this Converter. The Parser class to instantiate
+     * is defined by the concrete implementation.
+     */
+    public Parser getParser();
 
-    public void convert(InputDescriptor input, OutputDescriptor output) throws ConverterException;
+    public void convert(InputDescriptor input, OutputDescriptor output) 
+            throws ConverterException;
 
 }

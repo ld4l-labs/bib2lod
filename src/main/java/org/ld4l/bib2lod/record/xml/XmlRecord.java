@@ -5,7 +5,6 @@ package org.ld4l.bib2lod.record.xml;
 import java.lang.reflect.InvocationTargetException;
 
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.Record.RecordException;
 import org.w3c.dom.Element;
 
 /**

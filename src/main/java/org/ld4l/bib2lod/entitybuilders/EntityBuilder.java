@@ -2,37 +2,51 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.List;
-
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
-import org.w3c.dom.Element;
+import org.ld4l.bib2lod.record.Record;
 
 /**
- *
+ * Builds an Entity from a Record
  */
 public interface EntityBuilder {
     
+    public static class EntityBuilderException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public EntityBuilderException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        public EntityBuilderException(String message) {
+            super(message);
+        }
+
+        public EntityBuilderException(Throwable cause) {
+            super(cause);
+        }
+    }  
+    
     /**
      * Factory method
-     * @param type - the type of Entity to instantiate
+     * @param type - the type of EntityBuilder to instantiate (InstanceBuilder, 
+     * WorkBuilder, etc.)
+     * @throws EntityBuilderException 
      */
-    static EntityBuilder instance(Class<?> type, Configuration configuration) {
-        return Bib2LodObjectFactory.instance().createEntityBuilder(
-                type, configuration);
+    static EntityBuilder instance(Class<?> builderClass) 
+            throws EntityBuilderException {
+        try {
+            return (EntityBuilder) builderClass                            
+                    .newInstance();
+        } catch (InstantiationException | IllegalAccessException
+                | IllegalArgumentException | SecurityException e) {
+            throw new EntityBuilderException(e);
+        }                
     }
     
-   
     /**
-     * Parses a record into a list of Entities.
-     * @param <T> - the type of the record (varies between implementations)
-     * @param element - the element from which to build the resources
-     * @return a List of Entities
+     * Builds an entity from a Record.
+     * @throws EntityBuilderException 
      */
-    //public <T> Entity build(T element);
-    // TEMPORARY!! Can't specify Element type here - not common to all builders
-    public List<Entity> build(Element element);
-    
+    public Entity build(Record record) throws EntityBuilderException;
 
 }

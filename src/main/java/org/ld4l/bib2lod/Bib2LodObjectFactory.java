@@ -12,7 +12,6 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Instance;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.modelbuilders.InstanceModelBuilder;
@@ -79,9 +78,10 @@ public abstract class Bib2LodObjectFactory {
     public abstract Cleaner createCleaner(Configuration configuration);
 
     /**
-     * @param className - the class name of the minter to instantiate 
+     * @param className - the class name of the UriGetter to instantiate 
      * @param configuration - the program Configuration
      */
+    // TODO - since we have the class name - move this to the interface instance() method
     public UriGetter createUriGetter(String className, 
             Configuration configuration) {
         
@@ -97,25 +97,7 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         }   
     }
-    
-    
-    /**
-     * @param type - the class to instantiate
-     * @param configuration - the program Configuration
-     */
-    public EntityBuilder createEntityBuilder(
-            Class<?> minterClass, Configuration configuration) {
-        
-        try {
-            return (EntityBuilder) minterClass                            
-                    .getConstructor(Configuration.class)
-                    .newInstance(configuration);
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        }   
-    }
+
     
     /**
      * @param resource - the resource for which to create the ModelBuilder
@@ -136,6 +118,7 @@ public abstract class Bib2LodObjectFactory {
      * @param type - the class to instantiate
      * @return
      */
+    // TODO - since we have the class name - move this to the interface instance() method
     public Entity createEntity(Class<? extends Entity> type) {
         try {
             return type.newInstance();
@@ -178,7 +161,6 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         }
     }
-
 
 }
 

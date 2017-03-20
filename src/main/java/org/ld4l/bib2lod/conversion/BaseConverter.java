@@ -3,6 +3,7 @@
 package org.ld4l.bib2lod.conversion;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -10,6 +11,10 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.InstanceEntityBuilder;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
@@ -28,8 +33,9 @@ public abstract class BaseConverter implements Converter {
 
     /**
      * Constructor
-     * @param configuration - the Configuration object
+     * @param configuration - the program Configuration
      */
+    // TODO Do we need to pass in the Configuration?
     public BaseConverter(Configuration configuration) {
         this.configuration = configuration;
     }
@@ -38,47 +44,42 @@ public abstract class BaseConverter implements Converter {
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
      */  
     @Override
-    public void convert(InputDescriptor input, OutputDescriptor output) throws ConverterException {
+    public void convert(InputDescriptor input, OutputDescriptor output) 
+            throws ConverterException {
 
         Parser parser;
         List<Record> records;
         Model model = ModelFactory.createDefaultModel();
         
+        parser = getParser();
         try {
-            parser = getParser();
             records = parser.parse(input);
-            for (Record record : records) {
+        } catch (ParserException e) {
+            // Caller (e.g., SimpleManager) should skip this input and go to 
+            // next input.
+            throw new ConverterException(e);
+        }
+        
+        for (Record record : records) {
+            try {
                 model.add(convertRecord(record));
+            } catch (RecordConversionException e) {
+                // Log the error and continue to next record.
+                // TODO We may want a more sophisticated logging mechanism for
+                // this type of error.
+                e.printStackTrace();
+                continue;
             }
+        }
+        
+        try {
             output.writeModel(model);
             LOGGER.debug(model.toString());
-        } catch (ParserException | IOException | OutputServiceException e) {
+        } catch (IOException | OutputServiceException e) {
+            // Caller (e.g., SimpleManager) should skip this input and go to 
+            // next input.
             throw new ConverterException(e);
-        }      
-  
-        // Then what do we do with it? Do we write it out here, or send it back
-        // up to the Manager to write?
-        
-
-//        try {
-//            for (Element record : records) {
-//                // Parse the record into Entity objects.
-//                List<Entity> entities = parser.parseRecord(record);
-//                for (Entity entity : entities) {
-//                    ModelBuilder modelBuilder = 
-//                            ModelBuilder.instance(entity, configuration);
-//                    Model resourceModel = modelBuilder.build();
-//                    // Are there going to be any retractions? Then need to change
-//                    // this to getAdditions(), getRetractions() from the builder.
-//                    model.add(resourceModel);
-//                }  
-//            }
-//            
-//            model.write(outputStream, "N-TRIPLE");
-//        } catch (ParserException e) {
-//            throw new ConverterException(e);
-//        }
-
+        }
     }
 
     /**
@@ -92,26 +93,69 @@ public abstract class BaseConverter implements Converter {
      * the concrete implementation.
      * @return the Parser
      */
-    private Parser getParser() {
+    // TODO Seems wrong to have this in the interface. Only reason is to 
+    // allow call from BaseConverterTest.
+    public Parser getParser() {
         Class<?> parserClass = getParserClass();
         return Parser.instance(configuration, parserClass);        
     }
 
     /**
-     * Converts a record to an RDF Model.
+     * Converts a Record to an RDF Model.
+     * @throws RecordConversionException 
+     * @throws RecordConverterException 
      */
-    // protected abstract Model convertRecord(Record record);
-    // TODO Not sure whether this goes here or whether it is 
-    // implementation-specific.
-    protected Model convertRecord(Record record) {
+    protected Model convertRecord(Record record) 
+            throws RecordConversionException  {
+
+        List<Entity> entities;
+        try {
+            entities = buildEntities(record);
+        } catch (EntityBuilderException e) {
+            // Caller convert() skips this record and continues to next record.
+            throw new RecordConversionException(e);
+        }
         
         Model model = ModelFactory.createDefaultModel();
         
-        // Create Instance and other Entities
-        // Maybe use EntityBuilders to create these entities - not sure yet
-        // Then for each Entity, create a model/set of statements/resource and 
-        // add to model
+        for (Entity entity : entities) {
+            // get a Jena Model/Resource/StmtIterator/List<Statement> for 
+            // the entity         
+            model.add(buildModel(entity));
+
+        }           
+        return model;
+    }
+    
+    /**
+     * Builds the set of Entity objects from which the Models will be built.
+     * @throws EntityBuilderException 
+     */
+    private List<Entity> buildEntities(Record record) 
+            throws EntityBuilderException {
         
+        List<Entity> entities = new ArrayList<Entity>();
+
+        EntityBuilder instanceBuilder = 
+                EntityBuilder.instance(InstanceEntityBuilder.class);
+        Entity instance = instanceBuilder.build(record);
+        // more stuff in here...or should instanceBuilder return a list
+        // of entities itself? That is, will the other entities be spun
+        // off the instance, or will we come back here to instantiate the
+        // other builders and create the entities?
+        entities.add(instance);
+
+        return entities;
+    }
+    
+    /**
+     * Builds a Model from an Entity.
+     */
+    // TODO May want to return a Resource/StmtIterator/List<Statement> instead
+    private Model buildModel(Entity entity) {
+        Model model = ModelFactory.createDefaultModel();
+        // TODO *** throw a ModelBuilder exception which convertRecord will  
+        // catch, then throw as a ConverterException
         return model;
     }
     

@@ -15,8 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.parsing.BaseParser;
-import org.ld4l.bib2lod.parsing.Parser;
-import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.Record.RecordException;
 import org.ld4l.bib2lod.record.xml.XmlRecord;
