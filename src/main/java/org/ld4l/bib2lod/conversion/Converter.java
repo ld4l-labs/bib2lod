@@ -7,8 +7,8 @@ import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
 /**
- * An object that orchestrates the conversion of an input reader containing one
- * or more records.
+ * Orchestrates the conversion of an input object containing one or more
+ * records.
  */
 public interface Converter {
     
@@ -34,7 +34,7 @@ public interface Converter {
     /**
      * Signals a problem during conversion of a single record.
      */
-    public static class RecordConversionException extends Exception {
+    public static class RecordConversionException extends ConverterException {
         private static final long serialVersionUID = 1L;
 
         public RecordConversionException(String message, Throwable cause) {

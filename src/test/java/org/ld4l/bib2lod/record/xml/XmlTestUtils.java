@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
- * Provides helper methods for testing XML input.
+ * Helper methods for testing XML input.
  */
 public final class XmlTestUtils {
 

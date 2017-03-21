@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public class MockOptionsReader implements OptionsReader {
     private final JsonNode node;
+    
     // ----------------------------------------------------------------------
     // Stub infrastructure
     // ----------------------------------------------------------------------

@@ -11,6 +11,8 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.MockConfiguration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.io.InputService;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.uris.UriGetter;
 
 /**
@@ -28,6 +30,9 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     private final Bib2LodObjectFactory defaultFactory;
     private OptionsReader optionsReader;
     private Configuration configuration;
+    private Converter converter;
+    private InputService inputService;
+    private OutputService outputService;
 
     public MockBib2LodObjectFactory() {
         try {
@@ -43,12 +48,36 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         }
     }
 
+    // ----------------------------------------------------------------------
+    // Setters
+    // ----------------------------------------------------------------------
+    
     public void setOptionsReader(OptionsReader optionsReader) {
         this.optionsReader = optionsReader;
     }
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+    
+    public void setConverter(Converter converter) {
+        this.converter = converter;
+    }
+    
+    public void setInputService(InputService service) {
+        this.inputService = service;
+    }
+    
+    public void setOutputService(OutputService service) {
+        this.outputService = service;
+    }
+    
+    // ----------------------------------------------------------------------
+    // Getters
+    // ----------------------------------------------------------------------
+    
+    public Converter getConverter() {
+        return this.converter;
     }
     
     // ----------------------------------------------------------------------
@@ -69,10 +98,6 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Configuration createConfiguration(String[] args) {
-        // Currently the default configuration is StubConfiguration, which 
-        // doesn't work to test the abstract BaseConfiguration because it  
-        // doesn't use a JsonNode, and isn't useful to build tests on because it
-        // is only temporary. 
         try {
             return new MockConfiguration(args);
         } catch (IOException | ParseException e) {
@@ -85,8 +110,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Cleaner createCleaner() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
     }
 
     /* (non-Javadoc)
@@ -94,8 +118,8 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public Converter createConverter() {
-        // TODO Auto-generated method stub
-        return null;
+        return (converter != null) ? converter
+                : defaultFactory.createConverter();
     }
 
     /* (non-Javadoc)
@@ -103,8 +127,19 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     @Override
     public UriGetter createUriGetter(String className, Configuration configuration) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    @Override
+    public InputService createInputService(Configuration configuration) {
+        return (inputService != null) ? inputService
+                : defaultFactory.createInputService(configuration);
+    }
+    
+    @Override
+    public OutputService createOutputService(Configuration configuration) {
+        return (outputService != null) ? outputService
+                : defaultFactory.createOutputService(configuration);
     }
 
 }

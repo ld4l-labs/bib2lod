@@ -1,5 +1,11 @@
 package org.ld4l.bib2lod.testing;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.junit.After;
+import org.junit.Before;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -50,6 +56,40 @@ public abstract class AbstractTestClass {
         } else {
             node.put(fieldName, String.valueOf(newValue));
         }
-    }    
+    }  
+    
+    // ----------------------------------------------------------------------
+    // Control standard output or error output.
+    // ----------------------------------------------------------------------
+
+    private static final PrintStream originalSysout = System.out;
+    private static final PrintStream originalSyserr = System.err;
+    private final ByteArrayOutputStream capturedSysout = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream capturedSyserr = new ByteArrayOutputStream();
+
+    @Before
+    @After
+    public void restoreOutputStreams() {
+        System.setOut(originalSysout);
+        System.setErr(originalSyserr);
+        capturedSysout.reset();
+        capturedSyserr.reset();
+    }
+
+    protected void suppressSysout() {
+        System.setOut(new PrintStream(capturedSysout, true));
+    }
+
+    protected void suppressSyserr() {
+        System.setErr(new PrintStream(capturedSyserr, true));
+    }
+
+    protected String getSysoutForTest() {
+        return capturedSysout.toString();
+    }
+
+    protected String getSyserrForTest() {
+        return capturedSyserr.toString();
+    }
       
 }

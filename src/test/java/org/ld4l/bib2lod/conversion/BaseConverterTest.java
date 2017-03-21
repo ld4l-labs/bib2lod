@@ -4,12 +4,22 @@ package org.ld4l.bib2lod.conversion;
 
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
+import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.InputService.InputMetadata;
+import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
+import org.ld4l.bib2lod.parsing.xml.XmlParser;
+import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests abstract class BaseConverter.
@@ -20,6 +30,86 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  * - invalid input is ignored (or in SimpleManagerTest?)
  */
 public class BaseConverterTest extends AbstractTestClass {
+ 
+    // ----------------------------------------------------------------------
+    // Mocking infrastructure
+    // ----------------------------------------------------------------------
+    
+    public static class MockConverter extends BaseConverter {
+
+        @Override
+        protected Class<?> getParserClass() {
+            return MockXmlParser.class;
+        }
+    }
+    
+    public static class MockXmlParser extends XmlParser {
+
+        private static final String RECORD_TAG_NAME = "record";   
+        private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
+
+        @Override
+        protected String getRecordTagName() {
+            return RECORD_TAG_NAME;
+        }
+
+        @Override
+        protected Class<?> getRecordClass() {
+            return RECORD_CLASS;
+        }
+    }
+
+    public static class MockXmlRecord implements Record { // extends BaseXmlRecord {
+        
+        private String textValue;
+
+        public MockXmlRecord(Element record) {
+            //super(record);
+            textValue = record.getFirstChild().getTextContent();    
+        }
+
+        @Override
+        public boolean isValid() {
+            if (! textValue.isEmpty()) {
+                return false;
+            }
+            return true;
+        }
+    }
+    
+    // TODO Or implement EntityBuilder?
+    public static class MockEntityBuilder extends BaseEntityBuilder {
+
+        @Override
+        public Entity build(Record record) throws EntityBuilderException {
+            return null;            
+        }
+    }
+
+    public static class MockInputDescriptor implements InputDescriptor {
+        
+        private final String inputString;
+        
+        public MockInputDescriptor(String input) {
+            this.inputString = input;
+        }
+
+        @Override
+        public InputMetadata getMetadata() {
+            throw new RuntimeException("Method not implemented.");
+        }
+
+        @Override
+        public synchronized InputStream getInputStream() throws IOException {
+            throw new RuntimeException("Method not implemented.");
+        }
+
+        @Override
+        public synchronized void close() throws InputServiceException, IOException {
+            throw new RuntimeException("Method not implemented.");          
+        }
+    }
+    
 
     private Parser parser;
     private MockConverter converter;
