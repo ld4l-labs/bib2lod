@@ -23,7 +23,7 @@ cornell:work1 a bf:Work, bf:Text ;
     
     bf:adminMetadata [
         a bf:AdminMetadata ;
-        bf:identifiedBy [ # identifies Instance or AdminMetadata?
+        bf:identifiedBy [ # Identifies Instance or AdminMetadata?
             a bf:Local ;
             rdf:value "102063" ;
             ld4l:hasSource </http://uri/to/nnc> # URI to NNC
@@ -32,8 +32,8 @@ cornell:work1 a bf:Work, bf:Text ;
             a bf:Status ;
             bf:code "c"
         ] ;
-        bf:encodingLevel [ # property doesn't exist
-           a bf:EncodingLevel ; # class doesn't exist
+        bf:encodingLevel [ # Property doesn't exist
+           a bf:EncodingLevel ; # Class doesn't exist
            bf:code "1 "
         ] ;
         bf:creationDate "1986-05-06"
@@ -42,6 +42,8 @@ cornell:work1 a bf:Work, bf:Text ;
 
 
 cornell:inst1 a bf:Instance ; 
+
+    bf:hasItem cornell:item1 ; # Not sure about this; do we always create an Item from the record?
 
     bf:title [
         a bf:Title ;
@@ -52,12 +54,13 @@ cornell:inst1 a bf:Instance ;
         ] ;        
     ] ; 
     
-    # property of Instance, not Title
+    # Property of Instance, not Title
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     
     bf:issuance [
         a bf:Issuance ;
-        bf:code "m" # should not code MARC into the RDF. Possibly can make an exception for AdminMetadata, but not other resources.
+        # Should not code MARC into the RDF. Possibly can make an exception for AdminMetadata, but not other resources (IMO).
+        bf:code "m" 
     ] ;
     
     ld4l:hasActivity [
@@ -70,10 +73,13 @@ cornell:inst1 a bf:Instance ;
     
     bf:adminMetadata [
         a bf:AdminMetadata ;
-        bf:identifiedBy [
+        bf:identifiedBy [ # Identifies Instance or AdminMetadata?
             a bf:Local ;
             rdf:value "102063" ;
             ld4l:hasSource </http://uri/to/nnc> # URI to NNC
         ]  
     ]    
 . 
+
+# Not sure about this; do we always create an Item from the record?
+cornell:item1 a bf:Item .
