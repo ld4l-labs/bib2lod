@@ -85,9 +85,12 @@ public class MarcxmlDataField extends MarcxmlField {
         if (Integer.parseInt(tag) > 999) {
             return false;
         }
+        /*
+         * Bad test: when pretty-printed there is whitespace inside the element.
         if (textValue != null) {
             return false;
         }
+        */
         if (! isValidIndicator(ind1)) {
             return false;
         }

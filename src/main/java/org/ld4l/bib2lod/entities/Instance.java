@@ -2,24 +2,40 @@
 
 package org.ld4l.bib2lod.entities;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.ld4l.bib2lod.Namespace;
 
 /**
- *
+ * Represents the data about an Instance resource.
  */
-public class Instance extends BaseEntity {
+public class Instance extends BibEntity {
     
-    // Maybe a Map<String, String>, mapping identifier type to value
-    private Map<String, String> identifiers;
-    
-    public Instance() {
-        identifiers = new HashMap<String, String>();
+    private enum Type {
+        INSTANCE(Namespace.BIBFRAME, "Instance");
+        
+        private String uri;
+        /**
+         * Constructor
+         */
+        Type(Namespace namespace, String name) {
+            this.uri = namespace.uri() + name;
+        }
+        
+        public String uri() {
+            return uri;
+        }
     }
     
-    public void setIdentifier(String type, String value) {
+    private static Type SUPERTYPE = Type.INSTANCE;
 
-        
+    @Override
+    public String getSuperType() {
+        return SUPERTYPE.uri;
+    }
+
+
+    
+//    public void setIdentifier(String type, String value) {
+//      
 //        try {
 //            Identifier identifier = 
 //                    (Identifier) Entity.instance(Identifier.class);
@@ -30,9 +46,7 @@ public class Instance extends BaseEntity {
 //            throw new EntityInstantiationException(
 //                    e.getMessage(), e.getCause());
 //        }
-    }
-    
-    
-    
+//    }
+
 
 }

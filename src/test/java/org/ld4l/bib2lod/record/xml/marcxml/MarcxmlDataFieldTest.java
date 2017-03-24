@@ -16,9 +16,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     private static final String NO_VALUE = 
             "<datafield tag='245' ind1='0' ind2='0'></datafield>";
     
-    private static final String TEXT_VALUE = 
-            "<datafield tag='245' ind1='0' ind2='0'>text</datafield>";
-    
     private static final String NON_SUBFIELD_CHILD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
                  "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
@@ -47,8 +44,8 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
 
     private static final String INVALID_SUBFIELD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield>Clinical cardiopulmonary physiology.</subfield>" +
-                "</datafield>";
+                "<subfield>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
     
     private static final String VALID_DATAFIELD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
@@ -64,12 +61,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     public void noValue_Invalid() throws Exception {
         MarcxmlDataField dataField = buildDataFieldFromString(NO_VALUE);
         Assert.assertFalse(dataField.isValid());
-    }
-    
-    @Test
-    public void hasTextValue_Invalid() throws Exception {
-        MarcxmlDataField dataField = buildDataFieldFromString(TEXT_VALUE);
-        Assert.assertFalse(dataField.isValid()); 
     }
     
     @Test

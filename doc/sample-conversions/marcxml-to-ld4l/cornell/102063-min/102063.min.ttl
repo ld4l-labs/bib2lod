@@ -59,7 +59,7 @@ cornell:inst1 a bf:Instance ;
     
     bf:issuance [
         a bf:Issuance ;
-        # Should not code MARC into the RDF. Possibly can make an exception for AdminMetadata, but not other resources (IMO).
+        # Should not code MARC into the RDF. Possibly can make an exception for AdminMetadata, but not other resources.
         bf:code "m" 
     ] ;
     

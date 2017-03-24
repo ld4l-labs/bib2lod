@@ -6,12 +6,14 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
@@ -40,6 +42,12 @@ public class BaseConverterTest extends AbstractTestClass {
         @Override
         protected Class<?> getParserClass() {
             return MockXmlParser.class;
+        }
+
+        @Override
+        protected List<Entity> buildEntities(Record record)
+                throws EntityBuilderException {
+            throw new RuntimeException("Method not yet implemented.");
         }
     }
     
@@ -77,11 +85,14 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }
     
-    // TODO Or implement EntityBuilder?
     public static class MockEntityBuilder extends BaseEntityBuilder {
 
+        public MockEntityBuilder(Record record) {
+            super(record);
+        }
+
         @Override
-        public Entity build(Record record) throws EntityBuilderException {
+        public Entity build() throws EntityBuilderException {
             return null;            
         }
     }

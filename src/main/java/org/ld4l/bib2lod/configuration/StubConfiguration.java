@@ -21,14 +21,14 @@ public class StubConfiguration extends BaseConfiguration {
             "http://data.ld4l.org/cornell/";
     private static final String INPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileInputService";
     private static final String INPUT_SOURCE = 
-            "/Users/rjy7/projects/bib2lod/doc/sample-conversions/marcxml-to-ld4l/102063.min.xml";
+            "/Users/rjy7/projects/bib2lod/doc/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml";
     private static final String INPUT_FILE_EXTENSION = "xml";
     private static final String INPUT_FORMAT = "MARCXML";
     private static final String OUTPUT_DESTINATION = 
             "/Users/rjy7/projects/bib2lod/output/";
     private static final String OUTPUT_FORMAT = "N-TRIPLE";
-    private static final String[] URI_GETTERS = {
-        "org.ld4l.bib2lod.uris.RandomUriGetter"};
+    private static final String[] URI_SERVICES = {
+        "org.ld4l.bib2lod.uris.RandomUriMinter"};
     private static final String OUTPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileOutputService";
     private static final String CLEANER = 
             "org.ld4l.bib2lod.cleaning.MarcxmlCleaner";
@@ -55,7 +55,7 @@ public class StubConfiguration extends BaseConfiguration {
                         SecurityException  {
    
 
-        setUpUriGetters(LOCAL_NAMESPACE, URI_GETTERS);
+        setUpUriServices(LOCAL_NAMESPACE, URI_SERVICES);
 
         this.inputServiceClass = INPUT_SERVICE_CLASS;
         this.inputSource = INPUT_SOURCE;

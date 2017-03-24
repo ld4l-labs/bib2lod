@@ -10,8 +10,8 @@ import org.ld4l.bib2lod.conversion.BaseConverter;
  * Abstract converter that takes XML input.
  */
 // TODO Figure out if this class is needed.
-public abstract class XmlToRdf extends BaseConverter {
+public abstract class XmlConverter extends BaseConverter {
     
     private static final Logger LOGGER = LogManager.getLogger();
-
+    
 }

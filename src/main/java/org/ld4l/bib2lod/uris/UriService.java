@@ -11,9 +11,7 @@ import org.ld4l.bib2lod.entities.Entity;
 /**
  * Provides URIs for org.ld4l.bib2lod.entities built by the converter.
  */
-// TODO Change to UriGetter, UriGenerator etc - since doesn't always mint a 
-// new one
-public interface UriGetter {
+public interface UriService {
     
     /**
      * Signals that the content of a configuration value is invalid.  Differs
@@ -31,27 +29,26 @@ public interface UriGetter {
     }
     
     /**
-     * Stores the list of UriGetters that will be used to mint URIs for 
+     * Stores the list of UriServices that will be used to provide URIs for 
      * Resources.
      */
-    static List<UriGetter> uriGetters = new ArrayList<UriGetter>();
+    static List<UriService> uriServices = new ArrayList<UriService>();
     
     /**
      * Factory method
-     * 
-     * @param uriGetterClass - the class name of the UriGetter to instantiate
+     * @param uriServiceClass - the class name of the UriService to instantiate
      */
-    static UriGetter instance(String uriGetterClass, Configuration configuration) {
+    static UriService instance(String uriServiceClass, Configuration configuration) {
 
-        return Bib2LodObjectFactory.instance().createUriGetter(uriGetterClass,
+        return Bib2LodObjectFactory.instance().createUriService(uriServiceClass,
                 configuration);
     }
     
-    public static void createUriGetters(String[] uriGetterClasses,
+    public static void createUriServices(String[] uriServiceClasses,
             Configuration configuration) {
 
-        for (String uriGetterClass : uriGetterClasses) {
-            uriGetters.add(instance(uriGetterClass, configuration));
+        for (String uriServiceClass : uriServiceClasses) {
+            uriServices.add(instance(uriServiceClass, configuration));
         }
     }
     
@@ -59,13 +56,12 @@ public interface UriGetter {
      * Returns a URI for an Entity
      * @return - a URI String 
      */
-    // TODO Since we are using the Entity to get the URI, we might just as well 
-    // do this when d building the Entity rather than the Resource/Model.
     public static String getUri(Entity entity) {
         
         String uri = null;
         
-        Iterator<UriGetter> it = uriGetters.iterator();
+        // Use an iterator so each service can call the next service if needed.
+        Iterator<UriService> it = uriServices.iterator();
         
         if (it.hasNext()) {
             uri = it.next().getUri(entity, it);
@@ -82,6 +78,6 @@ public interface UriGetter {
      * Iterates through the specified URIs to return a URI for an Entity
      * @return - a URI String 
      */
-    String getUri(Entity entity, Iterator<UriGetter> it);
+    String getUri(Entity entity, Iterator<UriService> it);
   
 }

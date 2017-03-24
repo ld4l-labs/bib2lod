@@ -8,22 +8,17 @@ import org.ld4l.bib2lod.entities.Entity;
 /**
  * An abstract implementation.
  */
-public abstract class BaseUriGetter implements UriGetter {
+public abstract class BaseUriService implements UriService {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    // Remains to be seen which of these should be member variables. Everything
-    // can be retrieved from the configuration, but it may be more convenient
-    // to store them directly.
-    protected Configuration configuration;
     protected String localNamespace;
 
     /**
      * Constructor.
      * @param configuration
      */
-    public BaseUriGetter(Configuration configuration) {
-        this.configuration = configuration;
+    public BaseUriService(Configuration configuration) {
         this.localNamespace = configuration.getLocalNamespace();
     }
 

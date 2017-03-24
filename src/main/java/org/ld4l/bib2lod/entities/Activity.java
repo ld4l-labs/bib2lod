@@ -9,23 +9,14 @@ import org.ld4l.bib2lod.Namespace;
 /**
  *
  */
-public class Work extends BibEntity {
+public class Activity extends BaseEntity {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
     
-    /**
-     * Define the Work classes.
-     */
-    // TODO This is a place where I'd like to use the ontology files to get 
-    // back all the Identifier classes (i.e., the superclass and subclasses).
-    // TODO Right now this is only used internally. It's not useful for
-    // external classes to refer to this, because then they have to refer to
-    // Instance.Type, Work.Type, etc.
-    // OR: could put these all in the same package
     private static enum Type {
 
         // TODO Add the others
-        WORK(Namespace.BIBFRAME, "Identifier");                    
+        ACTIVITY(Namespace.LD4L, "Activity");
 
         private static final Logger LOGGER = LogManager.getLogger(); 
         
@@ -40,14 +31,16 @@ public class Work extends BibEntity {
             return uri;
         }
     }
+    
+    private static Type SUPERTYPE = Type.ACTIVITY;
 
-    private static Type SUPERTYPE = Type.WORK;
-
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.entities.Entity#getSuperType()
+     */
     @Override
     public String getSuperType() {
         return SUPERTYPE.uri;
     }
-    
-
 
 }

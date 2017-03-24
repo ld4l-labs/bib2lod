@@ -13,7 +13,7 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.uris.UriGetter;
+import org.ld4l.bib2lod.uris.UriService;
 
 /**
  * Factory class to instantiate Bib2Lod objects.
@@ -69,16 +69,16 @@ public abstract class Bib2LodObjectFactory {
     public abstract Cleaner createCleaner();
 
     /**
-     * @param className - the class name of the UriGetter to instantiate 
+     * @param className - the class name of the UriService to instantiate 
      * @param configuration - the program Configuration
      */
     // TODO - since we have the class name - move this to the interface instance() method
-    public UriGetter createUriGetter(String className, 
+    public UriService createUriService(String className, 
             Configuration configuration) {
         
         try {
-            Class<?> minterClass = Class.forName(className);
-            return (UriGetter) minterClass                            
+            Class<?> uriServiceClass = Class.forName(className);
+            return (UriService) uriServiceClass                            
                     .getConstructor(Configuration.class)
                     .newInstance(configuration);
         } catch (ClassNotFoundException | InstantiationException

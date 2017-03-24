@@ -21,25 +21,37 @@ public abstract class BaseEntity implements Entity {
     // Identifier.Type)? But then there needs to be one enum Type for all types
     // of resources. Seems messy, and nicer for each type of resource to 
     // define its own types.
-    private List<String> types; 
+    protected List<String> types; 
+   
     
-    // TODO Not sure whether to create the uri here or when building the model. 
-    // Try the latter first.
-    // private String uri;
-    
+    /**
+     * Constructor
+     */
     public BaseEntity() {
         types = new ArrayList<String>();
+        String superType = getSuperType();
+        if (superType != null) {
+            types.add(superType);
+        }
     }
-       
+    
+    @Override
+    public void addType(String type) {
+        types.add(type);
+    }
+     
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.entities.Entity#getTypes()
+     */
     @Override
     public List<String> getTypes() {
         return types;
     }
-  
+   
     public void setTypes(Map<Namespace, String> types) {
         for (Map.Entry<Namespace, String> entry : types.entrySet()) {
-            this.types.add(entry.getKey().uri() + entry.getValue());
-            
+            this.types.add(entry.getKey().uri() + entry.getValue());           
         }
     }
 

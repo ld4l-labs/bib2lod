@@ -6,12 +6,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.Namespace;
 
-public class Identifier extends BaseEntity {  
-
+/**
+ *
+ */
+public class TitleElement extends BaseEntity {
+    
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     /**
-     * Define the Identifier types.
+     * Define the TitleElement classes.
      */
     // TODO This is a place where I'd like to use the ontology files to get 
     // back all the Identifier classes (i.e., the superclass and subclasses).
@@ -19,42 +22,36 @@ public class Identifier extends BaseEntity {
     // external classes to refer to this, because then they have to refer to
     // Instance.Type, Work.Type, etc.
     // OR: could put these all in the same package
-    public static enum Type {
+    private static enum Type {
 
-        IDENTIFIER(Namespace.BIBFRAME, "Identifier"),                     
-        LOCAL(Namespace.BIBFRAME, "Local");
+        TITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
+        NON_SORT_ELEMENT(Namespace.LD4L, "TitleElement"),
+        MAIN_TITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
+        SUBTITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
+        PART_NUMBER_ELEMENT(Namespace.LD4L, "TitleElement"),
+        PART_NAME_ELEMENT(Namespace.LD4L, "TitleElement");
+
+        private static final Logger LOGGER = LogManager.getLogger(); 
         
         private final String uri;
         
         Type(Namespace namespace, String localName) {
             this.uri = namespace.uri() + localName;
+
         }
  
         public String uri() {
             return uri;
         }
     }
-    
-    private static Type SUPERTYPE = Type.IDENTIFIER;
-    
-    private String value;
 
+    private static Type SUPERTYPE = Type.TITLE_ELEMENT;
 
-    @Override
+    
     public String getSuperType() {
         return SUPERTYPE.uri;
     }
-    
-    public void addType(Type type) {
-        super.addType(type.uri);
-    }
-    
-    public String getValue() {
-        return value;
-    }
-    
-    public void setValue(String value) {
-        this.value = value;
-    }
+
+
 
 }

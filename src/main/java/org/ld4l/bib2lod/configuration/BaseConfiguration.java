@@ -5,9 +5,11 @@ package org.ld4l.bib2lod.configuration;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.jena.iri.IRIException;
+import org.apache.jena.riot.system.IRIResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.uris.UriGetter;
+import org.ld4l.bib2lod.uris.UriService;
 
 /**
  * An abstract implementation providing shared methods.
@@ -54,6 +56,8 @@ public abstract class BaseConfiguration implements Configuration {
      * @see org.ld4l.bib2lod.configuration.Configuration#getLocalNamespace()
      */
     @Override
+    // TODO Probably don't need to store local namespace - can be stored in
+    // the UriServices
     public String getLocalNamespace() {
         return localNamespace;
     }
@@ -126,21 +130,21 @@ public abstract class BaseConfiguration implements Configuration {
     }
     
     /**
-     * Sets local namespace and builds UriGetters to be stored as static
-     * variable of UriGetter. These functions are combined into one method
+     * Sets local namespace and builds UriServices to be stored as static
+     * variable of UriService. These functions are combined into one method
      * because the latter depends on having a local namespace in the 
      * configuration.
      * @param localNamespace
-     * @param uriGetters - array of UriGetter classes to instantiate
+     * @param uriServices - array of UriService classes to instantiate
      * @throws ConfigurationException 
      */
-    protected void setUpUriGetters(String localNamespace, String[] uriGetters) 
+    protected void setUpUriServices(String localNamespace, String[] uriServices) 
             throws ConfigurationException {
         
         setLocalNamespace(localNamespace);
         
         try {
-            createUriGetters(uriGetters);
+            createUriServices(uriServices);
         } catch (IllegalArgumentException
                 | SecurityException e) {
             throw new ConfigurationException(e);
@@ -167,10 +171,14 @@ public abstract class BaseConfiguration implements Configuration {
      * @return true if valid, else throws an exception
      * @throws ConfigurationException
      */
+    // TODO Move into UriService
     protected static boolean isValidLocalNamespace(String localNamespace) {
     
-        // Throws an error if the localNamespace is malformed.
-        org.apache.jena.riot.system.IRIResolver.validateIRI(localNamespace);
+        try {
+            IRIResolver.validateIRI(localNamespace);
+        } catch (IRIException e) {
+            throw new ConfigurationException(e);
+        }
     
         // Require the final slash, otherwise it could be a web page address
         if (!localNamespace.endsWith("/")) {
@@ -182,13 +190,13 @@ public abstract class BaseConfiguration implements Configuration {
     }
 
     /**
-     * Sets list of UriGetter instances.
-     * @param uriGetter - array of names of UriGetter classes
+     * Sets list of UriService instances.
+     * @param uriService - array of names of UriService classes
      * @return void
      */
-    private void createUriGetters(String[] uriGetters)  {
+    private void createUriServices(String[] uriServices)  {
         
-       UriGetter.createUriGetters(uriGetters, this);
+       UriService.createUriServices(uriServices, this);
     }
     
     /**

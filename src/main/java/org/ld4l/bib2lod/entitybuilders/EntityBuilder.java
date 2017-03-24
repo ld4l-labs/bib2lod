@@ -2,15 +2,15 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
+import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.record.Record;
 
 /**
  * Builds an Entity from a Record
  */
 public interface EntityBuilder {
     
-    public static class EntityBuilderException extends Exception {
+    public static class EntityBuilderException extends RecordConversionException {
         private static final long serialVersionUID = 1L;
 
         public EntityBuilderException(String message, Throwable cause) {
@@ -27,26 +27,9 @@ public interface EntityBuilder {
     }  
     
     /**
-     * Factory method
-     * @param type - the type of EntityBuilder to instantiate (InstanceBuilder, 
-     * WorkBuilder, etc.)
+     * Builds an Entity.
      * @throws EntityBuilderException 
      */
-    static EntityBuilder instance(Class<?> builderClass) 
-            throws EntityBuilderException {
-        try {
-            return (EntityBuilder) builderClass                            
-                    .newInstance();
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | SecurityException e) {
-            throw new EntityBuilderException(e);
-        }                
-    }
-    
-    /**
-     * Builds an entity from a Record.
-     * @throws EntityBuilderException 
-     */
-    public Entity build(Record record) throws EntityBuilderException;
+    public Entity build() throws EntityBuilderException;
 
 }

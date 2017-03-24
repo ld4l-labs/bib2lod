@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.entities;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -44,10 +45,39 @@ public interface Entity {
             throw new EntityInstantiationException(e);
         }     
     }
+    
+    /**
+     * Factory method
+     * @param type - the type of Entity to instantiate
+     * @param relatedEntity - the Entity to which this Entity is related when it
+     * is built
+     */
+    static Entity instance(Class<? extends Entity> type, Entity relatedEntity) {
+        try {
+            return (Entity) type
+                    .getConstructor(Entity.class)
+                    .newInstance(relatedEntity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException | 
+                NoSuchMethodException e) {
+            throw new EntityInstantiationException(e);
+        }     
+    }
+    
+    
+    public void addType(String type);
 
     /**
-     * Returns a list of the types of this Entity.
+     * Returns a list of the Entity's types.
      */
-    List<String> getTypes();
+    public List<String> getTypes();
+    
+    /**
+     * Return the super type - the type that all entities of this type belong 
+     * to.
+     */
+    public String getSuperType();
+
 
 }

@@ -9,12 +9,12 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
- * A UriGetter that constructs a URI from the local namespace and a randomly-
+ * A UriService that constructs a URI from the local namespace and a randomly-
  * generated and hashed local name. An alpha character is prefixed to support
  * serializations (e.g., RDF/XML) and APIs (e.g., Jena) that do not allow or
  * understand local names beginning with non-alphabetic characters.
  */
-public class RandomUriGetter extends BaseUriGetter {
+public class RandomUriMinter extends BaseUriService {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -24,12 +24,12 @@ public class RandomUriGetter extends BaseUriGetter {
      * Constructor.
      * @param configuration - the program Configuration
      */
-    public RandomUriGetter(Configuration configuration) {
+    public RandomUriMinter(Configuration configuration) {
         super(configuration);
     }
     
     @Override
-    public String getUri(Entity entity, Iterator<UriGetter> it) {
+    public String getUri(Entity entity, Iterator<UriService> it) {
         String localName = getLocalName(entity);
         return buildUri(localName);
     }
@@ -46,7 +46,6 @@ public class RandomUriGetter extends BaseUriGetter {
         // RDF/XML; see http://www.w3.org/TR/xml11/#NT-NameStartChar, so 
         // prefix a character to the hashed UUID.
         String localName = LOCAL_NAME_ALPHA_PREFIX + hash(uuid);
-        LOGGER.debug("Local name = " + localName);
         return localName;   
     }
 

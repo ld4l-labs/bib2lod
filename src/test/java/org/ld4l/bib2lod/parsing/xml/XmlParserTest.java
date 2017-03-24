@@ -16,7 +16,6 @@ import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.xml.BaseXmlRecord;
 import org.ld4l.bib2lod.record.xml.BaseXmlRecordElement;
 import org.ld4l.bib2lod.record.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;

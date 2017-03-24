@@ -8,8 +8,6 @@ package org.ld4l.bib2lod.record;
  */
 public interface Record {
     
-    // TODO Should this be RecordInstantiationException? See if it's used for
-    // anything other than instantiation.
     public static class RecordException extends Exception {
         private static final long serialVersionUID = 1L;
 
@@ -26,21 +24,21 @@ public interface Record {
         }
     }
     
-    //  public static class RecordInstantiationException extends RuntimeException {
-    //  private static final long serialVersionUID = 1L;
-    //
-    //  public RecordInstantiationException(String message, Throwable cause) {
-    //      super(message, cause);
-    //  }
-    //
-    //  public RecordInstantiationException(String message) {
-    //      super(message);
-    //  }
-    //
-    //  public RecordInstantiationException(Throwable cause) {
-    //      super(cause);
-    //  }
-    //}
+      public static class RecordInstantiationException extends RecordException {
+          private static final long serialVersionUID = 1L;
+        
+          public RecordInstantiationException(String message, Throwable cause) {
+              super(message, cause);
+          }
+        
+          public RecordInstantiationException(String message) {
+              super(message);
+          }
+        
+          public RecordInstantiationException(Throwable cause) {
+              super(cause);
+          }
+    }
     
     /**
      * Returns true iff the record is valid.

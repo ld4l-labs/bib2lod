@@ -13,7 +13,7 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.uris.UriGetter;
+import org.ld4l.bib2lod.uris.UriService;
 
 /**
  * When created, sets itself as a wrapper for the default factory instance.
@@ -122,11 +122,12 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
                 : defaultFactory.createConverter();
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriGetter(org.ld4l.bib2lod.configuration.Configuration)
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.Bib2LodObjectFactory#createUriService(java.lang.String, org.ld4l.bib2lod.configuration.Configuration)
      */
     @Override
-    public UriGetter createUriGetter(String className, Configuration configuration) {
+    public UriService createUriService(String className, Configuration configuration) {
         throw new RuntimeException("Method not implemented.");
     }
     
