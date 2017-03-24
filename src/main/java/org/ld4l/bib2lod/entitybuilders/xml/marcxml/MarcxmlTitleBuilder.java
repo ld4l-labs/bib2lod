@@ -20,31 +20,27 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
 
-    private BibEntity bibEntity;
     
     /**
      * Constructor
      * @param record - the MARCXML record
-     * @param bibResource - the bib resource to which this title is related
+     * @param field - the data field in the 
+     * @param bibEntity - the bib entity (Work or Instance) of which this title 
+     * is the title
      * @throws EntityBuilderException 
      */
     public MarcxmlTitleBuilder(MarcxmlRecord record, MarcxmlField field, 
             BibEntity bibEntity) throws EntityBuilderException {
-        super(record, field);
-        this.bibEntity = bibEntity;
+        super(record, field, bibEntity);
     }
 
     @Override
     public Entity build() throws EntityBuilderException {
-        Entity title = Entity.instance(Title.class, bibEntity);
+        Entity title = Entity.instance(Title.class, relatedEntity);
         
         List<MarcxmlDataField> dataFields = record.getDataFields();
         
         return title;
     }
     
-    public BibEntity getBibEntity() {
-        return bibEntity;
-    }
-
 }

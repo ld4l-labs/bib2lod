@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.resourcebuilders;
 
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
@@ -36,13 +37,14 @@ public interface ResourceBuilder {
     /**
      * Factory method
      * @param type - the Entity for which to instantiate a ResourceBuilder
+     * @param model - the Model to build the Resource in
      * @throws ResourceBuilderException 
      */
-    static ResourceBuilder instance(Entity entity) 
+    static InstanceResourceBuilder instance(Entity entity, Model model) 
             throws ResourceBuilderException {
 
         if (entity instanceof Instance) {
-            return new InstanceBuilder((Instance) entity);
+            return new InstanceResourceBuilder((Instance) entity, model);
         }
         // etc
         throw new ResourceBuilderException(

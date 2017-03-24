@@ -29,5 +29,9 @@ public abstract class BibEntity extends BaseEntity {
     public void addIdentifier(Identifier identifier) {
         identifiers.add(identifier);
     }
+    
+    public List<Identifier> getIdentifiers() {
+        return identifiers;
+    }
 
 }

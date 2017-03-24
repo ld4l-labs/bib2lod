@@ -18,11 +18,11 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
      */
     public MarcxmlInstanceBuilder(MarcxmlRecord record) 
             throws EntityBuilderException {
-        super(record, null);
+        super(record, null, null);
     }
 
     /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build(org.ld4l.bib2lod.record.Record)
+     * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build()
      */
     @Override
     // TODO May want to instead return a list of entities - i.e., all those 

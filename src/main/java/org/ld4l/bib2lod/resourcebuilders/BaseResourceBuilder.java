@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.resourcebuilders;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
@@ -21,15 +22,17 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
     
     protected Entity entity;
     protected Resource resource;
+    protected Model model;
 
     /**
      * Constructor
      * @param configuration 
      * @param entity 
+     * @param model 
      */
-    public BaseResourceBuilder(Entity entity) {
+    public BaseResourceBuilder(Entity entity, Model model) {
         this.entity = entity;
-
+        this.model = model;
     }
 
     /*
@@ -38,7 +41,6 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
      */
     @Override
     public Resource build() {
-        Model model = ModelFactory.createDefaultModel();
         this.resource = model.createResource(UriService.getUri(entity));
         addTypeAssertions();
         return resource;
@@ -49,32 +51,45 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
      */
     private void addTypeAssertions() {
         for (String uri : entity.getTypes()) {
-            // TODO If we read ontologies into an OntModel, we can get the
+            // TODO If we read the ontologies into an OntModel, we can get the
             // property from the model using Model.createProperty(type);
-            resource.addProperty(RDF.type, ResourceFactory.createResource(uri));
+            addObjectPropertyAssertion(RDF.type, uri);
         }
     }
-
     
     // ----------------------------------------------------------------------
     // Utilities
     // ----------------------------------------------------------------------
     
+    // TODO All of this would be better if we read the ontologies into an
+    // OntModel and get the properties and resources from there.
     
-   
-// TODO Wait to define these until we see in the subclasses what we need.
-//    protected Resource createResource(String uri, Model model) {
-//        return model.createResource(uri);
-//    }
-//    
-//    protected Property createProperty(String uri, Model model) {
-//        return model.createProperty(uri);
-//    }
-//    
-//    protected void addTypes(Resource resource, Entity entity) {
-//        for (String type : entity.getTypes()) {
-//            resource.addProperty(RDF.type, model.createProperty(type));
-//        }
-//    }
-
+    /**
+     * Adds an object property assertion to this Resource
+     */
+    protected void addObjectPropertyAssertion(String propertyUri, String objectUri) {
+        addObjectPropertyAssertion(resource, ResourceFactory.createProperty(propertyUri), objectUri);
+    }
+    
+    /**
+     * Adds an object property assertion to this Resource
+     */
+    protected void addObjectPropertyAssertion(Property property, String objectUri) {
+        addObjectPropertyAssertion(resource, property, objectUri);
+    }
+    
+    /**
+     * Adds an object property assertion to the specified Resource
+     */
+    protected static void addObjectPropertyAssertion(Resource resource, String propertyUri, String objectUri) {
+        addObjectPropertyAssertion(resource, ResourceFactory.createProperty(propertyUri), objectUri);
+    }
+    
+    /**
+     * Adds an object property assertion to the specified Resource
+     */    
+    protected static void addObjectPropertyAssertion(Resource resource, Property property, String objectUri) {
+        resource.addProperty(property, ResourceFactory.createResource(objectUri));
+    }
+    
 }

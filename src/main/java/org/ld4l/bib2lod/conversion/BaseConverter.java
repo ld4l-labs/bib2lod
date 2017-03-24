@@ -105,14 +105,14 @@ public abstract class BaseConverter implements Converter {
         for (Entity entity : entities) {
             // get a Jena Model/Resource/StmtIterator/List<Statement> for 
             // the entity         
-            model.add(buildResource(entity).getModel());
+            buildResource(entity, model);
 
         }           
         return model;
     }
     
     /**
-     * Builds the set of Entity objects from which the Models will be built.
+     * Builds the set of Entity objects from which the Resources will be built.
      * @throws EntityBuilderException 
      */
     protected abstract List<Entity> buildEntities(Record record) 
@@ -120,13 +120,17 @@ public abstract class BaseConverter implements Converter {
 
     
     /**
-     * Builds a Resource from an Entity.
+     * Builds a Resource from an Entity and adds it to the Model. The Model
+     * must be passed to the ResourceBuilder so that the new Resource gets
+     * added to this Model, rather than the ResourceBuilder creating a new
+     * Model for the new Resource.
      * @throws ResourceBuilderException 
      */
-    private Resource buildResource(Entity entity) throws ResourceBuilderException {
+    private void buildResource(Entity entity, Model model) 
+            throws ResourceBuilderException {
         
-        ResourceBuilder builder = ResourceBuilder.instance(entity);                
-        return builder.build();
+        ResourceBuilder builder = ResourceBuilder.instance(entity, model);                
+        builder.build();
     }
     
 }

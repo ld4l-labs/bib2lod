@@ -2,13 +2,20 @@
 
 package org.ld4l.bib2lod.resourcebuilders;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.Namespace;
+import org.ld4l.bib2lod.entities.BibEntity;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Identifier;
 
 /**
- *
+ * Builds a Resource representing a bibliographic entity (Work, Instance, or 
+ * Item).
  */
 public abstract class BibResourceBuilder extends BaseResourceBuilder {
     
@@ -17,8 +24,8 @@ public abstract class BibResourceBuilder extends BaseResourceBuilder {
     /**
      * Constructor
      */
-    public BibResourceBuilder(Entity entity) {
-        super(entity);
+    public BibResourceBuilder(Entity entity, Model model) {
+        super(entity, model);
     }
 
     /*
@@ -27,7 +34,22 @@ public abstract class BibResourceBuilder extends BaseResourceBuilder {
      */
     @Override
     public Resource build() {
-        return super.build();
+        super.build();    
+        addIdentifiers();
+        return resource;
+    }
+    
+    private void addIdentifiers() {
+        BibEntity bibEntity = (BibEntity) entity;
+        
+        Property identifiedBy = ResourceFactory.createProperty(
+                Namespace.BIBFRAME.uri() + "identifiedBy");
+        
+        for (Identifier identifier : bibEntity.getIdentifiers()) {         
+            IdentifierResourceBuilder builder = new IdentifierResourceBuilder(identifier, model);
+            Resource identifierResource = builder.build();
+            resource.addProperty(identifiedBy, identifierResource);
+        }
     }
 
 }
