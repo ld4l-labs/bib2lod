@@ -1,18 +1,19 @@
 {
     "input": {
+        "service": "org.ld4l.bib2lod.io.FileInputService",
         "source": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
         "format": "MARCXML",
         "extension": "xml"
     }, 
     "output": {
+        "service": "org.ld4l.bib2lod.io.FileOutputService",
         "destination": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
         "format": "N-TRIPLE"
     },
     "local_namespace": "http://data.ld4l.org/cornell/",
-    "uri_getters": [ 
+    "uri_services": [ 
         "org.ld4l.bib2lod.uri.RandomUriMinter" 
     ],
-    "writer": "org.ld4l.bib2lod.io.write.SimpleRdfWriter",
-    "converter": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlToLd4lRdf",
+    "converter": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter",
     "reconcilers": []
 }                                                                                             
