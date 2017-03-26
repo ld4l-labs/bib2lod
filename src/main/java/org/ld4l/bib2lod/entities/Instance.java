@@ -9,27 +9,27 @@ import org.ld4l.bib2lod.Namespace;
  */
 public class Instance extends BibEntity {
     
-    private enum Type {
+    private enum InstanceType implements Type {
         INSTANCE(Namespace.BIBFRAME, "Instance");
         
         private String uri;
+        
         /**
          * Constructor
          */
-        Type(Namespace namespace, String name) {
+        InstanceType(Namespace namespace, String name) {
             this.uri = namespace.uri() + name;
         }
         
+        @Override
         public String uri() {
             return uri;
         }
     }
-    
-    private static Type SUPERTYPE = Type.INSTANCE;
 
     @Override
-    public String getSuperType() {
-        return SUPERTYPE.uri;
+    public Type getSuperType() {
+        return InstanceType.INSTANCE;
     }
 
 

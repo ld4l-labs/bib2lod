@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.BibEntity;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Title;
+import org.ld4l.bib2lod.entities.TitleElement;
+import org.ld4l.bib2lod.entities.TitleElement.TitleElementType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
@@ -18,29 +21,86 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
  */
 public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 
-    private static final Logger LOGGER = LogManager.getLogger(); 
-
+    private static final Logger LOGGER = LogManager.getLogger();
     
+    private List<MarcxmlDataField> dataFields;
+   
     /**
      * Constructor
      * @param record - the MARCXML record
-     * @param field - the data field in the 
-     * @param bibEntity - the bib entity (Work or Instance) of which this title 
-     * is the title
+     * @param bibEntity - the bib entity (Work or Instance) of which the title
+     * being built is the title
      * @throws EntityBuilderException 
      */
-    public MarcxmlTitleBuilder(MarcxmlRecord record, MarcxmlField field, 
+    public MarcxmlTitleBuilder(MarcxmlRecord record, 
             BibEntity bibEntity) throws EntityBuilderException {
-        super(record, field, bibEntity);
+        super(record, null, bibEntity);
+        
+//      for (MarcxmlDataField field : record.getDataFields()) {
+//      String name = field.getName();
+//      if ( (name.equals("130") || name.equals("240") || name.equals("245") ) && !titleDone) {
+//          // Need whole Record to simultaneously convert 130, 240, and 245
+//          new MarcxmlTitleBuilder(record, field, instance) 
+//                  .build();
+//      }
+//  }
     }
 
     @Override
-    public Entity build() throws EntityBuilderException {
-        Entity title = Entity.instance(Title.class, relatedEntity);
+    public List<Entity> build() throws EntityBuilderException {
         
-        List<MarcxmlDataField> dataFields = record.getDataFields();
+        List<Entity> entities = new ArrayList<Entity>();
         
-        return title;
+        Title title = (Title) Entity.instance(Title.class);
+        String titleLabel = null;
+        
+        MarcxmlDataField field245 = MarcxmlDataField.get(dataFields, "245");
+        
+        if (field245 != null) {
+            // Title label always comes from 245. If 130 and/or 240 are present,
+            // the $a fields are the same.
+            // 245$a stores full title
+            titleLabel = field245.getSubfield("a").getTextValue();
+        }
+        
+        // Could there be a 130 or 240 without 245? Then need to look for
+        // $a in those fields if no 245.
+           
+        // Return an empty list if the title has no text value.
+        if (titleLabel != null) {
+            title.setRdfsLabel(titleLabel);
+            
+            // Build TitleElements
+            List<TitleElement> titleElements = 
+                    buildTitleElements(field245, titleLabel);
+            
+            // TODO Add values from 130 or 240
+            // NB If 130 is present, 240 is ignored
+        
+            title.addTitleElements(titleElements);
+            entities.add(title);
+            entities.addAll(titleElements);
+        }
+
+        return entities;
     }
     
+    private List<TitleElement> buildTitleElements(
+            MarcxmlField field, String titleLabel) {
+         
+        // TODO: get title  parts from subfields
+        // Send each substring to the appropriate method.
+        List<TitleElement> titleElements = new ArrayList<TitleElement>();
+
+        // MainTitleElement label = titleLabel minus parts.
+        // Temporarily, build only the MainTitleElement and assign it same label
+        // as title.
+        titleElements.add(new TitleElement(
+                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
+        
+        // TODO set ranks
+        
+        return titleElements;
+    }
+
 }

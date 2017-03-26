@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
+import java.util.List;
+
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
 
@@ -30,6 +32,6 @@ public interface EntityBuilder {
      * Builds an Entity.
      * @throws EntityBuilderException 
      */
-    public Entity build() throws EntityBuilderException;
+    public List<Entity> build() throws EntityBuilderException;
 
 }

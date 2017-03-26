@@ -2,8 +2,13 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Instance;
+import org.ld4l.bib2lod.entities.Item;
+import org.ld4l.bib2lod.entities.Work;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
@@ -11,6 +16,10 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
  * Builds an Instance from a Record.
  */
 public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
+ 
+    private Instance instance;
+    private Work work;
+    private Item item;
 
     /**
      * Constructor
@@ -19,31 +28,80 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     public MarcxmlInstanceBuilder(MarcxmlRecord record) 
             throws EntityBuilderException {
         super(record, null, null);
+        this.instance = new Instance();
     }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build()
      */
     @Override
-    // TODO May want to instead return a list of entities - i.e., all those 
-    // emanating from the instance. Depends on how we handle this in the converter.
-    public Entity build() throws EntityBuilderException {
-        
-        Instance instance = new Instance();
+    public List<Entity> build() throws EntityBuilderException {
 
-        for (MarcxmlControlField field : record.getControlFields()) {
-            String controlNumber = field.getControlNumber();
-            if (controlNumber.equals("001")) {
-                new MarcxmlIdentifierBuilder(field, instance)
-                        .build();
-            }
-            // TODO Assumes this is the only control field that produces an
-            // Identifier. Is that correct?
-            break;
-        }
+        List<Entity> entities = new ArrayList<Entity>();
+        convertLeader();
         
-        return instance;
+        // TODO Need to build work first, since some values affect the work
+        // as well as or instead of the instance. E.g., language value in 
+        // control field 008.
+        // Build the work, assign to this.work
+        // Same for item
+        
+        entities.addAll(convertControlFields());
+        entities.addAll(convertDataFields());         
+        entities.add(instance);
+        return entities;
     }
+    
+    private void convertLeader() {
+        // TODO
+    }
+    
+    /**
+     * Convert this Instance's controlfields
+     * @throws EntityBuilderException
+     */
+    private List<Entity> convertControlFields() throws EntityBuilderException {
+        
+        List<Entity> entities = new ArrayList<Entity>();
+        
+        MarcxmlControlField controlField001 = record.getControlField("001");
+        
+        if (controlField001 != null) {
+            entities.addAll(new MarcxmlIdentifierBuilder(controlField001, instance)
+                    .build());    
+            
+        }
+   
+        // TODO Other control fields. Some affect work as well as instance
+        // (e.g., language value in 008)
+        
+        return entities;
+    }
+    
+    /**
+     * Convert this Instance's datafields
+     * @return
+     * @throws EntityBuilderException
+     */
+    private List<Entity> convertDataFields() throws EntityBuilderException {
+        
+        List<Entity> entities = new ArrayList<Entity>();
+        
+        //entities.addAll(convertTitleFields());
+
+        return entities;
+    }
+    
+    private List<Entity> convertTitleFields() {
+        
+        List<Entity> entities = new ArrayList<Entity>();
+//        entities.addAll(new MarcxmlTitleBuilder(record, instance));
+
+        
+        return entities;
+    }
+        
+     
 
 
 

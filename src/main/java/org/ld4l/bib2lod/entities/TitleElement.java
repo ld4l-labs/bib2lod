@@ -18,40 +18,49 @@ public class TitleElement extends BaseEntity {
      */
     // TODO This is a place where I'd like to use the ontology files to get 
     // back all the Identifier classes (i.e., the superclass and subclasses).
-    // TODO Right now this is only used internally. It's not useful for
-    // external classes to refer to this, because then they have to refer to
-    // Instance.Type, Work.Type, etc.
-    // OR: could put these all in the same package
-    private static enum Type {
+    public static enum TitleElementType implements Type {
 
         TITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
-        NON_SORT_ELEMENT(Namespace.LD4L, "TitleElement"),
-        MAIN_TITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
-        SUBTITLE_ELEMENT(Namespace.LD4L, "TitleElement"),
-        PART_NUMBER_ELEMENT(Namespace.LD4L, "TitleElement"),
-        PART_NAME_ELEMENT(Namespace.LD4L, "TitleElement");
-
-        private static final Logger LOGGER = LogManager.getLogger(); 
+        NON_SORT_ELEMENT(Namespace.LD4L, "NonSortTitleElement"),
+        MAIN_TITLE_ELEMENT(Namespace.LD4L, "MainTitleElement"),
+        SUBTITLE_ELEMENT(Namespace.LD4L, "SubtitleElement"),
+        PART_NUMBER_ELEMENT(Namespace.LD4L, "PartNumberElement"),
+        PART_NAME_ELEMENT(Namespace.LD4L, "PartNameElement");
         
         private final String uri;
         
-        Type(Namespace namespace, String localName) {
+        TitleElementType(Namespace namespace, String localName) {
             this.uri = namespace.uri() + localName;
 
         }
- 
+        
+        @Override
         public String uri() {
             return uri;
         }
     }
 
-    private static Type SUPERTYPE = Type.TITLE_ELEMENT;
-
+    private int rank;
     
-    public String getSuperType() {
-        return SUPERTYPE.uri;
+    /**
+     * Constructor
+     */
+    public TitleElement(TitleElementType type, String label) {
+        this.types.add(type);
+        this.label = label;
     }
 
-
+    @Override
+    public Type getSuperType() {
+        return TitleElementType.TITLE_ELEMENT;
+    }
+    
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+    
+    public int getRank() {
+        return rank;
+    }
 
 }

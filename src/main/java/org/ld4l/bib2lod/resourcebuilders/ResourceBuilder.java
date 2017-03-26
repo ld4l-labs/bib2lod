@@ -6,6 +6,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Identifier;
 import org.ld4l.bib2lod.entities.Instance;
 
 /**
@@ -40,15 +41,18 @@ public interface ResourceBuilder {
      * @param model - the Model to build the Resource in
      * @throws ResourceBuilderException 
      */
-    static InstanceResourceBuilder instance(Entity entity, Model model) 
+    static ResourceBuilder instance(Entity entity, Model model) 
             throws ResourceBuilderException {
 
         if (entity instanceof Instance) {
             return new InstanceResourceBuilder((Instance) entity, model);
         }
+        if (entity instanceof Identifier) {
+            return new IdentifierResourceBuilder((Identifier) entity, model);
+        }
         // etc
         throw new ResourceBuilderException(
-                "Model builders other than InstanceResourceBuilder not implemented.");
+                Entity.class.getSimpleName() + " ResourceBuilder not implemented.");
     }
     
     /**

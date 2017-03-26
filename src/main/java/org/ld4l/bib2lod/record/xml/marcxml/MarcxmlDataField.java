@@ -66,6 +66,53 @@ public class MarcxmlDataField extends MarcxmlField {
     public List<MarcxmlSubfield> getSubfields() {
         return subfields;
     }
+    
+    /**
+     * Returns a list of subfields of the datafield with the specified code.
+     * Use with repeating subfields. Returns an empty List if no subfields 
+     * found.
+     * @param String code - the value of the code attribute
+     */
+    public List<MarcxmlSubfield> getSubfields(String code) {
+        List<MarcxmlSubfield> subfields = new ArrayList<MarcxmlSubfield>();
+        for (MarcxmlSubfield subfield : subfields) {
+            if (subfield.getCode().equals(code)) {
+                subfields.add(subfield);
+            }
+        }
+        return subfields;
+    }
+    
+    /**
+     * Returns the subfield of the datafield with the specified code. Used for 
+     * non-repeating  subfields. If sent a repeating subfield, returns the first 
+     * encountered. Returns null if no subfield found. 
+     */
+    public MarcxmlSubfield getSubfield(String code) {
+        
+        for (MarcxmlSubfield field : subfields) {
+            if (field.getCode().equals(code)) {
+                return field;
+            }
+        }     
+        return null;
+    }
+    
+    /**
+     * Return the datafield in the specified list with the specified tag value.
+     * Returns the first if multiple are found. Returns null if none are found. 
+     */
+    public static MarcxmlDataField get(
+            List<MarcxmlDataField> fields, String tag) {
+        
+        for (MarcxmlDataField field: fields) {
+            if (field.getName().equals(tag)) {
+                return field;
+            }
+        }
+        return null;
+        
+    }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.record.RecordElement#isValid()

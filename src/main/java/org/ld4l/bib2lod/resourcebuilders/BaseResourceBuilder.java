@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.resourcebuilders;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -11,6 +10,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -50,10 +50,10 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
      * Add assertions of class membership to the Resource.
      */
     private void addTypeAssertions() {
-        for (String uri : entity.getTypes()) {
+        for (Type type : entity.getTypes()) {
             // TODO If we read the ontologies into an OntModel, we can get the
             // property from the model using Model.createProperty(type);
-            addObjectPropertyAssertion(RDF.type, uri);
+            addObjectPropertyAssertion(RDF.type, type.uri());
         }
     }
     

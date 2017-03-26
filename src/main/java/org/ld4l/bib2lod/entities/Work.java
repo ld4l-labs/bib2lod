@@ -22,30 +22,26 @@ public class Work extends BibEntity {
     // external classes to refer to this, because then they have to refer to
     // Instance.Type, Work.Type, etc.
     // OR: could put these all in the same package
-    private static enum Type {
+    private static enum WorkType implements Type {
 
         // TODO Add the others
         WORK(Namespace.BIBFRAME, "Identifier");                    
-
-        private static final Logger LOGGER = LogManager.getLogger(); 
         
         private final String uri;
         
-        Type(Namespace namespace, String localName) {
+        WorkType(Namespace namespace, String localName) {
             this.uri = namespace.uri() + localName;
-
         }
  
+        @Override
         public String uri() {
             return uri;
         }
     }
 
-    private static Type SUPERTYPE = Type.WORK;
-
     @Override
-    public String getSuperType() {
-        return SUPERTYPE.uri;
+    public Type getSuperType() {
+        return WorkType.WORK;
     }
     
 

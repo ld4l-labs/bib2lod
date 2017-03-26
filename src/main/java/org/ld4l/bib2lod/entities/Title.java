@@ -2,6 +2,9 @@
 
 package org.ld4l.bib2lod.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ld4l.bib2lod.Namespace;
 
 /**
@@ -9,14 +12,15 @@ import org.ld4l.bib2lod.Namespace;
  */
 public class Title extends BaseEntity {
     
-    private enum Type {
+    private enum TitleType implements Type {
         TITLE(Namespace.BIBFRAME, "Title");
         
         private String uri;
+        
         /**
          * Constructor
          */
-        Type(Namespace namespace, String name) {
+        TitleType(Namespace namespace, String name) {
             this.uri = namespace.uri() + name;
         }
         
@@ -25,23 +29,26 @@ public class Title extends BaseEntity {
         }
     }
     
-    private static Type SUPERTYPE = Type.TITLE;
+    private List<TitleElement> titleElements;
     
-    // This Title is the title of bibEntity
-    private BibEntity bibEntity;
-    
-    public Title(BibEntity bibEntity) {
-        super();
-        this.bibEntity = bibEntity;
-    }
-    
-    public BibEntity getBibEntity() {
-        return bibEntity;
+    /**
+     * Constructor
+     */
+    public Title() {
+        titleElements = new ArrayList<TitleElement>();
     }
 
     @Override
-    public String getSuperType() {
-        return SUPERTYPE.uri;
+    public Type getSuperType() {
+        return TitleType.TITLE;
+    }
+    
+    public void addTitleElement(TitleElement element) {
+        titleElements.add(element);
+    }
+    
+    public void addTitleElements(List<TitleElement> elements) {
+        titleElements.addAll(elements);
     }
 
 }

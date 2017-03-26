@@ -2,12 +2,12 @@
 
 package org.ld4l.bib2lod.entities;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
- * Stores the data from a record that will be converted to a single 
- * org.ld4l.bib2lod.entities.Entity.
+ * Stores the data from a record that will be converted RDF. The fields defined
+ * by the Entity implementation are ontology-specific. Different target 
+ * ontologies require different implementations.
  */
 public interface Entity {
     
@@ -46,38 +46,44 @@ public interface Entity {
         }     
     }
     
-    /**
-     * Factory method
-     * @param type - the type of Entity to instantiate
-     * @param relatedEntity - the Entity to which this Entity is related when it
-     * is built
-     */
-    static Entity instance(Class<? extends Entity> type, Entity relatedEntity) {
-        try {
-            return (Entity) type
-                    .getConstructor(Entity.class)
-                    .newInstance(relatedEntity);
-        } catch (InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | SecurityException | InvocationTargetException | 
-                NoSuchMethodException e) {
-            throw new EntityInstantiationException(e);
-        }     
-    }
-    
-    
-    public void addType(String type);
+//    /**
+//     * Factory method
+//     * @param type - the type of Entity to instantiate
+//     * @param relatedEntity - the Entity to which this Entity is related when it
+//     * is built
+//     */
+//    static Entity instance(Class<? extends Entity> type, Entity relatedEntity) {
+//        try {
+//            return (Entity) type
+//                    .getConstructor(Entity.class)
+//                    .newInstance(relatedEntity);
+//        } catch (InstantiationException
+//                | IllegalAccessException | IllegalArgumentException
+//                | SecurityException | InvocationTargetException | 
+//                NoSuchMethodException e) {
+//            throw new EntityInstantiationException(e);
+//        }     
+//    }
 
     /**
      * Returns a list of the Entity's types.
      */
-    public List<String> getTypes();
+    public List<Type> getTypes();
     
     /**
-     * Return the super type - the type that all entities of this type belong 
-     * to.
+     * Return the superclass - the type all Entities of this type belong to.
      */
-    public String getSuperType();
+    public Type getSuperType();
+
+    /**
+     * Add the type to this Entity.
+     */
+    void addType(Type type);
+
+    /**
+     * Add the specified types to this Entity.
+     */
+    void setTypes(List<Type> types);
 
 
 }

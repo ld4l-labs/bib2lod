@@ -92,7 +92,7 @@ public class BaseConverterTest extends AbstractTestClass {
         }
 
         @Override
-        public Entity build() throws EntityBuilderException {
+        public List<Entity> build() throws EntityBuilderException {
             return null;            
         }
     }

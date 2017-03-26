@@ -9,11 +9,25 @@ import org.ld4l.bib2lod.Namespace;
  */
 public class Item extends BibEntity {
     
-    private static String TYPE = Namespace.BIBFRAME.uri() + "Item";
+    public enum ItemType implements Type {
+        ITEM(Namespace.BIBFRAME, "Item");
+        
+        private final String uri;
+        
+        ItemType(Namespace namespace, String localName) {
+            this.uri = namespace.uri() + localName;
+        }
+ 
+        @Override
+        public String uri() {
+            return uri;
+        }
+    }
+    
 
     @Override
-    public String getSuperType() {
-        return TYPE;
+    public Type getSuperType() {
+        return ItemType.ITEM;
     }
     
 

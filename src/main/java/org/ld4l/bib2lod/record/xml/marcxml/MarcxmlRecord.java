@@ -197,14 +197,14 @@ public class MarcxmlRecord extends BaseXmlRecord {
     /**
      * Returns the control field for the specified value of the tag attribute.
      * Note that only one control field for a given tag value was included when 
-     * the list was built. Returns null if no control field for the tag is
-     * found.
+     * the list of fields was built. Returns null if no control field for the 
+     * tag is found.
      * @param String tag - the value of the tag attribute
      */
-    public MarcxmlControlField getControlField(String tag) {
+    public MarcxmlControlField getControlField(String controlNumber) {
         
         for (MarcxmlControlField controlField : controlFields) {
-            if (controlField.getControlNumber().equals(tag)) {
+            if (controlField.getControlNumber().equals(controlNumber)) {
                 return controlField;
             }
         }
@@ -219,8 +219,8 @@ public class MarcxmlRecord extends BaseXmlRecord {
     }
     
     /**
-     * Returns the data fields for the specified value of the tag attribute. 
-     * Returns an empty list if none are found.
+     * Returns the datafields for the specified value of the tag attribute. 
+     * Use with repeating datafields. Returns an empty List if none are found.
      * @param String tag - the value of the tag attribute
      */
     public List<MarcxmlDataField> getDataFields(String tag) {
@@ -236,10 +236,9 @@ public class MarcxmlRecord extends BaseXmlRecord {
     }
     
     /**
-     * Returns the data field for the specified value of the tag attribute. Use
-     * when only one element with the specified name is expected in the
-     * record. If multiple are found, returns the first. Returns null if no 
-     * data field is found.
+     * Returns the datafield for the specified value of the tag attribute. Use
+     * for non-repeating datafields. If multiple are found, returns the first. 
+     * Returns null if no datafield is found.
      * @param String tag - the value of the tag attribute
      */
     public MarcxmlDataField getDataField(String tag) {

@@ -46,8 +46,7 @@ public class MarcxmlConverter extends XmlConverter {
         // The Instance is the fundamental Entity created from the Record.
         EntityBuilder instanceBuilder = 
                 new MarcxmlInstanceBuilder((MarcxmlRecord) record);
-        Entity instance = instanceBuilder.build();
-        entities.add(instance);
+        entities.addAll(instanceBuilder.build());
         
         // From here, build bib resources: Instance, Work, Item
         // Other entities are built off of each of those (identifiers, 

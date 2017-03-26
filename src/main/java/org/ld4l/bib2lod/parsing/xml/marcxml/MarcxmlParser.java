@@ -35,31 +35,4 @@ public class MarcxmlParser extends XmlParser {
         return RECORD_CLASS;
     }
 
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.parsing.Parser#parseRecord(java.lang.Object)
-     */
-//    @Override
-//    public List<Entity> parseRecord(Element record) throws 
-//            ParserException {
-//        
-//        List<Entity> entities = new ArrayList<Entity>();
-//
-//        // Possibly instance should be treated differently from the other
-//        // Entities that will be created from this record, since everything
-//        // originates from the instance (the record). As such building the 
-//        // instance Entity would just be part of MarcxmlParser, whereas there 
-//        // would be individual builders for other Entity types.
-//            
-//        // Again - is there a reason not to call the constructor directly,
-//        // when we know what kind of a builder we want?
-//        MarcxmlInstanceBuilder instanceBuilder = 
-//                (MarcxmlInstanceBuilder) EntityBuilder.instance(
-//                        MarcxmlInstanceBuilder.class, configuration);
-//
-//        entities.addAll(instanceBuilder.build(record));
-//            
-//        return entities;
-//    }
-
 }
