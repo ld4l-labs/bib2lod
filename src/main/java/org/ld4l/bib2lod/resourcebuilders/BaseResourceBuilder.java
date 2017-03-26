@@ -7,8 +7,10 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.entities.BaseEntity;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.uris.UriService;
@@ -42,8 +44,28 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
     @Override
     public Resource build() {
         this.resource = model.createResource(UriService.getUri(entity));
+        
         addTypeAssertions();
+        
+        addRdfsLabel();
+        
+        addRdfValue();
+
         return resource;
+    }
+
+    private void addRdfsLabel() {
+        String label = entity.getRdfsLabel();
+        if (label != null) {
+            resource.addProperty(RDFS.label, label);
+        }
+    }
+    
+    private void addRdfValue() {
+        String value = entity.getRdfValue();
+        if (value != null) {
+            resource.addProperty(RDF.value, value);
+        }
     }
     
     /**
@@ -53,9 +75,13 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
         for (Type type : entity.getTypes()) {
             // TODO If we read the ontologies into an OntModel, we can get the
             // property from the model using Model.createProperty(type);
+            
+            // TODO Don't add supertype unless there are no other types
+            
             addObjectPropertyAssertion(RDF.type, type.uri());
         }
     }
+
     
     // ----------------------------------------------------------------------
     // Utilities
@@ -68,28 +94,24 @@ public abstract class BaseResourceBuilder implements ResourceBuilder {
      * Adds an object property assertion to this Resource
      */
     protected void addObjectPropertyAssertion(String propertyUri, String objectUri) {
-        addObjectPropertyAssertion(resource, ResourceFactory.createProperty(propertyUri), objectUri);
+        resource.addProperty(ResourceFactory.createProperty(propertyUri), 
+                ResourceFactory.createResource(objectUri));
     }
-    
+
     /**
      * Adds an object property assertion to this Resource
      */
     protected void addObjectPropertyAssertion(Property property, String objectUri) {
-        addObjectPropertyAssertion(resource, property, objectUri);
+        resource.addProperty(property, 
+                ResourceFactory.createResource(objectUri));
     }
     
     /**
-     * Adds an object property assertion to the specified Resource
+     * Adds a datatype property assertion to this Resource
      */
-    protected static void addObjectPropertyAssertion(Resource resource, String propertyUri, String objectUri) {
-        addObjectPropertyAssertion(resource, ResourceFactory.createProperty(propertyUri), objectUri);
+    protected void addDatatypePropertyAssertion(String propertyUri, String value) {
+        resource.addProperty(ResourceFactory.createProperty(propertyUri), value);
     }
-    
-    /**
-     * Adds an object property assertion to the specified Resource
-     */    
-    protected static void addObjectPropertyAssertion(Resource resource, Property property, String objectUri) {
-        resource.addProperty(property, ResourceFactory.createResource(objectUri));
-    }
+
     
 }

@@ -34,7 +34,7 @@ public abstract class BaseEntity implements Entity {
     }
 
     @Override
-    public void setTypes(List<Type> types) {
+    public void addTypes(List<Type> types) {
         types.addAll(types);
     }
     
@@ -43,10 +43,12 @@ public abstract class BaseEntity implements Entity {
         types.add(type);
     }
     
+    @Override
     public void setRdfsLabel(String label) {
         this.label = label;
     }
     
+    @Override
     public void setRdfValue(String value) {
         this.value = value;
     }

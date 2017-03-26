@@ -46,8 +46,8 @@ public class TitleElement extends BaseEntity {
      * Constructor
      */
     public TitleElement(TitleElementType type, String label) {
-        this.types.add(type);
-        this.label = label;
+        addType(type);
+        setRdfsLabel(label);
     }
 
     @Override

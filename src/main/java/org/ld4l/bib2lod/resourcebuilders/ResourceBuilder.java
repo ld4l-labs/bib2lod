@@ -8,6 +8,7 @@ import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Identifier;
 import org.ld4l.bib2lod.entities.Instance;
+import org.ld4l.bib2lod.entities.Title;
 
 /**
  * Builds a Model from an Entity.
@@ -49,6 +50,9 @@ public interface ResourceBuilder {
         }
         if (entity instanceof Identifier) {
             return new IdentifierResourceBuilder((Identifier) entity, model);
+        }
+        if (entity instanceof Title) {
+            return new TitleResourceBuilder((Title) entity, model);
         }
         // etc
         throw new ResourceBuilderException(

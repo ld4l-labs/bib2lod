@@ -87,22 +87,9 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        //entities.addAll(convertTitleFields());
+        //entities.addAll(new MarcxmlTitleBuilder(record, instance).build());
 
         return entities;
     }
-    
-    private List<Entity> convertTitleFields() {
         
-        List<Entity> entities = new ArrayList<Entity>();
-//        entities.addAll(new MarcxmlTitleBuilder(record, instance));
-
-        
-        return entities;
-    }
-        
-     
-
-
-
 }

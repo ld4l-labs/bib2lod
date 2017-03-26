@@ -12,8 +12,6 @@ import org.ld4l.bib2lod.record.Record;
  */
 public abstract class BaseEntityBuilder implements EntityBuilder {
     
-    // *** NOT CURRENTLY USED. ENTITY BUILDERS NEED TO STORE THE RECORD AS THE
-    // SPECIFIC TYPE - E.G., MarcxmlRecord, etc.
     protected Record record;
     //protected Entity relatedEntity;
 

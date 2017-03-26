@@ -36,14 +36,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
             BibEntity bibEntity) throws EntityBuilderException {
         super(record, null, bibEntity);
         
-//      for (MarcxmlDataField field : record.getDataFields()) {
-//      String name = field.getName();
-//      if ( (name.equals("130") || name.equals("240") || name.equals("245") ) && !titleDone) {
-//          // Need whole Record to simultaneously convert 130, 240, and 245
-//          new MarcxmlTitleBuilder(record, field, instance) 
-//                  .build();
-//      }
-//  }
+
     }
 
     @Override
@@ -54,10 +47,12 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         Title title = (Title) Entity.instance(Title.class);
         String titleLabel = null;
         
-        MarcxmlDataField field245 = MarcxmlDataField.get(dataFields, "245");
+        MarcxmlDataField field245 = record.getDataField("245");
+        MarcxmlDataField field130 = record.getDataField("130");
+        MarcxmlDataField field240 = record.getDataField("240");
         
         if (field245 != null) {
-            // Title label always comes from 245. If 130 and/or 240 are present,
+            // Full title always comes from 245. If 130 and/or 240 are present,
             // the $a fields are the same.
             // 245$a stores full title
             titleLabel = field245.getSubfield("a").getTextValue();

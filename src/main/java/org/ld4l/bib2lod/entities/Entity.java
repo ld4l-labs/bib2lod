@@ -65,25 +65,21 @@ public interface Entity {
 //        }     
 //    }
 
-    /**
-     * Returns a list of the Entity's types.
-     */
     public List<Type> getTypes();
     
-    /**
-     * Return the superclass - the type all Entities of this type belong to.
-     */
     public Type getSuperType();
 
-    /**
-     * Add the type to this Entity.
-     */
-    void addType(Type type);
+    public void addType(Type type);
 
-    /**
-     * Add the specified types to this Entity.
-     */
-    void setTypes(List<Type> types);
+    public void addTypes(List<Type> types);
+
+    public void setRdfsLabel(String label);
+    
+    public String getRdfsLabel();
+
+    public void setRdfValue(String value);
+    
+    public String getRdfValue();
 
 
 }
