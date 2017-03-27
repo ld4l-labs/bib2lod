@@ -9,6 +9,7 @@ import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Identifier;
 import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entities.Title;
+import org.ld4l.bib2lod.entities.TitleElement;
 
 /**
  * Builds a Model from an Entity.
@@ -54,9 +55,10 @@ public interface ResourceBuilder {
         if (entity instanceof Title) {
             return new TitleResourceBuilder((Title) entity, model);
         }
-        // etc
-        throw new ResourceBuilderException(
-                Entity.class.getSimpleName() + " ResourceBuilder not implemented.");
+        if (entity instanceof TitleElement) {
+            return new TitleElementResourceBuilder((Title) entity, model);
+        }
+        throw new ResourceBuilderException("ResourceBuilder for this Entity type not implemented.");
     }
     
     /**

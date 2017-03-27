@@ -50,5 +50,9 @@ public class Title extends BaseEntity {
     public void addTitleElements(List<TitleElement> elements) {
         titleElements.addAll(elements);
     }
+    
+    public List<TitleElement> getTitleElements() {
+        return titleElements;
+    }
 
 }
