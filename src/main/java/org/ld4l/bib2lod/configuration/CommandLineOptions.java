@@ -19,11 +19,11 @@ import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
  * -o OutputService:ext
  * </pre>
  */
-public class ArgumentsParser implements Arguments {
+public class CommandLineOptions implements ConfigurationOptions {
     private String configFile;
     private List<AttributeOverride> overrides = new ArrayList<>();
 
-    public ArgumentsParser(String[] args) {
+    public CommandLineOptions(String... args) {
         for (Iterator<String> it = Arrays.asList(args).iterator(); it
                 .hasNext();) {
             String key = it.next();
@@ -43,13 +43,35 @@ public class ArgumentsParser implements Arguments {
                 } else {
                     parseOverride(value);
                 }
+            } else {
+                throw new ConfigurationException(
+                        "The only valid options are -c for the config file, "
+                                + "and -o for an attribute override: '" + key
+                                + "'");
             }
         }
     }
 
-    private void parseOverride(String value) {
-        throw new RuntimeException(
-                "ArgumentsParser.parseOverride not implemented.");
+    private void parseOverride(String spec) {
+        int firstEquals = spec.indexOf('=');
+        String namestring;
+        String value;
+        if (firstEquals == -1) {
+            namestring = spec;
+            value = null;
+        } else {
+            namestring = spec.substring(0, firstEquals);
+            value = spec.substring(firstEquals + 1);
+        }
+
+        if (namestring.contains(" ")) {
+            throw new ConfigurationException(
+                    "An override may not contain spaces to the left of "
+                            + "the equals sign: '" + spec + "'");
+        }
+
+        List<String> names = Arrays.asList(namestring.split(":"));
+        overrides.add(new AttributeOverride(names, value));
     }
 
     @Override

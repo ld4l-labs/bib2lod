@@ -117,7 +117,6 @@ public final class SimpleManager {
       * </pre>
      */
     private static class StubConfigurator implements Configurator {
-
         @Override
         public Configuration getTopLevelConfiguration() {
             return new ConfigurationNode.Builder()
@@ -154,7 +153,5 @@ public final class SimpleManager {
                                     .build())
                     .build();
         }
-
     }
-
 }
