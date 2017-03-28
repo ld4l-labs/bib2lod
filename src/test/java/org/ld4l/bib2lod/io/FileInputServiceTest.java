@@ -13,8 +13,9 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.ld4l.bib2lod.configuration.BaseConfiguration;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
+import org.ld4l.bib2lod.configuration.ConfigurationNode;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -54,20 +55,20 @@ public class FileInputServiceTest extends AbstractTestClass {
     // The tests
     // ----------------------------------------------------------------------
 
-    @Test(expected = IOException.class)
+    @Test(expected = ConfigurationException.class)
     public void inputSourceDoesntExist_ThrowsException() throws Exception {
         File file = new File(folder.getRoot().getCanonicalPath(), "test");
         createServiceAndGetDescriptors(file.getCanonicalPath(), null);
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = ConfigurationException.class)
     public void inputFileNotReadable_ThrowsException() throws Exception {
         File file = folder.newFile();
         file.setReadable(false);
         createServiceAndGetDescriptors(file.getCanonicalPath(), null);
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = ConfigurationException.class)
     public void inputDirectoryNotReadable_ThrowsException() throws Exception {
         File subfolder = folder.newFolder();
         subfolder.setReadable(false);
@@ -158,15 +159,12 @@ public class FileInputServiceTest extends AbstractTestClass {
     // Helper methods
     // ----------------------------------------------------------------------
 
-    private void createServiceAndGetDescriptors(String path, String extension)
-            throws IOException {
-        config = new BaseConfiguration() {
-            {
-                inputSource = path;
-                inputFileExtension = extension;
-            }
-        };
-        service = new FileInputService(config);
+    private void createServiceAndGetDescriptors(String path, String extension) {
+        config = new ConfigurationNode.Builder().addAttribute("source", path)
+                .addAttribute("extension", extension).build();
+        service = new FileInputService();
+        service.configure(config);
+
         inputs = new ArrayList<>();
         for (InputDescriptor in : service.getDescriptors()) {
             inputs.add(in);

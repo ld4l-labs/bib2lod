@@ -20,14 +20,6 @@ public class RandomUriMinter extends BaseUriService {
 
     private String LOCAL_NAME_ALPHA_PREFIX = "n";
     
-    /**
-     * Constructor.
-     * @param configuration - the program Configuration
-     */
-    public RandomUriMinter(Configuration configuration) {
-        super(configuration);
-    }
-    
     @Override
     public String getUri(Entity entity, Iterator<UriService> it) {
         String localName = getLocalName(entity);

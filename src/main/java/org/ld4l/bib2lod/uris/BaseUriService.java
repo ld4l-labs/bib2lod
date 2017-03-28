@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.uris;
 
+import java.util.Iterator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -14,12 +16,16 @@ public abstract class BaseUriService implements UriService {
     
     protected String localNamespace;
 
-    /**
-     * Constructor.
-     * @param configuration
-     */
-    public BaseUriService(Configuration configuration) {
-        this.localNamespace = configuration.getLocalNamespace();
+    @Override
+    public void configure(Configuration config) {
+        localNamespace = config.getAttribute("localNamespace");
+    }
+
+    @Override
+    public String getUri(Entity entity, Iterator<UriService> it) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("BaseUriService.getUri() not implemented.");
+        
     }
 
     protected abstract String getLocalName(Entity entity);

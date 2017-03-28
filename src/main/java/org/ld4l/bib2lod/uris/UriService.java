@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
  * Provides URIs for org.ld4l.bib2lod.entities built by the converter.
  */
-public interface UriService {
+public interface UriService extends Configurable {
     
     /**
      * Signals that the content of a configuration value is invalid.  Differs
@@ -38,18 +38,9 @@ public interface UriService {
      * Factory method
      * @param uriServiceClass - the class name of the UriService to instantiate
      */
-    static UriService instance(String uriServiceClass, Configuration configuration) {
-
-        return Bib2LodObjectFactory.instance().createUriService(uriServiceClass,
-                configuration);
-    }
-    
-    public static void createUriServices(String[] uriServiceClasses,
-            Configuration configuration) {
-
-        for (String uriServiceClass : uriServiceClasses) {
-            uriServices.add(instance(uriServiceClass, configuration));
-        }
+    static List<UriService> instances() {
+        return Bib2LodObjectFactory.getFactory()
+                .instancesForClass(UriService.class);
     }
     
     /**
@@ -61,7 +52,7 @@ public interface UriService {
         String uri = null;
         
         // Use an iterator so each service can call the next service if needed.
-        Iterator<UriService> it = uriServices.iterator();
+        Iterator<UriService> it = instances().iterator();
         
         if (it.hasNext()) {
             uri = it.next().getUri(entity, it);

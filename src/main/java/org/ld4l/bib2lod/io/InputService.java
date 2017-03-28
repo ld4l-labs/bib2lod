@@ -5,13 +5,13 @@ package org.ld4l.bib2lod.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
 
 /**
  * A collection of data streams for input.
  */
-public interface InputService {
+public interface InputService extends Configurable {
     /**
      * Indicates a problem in the operation of the InputService.
      */
@@ -38,7 +38,7 @@ public interface InputService {
         InputMetadata getMetadata();
 
         InputStream getInputStream() throws IOException;
-        
+
         @Override
         public void close() throws InputServiceException, IOException;
     }
@@ -50,9 +50,9 @@ public interface InputService {
     /**
      * Factory method
      */
-    static InputService instance(Configuration configuration) {
-        return Bib2LodObjectFactory.instance()
-                .createInputService(configuration);
+    static InputService instance() {
+        return Bib2LodObjectFactory.getFactory()
+                .instanceForClass(InputService.class);
     }
 
     /**

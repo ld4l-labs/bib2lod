@@ -5,14 +5,14 @@ package org.ld4l.bib2lod.io;
 import java.io.IOException;
 
 import org.apache.jena.rdf.model.Model;
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 
 /**
  * Produces data streams for output, as requested.
  */
-public interface OutputService {
+public interface OutputService extends Configurable {
     /**
      * Indicates a problem in the operation of the OutputService.
      */
@@ -46,9 +46,9 @@ public interface OutputService {
     /**
      * Factory method
      */
-    static OutputService instance(Configuration configuration) {
-        return Bib2LodObjectFactory.instance()
-                .createOutputService(configuration);
+    static OutputService instance() {
+        return Bib2LodObjectFactory.getFactory()
+                .instanceForClass(OutputService.class);
     }
 
     /**

@@ -13,9 +13,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.MockBib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.BaseConfiguration;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.MockBib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
@@ -34,22 +34,6 @@ public class SimpleManagerTest extends AbstractTestClass {
     // Mocking infrastructure
     // ---------------------------------------------------------------------- 
     
-    public static class MockConfiguration extends BaseConfiguration {
-        
-        private static final String INPUT_SERVICE_CLASS = 
-                "org.ld4l.bib2lod.managers.MockInputService";
-        private static final String OUTPUT_SERVICE_CLASS = 
-                "org.ld4l.bib2lod.managers.MockOutputService";
-        private static final String CONVERTER_CLASS = 
-                "org.ld4l.bib2lod.managers.MockConverter";
-        
-        public MockConfiguration(String[] args) {
-            this.inputServiceClass = INPUT_SERVICE_CLASS;
-            this.outputServiceClass = OUTPUT_SERVICE_CLASS;
-            this.converter = CONVERTER_CLASS;
-        }
-    }
- 
     public static class MockConverter implements Converter {
         
         private int inputCount;
@@ -63,6 +47,11 @@ public class SimpleManagerTest extends AbstractTestClass {
         }
         
         @Override
+        public void configure(Configuration config) {
+            // Nothing to do
+        }
+
+       @Override
         public void convert(InputDescriptor input, OutputDescriptor output) 
                 throws ConverterException {
             inputCount++;
@@ -110,9 +99,14 @@ public class SimpleManagerTest extends AbstractTestClass {
         
         private final List<InputDescriptor> descriptor;
 
-        public MockInputService(Configuration configuration) throws IOException {
+        public MockInputService() {
             String[] inputs = {INPUT_1, INPUT_2, INPUT_3};
             this.descriptor = wrapStringsInDescriptors(inputs);
+        }
+
+        @Override
+        public void configure(Configuration config) {
+            // Nothing to do
         }
 
         private List<InputDescriptor> wrapStringsInDescriptors(String[] strings) {
@@ -143,7 +137,10 @@ public class SimpleManagerTest extends AbstractTestClass {
 
     public static class MockOutputService implements OutputService {
 
-        public MockOutputService(Configuration configuration) { }
+        @Override
+        public void configure(Configuration config) {
+            // Nothing to do
+        }
 
         @Override
         public OutputDescriptor openSink(InputMetadata metadata)
@@ -152,18 +149,15 @@ public class SimpleManagerTest extends AbstractTestClass {
         }
     }
     
-    
     private MockBib2LodObjectFactory factory;
-    private Configuration configuration;
 
     @Before
-    public void setup() throws IOException {
-        
-        configuration = Configuration.instance(new String[0]);
+    public void setup() {
         factory = new MockBib2LodObjectFactory();
-        factory.setConverter(new MockConverter());
-        factory.setInputService(new MockInputService(configuration));
-        factory.setOutputService(new MockOutputService(configuration));
+        factory.addInstance(Converter.class, new MockConverter());
+        factory.addInstance(InputService.class, new MockInputService());
+        factory.addInstance(OutputService.class, new MockOutputService());
+        Bib2LodObjectFactory.setFactoryInstance(factory);
   
         // Suppress output when SimpleManager throws an exception.
         suppressSysout();
@@ -177,8 +171,8 @@ public class SimpleManagerTest extends AbstractTestClass {
     @Ignore
     @Test
     public void converterError_IgnoresInput() {
-        SimpleManager.convert(configuration);
-        MockConverter converter = (MockConverter) factory.getConverter();
+        SimpleManager.convert();
+        MockConverter converter = (MockConverter) factory.instanceForClass(Converter.class);
         Assert.assertEquals(2, converter.getOutputCount());     
     }
 }

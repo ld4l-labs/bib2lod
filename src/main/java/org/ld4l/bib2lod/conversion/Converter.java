@@ -2,7 +2,8 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
@@ -10,8 +11,8 @@ import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
  * Orchestrates the conversion of an input object containing one or more
  * records.
  */
-public interface Converter {
-    
+public interface Converter extends Configurable {
+
     /**
      * Signals a problem during conversion of an input.
      */
@@ -30,7 +31,7 @@ public interface Converter {
             super(cause);
         }
     }
-    
+
     /**
      * Signals a problem during conversion of a single record.
      */
@@ -54,10 +55,11 @@ public interface Converter {
      * Factory method
      */
     static Converter instance() {
-        return Bib2LodObjectFactory.instance().createConverter();
+        return Bib2LodObjectFactory.getFactory()
+                .instanceForClass(Converter.class);
     }
 
-    public void convert(InputDescriptor input, OutputDescriptor output) 
+    public void convert(InputDescriptor input, OutputDescriptor output)
             throws ConverterException;
 
 }

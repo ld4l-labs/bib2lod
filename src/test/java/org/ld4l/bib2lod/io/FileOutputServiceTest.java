@@ -5,15 +5,14 @@ package org.ld4l.bib2lod.io;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.ld4l.bib2lod.configuration.BaseConfiguration;
-import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
+import org.ld4l.bib2lod.configuration.ConfigurationNode;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
@@ -48,20 +47,20 @@ public class FileOutputServiceTest extends AbstractTestClass {
         createServiceAndGetDescriptor(null, NTRIPLES, metadata("test"));
     }
 
-    @Test(expected = FileNotFoundException.class)
+    @Test(expected = ConfigurationException.class)
     public void destinationDoesntExist_throwsException() throws IOException {
         File file = new File(folder.getRoot().getCanonicalPath(),
                 "doesnt_exist");
         createServiceAndGetDescriptor(file, NTRIPLES, metadata("test"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ConfigurationException.class)
     public void destinationNotADirectory_throwsException() throws IOException {
         File file = folder.newFile("not_a_directory");
         createServiceAndGetDescriptor(file, NTRIPLES, metadata("test"));
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = ConfigurationException.class)
     public void destinationNotWriteable_throwsException() throws IOException {
         File dest = folder.newFolder("cant_write");
         dest.setWritable(false);
@@ -79,7 +78,6 @@ public class FileOutputServiceTest extends AbstractTestClass {
         File dest = folder.newFolder("ok");
         createServiceAndGetDescriptor(dest, "bogus_format", metadata("test"));
     }
-
 
     @Test(expected = NullPointerException.class)
     public void openSinkWithNoMetadata_throwsException() throws IOException {
@@ -99,14 +97,13 @@ public class FileOutputServiceTest extends AbstractTestClass {
         createServiceAndGetDescriptor(dest, NTRIPLES, metadata("test"));
         assertTrue(new File(dest, "test.nt").exists());
     }
+
     @Test
     public void checkExtensionSubstitution() throws IOException {
         File dest = folder.newFolder("we_win");
         createServiceAndGetDescriptor(dest, NTRIPLES, metadata("test.xml"));
         assertTrue(new File(dest, "test.nt").exists());
     }
-    
-
 
     // ----------------------------------------------------------------------
     // Helper methods
@@ -123,14 +120,12 @@ public class FileOutputServiceTest extends AbstractTestClass {
 
     private void createServiceAndGetDescriptor(File destination, String format,
             InputMetadata metadata) throws IOException {
-        Configuration config = new BaseConfiguration() {
-            {
-                outputDestination = destination == null ? null
-                        : destination.getCanonicalPath();
-                outputFormat = format;
-            }
-        };
-        service = new FileOutputService(config);
+        service = new FileOutputService();
+        service.configure(new ConfigurationNode.Builder()
+                .addAttribute("destination",
+                        destination == null ? null
+                                : destination.getCanonicalPath())
+                .addAttribute("format", format).build());
         output = service.openSink(metadata);
     }
 }

@@ -23,7 +23,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.ld4l.bib2lod.configuration.BaseConfiguration;
+import org.ld4l.bib2lod.configuration.ConfigurationNode;
 import org.ld4l.bib2lod.io.FileOutputService.Format;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
@@ -124,13 +124,10 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
     private void createServiceAndSink(Format f) throws IOException {
         format = f;
 
-        FileOutputService service = new FileOutputService(
-                new BaseConfiguration() {
-                    {
-                        outputDestination = folder.getRoot().getAbsolutePath();
-                        outputFormat = f.getLanguage();
-                    }
-                });
+        FileOutputService service = new FileOutputService();
+        service.configure(new ConfigurationNode.Builder()
+                .addAttribute("destination", folder.getRoot().getAbsolutePath())
+                .addAttribute("format", f.getLanguage()).build());
 
         sink = service.openSink(new FileInputService.InputMetadata() {
             @Override

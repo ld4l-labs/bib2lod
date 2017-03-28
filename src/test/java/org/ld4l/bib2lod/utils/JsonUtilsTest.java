@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.configuration;
+package org.ld4l.bib2lod.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;

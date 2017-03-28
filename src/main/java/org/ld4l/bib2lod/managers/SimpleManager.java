@@ -7,7 +7,14 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.Arguments;
+import org.ld4l.bib2lod.configuration.ArgumentsParser;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.CommandLineOverrider;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Configurator;
+import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.JsonConfigurator;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.io.InputService;
@@ -34,8 +41,15 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-            Configuration configuration = Configuration.instance(args);
-            convert(configuration);
+//            Arguments commandLine = new ArgumentsParser(args);
+//            Configuration configuration = new CommandLineOverrider(
+//                    new JsonConfigurator(commandLine.getConfigFile()),
+//                    commandLine.getOverrides()).getTopLevelConfiguration();
+            Configuration configuration = new StubConfigurator().getTopLevelConfiguration();
+            Bib2LodObjectFactory.setFactoryInstance(
+                    new DefaultBib2LodObjectFactory(configuration));
+            
+            convert();
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -50,13 +64,12 @@ public final class SimpleManager {
      * @param configuration - the program Configuration 
      * @throws ConverterException
      */
-    // protected rather than private to access from SimpleManagerTest.
-    protected static void convert(Configuration configuration) {
+    protected static void convert() {
 
         try {
             Converter converter = Converter.instance();
-            InputService inputService = InputService.instance(configuration);
-            OutputService outputService = OutputService.instance(configuration);
+            InputService inputService = InputService.instance();
+            OutputService outputService = OutputService.instance();
 
             Iterator<InputDescriptor> inputs = inputService.getDescriptors()
                     .iterator();
@@ -78,6 +91,47 @@ public final class SimpleManager {
         } finally {
             // TODO write the report.
         }
+    }
+    
+    private static class StubConfigurator implements Configurator {
+
+        /**
+         * <pre>
+        {
+        "local_namespace": "http://data.ld4l.org/cornell/",
+        "InputService": {
+         "class": "org.ld4l.bib2lod.io.FileInputService",
+         "source": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
+         "extension": "xml"
+        }, 
+        "OutputService": {
+         "class": "org.ld4l.bib2lod.io.FileOutputService",
+         "destination": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
+         "format": "N-TRIPLE"
+        },
+        "UriService": [
+         { 
+             "class": "org.ld4l.bib2lod.uri.RandomUriMinter"
+         } 
+        ],
+        "Cleaner": {
+         "class": "org.ld4l.bib2lod.cleaning.MarcxmlCleaner"
+        },
+        "Converter": {
+         "class": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter"
+        }
+        }                                                                                             
+          * </pre>
+         */
+        @Override
+        public Configuration getTopLevelConfiguration() 
+
+            // TODO Auto-generated method stub
+            throw new RuntimeException(
+                    "Configurator.getTopLevelConfiguration() not implemented.");
+
+        }
+        
     }
 
 }
