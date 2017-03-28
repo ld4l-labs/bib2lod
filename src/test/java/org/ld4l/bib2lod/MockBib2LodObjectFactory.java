@@ -13,12 +13,12 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.MockConfiguration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.resources.Entity;
-import org.ld4l.bib2lod.resources.Link;
-import org.ld4l.bib2lod.resources.ResourceBuilder;
-import org.ld4l.bib2lod.resources.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**

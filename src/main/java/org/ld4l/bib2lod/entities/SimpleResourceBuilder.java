@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.resources;
+package org.ld4l.bib2lod.entities;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
@@ -10,9 +10,9 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.BaseEntity;
-import org.ld4l.bib2lod.entities.EntityInterface;
-import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.entities_deprecated.BaseEntity;
+import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
+import org.ld4l.bib2lod.entities_deprecated.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**

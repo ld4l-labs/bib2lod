@@ -1,10 +1,10 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
+import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
-import org.ld4l.bib2lod.resources.Entity;
 
 public abstract class MarcxmlEntityBuilder extends BaseEntityBuilder {
 

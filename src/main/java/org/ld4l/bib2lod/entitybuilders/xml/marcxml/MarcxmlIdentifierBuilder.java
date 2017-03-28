@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.BibEntity;
-import org.ld4l.bib2lod.entities.EntityInterface;
-import org.ld4l.bib2lod.entities.Identifier;
-import org.ld4l.bib2lod.entities.Identifier.IdentifierType;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities_deprecated.BibEntity;
+import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
+import org.ld4l.bib2lod.entities_deprecated.Identifier;
+import org.ld4l.bib2lod.entities_deprecated.Identifier.IdentifierType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
-import org.ld4l.bib2lod.resources.Entity;
 
 public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder { 
 

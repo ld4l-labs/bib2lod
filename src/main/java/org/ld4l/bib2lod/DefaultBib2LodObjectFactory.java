@@ -18,14 +18,14 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter;
-import org.ld4l.bib2lod.resources.Entity;
-import org.ld4l.bib2lod.resources.Link;
-import org.ld4l.bib2lod.resources.ResourceBuilder;
-import org.ld4l.bib2lod.resources.SimpleEntity;
-import org.ld4l.bib2lod.resources.SimpleLink;
-import org.ld4l.bib2lod.resources.SimpleResourceBuilder;
-import org.ld4l.bib2lod.resources.SimpleType;
-import org.ld4l.bib2lod.resources.Type;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.SimpleEntity;
+import org.ld4l.bib2lod.entities.SimpleLink;
+import org.ld4l.bib2lod.entities.SimpleResourceBuilder;
+import org.ld4l.bib2lod.entities.SimpleType;
+import org.ld4l.bib2lod.entities.Type;
 
 /**
  * A simple implementation.

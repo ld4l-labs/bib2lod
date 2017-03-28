@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
+import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.Field;
-import org.ld4l.bib2lod.resources.Entity;
 
 /**
  * Builds an Entity from a Record

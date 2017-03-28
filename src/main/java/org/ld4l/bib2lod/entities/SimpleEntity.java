@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.resources;
+package org.ld4l.bib2lod.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
-import org.ld4l.bib2lod.resources.Type;
+import org.ld4l.bib2lod.entities.Type;
 
 /**
  * An object built from the input record representing a single resource in the

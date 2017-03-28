@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.resources;
+package org.ld4l.bib2lod.entities;
 
 import java.util.List;
 import java.util.Map;

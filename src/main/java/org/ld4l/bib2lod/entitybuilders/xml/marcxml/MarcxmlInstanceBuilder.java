@@ -5,11 +5,11 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ld4l.bib2lod.entities.Instance;
-import org.ld4l.bib2lod.entities.Item;
-import org.ld4l.bib2lod.entities.Work;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities_deprecated.Instance;
+import org.ld4l.bib2lod.entities_deprecated.Item;
+import org.ld4l.bib2lod.entities_deprecated.Work;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.resources.Entity;
 
 /**
  * Builds an Instance from a Record.

@@ -7,14 +7,14 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.BibEntity;
-import org.ld4l.bib2lod.entities.Title;
-import org.ld4l.bib2lod.entities.TitleElement;
-import org.ld4l.bib2lod.entities.TitleElement.TitleElementType;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities_deprecated.BibEntity;
+import org.ld4l.bib2lod.entities_deprecated.Title;
+import org.ld4l.bib2lod.entities_deprecated.TitleElement;
+import org.ld4l.bib2lod.entities_deprecated.TitleElement.TitleElementType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
-import org.ld4l.bib2lod.resources.Entity;
 
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.

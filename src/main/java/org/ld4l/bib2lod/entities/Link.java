@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.resources;
+package org.ld4l.bib2lod.entities;
 
 import org.apache.jena.rdf.model.Property;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;

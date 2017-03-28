@@ -1,8 +1,8 @@
-package org.ld4l.bib2lod.resources;
+package org.ld4l.bib2lod.entities;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.ld4l.bib2lod.resources.Type;
+import org.ld4l.bib2lod.entities.Type;
 
 /**
  * Wraps a Resource representing a class in the ontology.

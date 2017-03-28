@@ -9,7 +9,11 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.EntityInterface;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.SimpleEntity;
+import org.ld4l.bib2lod.entities.ResourceBuilder.ResourceBuilderException;
+import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
@@ -17,10 +21,6 @@ import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.resources.SimpleEntity;
-import org.ld4l.bib2lod.resources.ResourceBuilder.ResourceBuilderException;
-import org.ld4l.bib2lod.resources.Entity;
-import org.ld4l.bib2lod.resources.ResourceBuilder;
 
 /**
  * An abstract implementation.
