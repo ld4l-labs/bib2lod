@@ -14,7 +14,6 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.xml.marcxml.MarcxmlInstanceBuilder;
 import org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
 /**
  * Converts MARCXML records
@@ -34,21 +33,22 @@ public class MarcxmlConverter extends XmlConverter {
         return PARSER_CLASS;
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.conversion.BaseConverter#buildEntities(org.ld4l.bib2lod.record.Record)
-     */
-    @Override
+
     protected List<Entity> buildEntities(Record record) 
             throws EntityBuilderException {
         
         List<Entity> entities = new ArrayList<Entity>();
         
         // The Instance is the fundamental Entity created from the Record.
+        // From the InstanceBuilder we create dependent Entities such as 
+        // the Titles and Identifiers of the Instance.
         EntityBuilder instanceBuilder = 
-                new MarcxmlInstanceBuilder((MarcxmlRecord) record);
+                EntityBuilder.instance(
+                        MarcxmlInstanceBuilder.class, record);
+               
         entities.addAll(instanceBuilder.build());
         
-        // From here, build bib resources: Instance, Work, Item
+        // From here, build bib resources: Work, Item
         // Other entities are built off of each of those (identifiers, 
         // activities, etc. Both work and item builders need to get passed 
         // the record and the instance.

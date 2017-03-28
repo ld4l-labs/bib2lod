@@ -4,15 +4,27 @@ package org.ld4l.bib2lod;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
+import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.record.Field;
+import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -112,15 +124,10 @@ public abstract class Bib2LodObjectFactory {
      */
     public OutputService createOutputService(Configuration configuration) {
         try {
-            String className =  configuration.getOutputServiceClass();
-            Class<?> cls = Class.forName(className);
-            Constructor<?> con = cls.getConstructor(Configuration.class);
-            OutputService os = (OutputService) con.newInstance(configuration);
-            return os;
-//            return (OutputService) Class
-//                    .forName(configuration.getOutputServiceClass())
-//                    .getConstructor(Configuration.class)
-//                    .newInstance(configuration);
+            return (OutputService) Class
+                    .forName(configuration.getOutputServiceClass())
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
         } catch (InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException
@@ -128,6 +135,54 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         }
     }
+    
+    public EntityBuilder createEntityBuilder(
+            Class<?> builderClass, Record record) {         
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(Record.class)                     
+                    .newInstance(record);
+        } catch (IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException | InstantiationException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        } 
+    }
+
+    
+    public EntityBuilder createEntityBuilder(Class<?> builderClass,
+            Field field, Entity relatedEntity) {
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(Field.class, Entity.class)                           
+                    .newInstance(field, relatedEntity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        } 
+    }
+
+    public abstract Entity createEntity();
+    
+    public abstract Entity createEntity(Type type);
+    
+    public abstract Entity createEntity(String uri);
+    
+    public abstract Entity createEntity(Resource type);
+    
+    public abstract Type createType(OntologyClass ontClass);
+    
+    public abstract Type createType(Resource ontClass);
+    
+    public abstract Type createType(String uri);
+    
+    public abstract Link createLink(Property property);
+    
+    public abstract Link createLink(String uri);
+    
+    public abstract ResourceBuilder createResourceBuilder(Entity entity);
 
 }
 

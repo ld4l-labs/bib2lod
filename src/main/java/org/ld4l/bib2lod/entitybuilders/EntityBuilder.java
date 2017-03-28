@@ -2,10 +2,14 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.record.Field;
+import org.ld4l.bib2lod.record.Record;
 
 /**
  * Builds an Entity from a Record
@@ -27,6 +31,21 @@ public interface EntityBuilder {
             super(cause);
         }
     }  
+    
+    /**
+     * Factory methods
+     */
+    public static EntityBuilder instance(Class<?> builderClass, Record record) {
+        return Bib2LodObjectFactory.instance().createEntityBuilder(
+                builderClass, record);
+    }
+    
+    public static EntityBuilder instance(Class<?> builderClass, 
+            Field field, Entity relatedEntity) {
+        return Bib2LodObjectFactory.instance().createEntityBuilder(
+                builderClass, field, relatedEntity);
+    }
+
     
     /**
      * Builds an Entity.

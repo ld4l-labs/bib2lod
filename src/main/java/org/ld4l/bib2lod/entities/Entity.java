@@ -1,85 +1,60 @@
-/* $This file is distributed under the terms of the license in /doc/license.txt$ */
-
 package org.ld4l.bib2lod.entities;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Resource;
+import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
- * Stores the data from a record that will be converted RDF. The fields defined
- * by the Entity implementation are ontology-specific. Different target 
- * ontologies require different implementations.
+ * An object built from the input record representing a single resource in the
+ * output model. 
  */
 public interface Entity {
     
     /**
-     * Signals an exception during creation of an Entity. 
+     * Factory methods
      */
-    public static class EntityInstantiationException extends 
-            RuntimeException {         
-        private static final long serialVersionUID = 1L;
-
-        public EntityInstantiationException(String msg, Throwable cause) {
-            super(msg, cause);                 
-        }
-        
-        public EntityInstantiationException(String msg) {
-            super(msg);                 
-        }   
-        
-        public EntityInstantiationException(Throwable cause) {
-            super(cause);                 
-        }    
+    public static Entity instance() {
+        return Bib2LodObjectFactory.instance().createEntity();
     }
 
-    /**
-     * Factory method
-     * @param type - the type of Entity to instantiate
-     */
-    static Entity instance(Class<? extends Entity> type) {
-        try {
-            return (Entity) type
-                    .newInstance();
-        } catch (InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | SecurityException e) {
-            throw new EntityInstantiationException(e);
-        }     
+    public static Entity instance(Type type) {
+        return Bib2LodObjectFactory.instance().createEntity(type);
     }
     
-//    /**
-//     * Factory method
-//     * @param type - the type of Entity to instantiate
-//     * @param relatedEntity - the Entity to which this Entity is related when it
-//     * is built
-//     */
-//    static Entity instance(Class<? extends Entity> type, Entity relatedEntity) {
-//        try {
-//            return (Entity) type
-//                    .getConstructor(Entity.class)
-//                    .newInstance(relatedEntity);
-//        } catch (InstantiationException
-//                | IllegalAccessException | IllegalArgumentException
-//                | SecurityException | InvocationTargetException | 
-//                NoSuchMethodException e) {
-//            throw new EntityInstantiationException(e);
-//        }     
-//    }
+    public static Entity instance(Resource superClass) {
+        return Bib2LodObjectFactory.instance().createEntity(superClass);
+    }
 
+    public static Entity instance(String uri) {
+        return Bib2LodObjectFactory.instance().createEntity(uri);
+    }
+    
+    
+    public void addChildren(Link link, List<Entity> entities);
+    
+    public TreeMap<Link, List<Entity>> getChildren();
+    
+    public List<Entity> getChildren(Link link);
+    
+    public void addType(Type type);
+    
     public List<Type> getTypes();
     
-    public Type getSuperType();
-
-    public void addType(Type type);
-
-    public void addTypes(List<Type> types);
-
-    public void setRdfsLabel(String label);
+    public void addAttributes(Link link, List<Literal> values);
     
-    public String getRdfsLabel();
-
-    public void setRdfValue(String value);
+    public Map<Link, List<Literal>> getAttributes();
     
-    public String getRdfValue();
+    public List<Literal> getAttributes(Link link);
+    
+    public void setResource(Resource resource);
+    
+    public Resource getResource();
 
+    void addType(OntologyClass ontClass);
 
 }

@@ -6,13 +6,20 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.MockConfiguration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -141,6 +148,66 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     public OutputService createOutputService(Configuration configuration) {
         return (outputService != null) ? outputService
                 : defaultFactory.createOutputService(configuration);
+    }
+
+    @Override
+    public Entity createEntity() {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Entity createEntity(Type type) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Entity createEntity(String uri) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Type createType(Resource ontClass) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Type createType(String uri) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Link createLink(Property property) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Link createLink(String uri) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public ResourceBuilder createResourceBuilder(Entity entity) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Entity createEntity(Resource type) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Type createType(OntologyClass ontClass) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
     }
 
 }

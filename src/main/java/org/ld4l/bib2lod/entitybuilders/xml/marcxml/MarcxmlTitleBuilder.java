@@ -7,12 +7,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.BibEntity;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Title;
-import org.ld4l.bib2lod.entities.TitleElement;
-import org.ld4l.bib2lod.entities.TitleElement.TitleElementType;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.entities_deprecated.TitleElement;
+import org.ld4l.bib2lod.entities_deprecated.TitleElement.TitleElementType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
@@ -23,7 +20,10 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private List<MarcxmlDataField> dataFields;
+    //private List<MarcxmlDataField> dataFields;
+    
+    private final MarcxmlRecord record;
+    private final Entity bibEntity;
    
     /**
      * Constructor
@@ -33,8 +33,9 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
      * @throws EntityBuilderException 
      */
     public MarcxmlTitleBuilder(MarcxmlRecord record, 
-            BibEntity bibEntity) throws EntityBuilderException {
-        super(record, null, bibEntity);
+            Entity bibEntity) throws EntityBuilderException {
+        this.record = record;
+        this.bibEntity = bibEntity;
         
 
     }
@@ -44,38 +45,38 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        Title title = (Title) Entity.instance(Title.class);
-        String titleLabel = null;
-        
-        MarcxmlDataField field245 = record.getDataField("245");
-        MarcxmlDataField field130 = record.getDataField("130");
-        MarcxmlDataField field240 = record.getDataField("240");
-        
-        if (field245 != null) {
-            // Full title always comes from 245. If 130 and/or 240 are present,
-            // the $a fields are the same.
-            // 245$a stores full title
-            titleLabel = field245.getSubfield("a").getTextValue();
-        }
+        Entity title = Entity.instance();
+//        String titleLabel = null;
+//        
+//        MarcxmlDataField field245 = record.getDataField("245");
+//        MarcxmlDataField field130 = record.getDataField("130");
+//        MarcxmlDataField field240 = record.getDataField("240");
+//        
+//        if (field245 != null) {
+//            // Full title always comes from 245. If 130 and/or 240 are present,
+//            // the $a fields are the same.
+//            // 245$a stores full title
+//            titleLabel = field245.getSubfield("a").getTextValue();
+//        }
         
         // Could there be a 130 or 240 without 245? Then need to look for
         // $a in those fields if no 245.
            
         // Return an empty list if the title has no text value.
-        if (titleLabel != null) {
-            title.setRdfsLabel(titleLabel);
-            
-            // Build TitleElements
-            List<TitleElement> titleElements = 
-                    buildTitleElements(field245, titleLabel);
-            
-            // TODO Add values from 130 or 240
-            // NB If 130 is present, 240 is ignored
-        
-            title.addTitleElements(titleElements);
-            entities.add(title);
-            entities.addAll(titleElements);
-        }
+//        if (titleLabel != null) {
+//            title.setRdfsLabel(titleLabel);
+//            
+//            // Build TitleElements
+//            List<TitleElement> titleElements = 
+//                    buildTitleElements(field245, titleLabel);
+//            
+//            // TODO Add values from 130 or 240
+//            // NB If 130 is present, 240 is ignored
+//        
+//            title.addTitleElements(titleElements);
+//            entities.add(title);
+//            entities.addAll(titleElements);
+//        }
 
         return entities;
     }

@@ -86,9 +86,11 @@ public class BaseConverterTest extends AbstractTestClass {
     }
     
     public static class MockEntityBuilder extends BaseEntityBuilder {
+        
+        private Record record;
 
         public MockEntityBuilder(Record record) {
-            super(record);
+            this.record = record;
         }
 
         @Override

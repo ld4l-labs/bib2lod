@@ -6,29 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Instance;
-import org.ld4l.bib2lod.entities.Item;
-import org.ld4l.bib2lod.entities.Work;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.ontology.InstanceClass;
+import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
- 
-    private Instance instance;
-    private Work work;
-    private Item item;
+public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
+    
+    private final MarcxmlRecord record;
 
     /**
      * Constructor
      * @throws EntityBuilderException 
      */
-    public MarcxmlInstanceBuilder(MarcxmlRecord record) 
+    public MarcxmlInstanceBuilder(Record record) 
             throws EntityBuilderException {
-        super(record, null, null);
-        this.instance = new Instance();
+        this.record = (MarcxmlRecord) record;
+        this.entity = Entity.instance(InstanceClass.superClass());
     }
 
     /* (non-Javadoc)
@@ -38,38 +36,40 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     public List<Entity> build() throws EntityBuilderException {
 
         List<Entity> entities = new ArrayList<Entity>();
-        convertLeader();
+        //convertLeader();
         
         // TODO Need to build work first, since some values affect the work
         // as well as or instead of the instance. E.g., language value in 
         // control field 008.
         // Build the work, assign to this.work
         // Same for item
-        
+      
         entities.addAll(convertControlFields());
-        entities.addAll(convertDataFields());         
-        entities.add(instance);
+//        entities.addAll(convertDataFields());   
+        
+        entities.add(entity);
         return entities;
     }
     
     private void convertLeader() {
-        // TODO
+        throw new RuntimeException("Method not implemented.");
     }
     
     /**
-     * Convert this Instance's controlfields
+     * Convert the Record's control fields
      * @throws EntityBuilderException
      */
     private List<Entity> convertControlFields() throws EntityBuilderException {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        MarcxmlControlField controlField001 = record.getControlField("001");
+        MarcxmlControlField controlField001 = 
+                ((MarcxmlRecord) record).getControlField("001");
         
         if (controlField001 != null) {
-            entities.addAll(new MarcxmlIdentifierBuilder(controlField001, instance)
-                    .build());    
-            
+            entities.addAll(EntityBuilder.instance(
+                    MarcxmlIdentifierBuilder.class, controlField001, entity)
+                   .build());                
         }
    
         // TODO Other control fields. Some affect work as well as instance

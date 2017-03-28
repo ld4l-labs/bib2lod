@@ -88,7 +88,6 @@ public class JsonOptionsReader implements OptionsReader {
         try {
             return parser.parse(options, args);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             throw new OptionsReaderException(e);
         }  
     }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.cleaning.Cleaner;
@@ -16,6 +18,15 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.configuration.StubConfiguration;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.ResourceBuilder;
+import org.ld4l.bib2lod.entities.SimpleEntity;
+import org.ld4l.bib2lod.entities.SimpleLink;
+import org.ld4l.bib2lod.entities.SimpleResourceBuilder;
+import org.ld4l.bib2lod.entities.SimpleType;
+import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
  * A simple implementation.
@@ -62,6 +73,56 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Cleaner createCleaner() {
         return new MarcxmlCleaner();
+    }
+    
+    @Override
+    public Entity createEntity() {
+        return new SimpleEntity();
+    }
+    
+    @Override
+    public Entity createEntity(Type type) {
+        return new SimpleEntity(type);
+    }
+    
+    @Override
+    public Entity createEntity(String uri) {
+        return new SimpleEntity(uri);
+    }
+    
+    @Override
+    public Entity createEntity(Resource resource) {
+        return new SimpleEntity(resource);
+    }
+
+    @Override
+    public Type createType(Resource ontClass) {
+        return new SimpleType(ontClass);
+    }
+
+    @Override
+    public Type createType(String uri) {
+        return new SimpleType(uri);
+    }
+    
+    @Override
+    public Type createType(OntologyClass ontClass) {
+        return new SimpleType(ontClass);
+    }
+
+    @Override
+    public Link createLink(Property property) {
+        return new SimpleLink(property);
+    }
+
+    @Override
+    public Link createLink(String uri) {
+        return new SimpleLink(uri);
+    }
+
+    @Override
+    public ResourceBuilder createResourceBuilder(Entity entity) {
+        return new SimpleResourceBuilder(entity);
     }
 
 }

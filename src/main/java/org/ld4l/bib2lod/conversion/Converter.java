@@ -53,7 +53,7 @@ public interface Converter {
     /**
      * Factory method
      */
-    static Converter instance() {
+    public static Converter instance() {
         return Bib2LodObjectFactory.instance().createConverter();
     }
 
