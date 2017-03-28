@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * An abstract implementation.
  */
-public abstract class BaseField implements Field {
+public abstract class BaseRecordField implements RecordField {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     

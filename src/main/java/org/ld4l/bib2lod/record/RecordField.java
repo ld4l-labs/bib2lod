@@ -7,22 +7,22 @@ package org.ld4l.bib2lod.record;
  * providing no public setter methods, and only final private or protected 
  * setters.
  */
-public interface Field {
+public interface RecordField {
  
-    // TODO Should this be RecordElementInstantiationException? See if it's used for
-    // anything other than instantiation.
-    public static class RecordElementException extends Exception {
+    // TODO Should this be RecordFieldInstantiationException? See if it's used 
+    // for anything other than instantiation.
+    public static class RecordFieldException extends Exception {
         private static final long serialVersionUID = 1L;
 
-        public RecordElementException(String message, Throwable cause) {
+        public RecordFieldException(String message, Throwable cause) {
             super(message, cause);
         }
 
-        public RecordElementException(String message) {
+        public RecordFieldException(String message) {
             super(message);
         }
 
-        public RecordElementException(Throwable cause) {
+        public RecordFieldException(Throwable cause) {
             super(cause);
         }
     }
