@@ -4,7 +4,7 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.ld4l.bib2lod.record.RecordElement.RecordElementException;
+import org.ld4l.bib2lod.record.Field.RecordElementException;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 

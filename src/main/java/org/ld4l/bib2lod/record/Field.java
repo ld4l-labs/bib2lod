@@ -7,7 +7,7 @@ package org.ld4l.bib2lod.record;
  * providing no public setter methods, and only final private or protected 
  * setters.
  */
-public interface RecordElement {
+public interface Field {
  
     // TODO Should this be RecordElementInstantiationException? See if it's used for
     // anything other than instantiation.

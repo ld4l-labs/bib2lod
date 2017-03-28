@@ -5,12 +5,11 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Instance;
 import org.ld4l.bib2lod.entities.Item;
 import org.ld4l.bib2lod.entities.Work;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.resources.Entity;
 
 /**
  * Builds an Instance from a Record.
@@ -25,9 +24,9 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
      * Constructor
      * @throws EntityBuilderException 
      */
-    public MarcxmlInstanceBuilder(MarcxmlRecord record) 
+    public MarcxmlInstanceBuilder(Record record) 
             throws EntityBuilderException {
-        super(record, null, null);
+        super(record);
         this.instance = new Instance();
     }
 
@@ -38,17 +37,17 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     public List<Entity> build() throws EntityBuilderException {
 
         List<Entity> entities = new ArrayList<Entity>();
-        convertLeader();
-        
-        // TODO Need to build work first, since some values affect the work
-        // as well as or instead of the instance. E.g., language value in 
-        // control field 008.
-        // Build the work, assign to this.work
-        // Same for item
-        
-        entities.addAll(convertControlFields());
-        entities.addAll(convertDataFields());         
-        entities.add(instance);
+//        convertLeader();
+//        
+//        // TODO Need to build work first, since some values affect the work
+//        // as well as or instead of the instance. E.g., language value in 
+//        // control field 008.
+//        // Build the work, assign to this.work
+//        // Same for item
+//        
+//        entities.addAll(convertControlFields());
+//        entities.addAll(convertDataFields());         
+//        entities.add(instance);
         return entities;
     }
     
@@ -64,13 +63,13 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        MarcxmlControlField controlField001 = record.getControlField("001");
+        //MarcxmlControlField controlField001 = record.getControlField("001");
         
-        if (controlField001 != null) {
-            entities.addAll(new MarcxmlIdentifierBuilder(controlField001, instance)
-                    .build());    
+//        if (controlField001 != null) {
+//            entities.addAll(new MarcxmlIdentifierBuilder(controlField001, instance)
+//                    .build());    
             
-        }
+//        }
    
         // TODO Other control fields. Some affect work as well as instance
         // (e.g., language value in 008)

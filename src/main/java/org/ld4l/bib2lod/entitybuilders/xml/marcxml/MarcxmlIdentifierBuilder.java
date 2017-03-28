@@ -6,11 +6,12 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.BibEntity;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.EntityInterface;
 import org.ld4l.bib2lod.entities.Identifier;
 import org.ld4l.bib2lod.entities.Identifier.IdentifierType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
+import org.ld4l.bib2lod.resources.Entity;
 
 public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder { 
 
@@ -22,16 +23,16 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      * @param instance - the related Instance
      * @throws EntityBuilderException 
      */
-    public MarcxmlIdentifierBuilder(MarcxmlField field, BibEntity bibEntity) 
+    public MarcxmlIdentifierBuilder(MarcxmlField field, Entity bibEntity) 
             throws EntityBuilderException {
-        super(null, field, bibEntity);
+        super(field, bibEntity);
     }
      
     public List<Entity> build() {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        Identifier identifier;
+        Entity identifier;
         
         identifier = buildFromControlField();
         
@@ -39,10 +40,10 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
             // TODO Get identifier from a datafield
         }
 
-        if (identifier != null) {
-            ((BibEntity) relatedEntity).addIdentifier(identifier); 
-            // Don't add to entities here - then they get gets added twice.
-        }
+//        if (identifier != null) {
+//            ((BibEntity) relatedEntity).addIdentifier(identifier); 
+//            entities.add(identifier);
+//        }
         
         return entities;
     }
@@ -51,16 +52,16 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      * Builds an Identifier from the 001 controlfield. Returns null if 
      * this.field is not an 001 controlfield.
      */   
-    private Identifier buildFromControlField() {
+    private Entity buildFromControlField() {
         
-        if (field instanceof MarcxmlControlField) {
-            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
-                Identifier identifier = new Identifier();
-                identifier.addType(IdentifierType.LOCAL);
-                identifier.setRdfValue(field.getTextValue());
-                return identifier;
-            }           
-        }    
+//        if (field instanceof MarcxmlControlField) {
+//            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
+//                Entity identifier = new Identifier();
+//                identifier.addType(IdentifierType.LOCAL);
+//                identifier.setRdfValue(field.getTextValue());
+//                return identifier;
+//            }           
+//        }    
         return null;
     }
 

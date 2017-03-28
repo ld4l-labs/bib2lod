@@ -9,7 +9,7 @@ import java.util.List;
  * by the Entity implementation are ontology-specific. Different target 
  * ontologies require different implementations.
  */
-public interface Entity {
+public interface EntityInterface {
     
     /**
      * Signals an exception during creation of an Entity. 
@@ -35,9 +35,9 @@ public interface Entity {
      * Factory method
      * @param type - the type of Entity to instantiate
      */
-    static Entity instance(Class<? extends Entity> type) {
+    static EntityInterface instance(Class<? extends EntityInterface> type) {
         try {
-            return (Entity) type
+            return (EntityInterface) type
                     .newInstance();
         } catch (InstantiationException
                 | IllegalAccessException | IllegalArgumentException

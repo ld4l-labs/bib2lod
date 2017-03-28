@@ -5,14 +5,23 @@ package org.ld4l.bib2lod;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
+import org.ld4l.bib2lod.record.Field;
+import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.resources.Entity;
+import org.ld4l.bib2lod.resources.Link;
+import org.ld4l.bib2lod.resources.ResourceBuilder;
+import org.ld4l.bib2lod.resources.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -112,15 +121,10 @@ public abstract class Bib2LodObjectFactory {
      */
     public OutputService createOutputService(Configuration configuration) {
         try {
-            String className =  configuration.getOutputServiceClass();
-            Class<?> cls = Class.forName(className);
-            Constructor<?> con = cls.getConstructor(Configuration.class);
-            OutputService os = (OutputService) con.newInstance(configuration);
-            return os;
-//            return (OutputService) Class
-//                    .forName(configuration.getOutputServiceClass())
-//                    .getConstructor(Configuration.class)
-//                    .newInstance(configuration);
+            return (OutputService) Class
+                    .forName(configuration.getOutputServiceClass())
+                    .getConstructor(Configuration.class)
+                    .newInstance(configuration);
         } catch (InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException
@@ -128,6 +132,55 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         }
     }
+    
+    public EntityBuilder createEntityBuilder(
+            Class<?> builderClass, Record record) {         
+        try {
+            Constructor<?> c = builderClass.getConstructor(Record.class);
+            EntityBuilder eb = (EntityBuilder) c.newInstance(record);
+            return eb;
+//            return (EntityBuilder) builderClass
+//                    .getConstructor(Record.class)                     
+//                    .newInstance(record);
+        } catch (IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException | InstantiationException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        } 
+    }
+    
+    public EntityBuilder createEntityBuilder(Class<?> builderClass, 
+            Record record, Field element, Entity entity) {        
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(
+                            Record.class, Field.class, Entity.class)
+                    .newInstance(record, element, entity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        } 
+    }
+    
+    public abstract Entity createEntity();
+    
+    public abstract Entity createEntity(Type type);
+    
+    public abstract Entity createEntity(String uri);
+    
+    public abstract Type createType(Resource ontClass);
+    
+    public abstract Type createType(String uri);
+    
+    public abstract Link createLink(Property property);
+    
+    public abstract Link createLink(String uri);
+    
+    public abstract ResourceBuilder createResourceBuilder(Entity entity);
+
+
 
 }
 

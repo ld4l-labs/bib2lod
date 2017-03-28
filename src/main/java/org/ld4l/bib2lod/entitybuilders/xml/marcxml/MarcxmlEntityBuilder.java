@@ -1,15 +1,41 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
+import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.resources.Entity;
 
-public abstract class MarcxmlEntityBuilder implements EntityBuilder {
+public abstract class MarcxmlEntityBuilder extends BaseEntityBuilder {
+
+    /**
+     * Constructor
+     */
+    public MarcxmlEntityBuilder(Record record) {
+        super(record);
+    }
     
-    protected final MarcxmlRecord record;
-    protected final MarcxmlField field;
-    protected final Entity relatedEntity;
+    /**
+     * Constructor
+     */
+    public MarcxmlEntityBuilder(MarcxmlRecord record, Entity relatedEntity) {
+        super(record, null, relatedEntity);
+    }
+
+    /**
+     * Constructor
+     */
+    public MarcxmlEntityBuilder(MarcxmlRecord record, MarcxmlField field,
+            Entity relatedEntity) {
+        super(record, field, relatedEntity);
+    }
+    
+    /**
+     * Constructor
+     */
+    public MarcxmlEntityBuilder(MarcxmlField field, Entity relatedEntity) {
+        super(null, field, relatedEntity);
+    }
 
     /**
      * Constructor. Requires a full Record and/or a specific field in the 
@@ -19,18 +45,20 @@ public abstract class MarcxmlEntityBuilder implements EntityBuilder {
      * required to build a Work. 
      * @throws EntityBuilderException 
      */
-    public MarcxmlEntityBuilder(MarcxmlRecord record, MarcxmlField field, 
-            Entity relatedEntity) 
-            throws EntityBuilderException {
-        
-        if (record == null && field == null && relatedEntity == null) {
-            throw new EntityBuilderException("A Record and/or a field and/or " +
-                    "a related Entity must be provided");
-        }
-        this.record = record;
-        this.field = field;   
-        this.relatedEntity = relatedEntity;
-    }
+//    public MarcxmlEntityBuilder(MarcxmlRecord record, MarcxmlField field, 
+//            EntityInterface relatedEntity) 
+//            throws EntityBuilderException {
+//        
+//        if (record == null && field == null && relatedEntity == null) {
+//            throw new EntityBuilderException("A Record and/or a field and/or " +
+//                    "a related Entity must be provided");
+//        }
+//        this.record = record;
+//        this.field = field;   
+//        this.relatedEntity = relatedEntity;
+//    }
+
+
     
 
 }

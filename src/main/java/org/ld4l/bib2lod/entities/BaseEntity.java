@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * An abstract implementation.                     
  */
-public abstract class BaseEntity implements Entity {
+public abstract class BaseEntity implements EntityInterface {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
 
