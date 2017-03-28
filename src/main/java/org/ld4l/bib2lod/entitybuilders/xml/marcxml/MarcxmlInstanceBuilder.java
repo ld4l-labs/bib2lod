@@ -56,7 +56,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     }
     
     /**
-     * Convert the Record's control fields
+     * Converts the Record's control fields
      * @throws EntityBuilderException
      */
     private List<Entity> convertControlFields() throws EntityBuilderException {

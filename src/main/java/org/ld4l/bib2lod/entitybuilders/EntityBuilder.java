@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
@@ -51,6 +50,12 @@ public interface EntityBuilder {
      * Builds an Entity.
      * @throws EntityBuilderException 
      */
+    // TODO It remains to be seen whether this should return a single Entity or
+    // a list of Entities. That is, might we build more than one Entity from a
+    // single EntityBuilder.build() call, or will the additional Entities always
+    // be built from a call to another EntityBuilder's build() method? For now,
+    // define return type as a list for flexibility. If not needed, change to
+    // Entity.
     public List<Entity> build() throws EntityBuilderException;
 
 }
