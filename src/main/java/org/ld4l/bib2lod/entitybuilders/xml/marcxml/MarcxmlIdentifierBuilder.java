@@ -6,10 +6,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities_deprecated.BibEntity;
-import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
-import org.ld4l.bib2lod.entities_deprecated.Identifier;
-import org.ld4l.bib2lod.entities_deprecated.Identifier.IdentifierType;
+import org.ld4l.bib2lod.ontology.IdentifierClass;
+import org.ld4l.bib2lod.record.Field;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 
@@ -17,15 +15,19 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
+    private final MarcxmlField field;
+    private final Entity bibEntity;
+    
     /**
      * Construct a new identifier from a control field.
-     * @param field - the record field 
+     * @param fields - the relevant fields in the record
      * @param instance - the related Instance
      * @throws EntityBuilderException 
      */
-    public MarcxmlIdentifierBuilder(MarcxmlField field, Entity bibEntity) 
+    public MarcxmlIdentifierBuilder(Field field, Entity bibEntity) 
             throws EntityBuilderException {
-        super(field, bibEntity);
+        this.field = (MarcxmlField) field;
+        this.bibEntity = bibEntity;
     }
      
     public List<Entity> build() {
@@ -37,7 +39,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         identifier = buildFromControlField();
         
         if (identifier == null) {
-            // TODO Get identifier from a datafield
+            //identifier = buildFromDataField();
         }
 
 //        if (identifier != null) {
@@ -54,6 +56,13 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      */   
     private Entity buildFromControlField() {
         
+        if (field instanceof MarcxmlControlField) {
+            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
+                Entity identifier = Entity.instance(IdentifierClass.superClass());
+                identifier.addType(IdentifierClass.LOCAL);
+            }
+        }
+        
 //        if (field instanceof MarcxmlControlField) {
 //            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
 //                Entity identifier = new Identifier();
@@ -63,6 +72,10 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
 //            }           
 //        }    
         return null;
+    }
+    
+    private Entity buildFromDataField() {
+        throw new RuntimeException("Method not implemented");
     }
 
 }

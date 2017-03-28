@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
-import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -23,7 +23,7 @@ public class SimpleEntity implements Entity {
     
 
     /**
-     * Constructor
+     * Constructors
      */
     public SimpleEntity() {
         this.children = new TreeMap<Link, List<Entity>>();
@@ -31,12 +31,14 @@ public class SimpleEntity implements Entity {
         this.types = new ArrayList<Type>();
     }
 
-    /**
-     * Constructor
-     */
     public SimpleEntity(Type type) {
         this();
         types.add(type);
+    }
+    
+    public SimpleEntity(Resource type) {
+        this();
+        types.add(Type.instance(type));
     }
     
     /**
@@ -107,6 +109,11 @@ public class SimpleEntity implements Entity {
     @Override
     public Resource getResource() {
         return resource;
+    }
+
+    @Override
+    public void addType(OntologyClass ontClass) {
+        types.add(Type.instance(ontClass));
     }
 
 }

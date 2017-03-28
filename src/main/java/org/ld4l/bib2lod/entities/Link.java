@@ -9,19 +9,17 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 public interface Link {
     
     /**
-     * Factory method
+     * Factory methods
      */
     public static Entity instance(Type type) {
         return Bib2LodObjectFactory.instance().createEntity(type);
     }
     
-    /**
-     * Factory method
-     */
     public static Entity instance(String uri) {
         return Bib2LodObjectFactory.instance().createEntity(uri);
     }
 
+    
     public Property getProperty();
 
 }

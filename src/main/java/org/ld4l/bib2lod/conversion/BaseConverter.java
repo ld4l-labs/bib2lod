@@ -11,9 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.ResourceBuilder;
-import org.ld4l.bib2lod.entities.SimpleEntity;
-import org.ld4l.bib2lod.entities.ResourceBuilder.ResourceBuilderException;
-import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
@@ -100,11 +97,11 @@ public abstract class BaseConverter implements Converter {
                 // child when adding the linking statement to the parent.
                 
                 // TODO Maybe do inside the build method, not sure yet.
-                entity.setResource(builder.build());                
+                //entity.setResource(builder.build());                
             }
             
             for (Entity entityWithResource : entities) {
-                model.add(entityWithResource.getResource().getModel());
+                //model.add(entityWithResource.getResource().getModel());
             }
             
         } catch (EntityBuilderException e) {

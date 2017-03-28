@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -15,25 +16,24 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 public interface Entity {
     
     /**
-     * Factory method
+     * Factory methods
      */
     public static Entity instance() {
         return Bib2LodObjectFactory.instance().createEntity();
     }
-    
-    /**
-     * Factory method
-     */
+
     public static Entity instance(Type type) {
         return Bib2LodObjectFactory.instance().createEntity(type);
     }
     
-    /**
-     * Factory method
-     */
+    public static Entity instance(Resource superClass) {
+        return Bib2LodObjectFactory.instance().createEntity(superClass);
+    }
+
     public static Entity instance(String uri) {
         return Bib2LodObjectFactory.instance().createEntity(uri);
     }
+    
     
     public void addChildren(Link link, List<Entity> entities);
     
@@ -54,5 +54,7 @@ public interface Entity {
     public void setResource(Resource resource);
     
     public Resource getResource();
+
+    void addType(OntologyClass ontClass);
 
 }

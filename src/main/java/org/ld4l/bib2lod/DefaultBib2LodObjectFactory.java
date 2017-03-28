@@ -26,6 +26,7 @@ import org.ld4l.bib2lod.entities.SimpleLink;
 import org.ld4l.bib2lod.entities.SimpleResourceBuilder;
 import org.ld4l.bib2lod.entities.SimpleType;
 import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
  * A simple implementation.
@@ -88,6 +89,11 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Entity createEntity(String uri) {
         return new SimpleEntity(uri);
     }
+    
+    @Override
+    public Entity createEntity(Resource resource) {
+        return new SimpleEntity(resource);
+    }
 
     @Override
     public Type createType(Resource ontClass) {
@@ -97,6 +103,11 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Type createType(String uri) {
         return new SimpleType(uri);
+    }
+    
+    @Override
+    public Type createType(OntologyClass ontClass) {
+        return new SimpleType(ontClass);
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.ld4l.bib2lod.entities.ResourceBuilder;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -193,6 +194,18 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
     @Override
     public ResourceBuilder createResourceBuilder(Entity entity) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Entity createEntity(Resource type) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+
+    @Override
+    public Type createType(OntologyClass ontClass) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }

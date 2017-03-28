@@ -2,7 +2,7 @@ package org.ld4l.bib2lod.entities;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
  * Wraps a Resource representing a class in the ontology.
@@ -15,19 +15,21 @@ public class SimpleType implements Type {
     private Resource ontClass;
     
     /**
-     * Constructor
+     * Constructors
      */
     public SimpleType(Resource ontClass) {
         this.ontClass = ontClass;
     }
-    
-    /**
-     * Constructor
-     */
+
     public SimpleType(String uri) {
         this.ontClass = ResourceFactory.createResource(uri);
     }
     
+    public SimpleType(OntologyClass ontClass) {
+        this(ontClass.uri());
+    }
+    
+
     @Override
     public Resource getOntClass() {
         return ontClass;
