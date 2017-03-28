@@ -14,14 +14,16 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     // Stub infrastructure
     // ----------------------------------------------------------------------
 
-    MapOfLists<Class<? extends Configurable>, Configurable> instances = new MapOfLists<>();
+    MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
     
-    public <T extends Configurable> void addInstance(Class<T> interfaze, T instance) {
+    public <T> void addInstance(Class<T> interfaze, T instance) {
         addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
     }
     
-    public <T extends Configurable> void addInstance(Class<T> interfaze, T instance, Configuration config) {
-        instance.configure(config);
+    public <T> void addInstance(Class<T> interfaze, T instance, Configuration config) {
+        if (instance instanceof Configurable) {
+            ((Configurable) instance).configure(config);
+        }
         instances.addValue(interfaze, instance);
     }
     
@@ -31,13 +33,13 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Configurable> T instanceForClass(Class<T> class1) {
+    public <T> T instanceForInterface(Class<T> class1) {
         return (T) instances.getValue(class1);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Configurable> List<T> instancesForClass(Class<T> class1) {
+    public <T> List<T> instancesForInterface(Class<T> class1) {
         return (List<T>) instances.getValues(class1);
     }
 

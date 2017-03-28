@@ -5,12 +5,12 @@ package org.ld4l.bib2lod.configuration;
 /**
  * TODO
  */
-public class JsonConfigurator implements Configurator {
+public class JsonConfigurationFileReader implements Configurator {
 
     /**
      * @param args
      */
-    public JsonConfigurator(String configFile) {
+    public JsonConfigurationFileReader(String configFile) {
         // TODO Auto-generated constructor stub
         throw new RuntimeException("JsonConfigurator Constructor not implemented.");
     }

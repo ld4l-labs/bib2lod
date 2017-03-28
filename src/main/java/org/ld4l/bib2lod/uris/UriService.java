@@ -40,7 +40,7 @@ public interface UriService extends Configurable {
      */
     static List<UriService> instances() {
         return Bib2LodObjectFactory.getFactory()
-                .instancesForClass(UriService.class);
+                .instancesForInterface(UriService.class);
     }
     
     /**

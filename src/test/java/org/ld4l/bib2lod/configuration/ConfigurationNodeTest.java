@@ -13,12 +13,16 @@ import org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
 /**
  * Test the functionality for attributes. The functionality for child nodes is
  * almost totally the same code.
+ * 
+ * Test the functionality for className.
  */
 public class ConfigurationNodeTest {
     private static final String KEY1 = "key1";
     private static final String KEY2 = "key2";
     private static final String VALUE1 = "value1";
     private static final String VALUE2 = "value2";
+    private static final String CLASSNAME1 = "classname1";
+    private static final String CLASSNAME2 = "classname2";
     private ConfigurationNode config;
     private ConfigurationNode config2;
     private ConfigurationNode child1;
@@ -84,5 +88,25 @@ public class ConfigurationNodeTest {
                 .build();
         assertEquals(config, new Builder(config).build());
     }
+    
+    @Test
+    public void getClassNameFromNone_returnsNull() {
+        config = new Builder().build();
+        assertNull(config.getClassName());
+    }
+    
+    @Test
+    public void getClassNameFromOne_returnsValue() {
+        config = new Builder().setClassName(CLASSNAME1).build();
+        assertEquals(CLASSNAME1, config.getClassName());
+    }
+    @Test
+    public void getClassNameFromTwo_returnsLast() {
+        config = new Builder().setClassName(CLASSNAME1).setClassName(CLASSNAME2).build();
+        assertEquals(CLASSNAME2, config.getClassName());
+    }
+    
+
+
 
 }

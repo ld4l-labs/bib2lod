@@ -2,39 +2,115 @@
 
 package org.ld4l.bib2lod.configuration;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
+import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
- * TODO
+ * Create instances of various classes, as directed by the configuration.
+ * 
+ * Pass configuration objects to these instance if appropriate.
+ * 
+ * Serve these instances on request.
  */
 public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
+    private MapOfLists<Class<?>, Object> configuredInstances = new MapOfLists<>();
 
     /**
-     * @param jsonConfigurator
+     * Create the instances, configure them, and store them for later.
+     * 
+     * @param configuration
+     *            Must be fully processed: command-line overrides have been
+     *            applied and attributes have cascaded.
      */
     public DefaultBib2LodObjectFactory(Configuration configuration) {
-        // TODO Auto-generated constructor stub
-        throw new RuntimeException("DefaultBib2LodObjectFactory Constructor not implemented.");
+        checkThatTopNodeIsValid(configuration);
+        populateTheMap(configuration, "TOP_NODE");
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Bib2LodObjectFactory#instanceForClass(java.lang.Class)
-     */
-    @Override
-    public <T extends Configurable> T instanceForClass(Class<T> class1) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Bib2LodObjectFactory.instanceForClass() not implemented.");
-        
+    private void checkThatTopNodeIsValid(Configuration configuration) {
+        Objects.requireNonNull(configuration,
+                "You must provide a Configuration object.");
+        if (configuration.getClassName() != null) {
+            throw new ConfigurationException(
+                    "The top configuration node is not permitted to have a class name.");
+        }
     }
-    
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.configuration.Bib2LodObjectFactory#instancesForClass(java.lang.Class)
+
+    /**
+     * Recursively go through the configuration tree, creating instances and
+     * storing them in the map.
      */
+    private void populateTheMap(Configuration configNode, String nodeName) {
+        createAndConfigure(configNode, nodeName);
+
+        for (String key : configNode.getChildNodeKeys()) {
+            for (Configuration childNode : configNode.getChildNodes(key)) {
+                populateTheMap(childNode, key);
+            }
+        }
+    }
+
+    private void createAndConfigure(Configuration configNode, String nodeName) {
+        String className = configNode.getClassName();
+        if (className == null) {
+            return;
+        }
+
+        try {
+            Class<?> instanceClass = Class.forName(className);
+            Class<?> interfaceClass = inferInterfaceClass(instanceClass,
+                    nodeName);
+            Object instance = instanceClass.newInstance();
+            if (instance instanceof Configurable) {
+                ((Configurable) instance).configure(configNode);
+            }
+            configuredInstances.addValue(interfaceClass, instance);
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException e) {
+            throw new ConfigurationException(
+                    "Failed to create an instance of " + className, e);
+        }
+    }
+
+    /**
+     * Does the instance class implement an interface whose simple name is the
+     * same as the node name?
+     */
+    private Class<?> inferInterfaceClass(Class<?> instanceClass,
+            String nodeName) {
+        List<Class<?>> candidates = new ArrayList<>();
+        for (Class<?> interfaze : instanceClass.getInterfaces()) {
+            if (interfaze.getSimpleName().equals(nodeName)) {
+                candidates.add(interfaze);
+            }
+        }
+        if (candidates.isEmpty()) {
+            throw new ConfigurationException("Class '" + instanceClass.getName()
+                    + "' doesn't implement any interfaces named '" + nodeName
+                    + "'.");
+        } else if (candidates.size() > 1) {
+            throw new ConfigurationException("Class '" + instanceClass.getName()
+                    + "' implements more than one interface named '" + nodeName
+                    + "': " + candidates);
+        } else {
+            return candidates.get(0);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Configurable> List<T> instancesForClass(Class<T> class1) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Bib2LodObjectFactory.instancesForClass() not implemented.");
-        
+    public <T> T instanceForInterface(Class<T> interfaze) {
+        return (T) configuredInstances.getValue(interfaze);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> instancesForInterface(Class<T> interfaze) {
+        return (List<T>) configuredInstances.getValues(interfaze);
     }
 
 }

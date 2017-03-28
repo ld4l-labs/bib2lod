@@ -48,9 +48,9 @@ public class SimpleManagerTest extends AbstractTestClass {
         
         @Override
         public void configure(Configuration config) {
-            // Nothing to do
+            // Nothing to do.
         }
-
+        
        @Override
         public void convert(InputDescriptor input, OutputDescriptor output) 
                 throws ConverterException {
@@ -172,7 +172,7 @@ public class SimpleManagerTest extends AbstractTestClass {
     @Test
     public void converterError_IgnoresInput() {
         SimpleManager.convert();
-        MockConverter converter = (MockConverter) factory.instanceForClass(Converter.class);
+        MockConverter converter = (MockConverter) factory.instanceForInterface(Converter.class);
         Assert.assertEquals(2, converter.getOutputCount());     
     }
 }

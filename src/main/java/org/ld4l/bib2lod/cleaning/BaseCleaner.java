@@ -10,10 +10,12 @@ import org.ld4l.bib2lod.configuration.Configuration;
 public abstract class BaseCleaner implements Cleaner {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    protected Configuration configuration;
 
     @Override
-    public void configure(Configuration config) {
-        // Nothing to do.
+    public void configure(Configuration c) {
+        configuration = c;
     }
 
     @Override

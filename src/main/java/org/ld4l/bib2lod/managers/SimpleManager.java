@@ -7,14 +7,11 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.configuration.Arguments;
-import org.ld4l.bib2lod.configuration.ArgumentsParser;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.CommandLineOverrider;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.ConfigurationNode;
 import org.ld4l.bib2lod.configuration.Configurator;
 import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.JsonConfigurator;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.io.InputService;
@@ -41,10 +38,8 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-//            Arguments commandLine = new ArgumentsParser(args);
-//            Configuration configuration = new CommandLineOverrider(
-//                    new JsonConfigurator(commandLine.getConfigFile()),
-//                    commandLine.getOverrides()).getTopLevelConfiguration();
+//            CommandLineOptions commandLine = new CommandLineOptions(args);
+//            Configuration configuration = new JsonConfigurator(commandLine).getTopLevelConfiguration();
             Configuration configuration = new StubConfigurator().getTopLevelConfiguration();
             Bib2LodObjectFactory.setFactoryInstance(
                     new DefaultBib2LodObjectFactory(configuration));
@@ -93,11 +88,9 @@ public final class SimpleManager {
         }
     }
     
-    private static class StubConfigurator implements Configurator {
-
-        /**
-         * <pre>
-        {
+    /** Implements this Json.
+     * <pre>
+    {
         "local_namespace": "http://data.ld4l.org/cornell/",
         "InputService": {
          "class": "org.ld4l.bib2lod.io.FileInputService",
@@ -120,18 +113,48 @@ public final class SimpleManager {
         "Converter": {
          "class": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter"
         }
-        }                                                                                             
-          * </pre>
-         */
+    }                                                                                             
+      * </pre>
+     */
+    private static class StubConfigurator implements Configurator {
+
         @Override
-        public Configuration getTopLevelConfiguration() 
-
-            // TODO Auto-generated method stub
-            throw new RuntimeException(
-                    "Configurator.getTopLevelConfiguration() not implemented.");
-
+        public Configuration getTopLevelConfiguration() {
+            return new ConfigurationNode.Builder()
+                    .addAttribute("local_namespace",
+                            "http://data.ld4l.org/cornell/")
+                    .addChild("InputService",
+                            new ConfigurationNode.Builder()
+                                    .setClassName(
+                                            "org.ld4l.bib2lod.io.FileInputService")
+                                    .addAttribute("source",
+                                            "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml")
+                                    .addAttribute("extension", "xml").build())
+                    .addChild("OutputService",
+                            new ConfigurationNode.Builder()
+                                    .setClassName(
+                                            "org.ld4l.bib2lod.io.FileOutputService")
+                                    .addAttribute("destination",
+                                            "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/")
+                                    .addAttribute("format", "N-TRIPLE").build())
+                    .addChild("UriService",
+                            new ConfigurationNode.Builder()
+                                    .setClassName(
+                                            "org.ld4l.bib2lod.uri.RandomUriMinter")
+                                    .build())
+                    .addChild("Cleaner",
+                            new ConfigurationNode.Builder()
+                                    .setClassName(
+                                            "org.ld4l.bib2lod.cleaning.MarcxmlCleaner")
+                                    .build())
+                    .addChild("Converter",
+                            new ConfigurationNode.Builder()
+                                    .setClassName(
+                                            "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter")
+                                    .build())
+                    .build();
         }
-        
+
     }
 
 }

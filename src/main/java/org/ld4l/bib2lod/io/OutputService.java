@@ -48,7 +48,7 @@ public interface OutputService extends Configurable {
      */
     static OutputService instance() {
         return Bib2LodObjectFactory.getFactory()
-                .instanceForClass(OutputService.class);
+                .instanceForInterface(OutputService.class);
     }
 
     /**

@@ -3,8 +3,12 @@ package org.ld4l.bib2lod.testing;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -91,5 +95,47 @@ public abstract class AbstractTestClass {
     protected String getSyserrForTest() {
         return capturedSyserr.toString();
     }
-      
+
+    // ----------------------------------------------------------------------
+    // More precise methods for dealing with expected exceptions. Test not only
+    // the class of the exception, but the contents of the message, and the same
+    // for the first-level cause.
+    // ----------------------------------------------------------------------
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    protected void expectException(Class<? extends Throwable> type,
+            String messageSubstring) {
+        exception.expect(type);
+        exception.expectMessage(messageSubstring);
+    }
+
+    protected void expectException(Class<? extends Throwable> type,
+            Matcher<String> messageMatcher) {
+        exception.expect(type);
+        exception.expectMessage(messageMatcher);
+    }
+
+    protected void expectExceptionCause(Class<? extends Throwable> type,
+            String messageSubstring) {
+        exception.expectCause(Matchers.<Throwable>instanceOf(type));
+        exception.expectCause(Matchers.<Throwable>hasProperty("message",
+                Matchers.containsString(messageSubstring)));
+    }
+
+    protected void expectExceptionCause(Class<? extends Throwable> type,
+            Matcher<String> messageMatcher) {
+        exception.expectCause(Matchers.<Throwable>instanceOf(type));
+        exception.expectCause(
+                Matchers.<Throwable>hasProperty("message", messageMatcher));
+    }
+
+    protected void expectException(Class<? extends Throwable> clazz,
+            String messageSubstring, Class<? extends Throwable> causeClazz,
+            String causeMessageSubstring) {
+        expectException(clazz, messageSubstring);
+        expectExceptionCause(causeClazz, causeMessageSubstring);
+    }
+
 }

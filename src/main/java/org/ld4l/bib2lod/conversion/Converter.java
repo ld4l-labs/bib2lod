@@ -56,7 +56,7 @@ public interface Converter extends Configurable {
      */
     static Converter instance() {
         return Bib2LodObjectFactory.getFactory()
-                .instanceForClass(Converter.class);
+                .instanceForInterface(Converter.class);
     }
 
     public void convert(InputDescriptor input, OutputDescriptor output)

@@ -53,6 +53,14 @@ public interface Configuration {
     List<Configuration> getChildNodes(String key);
 
     /**
+     * Get the name of the associated class. An object of this class will be
+     * created, and will receive this Configuration if it implements Configurable.
+     * 
+     * If null, then no instance is created for this Configuration.
+     */
+    String getClassName();
+
+    /**
      * Indicates a problem when applying the onfiguration.
      */
     public static class ConfigurationException extends RuntimeException {

@@ -10,7 +10,7 @@ public interface Cleaner extends Configurable {
      */
     static Cleaner instance() {
         return Bib2LodObjectFactory.getFactory()
-                .instanceForClass(Cleaner.class);
+                .instanceForInterface(Cleaner.class);
     }
 
     public String clean();

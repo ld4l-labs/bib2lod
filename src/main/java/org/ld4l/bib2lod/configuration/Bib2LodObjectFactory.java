@@ -5,35 +5,45 @@ package org.ld4l.bib2lod.configuration;
 import java.util.List;
 
 /**
- * TODO
+ * This base class holds the factory instance which others will use.
  */
 public abstract class Bib2LodObjectFactory {
-    /**
-     * @param defaultBib2LodObjectFactory
-     */
-    public static void setFactoryInstance(Bib2LodObjectFactory factory) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException(
-                "Bib2LodObjectFactory.setInstance() not implemented.");
-    }
-    
-    public static Bib2LodObjectFactory getFactory() {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Bib2LodObjectFactory.getFactory() not implemented.");
-    }
-    
-    /**
-     * @param class1
-     * @return
-     */
-    public abstract <T extends Configurable> T instanceForClass(
-            Class<T> class1);
+    private static Bib2LodObjectFactory instance;
 
     /**
-     * @param class1
-     * @return
+     * Set the factory instance. May be called only once.
      */
-    public abstract <T extends Configurable> List<T> instancesForClass(
-            Class<T> class1);
+    public static void setFactoryInstance(Bib2LodObjectFactory factory) {
+        if (instance == null) {
+            instance = factory;
+        } else {
+            throw new IllegalStateException(
+                    "Bib2LodObjectFactory instance has already been set");
+        }
+    }
+
+    /**
+     * Get the factory instance. Never returns null.
+     */
+    public static Bib2LodObjectFactory getFactory() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                    "Bib2LodObjectFactory instance has not been set");
+        } else {
+            return instance;
+        }
+    }
+
+    /**
+     * Return the first instance that was created for this interface. May return
+     * null.
+     */
+    public abstract <T> T instanceForInterface(Class<T> interfaze);
+
+    /**
+     * Return the instances that were created for this interface. May be empty,
+     * but never null.
+     */
+    public abstract <T> List<T> instancesForInterface(Class<T> interfaze);
 
 }

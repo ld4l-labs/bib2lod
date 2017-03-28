@@ -15,11 +15,13 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
 public class ConfigurationNode implements Configuration {
     private final MapOfLists<String, String> attributesMap;
     private final MapOfLists<String, Configuration> childrenMap;
+    private final String className;
 
     public ConfigurationNode(MapOfLists<String, String> attributesMap,
-            MapOfLists<String, Configuration> childrenMap) {
+            MapOfLists<String, Configuration> childrenMap, String className) {
         this.attributesMap = attributesMap;
         this.childrenMap = childrenMap;
+        this.className = className;
     }
 
     @Override
@@ -53,6 +55,11 @@ public class ConfigurationNode implements Configuration {
     }
 
     @Override
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hashCode(attributesMap, childrenMap);
     }
@@ -80,12 +87,14 @@ public class ConfigurationNode implements Configuration {
      *                                .attribute("this", "that")
      *                                .attribute("some", "other")
      *                                .child("son", configNode)
+     *                                .setClassName("my.excellent.Class")
      *                                .build();
      * </pre>
      */
     public static class Builder {
         private final MapOfLists<String, String> attributesMap = new MapOfLists<>();
         private final MapOfLists<String, Configuration> childrenMap = new MapOfLists<>();
+        private String className;
 
         public Builder() {
             // Nothing to do
@@ -120,8 +129,13 @@ public class ConfigurationNode implements Configuration {
             return this;
         }
 
+        public Builder setClassName(String name) {
+            className = name;
+            return this;
+        }
+
         public ConfigurationNode build() {
-            return new ConfigurationNode(attributesMap, childrenMap);
+            return new ConfigurationNode(attributesMap, childrenMap, className);
         }
 
     }

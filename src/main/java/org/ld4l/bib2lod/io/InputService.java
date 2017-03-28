@@ -52,7 +52,7 @@ public interface InputService extends Configurable {
      */
     static InputService instance() {
         return Bib2LodObjectFactory.getFactory()
-                .instanceForClass(InputService.class);
+                .instanceForInterface(InputService.class);
     }
 
     /**
