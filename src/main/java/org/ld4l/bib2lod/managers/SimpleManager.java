@@ -7,11 +7,15 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.AttributeCascader;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.CommandLineOptions;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.ConfigurationNode;
+import org.ld4l.bib2lod.configuration.ConfigurationOverrider;
 import org.ld4l.bib2lod.configuration.Configurator;
 import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.JsonConfigurationFileParser;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.io.InputService;
@@ -38,12 +42,7 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-//            CommandLineOptions commandLine = new CommandLineOptions(args);
-//            Configuration configuration = new JsonConfigurator(commandLine).getTopLevelConfiguration();
-            Configuration configuration = new StubConfigurator().getTopLevelConfiguration();
-            Bib2LodObjectFactory.setFactoryInstance(
-                    new DefaultBib2LodObjectFactory(configuration));
-            
+            setup(args);
             convert();
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
@@ -51,6 +50,27 @@ public final class SimpleManager {
             e.printStackTrace();
             LOGGER.error("CONVERSION FAILED TO COMPLETE");
         }
+    }
+
+    /**
+     * Parse the command line options, read the config file and adjust as
+     * necessary. Set up the object factory.
+     */
+    private static void setup(String[] args) {
+        CommandLineOptions commandLine = new CommandLineOptions(args);
+
+        Configuration configuration;
+        configuration = new JsonConfigurationFileParser(commandLine)
+                .getTopLevelConfiguration();
+        configuration = new ConfigurationOverrider(commandLine)
+                .override(configuration);
+        configuration = new AttributeCascader().cascade(configuration);
+
+        Bib2LodObjectFactory.setFactoryInstance(
+                new DefaultBib2LodObjectFactory(configuration));
+
+        // Configuration configuration = new
+        // StubConfigurator().getTopLevelConfiguration();
     }
 
     /**
@@ -88,7 +108,9 @@ public final class SimpleManager {
         }
     }
     
-    /** Implements this Json.
+    /**
+     * StubConverter implements the following Json.
+     * 
      * <pre>
     {
         "local_namespace": "http://data.ld4l.org/cornell/",

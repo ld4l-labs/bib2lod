@@ -5,7 +5,6 @@ package org.ld4l.bib2lod.configuration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -70,7 +69,7 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         parseArgs("-o", "replace=newValue");
         assertNull(configFile);
         assertEquals(1, overrides.size());
-        assertExpectedOverride(keys("replace"), "newValue", overrides.get(0));
+        assertExpectedOverride(path("replace"), "newValue", overrides.get(0));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         parseArgs("-o", "replace");
         assertNull(configFile);
         assertEquals(1, overrides.size());
-        assertExpectedOverride(keys("replace"), null, overrides.get(0));
+        assertExpectedOverride(path("replace"), null, overrides.get(0));
     }
 
     @Test
@@ -86,7 +85,7 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         parseArgs("-o", "replace:me:with:this=excellent value");
         assertNull(configFile);
         assertEquals(1, overrides.size());
-        assertExpectedOverride(keys("replace", "me", "with", "this"),
+        assertExpectedOverride(path("replace", "me", "with", "this"),
                 "excellent value", overrides.get(0));
     }
 
@@ -116,13 +115,13 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         overrides = commandLine.getOverrides();
     }
 
-    private List<String> keys(String... keys) {
-        return Arrays.asList(keys);
+    private ConfigurationFieldPath path(String... keys) {
+        return new ConfigurationFieldPath(keys);
     }
 
-    private void assertExpectedOverride(List<String> keys, String value,
-            AttributeOverride override) {
-        assertEquals(keys, override.keys);
+    private void assertExpectedOverride(ConfigurationFieldPath path,
+            String value, AttributeOverride override) {
+        assertEquals(path, override.keys);
         assertEquals(value, override.value);
     }
 }

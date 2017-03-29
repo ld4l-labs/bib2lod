@@ -15,8 +15,8 @@ import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
  * <pre>
  * Valid arguments are:
  * -c ConfigurationFile
- * -o InputService:source=some.file
- * -o OutputService:ext
+ * -o InputService:source=some.file   --   adds a value
+ * -o OutputService:ext               --   removes values
  * 
  * If no -c is specified, we will accept an environment variable instead.
  * </pre>
@@ -41,7 +41,7 @@ public class CommandLineOptions implements ConfigurationOptions {
             // Somebody must have put us into a controlled environment.
         }
     }
-    
+
     private void parseArguments(String... args) {
         for (Iterator<String> it = Arrays.asList(args).iterator(); it
                 .hasNext();) {
@@ -89,8 +89,7 @@ public class CommandLineOptions implements ConfigurationOptions {
                             + "the equals sign: '" + spec + "'");
         }
 
-        List<String> names = Arrays.asList(namestring.split(":"));
-        overrides.add(new AttributeOverride(names, value));
+        overrides.add(new AttributeOverride(value, namestring.split(":")));
     }
 
     @Override
