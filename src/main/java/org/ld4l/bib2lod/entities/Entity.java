@@ -1,8 +1,8 @@
 package org.ld4l.bib2lod.entities;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
@@ -38,7 +38,7 @@ public interface Entity {
     
     public void addChildren(Link link, List<Entity> entities);
     
-    public TreeMap<Link, List<Entity>> getChildren();
+    public HashMap<Link, List<Entity>> getChildren();
     
     public List<Entity> getChildren(Link link); 
     

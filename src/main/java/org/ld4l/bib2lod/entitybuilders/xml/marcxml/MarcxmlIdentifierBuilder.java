@@ -37,17 +37,15 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        Entity identifier;
-        
-        identifier = buildFromControlField();
+        Entity identifier = buildFromControlField();;
         
         if (identifier == null) {
             //identifier = buildFromDataField();
         }
         
         if (identifier != null) {
-//            bibEntity.addChild(
-//                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
+            bibEntity.addChild(
+                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
             entities.add(identifier);
         }
   
@@ -66,7 +64,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
                 identifier.addType(IdentifierClass.LOCAL);
                 Link link = Link.instance(RDF.value);
                 identifier.addAttribute(link, field.getTextValue());
-                
+                return identifier;             
             }
         }    
         return null;     

@@ -17,7 +17,7 @@ import org.ld4l.bib2lod.ontology.OntologyClass;
  */
 public class SimpleEntity implements Entity {
     
-    TreeMap<Link, List<Entity>> children;
+    HashMap<Link, List<Entity>> children;
     Map<Link, List<Literal>> attributes;
     List<Type> types;
     Resource resource;
@@ -27,7 +27,7 @@ public class SimpleEntity implements Entity {
      * Constructors
      */
     public SimpleEntity() {
-        this.children = new TreeMap<Link, List<Entity>>();
+        this.children = new HashMap<Link, List<Entity>>();
         this.attributes = new HashMap<Link, List<Literal>>();
         this.types = new ArrayList<Type>();
     }
@@ -49,13 +49,13 @@ public class SimpleEntity implements Entity {
     
     @Override
     public void addChild(Link link, Entity entity) {
-        throw new RuntimeException("Method not implemented.");
-//        if (children.containsKey(link)) {
-//            List<Entity> list = children.get(link);
-//            list.add(entity);  
-//        } else {
-//            children.put(link, Arrays.asList(entity));
-//        }  
+        
+        if (children.containsKey(link)) {
+            List<Entity> list = children.get(link);
+            list.add(entity);  
+        } else {
+            children.put(link, Arrays.asList(entity));
+        }  
     }
     
     @Override
@@ -70,7 +70,7 @@ public class SimpleEntity implements Entity {
     }
     
     @Override
-    public TreeMap<Link, List<Entity>> getChildren() {
+    public HashMap<Link, List<Entity>> getChildren() {
         return children;
     }
     
