@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +22,7 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.record.Field;
+import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.uris.UriService;
 
@@ -151,10 +150,10 @@ public abstract class Bib2LodObjectFactory {
 
     
     public EntityBuilder createEntityBuilder(Class<?> builderClass,
-            Field field, Entity relatedEntity) {
+            RecordField field, Entity relatedEntity) {
         try {
             return (EntityBuilder) builderClass
-                    .getConstructor(Field.class, Entity.class)                           
+                    .getConstructor(RecordField.class, Entity.class)                           
                     .newInstance(field, relatedEntity);
         } catch (InstantiationException
                 | IllegalAccessException | IllegalArgumentException

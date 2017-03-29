@@ -11,15 +11,15 @@ public interface Link {
     /**
      * Factory methods
      */
-    public static Entity instance(Type type) {
-        return Bib2LodObjectFactory.instance().createEntity(type);
-    }
-    
-    public static Entity instance(String uri) {
-        return Bib2LodObjectFactory.instance().createEntity(uri);
-    }
 
+    public static Link instance(Property property) {
+        return Bib2LodObjectFactory.instance().createLink(property);
+    }
     
+    public static Link instance(String uri) {
+        return Bib2LodObjectFactory.instance().createLink(uri);
+    }
+  
     public Property getProperty();
 
 }

@@ -12,7 +12,7 @@ import org.w3c.dom.Node;
  */
 // TODO Not using at this point. Not clear whether it serves any purpose or just
 // gets in the way. What are the methods common to different types of XML input?
-public abstract class BaseXmlField implements XmlField {
+public abstract class BaseXmlElement implements XmlElement {
     
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -21,7 +21,7 @@ public abstract class BaseXmlField implements XmlField {
     /**
      * Constructor
      */
-    public BaseXmlField(Element element) {
+    public BaseXmlElement(Element element) {
         textValue = setTextValue(element);
     }
     

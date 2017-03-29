@@ -34,6 +34,8 @@ public interface Entity {
         return Bib2LodObjectFactory.instance().createEntity(uri);
     }
     
+
+    public void addChild(Link link, Entity entity);
     
     public void addChildren(Link link, List<Entity> entities);
     
@@ -44,6 +46,10 @@ public interface Entity {
     public void addType(Type type);
     
     public List<Type> getTypes();
+    
+    public void addAttribute(Link link, String textValue);
+    
+    public void addAttribute(Link link, Literal value);
     
     public void addAttributes(Link link, List<Literal> values);
     

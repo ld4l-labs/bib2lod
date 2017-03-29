@@ -1,13 +1,14 @@
 package org.ld4l.bib2lod.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
@@ -41,12 +42,20 @@ public class SimpleEntity implements Entity {
         types.add(Type.instance(type));
     }
     
-    /**
-     * Constructor
-     */
     public SimpleEntity(String typeUri) {
         this();
         types.add(Type.instance(typeUri));
+    }
+    
+    @Override
+    public void addChild(Link link, Entity entity) {
+        throw new RuntimeException("Method not implemented.");
+//        if (children.containsKey(link)) {
+//            List<Entity> list = children.get(link);
+//            list.add(entity);  
+//        } else {
+//            children.put(link, Arrays.asList(entity));
+//        }  
     }
     
     @Override
@@ -78,6 +87,22 @@ public class SimpleEntity implements Entity {
     @Override
     public List<Type> getTypes() {
         return types;
+    }
+    
+    @Override
+    public void addAttribute(Link link, String string) {
+        addAttribute(link, ResourceFactory.createStringLiteral(string));
+    }
+    
+    @Override
+    public void addAttribute(Link link, Literal value) {
+        
+        if (attributes.containsKey(link)) {
+            List<Literal> list = attributes.get(link);
+            list.add(value);
+        } else {
+            attributes.put(link, Arrays.asList(value));
+        }
     }
     
     @Override

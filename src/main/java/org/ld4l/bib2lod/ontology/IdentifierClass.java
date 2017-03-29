@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.ontology;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.entities.Type;
 
 public enum IdentifierClass implements OntologyClass {
 
@@ -10,13 +11,15 @@ public enum IdentifierClass implements OntologyClass {
     
     private String uri;
     private Resource ontClass;
+    private Type type;
     
     /**
      * Constructor
      */
     IdentifierClass(Namespace namespace, String name) {
         this.uri = namespace.uri() + name;
-        ontClass = ResourceFactory.createResource(uri);
+        this.ontClass = ResourceFactory.createResource(uri);
+        this.type = Type.instance(ontClass);
     }
     
     @Override
@@ -28,8 +31,14 @@ public enum IdentifierClass implements OntologyClass {
     public Resource ontClass() {
         return ontClass;
     } 
+
+    @Override
+    public Type type() {
+        return type;
+    }
     
     public static Resource superClass() {
         return IDENTIFIER.ontClass;
     }
+
 }
