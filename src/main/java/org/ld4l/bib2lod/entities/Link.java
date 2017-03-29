@@ -19,7 +19,6 @@ public interface Link {
         return Bib2LodObjectFactory.instance().createLink(uri);
     }
 
-    
     public Property getProperty();
 
 }

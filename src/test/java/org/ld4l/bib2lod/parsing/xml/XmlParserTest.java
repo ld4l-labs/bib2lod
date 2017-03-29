@@ -104,7 +104,7 @@ public class XmlParserTest extends AbstractTestClass {
             return true;
         }
     }
-    
+
     public static class MockXmlRecordElement extends BaseXmlElement {
 
         public MockXmlRecordElement(Element element) {

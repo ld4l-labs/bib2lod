@@ -34,14 +34,13 @@ public interface Entity {
         return Bib2LodObjectFactory.instance().createEntity(uri);
     }
     
-    
     public void addChild(Link link, Entity entity);
     
     public void addChildren(Link link, List<Entity> entities);
     
     public TreeMap<Link, List<Entity>> getChildren();
     
-    public List<Entity> getChildren(Link link);
+    public List<Entity> getChildren(Link link); 
     
     public void addType(Type type);
     
@@ -62,7 +61,5 @@ public interface Entity {
     public Resource getResource();
 
     void addType(OntologyClass ontClass);
-
-
-
+    
 }

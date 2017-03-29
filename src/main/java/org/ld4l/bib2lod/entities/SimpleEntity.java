@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -50,7 +49,13 @@ public class SimpleEntity implements Entity {
     
     @Override
     public void addChild(Link link, Entity entity) {
-        throw new RuntimeException("Method not implemented");
+        throw new RuntimeException("Method not implemented.");
+//        if (children.containsKey(link)) {
+//            List<Entity> list = children.get(link);
+//            list.add(entity);  
+//        } else {
+//            children.put(link, Arrays.asList(entity));
+//        }  
     }
     
     @Override

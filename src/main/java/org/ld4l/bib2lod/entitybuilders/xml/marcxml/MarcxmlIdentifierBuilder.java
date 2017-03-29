@@ -46,8 +46,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         }
         
         if (identifier != null) {
-            bibEntity.addChild(
-                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
+//            bibEntity.addChild(
+//                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
             entities.add(identifier);
         }
   
@@ -69,7 +69,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
                 
             }
         }    
-        return null;
+        return null;     
     }
     
     private Entity buildFromDataField() {

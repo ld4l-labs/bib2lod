@@ -20,9 +20,5 @@ public abstract class MarcxmlField extends BaseXmlElement {
     public MarcxmlField(Element element) {
         super(element);
     }
-    
-
-
-
 
 }

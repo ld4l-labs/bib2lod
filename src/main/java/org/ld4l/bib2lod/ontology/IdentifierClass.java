@@ -31,7 +31,7 @@ public enum IdentifierClass implements OntologyClass {
     public Resource ontClass() {
         return ontClass;
     } 
-    
+
     @Override
     public Type type() {
         return type;
@@ -40,6 +40,5 @@ public enum IdentifierClass implements OntologyClass {
     public static Resource superClass() {
         return IDENTIFIER.ontClass;
     }
-    
-    
+
 }
