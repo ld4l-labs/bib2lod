@@ -2,7 +2,6 @@ package org.ld4l.bib2lod.ontology;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.ld4l.bib2lod.entities.Type;
 
 public enum InstanceClass implements OntologyClass {
     
@@ -36,4 +35,5 @@ public enum InstanceClass implements OntologyClass {
     public static Resource superClass() {
         return INSTANCE.ontClass;
     }
+
 }

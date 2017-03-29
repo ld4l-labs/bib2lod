@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
@@ -88,15 +89,27 @@ public abstract class BaseConverter implements Converter {
 
         try {
             List<Entity> entities = buildEntities(record);
-            
+ 
             // Build a Resource from each Entity and attach it to the Entity.
             for (Entity entity : entities) {
-                entity.buildResource();
+                // If entity already has a Resource, it was built during a
+                // previous iteration.
+                if (entity.getResource() == null) {
+                    entity.buildResource();
+                }
             }
             
             // Add the Resource for each Entity to the Model
             for (Entity entity : entities) {
-                model.add(entity.getResource().getModel());
+                Resource resource = entity.getResource();
+                if (resource != null) {
+                    Model resourceModel = resource.getModel();
+                    // TODO I think adding an empty model generates an error.
+                    // Check.
+                    if (! resourceModel.isEmpty()) {
+                        model.add(entity.getResource().getModel());
+                    }
+                }
             }
             
         } catch (EntityBuilderException e) {

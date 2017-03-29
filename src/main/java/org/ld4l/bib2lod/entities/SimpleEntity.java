@@ -44,7 +44,6 @@ public class SimpleEntity implements Entity {
     
     public SimpleEntity(Resource ontClass) {
         this();
-        resource = ontClass;
         types.add(Type.instance(ontClass));
     }
     
@@ -158,7 +157,12 @@ public class SimpleEntity implements Entity {
         for (Entry<Link, List<Entity>> entry : children.entrySet()) {
             List<Entity> entities = entry.getValue();
             for (Entity childEntity : entities) {
-                childEntity.buildResource();
+                // If childEntity already has a Resource, it was built on an
+                // earlier iteration through the Resource-building loop in the
+                // Converter. 
+                if (childEntity.getResource() == null) {
+                    childEntity.buildResource();
+                }
             }
         }        
     }
@@ -175,13 +179,12 @@ public class SimpleEntity implements Entity {
         }
         
         // Add relationships to children
-
         for (Entry<Link, List<Entity>> child : children.entrySet()) {
             Link link = child.getKey();
             List<Entity> childEntities = children.get(link);
             for (Entity childEntity : childEntities) {
                 resource.addProperty(
-                        link.getProperty(), childEntity.getResource().getURI());
+                        link.getProperty(), childEntity.getResource());
             }          
         }
         

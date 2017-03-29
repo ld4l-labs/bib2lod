@@ -1,7 +1,6 @@
 package org.ld4l.bib2lod.ontology;
 
 import org.apache.jena.rdf.model.Resource;
-import org.ld4l.bib2lod.entities.Type;
 
 /**
  * The ontology classes used to type Entities. Implementing enums apply to a
