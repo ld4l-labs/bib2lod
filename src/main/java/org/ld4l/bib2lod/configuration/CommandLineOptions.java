@@ -17,13 +17,32 @@ import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
  * -c ConfigurationFile
  * -o InputService:source=some.file
  * -o OutputService:ext
+ * 
+ * If no -c is specified, we will accept an environment variable instead.
  * </pre>
  */
 public class CommandLineOptions implements ConfigurationOptions {
+    private static final String ENV_CONFIG_FILE = "BIB2LOD_CONFIG_FILE";
     private String configFile;
     private List<AttributeOverride> overrides = new ArrayList<>();
 
     public CommandLineOptions(String... args) {
+        getDefaultsFromEnvironment();
+        parseArguments(args);
+    }
+
+    private void getDefaultsFromEnvironment() {
+        try {
+            String cf = System.getenv(ENV_CONFIG_FILE);
+            if (cf != null) {
+                configFile = cf;
+            }
+        } catch (SecurityException e) {
+            // Somebody must have put us into a controlled environment.
+        }
+    }
+    
+    private void parseArguments(String... args) {
         for (Iterator<String> it = Arrays.asList(args).iterator(); it
                 .hasNext();) {
             String key = it.next();

@@ -79,6 +79,12 @@ public class ConfigurationNode implements Configuration {
         }
     }
 
+    @Override
+    public String toString() {
+        return "ConfigurationNode[className=" + className + ", attributesMap="
+                + attributesMap + ", childrenMap=" + childrenMap + "]";
+    }
+
     /**
      * The way to build an immutable node.
      *

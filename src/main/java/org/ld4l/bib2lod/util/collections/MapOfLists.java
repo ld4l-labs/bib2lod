@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -73,6 +72,11 @@ public class MapOfLists<K, V> {
             MapOfLists<?, ?> that = (MapOfLists<?, ?>) obj;
             return this.map.equals(that.map);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MapOfLists[" + map + "]";
     }
 
 }
