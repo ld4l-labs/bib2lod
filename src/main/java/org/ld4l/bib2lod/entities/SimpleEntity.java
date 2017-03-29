@@ -31,7 +31,7 @@ public class SimpleEntity implements Entity {
     /**
      * Constructors
      */
-    public SimpleEntity() {
+    private SimpleEntity() {
         this.children = new HashMap<Link, List<Entity>>();
         this.attributes = new HashMap<Link, List<Literal>>();
         this.types = new ArrayList<Type>();
@@ -42,15 +42,12 @@ public class SimpleEntity implements Entity {
         types.add(type);
     }
     
-    public SimpleEntity(Resource type) {
+    public SimpleEntity(Resource ontClass) {
         this();
-        types.add(Type.instance(type));
+        resource = ontClass;
+        types.add(Type.instance(ontClass));
     }
     
-    public SimpleEntity(String typeUri) {
-        this();
-        types.add(Type.instance(typeUri));
-    }
     
     @Override
     public void addChild(Link link, Entity entity) {
@@ -151,11 +148,11 @@ public class SimpleEntity implements Entity {
         // Build children of this Entity before building the Entity. Then
         // when building the linking assertion from this Entity to the child, 
         // we have the URI of the child's Resource.
-        buildChildren();
-        buildEntity();
+        buildChildResources();
+        buildThisResource();
     }
     
-    private void buildChildren() {
+    private void buildChildResources() {
 
         Map<Link, List<Entity>> children = getChildren();
         for (Entry<Link, List<Entity>> entry : children.entrySet()) {
@@ -166,7 +163,7 @@ public class SimpleEntity implements Entity {
         }        
     }
     
-    private void buildEntity() {
+    private void buildThisResource() {
 
         Model model = ModelFactory.createDefaultModel();
         String uri = UriService.getUri(this);

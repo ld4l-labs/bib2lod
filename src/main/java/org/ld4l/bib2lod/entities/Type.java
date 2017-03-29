@@ -12,18 +12,14 @@ public interface Type {
     /**
      * Factory methods
      */
-    public static Type instance(Resource ontClass) {
-        return Bib2LodObjectFactory.instance().createType(ontClass);
-    }
-
-    public static Type instance(String uri) {
-        return Bib2LodObjectFactory.instance().createType(uri);
-    }
-    
+   
     public static Type instance(OntologyClass ontClass) {
         return Bib2LodObjectFactory.instance().createType(ontClass);
     }
 
+    public static Type instance(Resource ontClass) {
+        return Bib2LodObjectFactory.instance().createType(ontClass);
+    }
     
     public String getUri();
 
@@ -32,6 +28,9 @@ public interface Type {
      */
     // TODO Consider changing Resource to OntClass
     public Resource getOntClass();
+
+
+
 
 
 }

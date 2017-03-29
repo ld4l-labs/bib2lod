@@ -18,22 +18,14 @@ public interface Entity {
     /**
      * Factory methods
      */
-    public static Entity instance() {
-        return Bib2LodObjectFactory.instance().createEntity();
-    }
-
     public static Entity instance(Type type) {
         return Bib2LodObjectFactory.instance().createEntity(type);
     }
     
-    public static Entity instance(Resource superClass) {
-        return Bib2LodObjectFactory.instance().createEntity(superClass);
+    public static Entity instance(Resource ontClass) {
+        return Bib2LodObjectFactory.instance().createEntity(ontClass);
     }
 
-    public static Entity instance(String uri) {
-        return Bib2LodObjectFactory.instance().createEntity(uri);
-    }
-    
     public void addChild(Link link, Entity entity);
     
     public void addChildren(Link link, List<Entity> entities);

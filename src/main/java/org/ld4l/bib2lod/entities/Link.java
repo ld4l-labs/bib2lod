@@ -9,14 +9,10 @@ import org.ld4l.bib2lod.Bib2LodObjectFactory;
 public interface Link {
     
     /**
-     * Factory methods
+     * Factory method
      */
     public static Link instance(Property property) {
         return Bib2LodObjectFactory.instance().createLink(property);
-    }
-    
-    public static Link instance(String uri) {
-        return Bib2LodObjectFactory.instance().createLink(uri);
     }
 
     public Property getProperty();

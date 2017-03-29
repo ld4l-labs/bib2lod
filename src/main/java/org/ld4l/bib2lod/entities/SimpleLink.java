@@ -1,7 +1,7 @@
 package org.ld4l.bib2lod.entities;
 
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.OntologyProperty;
 
 /**
  * Wraps a Property to link an Entity to a List of other Entities.
@@ -11,18 +11,16 @@ public class SimpleLink implements Link {
     private final Property property;
     
     /**
-     * Constructor
+     * Constructors
      */
     public SimpleLink(Property property) {
         this.property = property;
     }
     
-    /**
-     * Constructor
-     */
-    public SimpleLink(String uri) {
-        this.property = ResourceFactory.createProperty(uri);
+    public SimpleLink(OntologyProperty ontProperty) {
+        this.property = ontProperty.property();
     }
+    
     
     public Property getProperty() {
         return property;

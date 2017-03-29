@@ -12,6 +12,5 @@ public interface OntologyClass {
   
     public String uri();   
     public Resource ontClass();
-    public Type type();   
 
 }

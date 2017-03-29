@@ -19,6 +19,7 @@ import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -150,19 +151,19 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     @Override
-    public Entity createEntity() {
+    public Link createLink(Property property) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
-    public Entity createEntity(Type type) {
+    public Link createLink(OntologyProperty ontProperty) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
-    public Entity createEntity(String uri) {
+    public Type createType(OntologyClass ontClass) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
@@ -170,35 +171,17 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Type createType(Resource ontClass) {
         // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
+        return null;
     }
-
+    
     @Override
-    public Type createType(String uri) {
+    public Entity createEntity(Resource ontClass) {
         // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
+        return null;
     }
 
     @Override
-    public Link createLink(Property property) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
-    public Link createLink(String uri) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
-    public Entity createEntity(Resource type) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
-    public Type createType(OntologyClass ontClass) {
+    public Entity createEntity(Type type) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }

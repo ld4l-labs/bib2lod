@@ -36,7 +36,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     public List<Entity> build() throws EntityBuilderException {
 
         List<Entity> entities = new ArrayList<Entity>();
-        //convertLeader();
+        // convertLeader();
         
         // TODO Need to build work first, since some values affect the work
         // as well as or instead of the instance. E.g., language value in 
@@ -52,6 +52,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     }
     
     private void convertLeader() {
+        // TODO Convert leader
         throw new RuntimeException("Method not implemented.");
     }
     

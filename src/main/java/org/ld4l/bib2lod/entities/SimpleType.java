@@ -15,20 +15,16 @@ public class SimpleType implements Type {
     private final Resource ontClass;
     
     /**
-     * Constructors
+     * Constructor
      */
+    public SimpleType(OntologyClass ontClass) {
+        this.ontClass = ResourceFactory.createResource(ontClass.uri());
+    }
+    
     public SimpleType(Resource ontClass) {
         this.ontClass = ontClass;
     }
 
-    public SimpleType(String uri) {
-        this.ontClass = ResourceFactory.createResource(uri);
-    }
-    
-    public SimpleType(OntologyClass ontClass) {
-        this(ontClass.uri());
-    }
-    
 
     @Override
     public Resource getOntClass() {

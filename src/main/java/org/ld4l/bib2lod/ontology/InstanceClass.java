@@ -14,7 +14,6 @@ public enum InstanceClass implements OntologyClass {
     
     private String uri;
     private Resource ontClass;
-    private Type type;
     
     /**
      * Constructor
@@ -22,7 +21,6 @@ public enum InstanceClass implements OntologyClass {
     InstanceClass(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
-        this.type = Type.instance(ontClass);
     }
     
     @Override
@@ -34,12 +32,7 @@ public enum InstanceClass implements OntologyClass {
     public Resource ontClass() {
         return ontClass;
     } 
-    
-    @Override
-    public Type type() {
-        return type;
-    }
-    
+
     public static Resource superClass() {
         return INSTANCE.ontClass;
     }

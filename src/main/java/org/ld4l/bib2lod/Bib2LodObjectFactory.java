@@ -3,8 +3,6 @@
 package org.ld4l.bib2lod;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -21,8 +19,9 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.record.RecordField;
+import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -161,24 +160,18 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         } 
     }
-
-    public abstract Entity createEntity();
     
     public abstract Entity createEntity(Type type);
     
-    public abstract Entity createEntity(String uri);
-    
-    public abstract Entity createEntity(Resource type);
+    public abstract Entity createEntity(Resource ontClass);
     
     public abstract Type createType(OntologyClass ontClass);
     
     public abstract Type createType(Resource ontClass);
     
-    public abstract Type createType(String uri);
-    
     public abstract Link createLink(Property property);
-    
-    public abstract Link createLink(String uri);
+
+    public abstract Link createLink(OntologyProperty ontProperty);
 
 }
 

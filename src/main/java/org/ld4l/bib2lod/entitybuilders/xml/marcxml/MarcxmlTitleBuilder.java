@@ -43,7 +43,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         
         List<Entity> entities = new ArrayList<Entity>();
         
-        Entity title = Entity.instance();
+        //Entity title = Entity.instance(); // instantiate with Title superclass
 //        String titleLabel = null;
 //        
 //        MarcxmlDataField field245 = record.getDataField("245");

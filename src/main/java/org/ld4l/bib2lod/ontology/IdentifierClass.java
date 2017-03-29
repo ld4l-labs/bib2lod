@@ -11,7 +11,6 @@ public enum IdentifierClass implements OntologyClass {
     
     private String uri;
     private Resource ontClass;
-    private Type type;
     
     /**
      * Constructor
@@ -19,7 +18,6 @@ public enum IdentifierClass implements OntologyClass {
     IdentifierClass(Namespace namespace, String name) {
         this.uri = namespace.uri() + name;
         this.ontClass = ResourceFactory.createResource(uri);
-        this.type = Type.instance(ontClass);
     }
     
     @Override
@@ -32,11 +30,6 @@ public enum IdentifierClass implements OntologyClass {
         return ontClass;
     } 
 
-    @Override
-    public Type type() {
-        return type;
-    }
-    
     public static Resource superClass() {
         return IDENTIFIER.ontClass;
     }
