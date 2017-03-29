@@ -12,7 +12,7 @@ public class SimpleType implements Type {
     // Could use OntClass instead of Resource if there are methods that would
     // be useful. Probably not useful unless/until we read in the ontology to
     // get subclasses and other axioms.
-    private Resource ontClass;
+    private final Resource ontClass;
     
     /**
      * Constructors

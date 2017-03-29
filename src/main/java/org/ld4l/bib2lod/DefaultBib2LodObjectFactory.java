@@ -20,10 +20,8 @@ import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Link;
-import org.ld4l.bib2lod.entities.ResourceBuilder;
 import org.ld4l.bib2lod.entities.SimpleEntity;
 import org.ld4l.bib2lod.entities.SimpleLink;
-import org.ld4l.bib2lod.entities.SimpleResourceBuilder;
 import org.ld4l.bib2lod.entities.SimpleType;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.ontology.OntologyClass;
@@ -118,11 +116,6 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Link createLink(String uri) {
         return new SimpleLink(uri);
-    }
-
-    @Override
-    public ResourceBuilder createResourceBuilder(Entity entity) {
-        return new SimpleResourceBuilder(entity);
     }
 
 }

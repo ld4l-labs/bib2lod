@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
  */
 public class SimpleLink implements Link {
     
-    Property property;
+    private final Property property;
     
     /**
      * Constructor

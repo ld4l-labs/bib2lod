@@ -10,7 +10,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.ResourceBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
@@ -90,18 +89,14 @@ public abstract class BaseConverter implements Converter {
         try {
             List<Entity> entities = buildEntities(record);
             
+            // Build a Resource from each Entity and attach it to the Entity.
             for (Entity entity : entities) {
-                ResourceBuilder builder = ResourceBuilder.instance(entity);  
-                // TODO This is where we need to walk the tree and build 
-                // children before the parent, so we can use the URI from the
-                // child when adding the linking statement to the parent.
-                
-                // TODO Maybe do inside the build method, not sure yet.
-                //entity.setResource(builder.build());                
+                entity.buildResource();
             }
             
-            for (Entity entityWithResource : entities) {
-                //model.add(entityWithResource.getResource().getModel());
+            // Add the Resource for each Entity to the Model
+            for (Entity entity : entities) {
+                model.add(entity.getResource().getModel());
             }
             
         } catch (EntityBuilderException e) {

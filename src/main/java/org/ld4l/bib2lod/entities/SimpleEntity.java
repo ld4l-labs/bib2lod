@@ -5,11 +5,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Map.Entry;
+
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.RDF;
 import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.uris.UriService;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -17,10 +22,10 @@ import org.ld4l.bib2lod.ontology.OntologyClass;
  */
 public class SimpleEntity implements Entity {
     
-    HashMap<Link, List<Entity>> children;
-    Map<Link, List<Literal>> attributes;
-    List<Type> types;
-    Resource resource;
+    private final HashMap<Link, List<Entity>> children;
+    private final Map<Link, List<Literal>> attributes;
+    private final List<Type> types;
+    private Resource resource;
     
 
     /**
@@ -139,6 +144,60 @@ public class SimpleEntity implements Entity {
     @Override
     public void addType(OntologyClass ontClass) {
         types.add(Type.instance(ontClass));
+    }
+    
+    @Override
+    public void buildResource() {
+        // Build children of this Entity before building the Entity. Then
+        // when building the linking assertion from this Entity to the child, 
+        // we have the URI of the child's Resource.
+        buildChildren();
+        buildEntity();
+    }
+    
+    private void buildChildren() {
+
+        Map<Link, List<Entity>> children = getChildren();
+        for (Entry<Link, List<Entity>> entry : children.entrySet()) {
+            List<Entity> entities = entry.getValue();
+            for (Entity childEntity : entities) {
+                childEntity.buildResource();
+            }
+        }        
+    }
+    
+    private void buildEntity() {
+
+        Model model = ModelFactory.createDefaultModel();
+        String uri = UriService.getUri(this);
+        Resource resource = model.createResource(uri);
+        
+        // Add type assertions
+        for (Type type : types) {
+            resource.addProperty(RDF.type, type.getUri());
+        }
+        
+        // Add relationships to children
+
+        for (Entry<Link, List<Entity>> child : children.entrySet()) {
+            Link link = child.getKey();
+            List<Entity> childEntities = children.get(link);
+            for (Entity childEntity : childEntities) {
+                resource.addProperty(
+                        link.getProperty(), childEntity.getResource().getURI());
+            }          
+        }
+        
+        // Add attributes       
+        for (Entry<Link, List<Literal>> attribute : attributes.entrySet()) {
+            Link link = attribute.getKey();
+            List<Literal> literals = getAttributes(link);
+            for (Literal literal : literals) {
+                resource.addLiteral(link.getProperty(), literal);
+            }
+        }
+        
+        setResource(resource);        
     }
 
 }

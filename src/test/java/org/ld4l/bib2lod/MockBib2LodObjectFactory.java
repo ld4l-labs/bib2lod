@@ -15,7 +15,6 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Link;
-import org.ld4l.bib2lod.entities.ResourceBuilder;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
@@ -188,12 +187,6 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
     @Override
     public Link createLink(String uri) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
-    public ResourceBuilder createResourceBuilder(Entity entity) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }

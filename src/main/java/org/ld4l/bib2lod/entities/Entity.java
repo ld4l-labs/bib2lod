@@ -56,6 +56,8 @@ public interface Entity {
     
     public List<Literal> getAttributes(Link link);
     
+    public void buildResource();
+    
     public void setResource(Resource resource);
     
     public Resource getResource();

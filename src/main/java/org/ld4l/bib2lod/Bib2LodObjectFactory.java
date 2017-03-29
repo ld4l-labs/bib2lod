@@ -16,7 +16,6 @@ import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Link;
-import org.ld4l.bib2lod.entities.ResourceBuilder;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
@@ -180,8 +179,6 @@ public abstract class Bib2LodObjectFactory {
     public abstract Link createLink(Property property);
     
     public abstract Link createLink(String uri);
-    
-    public abstract ResourceBuilder createResourceBuilder(Entity entity);
 
 }
 
