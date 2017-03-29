@@ -40,6 +40,11 @@ public class ConfigurationNode implements Configuration {
     }
 
     @Override
+    public MapOfLists<String, String> getAttributesMap() {
+        return attributesMap.duplicate();
+    }
+
+    @Override
     public Set<String> getChildNodeKeys() {
         return childrenMap.keys();
     }
@@ -52,6 +57,11 @@ public class ConfigurationNode implements Configuration {
     @Override
     public List<Configuration> getChildNodes(String key) {
         return Collections.unmodifiableList(childrenMap.getValues(key));
+    }
+
+    @Override
+    public MapOfLists<String, Configuration> getChildNodesMap() {
+        return childrenMap.duplicate();
     }
 
     @Override
@@ -98,21 +108,26 @@ public class ConfigurationNode implements Configuration {
      * </pre>
      */
     public static class Builder {
-        private final MapOfLists<String, String> attributesMap = new MapOfLists<>();
-        private final MapOfLists<String, Configuration> childrenMap = new MapOfLists<>();
+        private final MapOfLists<String, String> attributesMap;
+        private final MapOfLists<String, Configuration> childrenMap;
         private String className;
 
         public Builder() {
-            // Nothing to do
+            attributesMap = new MapOfLists<>();
+            childrenMap = new MapOfLists<>();
         }
 
         public Builder(Configuration c) {
-            for (String key : c.getAttributeKeys()) {
-                attributesMap.getValues(key).addAll(c.getAttributes(key));
-            }
-            for (String key : c.getChildNodeKeys()) {
-                childrenMap.getValues(key).addAll(c.getChildNodes(key));
-            }
+            className = c.getClassName();
+            attributesMap = c.getAttributesMap();
+            childrenMap = c.getChildNodesMap();
+        }
+
+        public Builder(String clazz, MapOfLists<String, String> attributes,
+                MapOfLists<String, Configuration> children) {
+            this.className = clazz;
+            attributesMap = attributes;
+            childrenMap = children;
         }
 
         public Builder addAttribute(String key, String value) {
@@ -121,7 +136,7 @@ public class ConfigurationNode implements Configuration {
         }
 
         public Builder removeAttributes(String key) {
-            attributesMap.getValues(key).clear();
+            attributesMap.removeValues(key);
             return this;
         }
 
@@ -131,7 +146,7 @@ public class ConfigurationNode implements Configuration {
         }
 
         public Builder removeChildNodes(String key) {
-            childrenMap.getValues(key).clear();
+            childrenMap.removeValues(key);
             return this;
         }
 

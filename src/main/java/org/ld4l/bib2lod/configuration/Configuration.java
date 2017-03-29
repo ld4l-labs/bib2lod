@@ -5,6 +5,8 @@ package org.ld4l.bib2lod.configuration;
 import java.util.List;
 import java.util.Set;
 
+import org.ld4l.bib2lod.util.collections.MapOfLists;
+
 /**
  * A piece of the configuration tree.
  * 
@@ -37,6 +39,11 @@ public interface Configuration {
     List<String> getAttributes(String key);
 
     /**
+     * Get a map of the attributes, by key. Never null.
+     */
+    MapOfLists<String, String> getAttributesMap();
+
+    /**
      * Get the set of keys for child nodes, or an empty Set. Never null.
      */
     Set<String> getChildNodeKeys();
@@ -53,8 +60,14 @@ public interface Configuration {
     List<Configuration> getChildNodes(String key);
 
     /**
+     * Get a map of the child nodes, by key. Never null.
+     */
+    MapOfLists<String, Configuration> getChildNodesMap();
+
+    /**
      * Get the name of the associated class. An object of this class will be
-     * created, and will receive this Configuration if it implements Configurable.
+     * created, and will receive this Configuration if it implements
+     * Configurable.
      * 
      * If null, then no instance is created for this Configuration.
      */

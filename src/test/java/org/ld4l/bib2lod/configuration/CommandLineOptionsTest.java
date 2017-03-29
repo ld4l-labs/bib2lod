@@ -2,7 +2,8 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.configuration.ConfigurationOptions.AttributeOverride;
+import org.ld4l.bib2lod.configuration.ConfigurationOptions.ConfigurationFieldPath;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -86,6 +88,22 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         assertEquals(1, overrides.size());
         assertExpectedOverride(keys("replace", "me", "with", "this"),
                 "excellent value", overrides.get(0));
+    }
+
+    // ----------------------------------------------------------------------
+    // Tests on ConfigurationFieldPath
+    // ----------------------------------------------------------------------
+
+    @Test
+    public void printAnEmptyFieldPath() {
+        assertEquals("[]", new ConfigurationFieldPath().toString());
+    }
+
+    @Test
+    public void printAPopulatedFieldPath() {
+        ConfigurationFieldPath path = new ConfigurationFieldPath("one", "two")
+                .add("three");
+        assertEquals("[one, two, three]", path.toString());
     }
 
     // ----------------------------------------------------------------------

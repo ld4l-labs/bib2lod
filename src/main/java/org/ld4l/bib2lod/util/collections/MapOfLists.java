@@ -55,6 +55,26 @@ public class MapOfLists<K, V> {
         return map.get(key);
     }
 
+    /**
+     * Remove all of the values associated with this key.
+     */
+    public void removeValues(K key) {
+        map.remove(key);
+    }
+
+    /**
+     * Return a map that duplicates the structure of this one.
+     */
+    public MapOfLists<K, V> duplicate() {
+        MapOfLists<K, V> clone = new MapOfLists<>();
+        for (K k : map.keySet()) {
+            for (V v : map.get(k)) {
+                clone.addValue(k, v);
+            }
+        }
+        return clone;
+    }
+
     @Override
     public int hashCode() {
         return map.hashCode();

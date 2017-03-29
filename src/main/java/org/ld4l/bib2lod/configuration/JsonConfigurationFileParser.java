@@ -6,11 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
+import org.ld4l.bib2lod.configuration.ConfigurationOptions.ConfigurationFieldPath;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -44,7 +44,7 @@ public class JsonConfigurationFileParser implements Configurator {
     /** This constructor is particularly useful for unit tests. */
     public JsonConfigurationFileParser(InputStream jsonInput) {
         ObjectNode json = parseInputToJsonObject(jsonInput);
-        configuration = new Field("", json, new FieldPath())
+        configuration = new Field("", json, new ConfigurationFieldPath())
                 .convertToConfiguration();
     }
 
@@ -103,32 +103,8 @@ public class JsonConfigurationFileParser implements Configurator {
     }
 
     public static class ParsingException extends ConfigurationException {
-        public ParsingException(FieldPath path, String message) {
+        public ParsingException(ConfigurationFieldPath path, String message) {
             super("Problem parsing JSON at " + path + " -- " + message);
-        }
-    }
-
-    /**
-     * A list of names, very helpful in Exception messages. Immutable so it
-     * doesn't get corrupted during the recursion.
-     */
-    protected static class FieldPath {
-        private final String[] names;
-
-        public FieldPath(String... names) {
-            this.names = names;
-        }
-
-        public FieldPath add(String name) {
-            int newLength = names.length + 1;
-            String[] newNames = Arrays.copyOf(names, newLength);
-            newNames[newLength - 1] = name;
-            return new FieldPath(newNames);
-        }
-
-        @Override
-        public String toString() {
-            return Arrays.asList(names).toString();
         }
     }
 
@@ -140,9 +116,9 @@ public class JsonConfigurationFileParser implements Configurator {
 
         protected final String name;
         protected final JsonNode node;
-        protected final FieldPath path;
+        protected final ConfigurationFieldPath path;
 
-        Field(String name, JsonNode node, FieldPath path) {
+        Field(String name, JsonNode node, ConfigurationFieldPath path) {
             this.name = name;
             this.node = node;
             this.path = path;

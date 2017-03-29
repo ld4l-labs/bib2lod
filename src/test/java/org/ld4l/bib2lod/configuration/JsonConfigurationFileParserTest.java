@@ -2,15 +2,14 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.junit.Test;
-import static org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
-import org.ld4l.bib2lod.configuration.JsonConfigurationFileParser.FieldPath;
+import org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -40,21 +39,6 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
     public void topLevelJsonConstant_throwsException() {
         expectConfigurationException("single JSON object");
         runParser("true");
-    }
-
-    // ----------------------------------------------------------------------
-    // Tests on FieldPath
-    // ----------------------------------------------------------------------
-
-    @Test
-    public void printAnEmptyFieldPath() {
-        assertEquals("[]", new FieldPath().toString());
-    }
-
-    @Test
-    public void printAPopulatedFieldPath() {
-        FieldPath path = new FieldPath("one", "two").add("three");
-        assertEquals("[one, two, three]", path.toString());
     }
 
     // ----------------------------------------------------------------------

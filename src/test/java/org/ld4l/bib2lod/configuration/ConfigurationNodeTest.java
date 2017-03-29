@@ -2,13 +2,15 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
+import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
  * Test the functionality for attributes. The functionality for child nodes is
@@ -77,9 +79,26 @@ public class ConfigurationNodeTest {
 
     @Test
     public void copyConstructorWorks() {
-        config = new Builder().addAttribute(KEY1, VALUE1)
+        child1 = new Builder().setClassName("child1Class").build();
+        config = new Builder().setClassName("name").addAttribute(KEY1, VALUE1)
                 .addAttribute(KEY2, VALUE2).addChild(KEY1, child1).build();
         assertEquals(config, new Builder(config).build());
+    }
+
+    @Test
+    public void shortcutConstructorWorks() {
+        MapOfLists<String, String> attributes = new MapOfLists<>();
+        attributes.addValue(KEY1, VALUE1);
+
+        MapOfLists<String, Configuration> children = new MapOfLists<>();
+        child1 = new Builder().setClassName("child1Class").build();
+        children.addValue(KEY1, child1);
+
+        config = new Builder("name", attributes, children).build();
+
+        assertEquals("name", config.getClassName());
+        assertEquals(attributes, config.getAttributesMap());
+        assertEquals(children, config.getChildNodesMap());
     }
 
     @Test
@@ -88,25 +107,24 @@ public class ConfigurationNodeTest {
                 .build();
         assertEquals(config, new Builder(config).build());
     }
-    
+
     @Test
     public void getClassNameFromNone_returnsNull() {
         config = new Builder().build();
         assertNull(config.getClassName());
     }
-    
+
     @Test
     public void getClassNameFromOne_returnsValue() {
         config = new Builder().setClassName(CLASSNAME1).build();
         assertEquals(CLASSNAME1, config.getClassName());
     }
+
     @Test
     public void getClassNameFromTwo_returnsLast() {
-        config = new Builder().setClassName(CLASSNAME1).setClassName(CLASSNAME2).build();
+        config = new Builder().setClassName(CLASSNAME1).setClassName(CLASSNAME2)
+                .build();
         assertEquals(CLASSNAME2, config.getClassName());
     }
-    
-
-
 
 }
