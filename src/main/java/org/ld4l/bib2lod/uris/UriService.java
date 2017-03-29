@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
+import org.ld4l.bib2lod.entities.Entity;
 
 /**
  * Provides URIs for org.ld4l.bib2lod.entities built by the converter.
@@ -22,7 +22,7 @@ public interface UriService {
     public static class NullUriException extends RuntimeException {         
         private static final long serialVersionUID = 1L;
         
-        protected NullUriException(EntityInterface entity) {
+        protected NullUriException(Entity entity) {
             // TODO Need to reference the Entity somehow
             super("No URI generated for ??");                 
         }
@@ -56,7 +56,7 @@ public interface UriService {
      * Returns a URI for an Entity
      * @return - a URI String 
      */
-    public static String getUri(EntityInterface entity) {
+    public static String getUri(Entity entity) {
         
         String uri = null;
         
@@ -78,6 +78,6 @@ public interface UriService {
      * Iterates through the specified URIs to return a URI for an Entity
      * @return - a URI String 
      */
-    String getUri(EntityInterface entity, Iterator<UriService> it);
-  
+    String getUri(Entity entity, Iterator<UriService> it);
+
 }

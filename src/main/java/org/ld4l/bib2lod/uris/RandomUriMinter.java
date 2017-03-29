@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.entities_deprecated.EntityInterface;
+import org.ld4l.bib2lod.entities.Entity;
 
 /**
  * A UriService that constructs a URI from the local namespace and a randomly-
@@ -29,7 +29,7 @@ public class RandomUriMinter extends BaseUriService {
     }
     
     @Override
-    public String getUri(EntityInterface entity, Iterator<UriService> it) {
+    public String getUri(Entity entity, Iterator<UriService> it) {
         String localName = getLocalName(entity);
         return buildUri(localName);
     }
@@ -40,7 +40,7 @@ public class RandomUriMinter extends BaseUriService {
      * APIs that do not allow or understand local names beginning with 
      * non-alphabetic characters.
      */
-    protected String getLocalName(EntityInterface entity) {
+    protected String getLocalName(Entity entity) {
         String uuid = UUID.randomUUID().toString();
         // NB A digit is not a legal initial character of a local name in 
         // RDF/XML; see http://www.w3.org/TR/xml11/#NT-NameStartChar, so 

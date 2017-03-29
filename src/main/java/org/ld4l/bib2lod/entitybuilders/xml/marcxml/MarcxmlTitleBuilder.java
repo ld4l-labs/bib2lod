@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities_deprecated.TitleElement;
-import org.ld4l.bib2lod.entities_deprecated.TitleElement.TitleElementType;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
@@ -81,18 +79,18 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         return entities;
     }
     
-    private List<TitleElement> buildTitleElements(
+    private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {
          
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
-        List<TitleElement> titleElements = new ArrayList<TitleElement>();
+        List<Entity> titleElements = new ArrayList<Entity>();
 
         // MainTitleElement label = titleLabel minus parts.
         // Temporarily, build only the MainTitleElement and assign it same label
         // as title.
-        titleElements.add(new TitleElement(
-                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
+//        titleElements.add(new TitleElement(
+//                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
         
         // TODO set ranks
         
