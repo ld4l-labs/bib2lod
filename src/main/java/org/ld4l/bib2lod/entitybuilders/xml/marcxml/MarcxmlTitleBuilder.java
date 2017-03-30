@@ -34,15 +34,15 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
             Entity bibEntity) throws EntityBuilderException {
         this.record = record;
         this.bibEntity = bibEntity;
-        
-
     }
 
     @Override
-    public List<Entity> build() throws EntityBuilderException {
-        
-        List<Entity> entities = new ArrayList<Entity>();
-        
+    public Entity build() throws EntityBuilderException {
+        throw new RuntimeException("Method not implemented.");
+    }
+//        
+//        
+//        
         //Entity title = Entity.instance(); // instantiate with Title superclass
 //        String titleLabel = null;
 //        
@@ -76,8 +76,8 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 //            entities.addAll(titleElements);
 //        }
 
-        return entities;
-    }
+
+//    }
     
     private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {

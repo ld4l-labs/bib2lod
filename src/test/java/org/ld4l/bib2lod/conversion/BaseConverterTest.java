@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -45,7 +44,7 @@ public class BaseConverterTest extends AbstractTestClass {
         }
 
         @Override
-        protected List<Entity> buildEntities(Record record)
+        protected Entity buildEntity(Record record)
                 throws EntityBuilderException {
             throw new RuntimeException("Method not yet implemented.");
         }
@@ -94,7 +93,7 @@ public class BaseConverterTest extends AbstractTestClass {
         }
 
         @Override
-        public List<Entity> build() throws EntityBuilderException {
+        public Entity build() throws EntityBuilderException {
             return null;            
         }
     }

@@ -21,7 +21,7 @@ public class StubConfiguration extends BaseConfiguration {
             "http://data.ld4l.org/cornell/";
     private static final String INPUT_SERVICE_CLASS = "org.ld4l.bib2lod.io.FileInputService";
     private static final String INPUT_SOURCE = 
-            "/Users/rjy7/projects/bib2lod/doc/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml";
+            "/Users/rjy7/projects/bib2lod/sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml";
     private static final String INPUT_FILE_EXTENSION = "xml";
     private static final String INPUT_FORMAT = "MARCXML";
     private static final String OUTPUT_DESTINATION = 

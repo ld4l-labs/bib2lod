@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.ontology.OntologyClass;
@@ -36,6 +37,8 @@ public interface Entity {
     
     public void addType(Type type);
     
+    public void addType(OntologyClass ontClass);
+    
     public List<Type> getTypes();
     
     public void addAttribute(Link link, String textValue);
@@ -53,7 +56,8 @@ public interface Entity {
     public void setResource(Resource resource);
     
     public Resource getResource();
+                      
+    public Model buildModel();   
 
-    void addType(OntologyClass ontClass);
-    
+   
 }
