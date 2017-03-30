@@ -3,21 +3,22 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum InstanceClass implements Type {
-    
-    ARCHIVAL(Namespace.BIBFRAME, "Archival"),
-    ELECTRONIC(Namespace.BIBFRAME, "Electronic"),
-    INSTANCE(Namespace.BIBFRAME, "Instance"),
-    MANUSCRIPT(Namespace.BIBFRAME, "Manuscript"),
-    PRINT(Namespace.BIBFRAME, "Print");
-    
+public enum TitleElementType implements Type {
+
+    NON_SORT_ELEMENT(Namespace.LD4L, "NonSortTitleElement"),
+    MAIN_TITLE_ELEMENT(Namespace.LD4L, "MainTitleElement"),
+    PART_NAME_ELEMENT(Namespace.LD4L, "MainTitleElement"),
+    PART_NUMBER_ELEMENT(Namespace.LD4L, "MainTitleElement"),
+    SUBTITLE_ELEMENT(Namespace.LD4L, "MainTitleElement"),
+    TITLE_ELEMENT(Namespace.LD4L, "TitleElement");
+ 
     private String uri;
     private Resource ontClass;
     
     /**
      * Constructor
      */
-    InstanceClass(Namespace namespace, String localName) {
+    TitleElementType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
@@ -33,7 +34,6 @@ public enum InstanceClass implements Type {
     } 
 
     public static Type superClass() {
-        return INSTANCE;
+        return TITLE_ELEMENT;
     }
-
 }

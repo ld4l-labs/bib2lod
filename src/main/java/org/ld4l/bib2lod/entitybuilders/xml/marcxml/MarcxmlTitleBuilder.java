@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.TitleClass;
-import org.ld4l.bib2lod.ontology.TitleElementClass;
+import org.ld4l.bib2lod.ontology.TitleType;
+import org.ld4l.bib2lod.ontology.TitleElementType;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
@@ -45,7 +45,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
     public Entity build() throws EntityBuilderException {
         
         // The title
-        entity = Entity.instance(TitleClass.superClass());
+        entity = Entity.instance(TitleType.superClass());
         
         String titleLabel = null;
       
@@ -106,14 +106,14 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // Create MainTitleElement last, since its label is the Title label
         // minus the other element labels.
         Entity mainTitleElement = buildTitleElement(
-                TitleElementClass.MAIN_TITLE_ELEMENT, titleLabel, 10); 
+                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel, 10); 
         titleElements.add(mainTitleElement);
         
         return titleElements;               
     }
         
     private Entity buildTitleElement(
-            TitleElementClass elementClass, String label, int rank) {
+            TitleElementType elementClass, String label, int rank) {
         
          Entity titleElement = Entity.instance(elementClass);
          titleElement.addAttribute(DatatypeProp.LABEL, label);

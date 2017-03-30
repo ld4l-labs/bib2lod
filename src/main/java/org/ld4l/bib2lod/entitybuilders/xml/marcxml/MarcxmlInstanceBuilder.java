@@ -4,7 +4,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.InstanceClass;
+import org.ld4l.bib2lod.ontology.InstanceType;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
@@ -23,7 +23,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     public MarcxmlInstanceBuilder(Record record) 
             throws EntityBuilderException {
         this.record = (MarcxmlRecord) record;
-        this.entity = Entity.instance(InstanceClass.superClass());
+        this.entity = Entity.instance(InstanceType.superClass());
     }
 
     /* (non-Javadoc)
