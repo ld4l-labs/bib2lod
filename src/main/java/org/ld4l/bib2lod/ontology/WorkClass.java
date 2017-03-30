@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum WorkClass implements OntologyClass {
+public enum WorkClass implements Type {
 
     TEXT(Namespace.BIBFRAME, "Text"),
     WORK(Namespace.BIBFRAME, "Work");
@@ -25,11 +25,11 @@ public enum WorkClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClassResource() {
+    public Resource ontClass() {
         return ontClass;
     } 
 
-    public static OntologyClass superClass() {
+    public static Type superClass() {
         return WORK;
     }
 }

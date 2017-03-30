@@ -10,7 +10,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.Type;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -20,16 +20,12 @@ public interface Entity {
     
     /**
      * Factory methods
-     */
-    public static Entity instance(Type type) {
-        return Bib2LodObjectFactory.instance().createEntity(type);
-    }
-    
+     */ 
     public static Entity instance(Resource ontClass) {
         return Bib2LodObjectFactory.instance().createEntity(ontClass);
     }
     
-    public static Entity instance(OntologyClass ontClass) {
+    public static Entity instance(Type ontClass) {
         return Bib2LodObjectFactory.instance().createEntity(ontClass);
     }
     
@@ -52,8 +48,6 @@ public interface Entity {
     public Entity getChild(ObjectProp prop);  
     
     public void addType(Type type);
-    
-    public void addType(OntologyClass ontClass);
     
     public List<Type> getTypes();
     

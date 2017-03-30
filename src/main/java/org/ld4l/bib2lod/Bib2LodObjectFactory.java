@@ -12,11 +12,10 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.uris.UriService;
@@ -172,17 +171,11 @@ public abstract class Bib2LodObjectFactory {
         }         
     }
     
-    public abstract Entity createEntity(Type type);
-    
     public abstract Entity createEntity(Resource ontClass);
     
-    public abstract Entity createEntity(OntologyClass ontClass);
+    public abstract Entity createEntity(Type ontClass);
     
     public abstract Entity createEntity(Entity entity);
-    
-    public abstract Type createType(OntologyClass ontClass);
-    
-    public abstract Type createType(Resource ontClass);
 
 }
 

@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum ItemClass implements OntologyClass {
+public enum ItemClass implements Type {
         
     // There may not be any other Item classes
     ITEM(Namespace.BIBFRAME, "Item");
@@ -25,11 +25,11 @@ public enum ItemClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClassResource() {
+    public Resource ontClass() {
         return ontClass;
     } 
 
-    public static OntologyClass superClass() {
+    public static Type superClass() {
         return ITEM;
     }
 }

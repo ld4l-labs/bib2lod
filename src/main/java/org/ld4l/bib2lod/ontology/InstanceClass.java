@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum InstanceClass implements OntologyClass {
+public enum InstanceClass implements Type {
     
     ARCHIVAL(Namespace.BIBFRAME, "Archival"),
     ELECTRONIC(Namespace.BIBFRAME, "Electronic"),
@@ -28,11 +28,11 @@ public enum InstanceClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClassResource() {
+    public Resource ontClass() {
         return ontClass;
     } 
 
-    public static OntologyClass superClass() {
+    public static Type superClass() {
         return INSTANCE;
     }
 

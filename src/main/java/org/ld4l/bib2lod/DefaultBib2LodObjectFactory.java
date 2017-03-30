@@ -19,9 +19,7 @@ import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.SimpleEntity;
-import org.ld4l.bib2lod.entities.SimpleType;
-import org.ld4l.bib2lod.entities.Type;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.Type;
 
 /**
  * A simple implementation.
@@ -69,19 +67,9 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Cleaner createCleaner() {
         return new MarcxmlCleaner();
     }
-   
-    @Override
-    public Entity createEntity(Type type) {
-        return new SimpleEntity(type);
-    }
 
     @Override
-    public Entity createEntity(Resource ontClass) {
-        return new SimpleEntity(ontClass);
-    }
-    
-    @Override
-    public Entity createEntity(OntologyClass ontClass) {
+    public Entity createEntity(Type ontClass) {
         return new SimpleEntity(ontClass);
     }
     
@@ -89,15 +77,11 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     public Entity createEntity(Entity entity) {
         return new SimpleEntity(entity);
     }
-    
+
     @Override
-    public Type createType(OntologyClass ontClass) {
-        return new SimpleType(ontClass);
-    }
-    
-    @Override
-    public Type createType(Resource ontClass) {
-        return new SimpleType(ontClass);
+    public Entity createEntity(Resource ontClass) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
