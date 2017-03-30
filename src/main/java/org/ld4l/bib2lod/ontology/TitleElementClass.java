@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum TitleElementClass implements OntologyClass {
+public enum TitleElementClass implements Type {
 
     NON_SORT_ELEMENT(Namespace.LD4L, "NonSortTitleElement"),
     MAIN_TITLE_ELEMENT(Namespace.LD4L, "MainTitleElement"),
@@ -29,11 +29,11 @@ public enum TitleElementClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClassResource() {
+    public Resource ontClass() {
         return ontClass;
     } 
 
-    public static OntologyClass superClass() {
+    public static Type superClass() {
         return TITLE_ELEMENT;
     }
 }

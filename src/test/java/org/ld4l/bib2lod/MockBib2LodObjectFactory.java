@@ -13,10 +13,9 @@ import org.ld4l.bib2lod.configuration.MockConfiguration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -148,30 +147,15 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     @Override
-    public Type createType(OntologyClass ontClass) {
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
-    public Type createType(Resource ontClass) {
-        throw new RuntimeException("Method not implemented.");
-    }
-    
-    @Override
     public Entity createEntity(Resource ontClass) {
         throw new RuntimeException("Method not implemented.");
     }
     
     @Override
-    public Entity createEntity(OntologyClass ontClass) {
+    public Entity createEntity(Type ontClass) {
         throw new RuntimeException("Method not implemented.");
     }
 
-    @Override
-    public Entity createEntity(Type type) {
-        throw new RuntimeException("Method not implemented.");
-    }
-    
     @Override
     public Entity createEntity(Entity entity) {
         throw new RuntimeException("Method not implemented.");

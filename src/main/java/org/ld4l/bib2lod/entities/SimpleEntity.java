@@ -16,7 +16,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -44,16 +44,7 @@ public class SimpleEntity implements Entity {
         this();
         types.add(type);
     }
-    
-    public SimpleEntity(Resource ontClass) {
-        this();
-        types.add(Type.instance(ontClass));
-    }
-        
-    public SimpleEntity(OntologyClass ontClass) {
-        this(ontClass.ontClassResource());
-    }
-    
+
     /**
      * Copy constructor.
      * Use to copy the contents of non-reusable resources. For example, create
@@ -193,11 +184,6 @@ public class SimpleEntity implements Entity {
     }
 
     @Override
-    public void addType(OntologyClass ontClass) {
-        types.add(Type.instance(ontClass));
-    }
-    
-    @Override
     public void buildResource() {
         // Build children of this Entity before building the Entity, so that
         // when building the assertion linking this Entity to the child, we
@@ -225,7 +211,7 @@ public class SimpleEntity implements Entity {
         
         // Add type assertions
         for (Type type : types) {
-            resource.addProperty(RDF.type, type.getOntClass());
+            resource.addProperty(RDF.type, type.ontClass());
         }
         
         // Add relationships to children

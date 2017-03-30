@@ -11,12 +11,12 @@ import org.apache.jena.rdf.model.Resource;
 // enums would implement. These enums would include not just classes in the 
 // ld4l namespace, but the entire set of target terms from the LD4L application
 // profile. 
-public interface OntologyClass {
+public interface Type {
   
     public String uri(); 
     
     // Possibly return an OntClass instead, if the functionality is useful 
     // (e.g., in subclass inferencing).
-    public Resource ontClassResource();
+    public Resource ontClass();
 
 }

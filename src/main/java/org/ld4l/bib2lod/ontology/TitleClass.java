@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum TitleClass implements OntologyClass {
+public enum TitleClass implements Type {
 
     ABBREVIATED_TITLE(Namespace.LD4L, "AbbreviatedTitle"),
     TITLE(Namespace.BIBFRAME, "Title");
@@ -25,11 +25,11 @@ public enum TitleClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClassResource() {
+    public Resource ontClass() {
         return ontClass;
     } 
 
-    public static OntologyClass superClass() {
+    public static Type superClass() {
         return TITLE;
     }
 
