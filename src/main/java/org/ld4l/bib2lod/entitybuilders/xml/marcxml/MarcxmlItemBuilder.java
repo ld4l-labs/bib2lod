@@ -2,7 +2,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.ontology.ItemClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
@@ -25,8 +25,8 @@ public class MarcxmlItemBuilder extends MarcxmlEntityBuilder {
         
         // TODO Fill in other data about Item from other fields in the record
         
-        instance.addChild(
-                OntologyProperty.HAS_ITEM.link(), item);
+        instance.addChild(ObjectProp.HAS_ITEM, item);
+                
         return item; 
     }
 

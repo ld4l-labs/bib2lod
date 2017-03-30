@@ -13,12 +13,10 @@ import org.ld4l.bib2lod.configuration.MockConfiguration;
 import org.ld4l.bib2lod.configuration.OptionsReader;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
 import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -147,11 +145,6 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     public OutputService createOutputService(Configuration configuration) {
         return (outputService != null) ? outputService
                 : defaultFactory.createOutputService(configuration);
-    }
-
-    @Override
-    public Link createLink(OntologyProperty ontProperty) {
-        throw new RuntimeException("Method not implemented.");
     }
 
     @Override

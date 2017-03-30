@@ -1,7 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.WorkClass;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
@@ -24,12 +24,12 @@ public class MarcxmlWorkBuilder extends MarcxmlEntityBuilder {
         Entity work = Entity.instance(WorkClass.superClass());
         
         Entity instanceTitle = 
-                instance.getChild(OntologyProperty.HAS_PREFERRED_TITLE.link());
+                instance.getChild(ObjectProp.HAS_PREFERRED_TITLE);
         
         Entity workTitle = Entity.instance(instanceTitle);
-        work.addChild(OntologyProperty.HAS_PREFERRED_TITLE.link(), workTitle);
+        work.addChild(ObjectProp.HAS_PREFERRED_TITLE, workTitle);
         
-        instance.addChild(OntologyProperty.INSTANCE_OF.link(), work);
+        instance.addChild(ObjectProp.INSTANCE_OF, work);
 
         return work;
     }

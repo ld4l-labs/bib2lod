@@ -3,8 +3,9 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.IdentifierClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
@@ -41,9 +42,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
           identifier = buildFromDataField();
         }
 
-        bibEntity.addChild(
-                OntologyProperty.IDENTIFIED_BY.link(), identifier);
-  
+        bibEntity.addChild(ObjectProp.IDENTIFIED_BY, identifier);
+ 
         return identifier;
     }
     
@@ -56,7 +56,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
             Entity identifier = Entity.instance(IdentifierClass.superClass());
             identifier.addType(IdentifierClass.LOCAL);
-            identifier.addAttribute(OntologyProperty.VALUE.link(), field.getTextValue());
+            identifier.addAttribute(DatatypeProp.VALUE, field.getTextValue());
             return identifier;             
         }
         

@@ -8,8 +8,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.TitleClass;
 import org.ld4l.bib2lod.ontology.TitleElementClass;
 import org.ld4l.bib2lod.record.Record;
@@ -63,12 +63,11 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
                 // present,the $a fields should be the same.
                 if (subfield.getCode().equals("a")) {
                     titleLabel = subfield.getTextValue();
-                    entity.addAttribute(OntologyProperty.LABEL.link(), titleLabel);
+                    entity.addAttribute(DatatypeProp.LABEL, titleLabel);
                 }
                 
                 if (subfield.getCode().equals("c")) {
-                    bibEntity.addAttribute(
-                            OntologyProperty.RESPONSIBILITY_STATEMENT.link(), 
+                    bibEntity.addAttribute(DatatypeProp.RESPONSIBILITY_STATEMENT,
                             subfield.getTextValue());
                 }
                 
@@ -79,10 +78,10 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // TODO convert other subfields from 130/240
         
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
-        entity.addChildren(OntologyProperty.HAS_PART.link(), titleElements);
+        entity.addChildren(ObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
-        bibEntity.addChild(OntologyProperty.HAS_PREFERRED_TITLE.link(), entity);
+        bibEntity.addChild(ObjectProp.HAS_PREFERRED_TITLE, entity);
         
         return entity;
     }
@@ -117,8 +116,8 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
             TitleElementClass elementClass, String label, int rank) {
         
          Entity titleElement = Entity.instance(elementClass);
-         titleElement.addAttribute(OntologyProperty.LABEL.link(), label);
-         titleElement.addAttribute(OntologyProperty.RANK.link(), rank);  
+         titleElement.addAttribute(DatatypeProp.LABEL, label);
+         titleElement.addAttribute(DatatypeProp.RANK, rank);  
          return titleElement;
     }
     

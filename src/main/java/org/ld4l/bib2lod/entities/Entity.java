@@ -8,6 +8,8 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.OntologyClass;
 
 /**
@@ -35,19 +37,19 @@ public interface Entity {
         return Bib2LodObjectFactory.instance().createEntity(entity);
     }
 
-    public void addChild(Link link, Entity entity);
+    public void addChild(ObjectProp prop, Entity entity);
     
-    public void addChildren(Link link, List<Entity> entities);
+    public void addChildren(ObjectProp prop, List<Entity> entities);
     
-    public HashMap<Link, List<Entity>> getChildren();
+    public HashMap<ObjectProp, List<Entity>> getChildren();
     
-    public List<Entity> getChildren(Link link); 
+    public List<Entity> getChildren(ObjectProp prop); 
     
     /**
      * Use when only a single child with this link is expected. Others are
      * discarded.
      */
-    public Entity getChild(Link link);  
+    public Entity getChild(ObjectProp prop);  
     
     public void addType(Type type);
     
@@ -55,17 +57,17 @@ public interface Entity {
     
     public List<Type> getTypes();
     
-    public void addAttribute(Link link, String textValue);
+    public void addAttribute(DatatypeProp prop, String textValue);
     
-    public void addAttribute(Link link, int i);
+    public void addAttribute(DatatypeProp prop, int i);
     
-    public void addAttribute(Link link, Literal value);
+    public void addAttribute(DatatypeProp prop, Literal value);
     
-    public void addAttributes(Link link, List<Literal> values);
+    public void addAttributes(DatatypeProp prop, List<Literal> values);
     
-    public Map<Link, List<Literal>> getAttributes();
+    public Map<DatatypeProp, List<Literal>> getAttributes();
     
-    public List<Literal> getAttributes(Link link);
+    public List<Literal> getAttributes(DatatypeProp prop);
     
     public void buildResource();
     
