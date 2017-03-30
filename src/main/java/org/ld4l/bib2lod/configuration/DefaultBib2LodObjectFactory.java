@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
@@ -17,6 +19,8 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  * Serve these instances on request.
  */
 public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private MapOfLists<Class<?>, Object> configuredInstances = new MapOfLists<>();
 
     /**
@@ -82,12 +86,8 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
      */
     private Class<?> inferInterfaceClass(Class<?> instanceClass,
             String nodeName) {
-        List<Class<?>> candidates = new ArrayList<>();
-        for (Class<?> interfaze : instanceClass.getInterfaces()) {
-            if (interfaze.getSimpleName().equals(nodeName)) {
-                candidates.add(interfaze);
-            }
-        }
+        List<Class<?>> candidates = new InterfaceLister(instanceClass)
+                .getBySimpleName(nodeName);
         if (candidates.isEmpty()) {
             throw new ConfigurationException("Class '" + instanceClass.getName()
                     + "' doesn't implement any interfaces named '" + nodeName
@@ -104,13 +104,27 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T instanceForInterface(Class<T> interfaze) {
-        return (T) configuredInstances.getValue(interfaze);
+        T instance = (T) configuredInstances.getValue(interfaze);
+        if (instance != null) {
+            return instance;
+        } else {
+            throw new ConfigurationException(
+                    "The config file describes no instances for '" + interfaze
+                            + "'");
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> instancesForInterface(Class<T> interfaze) {
-        return (List<T>) configuredInstances.getValues(interfaze);
+        List<T> instances =  (List<T>) configuredInstances.getValues(interfaze);
+        if (!instances.isEmpty()) {
+            return instances;
+        } else {
+            throw new ConfigurationException(
+                    "The config file describes no instances for '" + interfaze
+                            + "'");
+        }
     }
 
 }

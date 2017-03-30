@@ -35,14 +35,20 @@ public abstract class Bib2LodObjectFactory {
     }
 
     /**
-     * Return the first instance that was created for this interface. May return
-     * null.
+     * Return the first instance that was created for this interface. Never
+     * returns null.
+     * 
+     * @throws ConfigurationException
+     *             if no instances are found.
      */
     public abstract <T> T instanceForInterface(Class<T> interfaze);
 
     /**
-     * Return the instances that were created for this interface. May be empty,
-     * but never null.
+     * Return the instances that were created for this interface. Never returns
+     * empty or null.
+     * 
+     * @throws ConfigurationException
+     *             if no instances are found.
      */
     public abstract <T> List<T> instancesForInterface(Class<T> interfaze);
 

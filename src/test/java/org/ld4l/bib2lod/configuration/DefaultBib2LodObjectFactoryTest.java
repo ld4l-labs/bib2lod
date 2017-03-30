@@ -3,8 +3,8 @@
 package org.ld4l.bib2lod.configuration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -77,13 +77,19 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
     }
 
     @Test
-    public void zeroInstancesPerInterfaceWorks() {
+    public void noInstanceForInterface_throwsException() {
+        expectException(ConfigurationException.class, "describes no instances");
         config = new Builder().build();
         factory = new DefaultBib2LodObjectFactory(config);
         instance = factory.instanceForInterface(AnInterface.class);
+    }
+
+    @Test // TODO CHange this
+    public void zeroInstancesForInterface_throwsException() {
+        expectException(ConfigurationException.class, "describes no instances");
+        config = new Builder().build();
+        factory = new DefaultBib2LodObjectFactory(config);
         instances = factory.instancesForInterface(AnInterface.class);
-        assertNull(instance);
-        assertEquals(0, instances.size());
     }
 
     @Test
@@ -168,7 +174,6 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
         assertEquals(1, factory.instancesForInterface(Omnibus2B.class).size());
     }
 
-
     // ----------------------------------------------------------------------
     // Helper methods
     // ----------------------------------------------------------------------
@@ -181,7 +186,7 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
             assertExpectedConfiguration(nodes[i], instances.get(i));
         }
     }
-    
+
     private void assertExpectedConfiguration(Configuration expected,
             Object configurable) {
         assertEquals(expected,
