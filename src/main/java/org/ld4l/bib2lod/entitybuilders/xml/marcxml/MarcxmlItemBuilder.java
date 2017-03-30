@@ -1,45 +1,12 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.Namespace;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.ItemClass;
 import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
 public class MarcxmlItemBuilder extends MarcxmlEntityBuilder {
-    
-    public enum ItemClass implements OntologyClass {
-        
-        ITEM(Namespace.BIBFRAME, "Item");
-        
-        private String uri;
-        private Resource ontClass;
-        
-        /**
-         * Constructor
-         */
-        ItemClass(Namespace namespace, String localName) {
-            this.uri = namespace.uri() + localName;
-            this.ontClass = ResourceFactory.createResource(uri);
-        }
-        
-        @Override
-        public String uri() {
-            return uri;
-        }
-
-        @Override
-        public Resource ontClass() {
-            return ontClass;
-        } 
-
-        public static Resource superClass() {
-            return ITEM.ontClass;
-        }
-    }
     
     private Entity instance;
     private MarcxmlRecord record;
