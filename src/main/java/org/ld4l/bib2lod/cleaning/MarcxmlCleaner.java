@@ -13,7 +13,7 @@ public class MarcxmlCleaner extends BaseCleaner {
     @Override
     public String clean() {
         // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
     }
 
 }

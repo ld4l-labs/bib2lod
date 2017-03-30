@@ -4,31 +4,31 @@ package org.ld4l.bib2lod.record.xml;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.ld4l.bib2lod.record.RecordElement;
+import org.ld4l.bib2lod.record.RecordField;
 import org.w3c.dom.Element;
 
 /**
  * Represents an element in an XML record.
  */
-public interface XmlRecordElement extends RecordElement {
+public interface XmlElement extends RecordField {
     
     /**
      * Factory method
      * @param elementClass - the class of XmlRecordElement to instantiate
      * @param element - the XML element
-     * @throws RecordElementException 
+     * @throws RecordFieldException 
      */
-    static XmlRecordElement instance(Class<?> elementClass, Element element) 
-            throws RecordElementException {
+    static XmlElement instance(Class<?> elementClass, Element element) 
+            throws RecordFieldException {
         try {
-            return (XmlRecordElement) elementClass
+            return (XmlElement) elementClass
                     .getConstructor(Element.class)
                     .newInstance(element);
         } catch (InstantiationException
                 | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException | NoSuchMethodException
                 | SecurityException e) {
-            throw new RecordElementException(e);
+            throw new RecordFieldException(e);
         }     
     }
     

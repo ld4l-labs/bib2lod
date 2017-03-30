@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -18,8 +19,6 @@ import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.resourcebuilders.ResourceBuilder;
-import org.ld4l.bib2lod.resourcebuilders.ResourceBuilder.ResourceBuilderException;
 
 /**
  * An abstract implementation.
@@ -52,21 +51,15 @@ public abstract class BaseConverter implements Converter {
             // Caller should catch the exception and continue to next input.
             throw new ConverterException(e);
         }
-
+        
         Model model = ModelFactory.createDefaultModel();
         
         for (Record record : records) {
-            try {
-                model.add(convertRecord(record));
-            } catch (RecordConversionException e) {
-                // Log the error and continue to next record.
-                // TODO We may want a more sophisticated logging mechanism for
-                // this type of error.
-                e.printStackTrace();
-                continue;
-            }
+            // TODO convertRecord() might return an empty model. Make sure this
+            // doesn't throw an error, else test for model not empty.
+            model.add(convertRecord(record));
         }
-        
+
         try {
             output.writeModel(model);
             LOGGER.debug(model.toString());
@@ -99,44 +92,48 @@ public abstract class BaseConverter implements Converter {
     protected Model convertRecord(Record record) 
             throws RecordConversionException  {
 
-        List<Entity> entities;
+        Model model = ModelFactory.createDefaultModel();
+
         try {
-            entities = buildEntities(record);
+            List<Entity> entities = buildEntities(record);
+ 
+            // Build a Resource from each Entity and attach it to the Entity.
+            for (Entity entity : entities) {
+                // If entity already has a Resource, it was built during a
+                // previous iteration.
+                if (entity.getResource() == null) {
+                    entity.buildResource();
+                }
+            }
+            
+            // Add the Resource for each Entity to the Model
+            for (Entity entity : entities) {
+                Resource resource = entity.getResource();
+                if (resource != null) {
+                    Model resourceModel = resource.getModel();
+                    // TODO I think adding an empty model generates an error.
+                    // Check.
+                    if (! resourceModel.isEmpty()) {
+                        model.add(entity.getResource().getModel());
+                    }
+                }
+            }
+            
         } catch (EntityBuilderException e) {
             throw new RecordConversionException(e);
-        }
-     
-        Model model = ModelFactory.createDefaultModel();
+        }     
         
-        for (Entity entity : entities) {
-            // get a Jena Model/Resource/StmtIterator/List<Statement> for 
-            // the entity         
-            buildResource(entity, model);
-
-        }           
         return model;
+
     }
     
     /**
      * Builds the set of Entity objects from which the Resources will be built.
+     * Based on the input Record, this is input-specific.
      * @throws EntityBuilderException 
      */
     protected abstract List<Entity> buildEntities(Record record) 
             throws EntityBuilderException;
 
-    
-    /**
-     * Builds a Resource from an Entity and adds it to the Model. The Model
-     * must be passed to the ResourceBuilder so that the new Resource gets
-     * added to this Model, rather than the ResourceBuilder creating a new
-     * Model for the new Resource.
-     * @throws ResourceBuilderException 
-     */
-    private void buildResource(Entity entity, Model model) 
-            throws ResourceBuilderException {
-        
-        ResourceBuilder builder = ResourceBuilder.instance(entity, model);                
-        builder.build();
-    }
     
 }

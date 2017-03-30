@@ -2,13 +2,22 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
+import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.entities.SimpleEntity;
+import org.ld4l.bib2lod.entities.SimpleLink;
+import org.ld4l.bib2lod.entities.SimpleType;
+import org.ld4l.bib2lod.entities.Type;
+import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
@@ -117,7 +126,7 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> instancesForInterface(Class<T> interfaze) {
-        List<T> instances =  (List<T>) configuredInstances.getValues(interfaze);
+        List<T> instances = (List<T>) configuredInstances.getValues(interfaze);
         if (!instances.isEmpty()) {
             return instances;
         } else {
@@ -125,6 +134,40 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
                     "The config file describes no instances for '" + interfaze
                             + "'");
         }
+    }
+
+    // ----------------------------------------------------------------------
+    // Vestigial methods
+    // ----------------------------------------------------------------------
+
+    @Override
+    public Entity createEntity(Type type) {
+        return new SimpleEntity(type);
+    }
+
+    @Override
+    public Entity createEntity(Resource ontClass) {
+        return new SimpleEntity(ontClass);
+    }
+    
+    @Override
+    public Type createType(OntologyClass ontClass) {
+        return new SimpleType(ontClass);
+    }
+    
+    @Override
+    public Type createType(Resource ontClass) {
+        return new SimpleType(ontClass);
+    }
+
+    @Override
+    public Link createLink(Property property) {
+        return new SimpleLink(property);
+    }
+
+    @Override
+    public Link createLink(OntologyProperty ontProperty) {
+        return new SimpleLink(ontProperty);
     }
 
 }

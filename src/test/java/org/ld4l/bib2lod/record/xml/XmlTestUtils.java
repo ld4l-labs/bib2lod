@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.ld4l.bib2lod.record.Record.RecordException;
-import org.ld4l.bib2lod.record.RecordElement.RecordElementException;
+import org.ld4l.bib2lod.record.RecordField.RecordFieldException;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
@@ -34,8 +34,8 @@ public final class XmlTestUtils {
         return XmlRecord.instance(recordClass, element);
     }
     
-    public static XmlRecordElement buildElementFromString(
-            Class<?> elementClass, String s) throws RecordElementException {
+    public static XmlElement buildElementFromString(
+            Class<?> elementClass, String s) throws RecordFieldException {
         
         Element element;
         try {
@@ -45,8 +45,8 @@ public final class XmlTestUtils {
                     .parse(new ByteArrayInputStream(s.getBytes()))
                     .getDocumentElement();
         } catch (SAXException | IOException | ParserConfigurationException e) {
-            throw new RecordElementException(e);
+            throw new RecordFieldException(e);
         }
-        return XmlRecordElement.instance(elementClass, element);        
+        return XmlElement.instance(elementClass, element);        
     }
 }

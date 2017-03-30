@@ -16,7 +16,7 @@ import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.xml.BaseXmlRecordElement;
+import org.ld4l.bib2lod.record.xml.BaseXmlElement;
 import org.ld4l.bib2lod.record.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.w3c.dom.Element;
@@ -104,8 +104,8 @@ public class XmlParserTest extends AbstractTestClass {
             return true;
         }
     }
-    
-    public static class MockXmlRecordElement extends BaseXmlRecordElement {
+
+    public static class MockXmlRecordElement extends BaseXmlElement {
 
         public MockXmlRecordElement(Element element) {
             super(element);

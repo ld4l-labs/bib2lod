@@ -70,5 +70,5 @@ public interface UriService extends Configurable {
      * @return - a URI String 
      */
     String getUri(Entity entity, Iterator<UriService> it);
-  
+
 }

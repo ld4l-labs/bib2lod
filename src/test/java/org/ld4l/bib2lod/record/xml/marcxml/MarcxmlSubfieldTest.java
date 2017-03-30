@@ -4,7 +4,7 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.ld4l.bib2lod.record.RecordElement.RecordElementException;
+import org.ld4l.bib2lod.record.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
@@ -80,7 +80,7 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     private MarcxmlSubfield buildSubfieldFromString(String s) 
-            throws RecordElementException {
+            throws RecordFieldException {
         return (MarcxmlSubfield) XmlTestUtils.buildElementFromString(
                 MarcxmlSubfield.class, s);
     }
