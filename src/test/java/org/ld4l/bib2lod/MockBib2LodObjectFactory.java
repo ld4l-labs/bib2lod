@@ -177,7 +177,13 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Entity createEntity(Resource ontClass) {
         // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    @Override
+    public Entity createEntity(OntologyClass ontClass) {
+        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
     }
 
     @Override

@@ -82,18 +82,13 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
         List<Entity> titleElements = new ArrayList<Entity>();
-        
-        // for each element, create a title element builder, adding the
-        // subtype rather than the supertype
 
         // MainTitleElement label = titleLabel minus parts.
-        // Temporarily, build only the MainTitleElement and assign it same label
-        // as title.
+        // Temporarily, build only the MainTitleElement and assign it the title
+        // label
         
-        // TODO *** Add Entity constructor that takes an OntologyClass rather than
-        // a Resource ****
         Entity mainTitleElement = Entity.instance(
-                TitleElementClass.MAIN_TITLE_ELEMENT.ontClass());
+                TitleElementClass.MAIN_TITLE_ELEMENT);
         mainTitleElement.addAttribute(
                 OntologyProperty.LABEL.link(), titleLabel);
         titleElements.add(mainTitleElement);

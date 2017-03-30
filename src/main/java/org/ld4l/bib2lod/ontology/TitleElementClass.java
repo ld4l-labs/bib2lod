@@ -29,7 +29,7 @@ public enum TitleElementClass implements OntologyClass {
     }
 
     @Override
-    public Resource ontClass() {
+    public Resource ontClassResource() {
         return ontClass;
     } 
 

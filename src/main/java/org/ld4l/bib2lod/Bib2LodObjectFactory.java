@@ -179,6 +179,8 @@ public abstract class Bib2LodObjectFactory {
     
     public abstract Entity createEntity(Resource ontClass);
     
+    public abstract Entity createEntity(OntologyClass ontClass);
+    
     public abstract Type createType(OntologyClass ontClass);
     
     public abstract Type createType(Resource ontClass);

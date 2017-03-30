@@ -48,6 +48,10 @@ public class SimpleEntity implements Entity {
     }
     
     
+    public SimpleEntity(OntologyClass ontClass) {
+        this(ontClass.ontClassResource());
+    }
+
     @Override
     public void addChild(Link link, Entity entity) {
         

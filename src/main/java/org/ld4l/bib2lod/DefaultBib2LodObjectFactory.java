@@ -85,6 +85,11 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
     
     @Override
+    public Entity createEntity(OntologyClass ontClass) {
+        return new SimpleEntity(ontClass);
+    }
+    
+    @Override
     public Type createType(OntologyClass ontClass) {
         return new SimpleType(ontClass);
     }

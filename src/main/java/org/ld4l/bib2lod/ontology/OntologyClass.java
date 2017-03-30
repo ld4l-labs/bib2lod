@@ -9,7 +9,8 @@ import org.apache.jena.rdf.model.Resource;
 // TODO Read in the ontology files to either replace or facilitate/enhance this.
 public interface OntologyClass {
   
-    public String uri();   
-    public Resource ontClass();
+    public String uri(); 
+    // Possibly define as OntResource.
+    public Resource ontClassResource();
 
 }
