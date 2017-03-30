@@ -39,6 +39,12 @@ public interface Entity {
     
     public List<Entity> getChildren(Link link); 
     
+    /**
+     * Use when only a single child with this link is expected. Others are
+     * discarded.
+     */
+    public Entity getChild(Link link);  
+    
     public void addType(Type type);
     
     public void addType(OntologyClass ontClass);
@@ -61,7 +67,9 @@ public interface Entity {
     
     public Resource getResource();
                       
-    public Model buildModel();   
+    public Model buildModel();
+
+ 
 
    
 }

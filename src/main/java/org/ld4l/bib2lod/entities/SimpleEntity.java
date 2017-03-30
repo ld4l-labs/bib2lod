@@ -88,6 +88,15 @@ public class SimpleEntity implements Entity {
     }
     
     @Override
+    public Entity getChild(Link link) {
+        List<Entity> entities = children.get(link);
+        if (!entities.isEmpty()) {
+            return entities.get(0);
+        }
+        return null;
+    }
+    
+    @Override
     public void addType(Type type) {
         types.add(type);
     }
@@ -230,5 +239,10 @@ public class SimpleEntity implements Entity {
         
         return model;
     }
+    
+//    @Override
+//    public Entity clone() {
+//        throw new RuntimeException("Method not implemented.");
+//    }
 
 }

@@ -8,8 +8,8 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
 public class MarcxmlItemBuilder extends MarcxmlEntityBuilder {
     
-    private Entity instance;
-    private MarcxmlRecord record;
+    private final Entity instance;
+    private final MarcxmlRecord record;
     
     /**
      * Constructor

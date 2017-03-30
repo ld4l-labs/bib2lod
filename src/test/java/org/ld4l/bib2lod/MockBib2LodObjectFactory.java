@@ -151,12 +151,6 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     @Override
-    public Link createLink(Property property) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
     public Link createLink(OntologyProperty ontProperty) {
         // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");

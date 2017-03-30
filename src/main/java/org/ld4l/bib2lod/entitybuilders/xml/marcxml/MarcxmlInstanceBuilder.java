@@ -12,7 +12,7 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
+public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     
     private final MarcxmlRecord record;
 
@@ -33,9 +33,10 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     public Entity build() throws EntityBuilderException {
 
         // TODO Add instance subtypes 
+        
         buildIdentifiers();
         buildTitles();
-//        buildWorks();
+        //buildWorks();
         buildItem();
         
         return entity;
@@ -61,9 +62,15 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
         EntityBuilder.instance(MarcxmlTitleBuilder.class, record, entity).build();
     }
     
-    private void buildWorks() {
+    private void buildWorks() throws EntityBuilderException {
         // NB There are special cases where one Instance has multiple Works.
-        throw new RuntimeException("Method not implemented.");
+        
+        // For now, the work will take its title from the instance title
+        // need to build a new title with all the same elements and attributes,
+        // but new resources.
+        // Need method of EntityBuilder.clone() or copy?
+        
+        EntityBuilder.instance(MarcxmlWorkBuilder.class, record, entity).build();
     }
     
     private void buildItem() throws EntityBuilderException {

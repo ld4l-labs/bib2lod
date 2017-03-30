@@ -5,11 +5,9 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
 import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.ontology.TitleClass;
 import org.ld4l.bib2lod.ontology.TitleElementClass;
@@ -70,7 +68,8 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
         entity.addChildren(OntologyProperty.HAS_PART.link(), titleElements);
         
-        bibEntity.addChild(OntologyProperty.TITLE.link(), entity);
+        // TODO Figure out how to recognize the preferred title vs other titlse
+        bibEntity.addChild(OntologyProperty.HAS_PREFERRED_TITLE.link(), entity);
         
         return entity;
     }

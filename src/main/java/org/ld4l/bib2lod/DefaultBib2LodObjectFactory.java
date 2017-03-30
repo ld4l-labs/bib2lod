@@ -100,11 +100,6 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     @Override
-    public Link createLink(Property property) {
-        return new SimpleLink(property);
-    }
-
-    @Override
     public Link createLink(OntologyProperty ontProperty) {
         return new SimpleLink(ontProperty);
     }

@@ -184,12 +184,8 @@ public abstract class Bib2LodObjectFactory {
     public abstract Type createType(OntologyClass ontClass);
     
     public abstract Type createType(Resource ontClass);
-    
-    public abstract Link createLink(Property property);
 
     public abstract Link createLink(OntologyProperty ontProperty);
-
-
 
 }
 
