@@ -36,7 +36,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
         
         buildIdentifiers();
         buildTitles();
-        //buildWorks();
+        buildWorks();
         buildItem();
         
         return entity;
@@ -57,7 +57,8 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
 
     }
     
-    private void buildTitles() throws EntityBuilderException {       
+    private void buildTitles() throws EntityBuilderException { 
+        
         // NB There may be multiple, so this isn't sufficient.
         EntityBuilder.instance(MarcxmlTitleBuilder.class, record, entity).build();
     }

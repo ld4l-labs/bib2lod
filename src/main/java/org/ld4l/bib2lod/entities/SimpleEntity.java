@@ -50,6 +50,33 @@ public class SimpleEntity implements Entity {
     public SimpleEntity(OntologyClass ontClass) {
         this(ontClass.ontClassResource());
     }
+    
+    /**
+     * Copy constructor.
+     * Use to copy the contents of non-reusable resources. For example, create
+     * create a copy of an Instance Title to assign to a Work, where Title and
+     * TitleElements are non-reusable, and thus the Work cannot simply link to
+     * the Instance Title.
+     */
+    public SimpleEntity(Entity original) {
+        this();
+        
+        // Attributes and types are simply copied
+        this.attributes.putAll(original.getAttributes());
+        this.types.addAll(original.getTypes());
+        
+        // Copy the dependent Entities in each child 
+        for (Entry<Link, List<Entity>> child : original.getChildren().entrySet()) {
+            Link link = child.getKey();
+            List<Entity> originalEntities = child.getValue();
+            List<Entity> newEntities = new ArrayList<Entity>();
+            for (Entity entity : originalEntities) {
+                Entity copy = Entity.instance(entity);
+                newEntities.add(copy);
+            }
+            this.children.put(link, newEntities);
+        } 
+    }
 
     @Override
     public void addChild(Link link, Entity entity) {
@@ -67,8 +94,7 @@ public class SimpleEntity implements Entity {
         
         if (entities.isEmpty()) {
             return;
-        }
-        
+        }       
         if (children.containsKey(link)) {
             List<Entity> list = children.get(link);
             list.addAll(entities);  
@@ -128,7 +154,6 @@ public class SimpleEntity implements Entity {
         if (values.isEmpty()) {
             return;
         }
-
         if (attributes.containsKey(link)) {
             List<Literal> list = attributes.get(link);
             list.addAll(values);  

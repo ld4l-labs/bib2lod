@@ -30,6 +30,10 @@ public interface Entity {
     public static Entity instance(OntologyClass ontClass) {
         return Bib2LodObjectFactory.instance().createEntity(ontClass);
     }
+    
+    public static Entity instance(Entity entity) {
+        return Bib2LodObjectFactory.instance().createEntity(entity);
+    }
 
     public void addChild(Link link, Entity entity);
     

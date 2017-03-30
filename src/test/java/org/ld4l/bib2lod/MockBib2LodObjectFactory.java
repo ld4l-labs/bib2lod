@@ -151,37 +151,36 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
     @Override
     public Link createLink(OntologyProperty ontProperty) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Type createType(OntologyClass ontClass) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Type createType(Resource ontClass) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
     }
     
     @Override
     public Entity createEntity(Resource ontClass) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
     
     @Override
     public Entity createEntity(OntologyClass ontClass) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Entity createEntity(Type type) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    @Override
+    public Entity createEntity(Entity entity) {
         throw new RuntimeException("Method not implemented.");
     }
 

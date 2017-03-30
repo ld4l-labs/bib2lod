@@ -25,12 +25,12 @@ public class MarcxmlWorkBuilder extends MarcxmlEntityBuilder {
         
         Entity instanceTitle = 
                 instance.getChild(OntologyProperty.HAS_PREFERRED_TITLE.link());
+        
+        Entity workTitle = Entity.instance(instanceTitle);
+        work.addChild(OntologyProperty.HAS_PREFERRED_TITLE.link(), workTitle);
+        
+        instance.addChild(OntologyProperty.INSTANCE_OF.link(), work);
 
-//        ** Add a copy constructor for Entity
-//        ** see josh bloch http://www.artima.com/intv/bloch13.html
-//        ** also check book
-//        
-//        instance.addChild(OntologyProperty.INSTANCE_OF.link(), work);
         return work;
     }
 
