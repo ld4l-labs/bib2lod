@@ -7,9 +7,11 @@ import org.ld4l.bib2lod.entities.Link;
 /**
  * Defines the ontology properties targeted in the conversion.
  */
+// TODO Read in the ontology files to either replace or facilitate/enhance this.
 // TODO - Probably want this to be an interface, with implementing enums for
-// LD4L, BF, etc. These would define all the properties (in any namespace) used
-// by that application profile.
+// LD4L, BF, etc. Each enum would define, not just properties in that namespace,
+// but the entire set of terms defined by the application profile/set of
+// target ontologies.
 public enum OntologyProperty {
 
     HAS_ITEM(Namespace.BIBFRAME, "hasItem"),

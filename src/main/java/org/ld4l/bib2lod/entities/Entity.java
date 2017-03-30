@@ -57,7 +57,7 @@ public interface Entity {
     
     public void addAttribute(Link link, String textValue);
     
-    public void addAttribute(Link link, int number);
+    public void addAttribute(Link link, int i);
     
     public void addAttribute(Link link, Literal value);
     
@@ -75,7 +75,4 @@ public interface Entity {
                       
     public Model buildModel();
 
- 
-
-   
 }

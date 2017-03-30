@@ -272,10 +272,5 @@ public class SimpleEntity implements Entity {
         
         return model;
     }
-    
-//    @Override
-//    public Entity clone() {
-//        throw new RuntimeException("Method not implemented.");
-//    }
 
 }
