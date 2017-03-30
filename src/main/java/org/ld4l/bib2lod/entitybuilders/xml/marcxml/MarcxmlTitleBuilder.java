@@ -5,9 +5,15 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entities.Link;
+import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.TitleClass;
+import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 
@@ -17,8 +23,6 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    //private List<MarcxmlDataField> dataFields;
     
     private final MarcxmlRecord record;
     private final Entity bibEntity;
@@ -30,32 +34,45 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
      * being built is the title
      * @throws EntityBuilderException 
      */
-    public MarcxmlTitleBuilder(MarcxmlRecord record, 
-            Entity bibEntity) throws EntityBuilderException {
-        this.record = record;
+    public MarcxmlTitleBuilder(Record record, Entity bibEntity)
+             throws EntityBuilderException {
+        this.record = (MarcxmlRecord) record;
         this.bibEntity = bibEntity;
     }
 
     @Override
     public Entity build() throws EntityBuilderException {
-        throw new RuntimeException("Method not implemented.");
+        
+        // The title
+        entity = Entity.instance(TitleClass.superClass());
+        
+        String titleLabel = null;
+      
+        MarcxmlDataField field245 = record.getDataField("245");
+        MarcxmlDataField field130 = record.getDataField("130");
+        MarcxmlDataField field240 = record.getDataField("240");
+      
+        if (field245 != null) {
+            // Full title always comes from 245. If 130 and/or 240 are present,
+            // the $a fields should be the same.
+            // 245$a stores full title
+          titleLabel = field245.getSubfield("a").getTextValue();
+          entity.addAttribute(Link.instance(RDFS.label), titleLabel); 
+        }
+        
+        // After building Title, build TitleElements
+        List<Entity> titleElements = buildTitleElements(field245, titleLabel);
+        entity.addChildren(OntologyProperty.HAS_PART.link(), titleElements);
+        
+        bibEntity.addChild(OntologyProperty.TITLE.link(), entity);
+        
+        return entity;
     }
 //        
 //        
 //        
         //Entity title = Entity.instance(); // instantiate with Title superclass
-//        String titleLabel = null;
-//        
-//        MarcxmlDataField field245 = record.getDataField("245");
-//        MarcxmlDataField field130 = record.getDataField("130");
-//        MarcxmlDataField field240 = record.getDataField("240");
-//        
-//        if (field245 != null) {
-//            // Full title always comes from 245. If 130 and/or 240 are present,
-//            // the $a fields are the same.
-//            // 245$a stores full title
-//            titleLabel = field245.getSubfield("a").getTextValue();
-//        }
+
         
         // Could there be a 130 or 240 without 245? Then need to look for
         // $a in those fields if no 245.
@@ -71,9 +88,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 //            // TODO Add values from 130 or 240
 //            // NB If 130 is present, 240 is ignored
 //        
-//            title.addTitleElements(titleElements);
-//            entities.add(title);
-//            entities.addAll(titleElements);
+
 //        }
 
 
@@ -81,10 +96,13 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
     
     private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {
-         
+                 
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
         List<Entity> titleElements = new ArrayList<Entity>();
+        
+        // for each element, create a title element builder, adding the
+        // subtype rather than the supertype
 
         // MainTitleElement label = titleLabel minus parts.
         // Temporarily, build only the MainTitleElement and assign it same label
@@ -95,6 +113,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // TODO set ranks
         
         return titleElements;
+                
     }
 
 }

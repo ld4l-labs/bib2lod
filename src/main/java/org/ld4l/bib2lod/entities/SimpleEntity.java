@@ -62,6 +62,10 @@ public class SimpleEntity implements Entity {
     @Override
     public void addChildren(Link link, List<Entity> entities) {
         
+        if (entities.isEmpty()) {
+            return;
+        }
+        
         if (children.containsKey(link)) {
             List<Entity> list = children.get(link);
             list.addAll(entities);  
@@ -109,12 +113,16 @@ public class SimpleEntity implements Entity {
     @Override
     public void addAttributes(Link link, List<Literal> values) {
         
+        if (values.isEmpty()) {
+            return;
+        }
+
         if (attributes.containsKey(link)) {
             List<Literal> list = attributes.get(link);
             list.addAll(values);  
         } else {
             attributes.put(link, values);
-        }          
+        }            
     }
     
     @Override

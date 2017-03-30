@@ -34,7 +34,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
 
         // TODO Add instance subtypes 
         buildIdentifiers();
-        // buildTitles();
+        buildTitles();
 //        buildWorks();
         buildItem();
         
@@ -56,41 +56,18 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
 
     }
     
-    private void buildTitles() {
-        throw new RuntimeException("Method not implemented.");
+    private void buildTitles() throws EntityBuilderException {       
+        // NB There may be multiple, so this isn't sufficient.
+        EntityBuilder.instance(MarcxmlTitleBuilder.class, record, entity).build();
     }
     
     private void buildWorks() {
+        // NB There are special cases where one Instance has multiple Works.
         throw new RuntimeException("Method not implemented.");
     }
     
     private void buildItem() throws EntityBuilderException {
         EntityBuilder.instance(MarcxmlItemBuilder.class, record, entity).build();
-    }
-    
-
-    /**
-     * Converts the Record's control fields
-     * @throws EntityBuilderException
-     */
-//    private List<Entity> convertControlFields() throws EntityBuilderException {
-//        
-//        List<Entity> entities = new ArrayList<Entity>();
-//        
-//        MarcxmlControlField controlField001 = 
-//                ((MarcxmlRecord) record).getControlField("001");
-//        
-//        if (controlField001 != null) {
-//            entities.addAll(EntityBuilder.instance(
-//                    MarcxmlIdentifierBuilder.class, controlField001, entity)
-//                   .build());                
-//        }
-//   
-//        // TODO Other control fields. Some affect work as well as instance
-//        // (e.g., language value in 008)
-//        
-//        return entities;
-//    }
-//   
+    }   
         
 }

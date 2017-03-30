@@ -51,8 +51,8 @@ public interface EntityBuilder {
 
     
     /**
-     * Builds an Entity, including its dependent Entities, such as Identifiers
-     * and Titles of Works and Instances.
+     * Builds an Entity, including its dependent Entities (e.g., Identifiers
+     * and Titles of Works and Instances).
      * @throws EntityBuilderException 
      */
     public Entity build() throws EntityBuilderException;
