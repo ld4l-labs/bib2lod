@@ -10,7 +10,9 @@ import org.apache.jena.rdf.model.Resource;
 public interface OntologyClass {
   
     public String uri(); 
-    // Possibly define as OntResource.
+    
+    // Possibly return an OntClass instead, if the functionality is useful 
+    // (e.g., in subclass inferencing).
     public Resource ontClassResource();
 
 }

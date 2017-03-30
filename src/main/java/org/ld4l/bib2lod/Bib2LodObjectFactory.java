@@ -4,7 +4,6 @@ package org.ld4l.bib2lod;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

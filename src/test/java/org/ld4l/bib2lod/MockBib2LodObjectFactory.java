@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;

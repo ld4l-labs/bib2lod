@@ -11,12 +11,8 @@ public class SimpleLink implements Link {
     private final Property property;
     
     /**
-     * Constructors
+     * Constructor
      */
-    public SimpleLink(Property property) {
-        this.property = property;
-    }
-    
     public SimpleLink(OntologyProperty ontProperty) {
         this.property = ontProperty.property();
     }

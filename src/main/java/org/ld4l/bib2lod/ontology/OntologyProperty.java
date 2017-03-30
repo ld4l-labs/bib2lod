@@ -4,6 +4,12 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.entities.Link;
 
+/**
+ * Defines the ontology properties targeted in the conversion.
+ */
+// TODO - Probably want this to be an interface, with implementing enums for
+// LD4L, BF, etc. These would define all the properties (in any namespace) used
+// by that application profile.
 public enum OntologyProperty {
 
     HAS_ITEM(Namespace.BIBFRAME, "hasItem"),

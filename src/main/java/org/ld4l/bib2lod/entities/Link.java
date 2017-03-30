@@ -7,6 +7,8 @@ import org.ld4l.bib2lod.ontology.OntologyProperty;
 /**
  * Represents a property that links two Entities.
  */
+// TODO - Probably should get rid of this and combine with OntologyProperty.
+// I.e., the Entity maps can be Map<OntologyProperty, List<Entity>>, etc.
 public interface Link {
     
     /**
