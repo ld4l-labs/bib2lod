@@ -32,8 +32,8 @@ public enum InstanceClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return INSTANCE.ontClass;
+    public static OntologyClass superClass() {
+        return INSTANCE;
     }
 
 }

@@ -29,8 +29,8 @@ public enum IdentifierClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return IDENTIFIER.ontClass;
+    public static OntologyClass superClass() {
+        return IDENTIFIER;
     }
 
 }

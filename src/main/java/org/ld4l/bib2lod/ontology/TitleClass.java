@@ -29,8 +29,8 @@ public enum TitleClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return TITLE.ontClass;
+    public static OntologyClass superClass() {
+        return TITLE;
     }
 
 }

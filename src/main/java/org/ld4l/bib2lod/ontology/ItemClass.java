@@ -29,7 +29,7 @@ public enum ItemClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return ITEM.ontClass;
+    public static OntologyClass superClass() {
+        return ITEM;
     }
 }

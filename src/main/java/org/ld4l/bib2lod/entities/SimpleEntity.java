@@ -46,8 +46,7 @@ public class SimpleEntity implements Entity {
         this();
         types.add(Type.instance(ontClass));
     }
-    
-    
+        
     public SimpleEntity(OntologyClass ontClass) {
         this(ontClass.ontClassResource());
     }

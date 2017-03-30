@@ -33,7 +33,7 @@ public enum TitleElementClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return TITLE_ELEMENT.ontClass;
+    public static OntologyClass superClass() {
+        return TITLE_ELEMENT;
     }
 }
