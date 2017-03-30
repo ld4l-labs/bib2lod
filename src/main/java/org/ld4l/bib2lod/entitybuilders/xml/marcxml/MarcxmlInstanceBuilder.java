@@ -2,9 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.InstanceClass;
@@ -33,64 +30,74 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
      * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build()
      */
     @Override
-    public List<Entity> build() throws EntityBuilderException {
+    public Entity build() throws EntityBuilderException {
 
-        List<Entity> entities = new ArrayList<Entity>();
-        // convertLeader();
+        // add instance subtypes 
+        buildIdentifiers();
+//        buildTitles();
+//        buildWorks();
+//        buildItem();
         
-        // TODO Need to build work first, since some values affect the work
-        // as well as or instead of the instance. E.g., language value in 
-        // control field 008.
-        // Build the work, assign to this.work
-        // Same for item
-      
-        entities.addAll(convertControlFields());
-//        entities.addAll(convertDataFields());   
-        
-        entities.add(entity);
-        return entities;
+        return entity;
     }
     
-    private void convertLeader() {
-        // TODO Convert leader
+    private void buildIdentifiers() throws EntityBuilderException {
+
+        MarcxmlControlField controlField001 = 
+                ((MarcxmlRecord) record).getControlField("001");
+
+        if (controlField001 != null) {
+            EntityBuilder.instance(
+                    MarcxmlIdentifierBuilder.class, controlField001, entity)
+                .build();                
+        }
+        
+//        
+//        now: get 001 control field
+//        create identifier builder, pass field and instance
+//        identifiers.add();
+//        
+//        then: process other data fields that signify identifiers, pass field and instance
+//        identifiers.add(e)
+//        
+//        identifiers.add
+    }
+    
+    private void buildTitles() {
         throw new RuntimeException("Method not implemented.");
     }
     
+    private void buildWorks() {
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    private void buildItem() {
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+
     /**
      * Converts the Record's control fields
      * @throws EntityBuilderException
      */
-    private List<Entity> convertControlFields() throws EntityBuilderException {
-        
-        List<Entity> entities = new ArrayList<Entity>();
-        
-        MarcxmlControlField controlField001 = 
-                ((MarcxmlRecord) record).getControlField("001");
-        
-        if (controlField001 != null) {
-            entities.addAll(EntityBuilder.instance(
-                    MarcxmlIdentifierBuilder.class, controlField001, entity)
-                   .build());                
-        }
-   
-        // TODO Other control fields. Some affect work as well as instance
-        // (e.g., language value in 008)
-        
-        return entities;
-    }
-    
-    /**
-     * Convert this Instance's datafields
-     * @return
-     * @throws EntityBuilderException
-     */
-    private List<Entity> convertDataFields() throws EntityBuilderException {
-        
-        List<Entity> entities = new ArrayList<Entity>();
-        
-        //entities.addAll(new MarcxmlTitleBuilder(record, instance).build());
-
-        return entities;
-    }
+//    private List<Entity> convertControlFields() throws EntityBuilderException {
+//        
+//        List<Entity> entities = new ArrayList<Entity>();
+//        
+//        MarcxmlControlField controlField001 = 
+//                ((MarcxmlRecord) record).getControlField("001");
+//        
+//        if (controlField001 != null) {
+//            entities.addAll(EntityBuilder.instance(
+//                    MarcxmlIdentifierBuilder.class, controlField001, entity)
+//                   .build());                
+//        }
+//   
+//        // TODO Other control fields. Some affect work as well as instance
+//        // (e.g., language value in 008)
+//        
+//        return entities;
+//    }
+//   
         
 }

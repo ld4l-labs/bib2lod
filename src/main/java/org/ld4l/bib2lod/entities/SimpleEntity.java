@@ -144,9 +144,9 @@ public class SimpleEntity implements Entity {
     
     @Override
     public void buildResource() {
-        // Build children of this Entity before building the Entity. Then
-        // when building the linking assertion from this Entity to the child, 
-        // we have the URI of the child's Resource.
+        // Build children of this Entity before building the Entity, so that
+        // when building the assertion linking this Entity to the child, we
+        // have the URI of the child's Resource.
         buildChildResources();
         buildThisResource();
     }
@@ -157,12 +157,7 @@ public class SimpleEntity implements Entity {
         for (Entry<Link, List<Entity>> entry : children.entrySet()) {
             List<Entity> entities = entry.getValue();
             for (Entity childEntity : entities) {
-                // If childEntity already has a Resource, it was built on an
-                // earlier iteration through the Resource-building loop in the
-                // Converter. 
-                if (childEntity.getResource() == null) {
-                    childEntity.buildResource();
-                }
+                childEntity.buildResource();
             }
         }        
     }
@@ -175,7 +170,7 @@ public class SimpleEntity implements Entity {
         
         // Add type assertions
         for (Type type : types) {
-            resource.addProperty(RDF.type, type.getUri());
+            resource.addProperty(RDF.type, type.getOntClass());
         }
         
         // Add relationships to children
@@ -198,6 +193,31 @@ public class SimpleEntity implements Entity {
         }
         
         setResource(resource);        
+    }
+    
+    @Override
+    public Model buildModel() {
+        
+        Model model = ModelFactory.createDefaultModel();
+        model.add(buildChildModels());
+        model.add(resource.getModel());
+        return model;
+    }
+    
+    private Model buildChildModels() {
+        
+        Model model = ModelFactory.createDefaultModel();
+        
+        for (Entry<Link, List<Entity>> child : children.entrySet()) {
+            Link link = child.getKey();
+            List<Entity> childEntities = children.get(link);
+            for (Entity childEntity : childEntities) {
+                Model childModel = childEntity.buildModel();
+                model.add(childModel);
+            }          
+        }
+        
+        return model;
     }
 
 }

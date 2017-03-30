@@ -2,9 +2,6 @@
 
 package org.ld4l.bib2lod.conversion.xml.marcxml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.conversion.xml.XmlConverter;
@@ -34,26 +31,26 @@ public class MarcxmlConverter extends XmlConverter {
     }
 
 
-    protected List<Entity> buildEntities(Record record) 
+    @Override
+    protected Entity buildEntity(Record record) 
             throws EntityBuilderException {
-        
-        List<Entity> entities = new ArrayList<Entity>();
-        
+             
         // The Instance is the fundamental Entity created from the Record.
         // From the InstanceBuilder we create dependent Entities such as 
         // the Titles and Identifiers of the Instance.
+        
+        // TODO This commits us to always creating an Instance, and thus
+        // adopting the model in which a painting, for example, is an Instance,
+        // Work, and Item simultaneously. Consider how to avoid the dependency
+        // on this model. We may need to inspect the leader first to determine
+        // what kind of work it is. Interesting dependency of converter on the
+        // application profile.
         EntityBuilder instanceBuilder = 
                 EntityBuilder.instance(
                         MarcxmlInstanceBuilder.class, record);
                
-        entities.addAll(instanceBuilder.build());
+        return instanceBuilder.build();
         
-        // From here, build bib resources: Work, Item
-        // Other entities are built off of each of those (identifiers, 
-        // activities, etc. Both work and item builders need to get passed 
-        // the record and the instance.
-
-        return entities;
     }
   
 }

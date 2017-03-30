@@ -1,8 +1,5 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +22,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
     private final Entity bibEntity;
     
     /**
-     * Construct a new identifier from a control field.
+     * Constructor
      * @param fields - the relevant fields in the record
      * @param instance - the related Instance
      * @throws EntityBuilderException 
@@ -36,10 +33,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         this.bibEntity = bibEntity;
     }
      
-    public List<Entity> build() {
-        
-        List<Entity> entities = new ArrayList<Entity>();
-        
+    public Entity build() {
+
         Entity identifier = buildFromControlField();;
         
         if (identifier == null) {
@@ -49,15 +44,14 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         if (identifier != null) {
             bibEntity.addChild(
                     OntologyProperty.IDENTIFIED_BY.link(), identifier);
-            entities.add(identifier);
         }
   
-        return entities;
+        return entity;
     }
     
     /**
-     * Builds an Identifier from the 001 controlfield. Returns null if 
-     * this.field is not an 001 controlfield.
+     * Builds an Identifier from the 001 control field. Returns null if 
+     * this.field is not an 001 control field.
      */   
     private Entity buildFromControlField() {
         
