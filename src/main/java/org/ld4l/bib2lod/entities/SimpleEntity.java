@@ -46,8 +46,38 @@ public class SimpleEntity implements Entity {
         this();
         types.add(Type.instance(ontClass));
     }
+        
+    public SimpleEntity(OntologyClass ontClass) {
+        this(ontClass.ontClassResource());
+    }
     
-    
+    /**
+     * Copy constructor.
+     * Use to copy the contents of non-reusable resources. For example, create
+     * create a copy of an Instance Title to assign to a Work, where Title and
+     * TitleElements are non-reusable, and thus the Work cannot simply link to
+     * the Instance Title.
+     */
+    public SimpleEntity(Entity original) {
+        this();
+        
+        // Attributes and types are simply copied
+        this.attributes.putAll(original.getAttributes());
+        this.types.addAll(original.getTypes());
+        
+        // Copy the dependent Entities in each child 
+        for (Entry<Link, List<Entity>> child : original.getChildren().entrySet()) {
+            Link link = child.getKey();
+            List<Entity> originalEntities = child.getValue();
+            List<Entity> newEntities = new ArrayList<Entity>();
+            for (Entity entity : originalEntities) {
+                Entity copy = Entity.instance(entity);
+                newEntities.add(copy);
+            }
+            this.children.put(link, newEntities);
+        } 
+    }
+
     @Override
     public void addChild(Link link, Entity entity) {
         
@@ -62,6 +92,9 @@ public class SimpleEntity implements Entity {
     @Override
     public void addChildren(Link link, List<Entity> entities) {
         
+        if (entities.isEmpty()) {
+            return;
+        }       
         if (children.containsKey(link)) {
             List<Entity> list = children.get(link);
             list.addAll(entities);  
@@ -78,6 +111,15 @@ public class SimpleEntity implements Entity {
     @Override
     public List<Entity> getChildren(Link link) {
         return children.get(link);
+    }
+    
+    @Override
+    public Entity getChild(Link link) {
+        List<Entity> entities = children.get(link);
+        if (!entities.isEmpty()) {
+            return entities.get(0);
+        }
+        return null;
     }
     
     @Override
@@ -109,12 +151,15 @@ public class SimpleEntity implements Entity {
     @Override
     public void addAttributes(Link link, List<Literal> values) {
         
+        if (values.isEmpty()) {
+            return;
+        }
         if (attributes.containsKey(link)) {
             List<Literal> list = attributes.get(link);
             list.addAll(values);  
         } else {
             attributes.put(link, values);
-        }          
+        }            
     }
     
     @Override
@@ -219,5 +264,10 @@ public class SimpleEntity implements Entity {
         
         return model;
     }
+    
+//    @Override
+//    public Entity clone() {
+//        throw new RuntimeException("Method not implemented.");
+//    }
 
 }

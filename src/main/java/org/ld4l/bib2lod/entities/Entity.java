@@ -26,6 +26,14 @@ public interface Entity {
     public static Entity instance(Resource ontClass) {
         return Bib2LodObjectFactory.instance().createEntity(ontClass);
     }
+    
+    public static Entity instance(OntologyClass ontClass) {
+        return Bib2LodObjectFactory.instance().createEntity(ontClass);
+    }
+    
+    public static Entity instance(Entity entity) {
+        return Bib2LodObjectFactory.instance().createEntity(entity);
+    }
 
     public void addChild(Link link, Entity entity);
     
@@ -34,6 +42,12 @@ public interface Entity {
     public HashMap<Link, List<Entity>> getChildren();
     
     public List<Entity> getChildren(Link link); 
+    
+    /**
+     * Use when only a single child with this link is expected. Others are
+     * discarded.
+     */
+    public Entity getChild(Link link);  
     
     public void addType(Type type);
     
@@ -57,7 +71,9 @@ public interface Entity {
     
     public Resource getResource();
                       
-    public Model buildModel();   
+    public Model buildModel();
+
+ 
 
    
 }

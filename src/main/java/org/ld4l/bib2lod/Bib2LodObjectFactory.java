@@ -4,7 +4,6 @@ package org.ld4l.bib2lod;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -160,16 +159,32 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         } 
     }
+
+    public EntityBuilder createEntityBuilder(Class<?> builderClass,
+            Record record, Entity relatedEntity) {
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(Record.class, Entity.class)                           
+                    .newInstance(record, relatedEntity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }         
+    }
     
     public abstract Entity createEntity(Type type);
     
     public abstract Entity createEntity(Resource ontClass);
     
+    public abstract Entity createEntity(OntologyClass ontClass);
+    
+    public abstract Entity createEntity(Entity entity);
+    
     public abstract Type createType(OntologyClass ontClass);
     
     public abstract Type createType(Resource ontClass);
-    
-    public abstract Link createLink(Property property);
 
     public abstract Link createLink(OntologyProperty ontProperty);
 

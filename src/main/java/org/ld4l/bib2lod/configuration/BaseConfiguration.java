@@ -116,7 +116,6 @@ public abstract class BaseConfiguration implements Configuration {
      */
     @Override
     public String getConverter() {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
@@ -125,7 +124,6 @@ public abstract class BaseConfiguration implements Configuration {
      */
     @Override
     public List<String> getReconcilers() {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
     

@@ -12,7 +12,7 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
+public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     
     private final MarcxmlRecord record;
 
@@ -32,11 +32,12 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     @Override
     public Entity build() throws EntityBuilderException {
 
-        // add instance subtypes 
+        // TODO Add instance subtypes 
+        
         buildIdentifiers();
-//        buildTitles();
-//        buildWorks();
-//        buildItem();
+        buildTitles();
+        buildWorks();
+        buildItem();
         
         return entity;
     }
@@ -52,52 +53,29 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
                 .build();                
         }
         
-//        
-//        now: get 001 control field
-//        create identifier builder, pass field and instance
-//        identifiers.add();
-//        
-//        then: process other data fields that signify identifiers, pass field and instance
-//        identifiers.add(e)
-//        
-//        identifiers.add
-    }
-    
-    private void buildTitles() {
-        throw new RuntimeException("Method not implemented.");
-    }
-    
-    private void buildWorks() {
-        throw new RuntimeException("Method not implemented.");
-    }
-    
-    private void buildItem() {
-        throw new RuntimeException("Method not implemented.");
-    }
-    
+        // TODO Convert other identifiers from data fields.
 
-    /**
-     * Converts the Record's control fields
-     * @throws EntityBuilderException
-     */
-//    private List<Entity> convertControlFields() throws EntityBuilderException {
-//        
-//        List<Entity> entities = new ArrayList<Entity>();
-//        
-//        MarcxmlControlField controlField001 = 
-//                ((MarcxmlRecord) record).getControlField("001");
-//        
-//        if (controlField001 != null) {
-//            entities.addAll(EntityBuilder.instance(
-//                    MarcxmlIdentifierBuilder.class, controlField001, entity)
-//                   .build());                
-//        }
-//   
-//        // TODO Other control fields. Some affect work as well as instance
-//        // (e.g., language value in 008)
-//        
-//        return entities;
-//    }
-//   
+    }
+    
+    private void buildTitles() throws EntityBuilderException { 
+        
+        // NB There may be multiple, so this isn't sufficient.
+        EntityBuilder.instance(MarcxmlTitleBuilder.class, record, entity).build();
+    }
+    
+    private void buildWorks() throws EntityBuilderException {
+        // NB There are special cases where one Instance has multiple Works.
+        
+        // For now, the work will take its title from the instance title
+        // need to build a new title with all the same elements and attributes,
+        // but new resources.
+        // Need method of EntityBuilder.clone() or copy?
+        
+        EntityBuilder.instance(MarcxmlWorkBuilder.class, record, entity).build();
+    }
+    
+    private void buildItem() throws EntityBuilderException {
+        EntityBuilder.instance(MarcxmlItemBuilder.class, record, entity).build();
+    }   
         
 }

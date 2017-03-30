@@ -85,15 +85,16 @@ public abstract class BaseConverter implements Converter {
     protected Model convertRecord(Record record) 
             throws RecordConversionException  {
 
-        // Build the primary Entity (e.g., an Instance) from the Record, and
-        // its dependent Entities.
+        // Build the primary Entity (e.g., an Instance) from the Record, 
+        // its dependent Entities, and links to the dependents.
         Entity entity = buildEntity(record);
  
         // Build a Resource from the Entity, including its dependent Entities.
+        // Each Resource is attached to its Entity.
         entity.buildResource();
 
         // Build the Model for this Record from the Entity's Resource and the
-        // Resources attached to its dependent Entities.
+        // Resources of its dependent Entities.
         Model model = entity.buildModel();
         
         return model;

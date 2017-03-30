@@ -3,19 +3,19 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum IdentifierClass implements OntologyClass {
+public enum TitleClass implements OntologyClass {
 
-    IDENTIFIER(Namespace.BIBFRAME, "Identifier"),
-    LOCAL(Namespace.BIBFRAME, "Local");
-    
+    ABBREVIATED_TITLE(Namespace.LD4L, "AbbreviatedTitle"),
+    TITLE(Namespace.BIBFRAME, "Title");
+ 
     private String uri;
     private Resource ontClass;
     
     /**
      * Constructor
      */
-    IdentifierClass(Namespace namespace, String name) {
-        this.uri = namespace.uri() + name;
+    TitleClass(Namespace namespace, String localName) {
+        this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
     
@@ -30,7 +30,7 @@ public enum IdentifierClass implements OntologyClass {
     } 
 
     public static OntologyClass superClass() {
-        return IDENTIFIER;
+        return TITLE;
     }
 
 }

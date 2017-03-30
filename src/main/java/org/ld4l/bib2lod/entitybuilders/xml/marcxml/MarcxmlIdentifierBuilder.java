@@ -1,10 +1,8 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
-import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
 import org.ld4l.bib2lod.ontology.IdentifierClass;
 import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.record.RecordField;
@@ -23,8 +21,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
     
     /**
      * Constructor
-     * @param fields - the relevant fields in the record
-     * @param instance - the related Instance
+     * @param field - the relevant field in the record
+     * @param bibEntity - the related entity 
      * @throws EntityBuilderException 
      */
     public MarcxmlIdentifierBuilder(RecordField field, Entity bibEntity) 
@@ -35,18 +33,18 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      
     public Entity build() {
 
-        Entity identifier = buildFromControlField();;
+        Entity identifier;
         
-        if (identifier == null) {
-            //identifier = buildFromDataField();
+        if (field instanceof MarcxmlControlField) {
+            identifier = buildFromControlField();
+        } else {
+          identifier = buildFromDataField();
         }
-        
-        if (identifier != null) {
-            bibEntity.addChild(
-                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
-        }
+
+        bibEntity.addChild(
+                OntologyProperty.IDENTIFIED_BY.link(), identifier);
   
-        return entity;
+        return identifier;
     }
     
     /**
@@ -55,15 +53,15 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      */   
     private Entity buildFromControlField() {
         
-        if (field instanceof MarcxmlControlField) {
-            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
-                Entity identifier = Entity.instance(IdentifierClass.superClass());
-                identifier.addType(IdentifierClass.LOCAL);
-                Link link = Link.instance(RDF.value);
-                identifier.addAttribute(link, field.getTextValue());
-                return identifier;             
-            }
-        }    
+        if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
+            Entity identifier = Entity.instance(IdentifierClass.superClass());
+            identifier.addType(IdentifierClass.LOCAL);
+            identifier.addAttribute(OntologyProperty.VALUE.link(), field.getTextValue());
+            return identifier;             
+        }
+        
+        // TODO Are there other control fields that contain identifiers?
+   
         return null;     
     }
     

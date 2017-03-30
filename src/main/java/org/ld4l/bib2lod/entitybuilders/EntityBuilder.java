@@ -42,11 +42,17 @@ public interface EntityBuilder {
         return Bib2LodObjectFactory.instance().createEntityBuilder(
                 builderClass, field, relatedEntity);
     }
+    
+    public static EntityBuilder instance(Class<?> builderClass, Record record, 
+            Entity relatedEntity) {
+        return Bib2LodObjectFactory.instance().createEntityBuilder(
+                builderClass, record, relatedEntity);
+    }
 
     
     /**
-     * Builds an Entity, including its dependent Entities, such as Identifiers
-     * and Titles of Works and Instances.
+     * Builds an Entity, including its dependent Entities (e.g., Identifiers
+     * and Titles of Works and Instances).
      * @throws EntityBuilderException 
      */
     public Entity build() throws EntityBuilderException;

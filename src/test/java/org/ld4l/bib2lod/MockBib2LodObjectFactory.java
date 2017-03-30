@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.cleaning.Cleaner;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -151,38 +150,37 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
 
     @Override
-    public Link createLink(Property property) {
-        // TODO Auto-generated method stub
-        throw new RuntimeException("Method not implemented.");
-    }
-
-    @Override
     public Link createLink(OntologyProperty ontProperty) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Type createType(OntologyClass ontClass) {
-        // TODO Auto-generated method stub
         throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Type createType(Resource ontClass) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
     }
     
     @Override
     public Entity createEntity(Resource ontClass) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    @Override
+    public Entity createEntity(OntologyClass ontClass) {
+        throw new RuntimeException("Method not implemented.");
     }
 
     @Override
     public Entity createEntity(Type type) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("Method not implemented.");
+    }
+    
+    @Override
+    public Entity createEntity(Entity entity) {
         throw new RuntimeException("Method not implemented.");
     }
 

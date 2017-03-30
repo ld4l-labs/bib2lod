@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,6 +84,16 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     }
     
     @Override
+    public Entity createEntity(OntologyClass ontClass) {
+        return new SimpleEntity(ontClass);
+    }
+    
+    @Override
+    public Entity createEntity(Entity entity) {
+        return new SimpleEntity(entity);
+    }
+    
+    @Override
     public Type createType(OntologyClass ontClass) {
         return new SimpleType(ontClass);
     }
@@ -92,11 +101,6 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
     @Override
     public Type createType(Resource ontClass) {
         return new SimpleType(ontClass);
-    }
-
-    @Override
-    public Link createLink(Property property) {
-        return new SimpleLink(property);
     }
 
     @Override
