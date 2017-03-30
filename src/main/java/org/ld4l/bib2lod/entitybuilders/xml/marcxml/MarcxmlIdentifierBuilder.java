@@ -58,8 +58,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
         if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
             Entity identifier = Entity.instance(IdentifierClass.superClass());
             identifier.addType(IdentifierClass.LOCAL);
-            Link link = Link.instance(RDF.value);
-            identifier.addAttribute(link, field.getTextValue());
+            identifier.addAttribute(OntologyProperty.VALUE.link(), field.getTextValue());
             return identifier;             
         }
         

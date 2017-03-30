@@ -9,7 +9,9 @@ public enum OntologyProperty {
     HAS_ITEM(Namespace.BIBFRAME, "hasItem"),
     HAS_PART(Namespace.DCTERMS, "hasPart"),
     IDENTIFIED_BY(Namespace.BIBFRAME, "identifiedBy"),
-    TITLE(Namespace.BIBFRAME, "title");
+    LABEL(Namespace.RDF, "label"),
+    TITLE(Namespace.BIBFRAME, "title"),
+    VALUE(Namespace.RDFS, "value");
     
     private String uri;
     private Property property;

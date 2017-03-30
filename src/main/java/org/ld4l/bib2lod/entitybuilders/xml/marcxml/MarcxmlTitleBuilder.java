@@ -12,6 +12,7 @@ import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.entities.Link;
 import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.ontology.TitleClass;
+import org.ld4l.bib2lod.ontology.TitleElementClass;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
@@ -48,6 +49,9 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         
         String titleLabel = null;
       
+        // Could there be a 130 or 240 without 245? Then need to look for
+        // $a in those fields if no 245.
+        
         MarcxmlDataField field245 = record.getDataField("245");
         MarcxmlDataField field130 = record.getDataField("130");
         MarcxmlDataField field240 = record.getDataField("240");
@@ -57,8 +61,10 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
             // the $a fields should be the same.
             // 245$a stores full title
           titleLabel = field245.getSubfield("a").getTextValue();
-          entity.addAttribute(Link.instance(RDFS.label), titleLabel); 
+          entity.addAttribute(OntologyProperty.LABEL.link(), titleLabel); 
         }
+        
+        // Add other values from 130/240
         
         // After building Title, build TitleElements
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
@@ -68,31 +74,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         
         return entity;
     }
-//        
-//        
-//        
-        //Entity title = Entity.instance(); // instantiate with Title superclass
 
-        
-        // Could there be a 130 or 240 without 245? Then need to look for
-        // $a in those fields if no 245.
-           
-        // Return an empty list if the title has no text value.
-//        if (titleLabel != null) {
-//            title.setRdfsLabel(titleLabel);
-//            
-//            // Build TitleElements
-//            List<TitleElement> titleElements = 
-//                    buildTitleElements(field245, titleLabel);
-//            
-//            // TODO Add values from 130 or 240
-//            // NB If 130 is present, 240 is ignored
-//        
-
-//        }
-
-
-//    }
     
     private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {
@@ -107,6 +89,15 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // MainTitleElement label = titleLabel minus parts.
         // Temporarily, build only the MainTitleElement and assign it same label
         // as title.
+        
+        // TODO *** Add Entity constructor that takes an OntologyClass rather than
+        // a Resource ****
+        Entity mainTitleElement = Entity.instance(
+                TitleElementClass.MAIN_TITLE_ELEMENT.ontClass());
+        mainTitleElement.addAttribute(
+                OntologyProperty.LABEL.link(), titleLabel);
+        titleElements.add(mainTitleElement);
+        
 //        titleElements.add(new TitleElement(
 //                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
         
