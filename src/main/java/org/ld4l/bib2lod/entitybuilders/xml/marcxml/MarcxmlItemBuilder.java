@@ -1,7 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
 
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.ItemClass;
+import org.ld4l.bib2lod.ontology.ItemType;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
@@ -21,7 +21,7 @@ public class MarcxmlItemBuilder extends MarcxmlEntityBuilder {
 
     @Override
     public Entity build() throws EntityBuilderException {
-        Entity item = Entity.instance(ItemClass.superClass());
+        Entity item = Entity.instance(ItemType.superClass());
         
         // TODO Fill in other data about Item from other fields in the record
         

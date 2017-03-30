@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
-import org.ld4l.bib2lod.ontology.IdentifierClass;
+import org.ld4l.bib2lod.ontology.IdentifierType;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
@@ -54,8 +54,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
     private Entity buildFromControlField() {
         
         if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
-            Entity identifier = Entity.instance(IdentifierClass.superClass());
-            identifier.addType(IdentifierClass.LOCAL);
+            Entity identifier = Entity.instance(IdentifierType.superClass());
+            identifier.addType(IdentifierType.LOCAL);
             identifier.addAttribute(DatatypeProp.VALUE, field.getTextValue());
             return identifier;             
         }

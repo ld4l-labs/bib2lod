@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum TitleElementClass implements Type {
+public enum TitleElementType implements Type {
 
     NON_SORT_ELEMENT(Namespace.LD4L, "NonSortTitleElement"),
     MAIN_TITLE_ELEMENT(Namespace.LD4L, "MainTitleElement"),
@@ -18,7 +18,7 @@ public enum TitleElementClass implements Type {
     /**
      * Constructor
      */
-    TitleElementClass(Namespace namespace, String localName) {
+    TitleElementType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }

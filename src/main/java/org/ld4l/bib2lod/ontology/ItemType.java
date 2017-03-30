@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum ItemClass implements Type {
+public enum ItemType implements Type {
         
     // There may not be any other Item classes
     ITEM(Namespace.BIBFRAME, "Item");
@@ -14,7 +14,7 @@ public enum ItemClass implements Type {
     /**
      * Constructor
      */
-    ItemClass(Namespace namespace, String localName) {
+    ItemType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }

@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum InstanceClass implements Type {
+public enum InstanceType implements Type {
     
     ARCHIVAL(Namespace.BIBFRAME, "Archival"),
     ELECTRONIC(Namespace.BIBFRAME, "Electronic"),
@@ -17,7 +17,7 @@ public enum InstanceClass implements Type {
     /**
      * Constructor
      */
-    InstanceClass(Namespace namespace, String localName) {
+    InstanceType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
