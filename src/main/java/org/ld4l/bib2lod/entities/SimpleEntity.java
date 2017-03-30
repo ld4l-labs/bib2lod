@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -135,6 +136,13 @@ public class SimpleEntity implements Entity {
     @Override
     public void addAttribute(Link link, String string) {
         addAttribute(link, ResourceFactory.createStringLiteral(string));
+    }
+    
+    @Override
+    public void addAttribute(Link link, int i) {
+        Literal literal = ResourceFactory.createTypedLiteral(
+                Integer.toString(i), XSDDatatype.XSDinteger);
+        addAttribute(link, literal);
     }
     
     @Override

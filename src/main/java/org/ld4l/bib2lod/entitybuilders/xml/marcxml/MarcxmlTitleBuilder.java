@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.ontology.OntologyClass;
 import org.ld4l.bib2lod.ontology.OntologyProperty;
 import org.ld4l.bib2lod.ontology.TitleClass;
 import org.ld4l.bib2lod.ontology.TitleElementClass;
@@ -80,12 +81,11 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
         entity.addChildren(OntologyProperty.HAS_PART.link(), titleElements);
         
-        // TODO Figure out how to recognize the preferred title vs other titlse
+        // TODO Figure out how to recognize the preferred title vs other titles
         bibEntity.addChild(OntologyProperty.HAS_PREFERRED_TITLE.link(), entity);
         
         return entity;
     }
-
     
     private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {
@@ -93,24 +93,33 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
         List<Entity> titleElements = new ArrayList<Entity>();
-
-        // MainTitleElement label = titleLabel minus parts.
-        // Temporarily, build only the MainTitleElement and assign it the title
-        // label
         
-        Entity mainTitleElement = Entity.instance(
-                TitleElementClass.MAIN_TITLE_ELEMENT);
-        mainTitleElement.addAttribute(
-                OntologyProperty.LABEL.link(), titleLabel);
+        /*
+         * Assign ranks as follows:
+         * NonSortElement - 0
+         * MainTitleElement - 10
+         * SubtitleElement - 20
+         * PartNumberElement - 30
+         * PartNameElement - 40
+         * The gaps allow for multiple elements of one type.
+         */
+        
+        // Create MainTitleElement last, since its label is the Title label
+        // minus the other element labels.
+        Entity mainTitleElement = buildTitleElement(
+                TitleElementClass.MAIN_TITLE_ELEMENT, titleLabel, 10); 
         titleElements.add(mainTitleElement);
         
-//        titleElements.add(new TitleElement(
-//                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
-        
-        // TODO set ranks
-        
-        return titleElements;
-                
+        return titleElements;               
     }
-
+        
+    private Entity buildTitleElement(
+            TitleElementClass elementClass, String label, int rank) {
+        
+         Entity titleElement = Entity.instance(elementClass);
+         titleElement.addAttribute(OntologyProperty.LABEL.link(), label);
+         titleElement.addAttribute(OntologyProperty.RANK.link(), rank);  
+         return titleElement;
+    }
+    
 }
