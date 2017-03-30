@@ -57,6 +57,8 @@ public interface Entity {
     
     public void addAttribute(Link link, String textValue);
     
+    public void addAttribute(Link link, int number);
+    
     public void addAttribute(Link link, Literal value);
     
     public void addAttributes(Link link, List<Literal> values);
