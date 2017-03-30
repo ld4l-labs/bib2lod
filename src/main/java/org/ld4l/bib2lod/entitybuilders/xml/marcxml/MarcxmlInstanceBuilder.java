@@ -32,11 +32,11 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
     @Override
     public Entity build() throws EntityBuilderException {
 
-        // add instance subtypes 
+        // TODO Add instance subtypes 
         buildIdentifiers();
-//        buildTitles();
+        // buildTitles();
 //        buildWorks();
-//        buildItem();
+        buildItem();
         
         return entity;
     }
@@ -52,15 +52,8 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
                 .build();                
         }
         
-//        
-//        now: get 001 control field
-//        create identifier builder, pass field and instance
-//        identifiers.add();
-//        
-//        then: process other data fields that signify identifiers, pass field and instance
-//        identifiers.add(e)
-//        
-//        identifiers.add
+        // TODO Convert other identifiers from data fields.
+
     }
     
     private void buildTitles() {
@@ -71,8 +64,8 @@ public class MarcxmlInstanceBuilder extends MarcxmlBibEntityBuilder {
         throw new RuntimeException("Method not implemented.");
     }
     
-    private void buildItem() {
-        throw new RuntimeException("Method not implemented.");
+    private void buildItem() throws EntityBuilderException {
+        EntityBuilder.instance(MarcxmlItemBuilder.class, record, entity).build();
     }
     
 

@@ -23,8 +23,8 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
     
     /**
      * Constructor
-     * @param fields - the relevant fields in the record
-     * @param instance - the related Instance
+     * @param field - the relevant field in the record
+     * @param bibEntity - the related entity 
      * @throws EntityBuilderException 
      */
     public MarcxmlIdentifierBuilder(RecordField field, Entity bibEntity) 
@@ -35,18 +35,18 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      
     public Entity build() {
 
-        Entity identifier = buildFromControlField();;
+        Entity identifier;
         
-        if (identifier == null) {
-            //identifier = buildFromDataField();
+        if (field instanceof MarcxmlControlField) {
+            identifier = buildFromControlField();
+        } else {
+          identifier = buildFromDataField();
         }
-        
-        if (identifier != null) {
-            bibEntity.addChild(
-                    OntologyProperty.IDENTIFIED_BY.link(), identifier);
-        }
+
+        bibEntity.addChild(
+                OntologyProperty.IDENTIFIED_BY.link(), identifier);
   
-        return entity;
+        return identifier;
     }
     
     /**
@@ -55,15 +55,16 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      */   
     private Entity buildFromControlField() {
         
-        if (field instanceof MarcxmlControlField) {
-            if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
-                Entity identifier = Entity.instance(IdentifierClass.superClass());
-                identifier.addType(IdentifierClass.LOCAL);
-                Link link = Link.instance(RDF.value);
-                identifier.addAttribute(link, field.getTextValue());
-                return identifier;             
-            }
-        }    
+        if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
+            Entity identifier = Entity.instance(IdentifierClass.superClass());
+            identifier.addType(IdentifierClass.LOCAL);
+            Link link = Link.instance(RDF.value);
+            identifier.addAttribute(link, field.getTextValue());
+            return identifier;             
+        }
+        
+        // TODO Are there other control fields that contain identifiers?
+   
         return null;     
     }
     

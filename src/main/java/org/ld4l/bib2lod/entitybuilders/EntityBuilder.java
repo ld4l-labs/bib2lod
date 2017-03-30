@@ -42,6 +42,12 @@ public interface EntityBuilder {
         return Bib2LodObjectFactory.instance().createEntityBuilder(
                 builderClass, field, relatedEntity);
     }
+    
+    public static EntityBuilder instance(Class<?> builderClass, Record record, 
+            Entity relatedEntity) {
+        return Bib2LodObjectFactory.instance().createEntityBuilder(
+                builderClass, record, relatedEntity);
+    }
 
     
     /**

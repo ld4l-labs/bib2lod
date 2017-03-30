@@ -160,6 +160,20 @@ public abstract class Bib2LodObjectFactory {
             throw new Bib2LodObjectFactoryException(e);
         } 
     }
+
+    public EntityBuilder createEntityBuilder(Class<?> builderClass,
+            Record record, Entity relatedEntity) {
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(Record.class, Entity.class)                           
+                    .newInstance(record, relatedEntity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }         
+    }
     
     public abstract Entity createEntity(Type type);
     
@@ -172,6 +186,8 @@ public abstract class Bib2LodObjectFactory {
     public abstract Link createLink(Property property);
 
     public abstract Link createLink(OntologyProperty ontProperty);
+
+
 
 }
 

@@ -6,6 +6,7 @@ import org.ld4l.bib2lod.entities.Link;
 
 public enum OntologyProperty {
 
+    HAS_ITEM(Namespace.BIBFRAME, "hasItem"),
     IDENTIFIED_BY(Namespace.BIBFRAME, "identifiedBy");
     
     private String uri;
