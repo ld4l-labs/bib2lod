@@ -15,6 +15,7 @@ import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlSubfield;
 
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
@@ -55,16 +56,27 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         MarcxmlDataField field240 = record.getDataField("240");
       
         if (field245 != null) {
-            // Full title always comes from 245. If 130 and/or 240 are present,
-            // the $a fields should be the same.
-            // 245$a stores full title
-          titleLabel = field245.getSubfield("a").getTextValue();
-          entity.addAttribute(OntologyProperty.LABEL.link(), titleLabel); 
+            for (MarcxmlSubfield subfield : field245.getSubfields()) {
+ 
+                // 245$a always stores the full title. If 130 and/or 240 are 
+                // present,the $a fields should be the same.
+                if (subfield.getCode().equals("a")) {
+                    titleLabel = subfield.getTextValue();
+                    entity.addAttribute(OntologyProperty.LABEL.link(), titleLabel);
+                }
+                
+                if (subfield.getCode().equals("c")) {
+                    bibEntity.addAttribute(
+                            OntologyProperty.RESPONSIBILITY_STATEMENT.link(), 
+                            subfield.getTextValue());
+                }
+                
+                // TODO Convert other subfields
+            }
         }
         
-        // Add other values from 130/240
+        // TODO convert other subfields from 130/240
         
-        // After building Title, build TitleElements
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
         entity.addChildren(OntologyProperty.HAS_PART.link(), titleElements);
         

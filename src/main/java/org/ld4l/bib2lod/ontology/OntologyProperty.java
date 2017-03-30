@@ -18,6 +18,7 @@ public enum OntologyProperty {
     IDENTIFIED_BY(Namespace.BIBFRAME, "identifiedBy"),
     INSTANCE_OF(Namespace.BIBFRAME, "instanceOf"),
     LABEL(Namespace.RDF, "label"),
+    RESPONSIBILITY_STATEMENT(Namespace.BIBFRAME, "responsibilityStatement"),
     TITLE(Namespace.BIBFRAME, "title"),
     VALUE(Namespace.RDFS, "value");
     

@@ -10,9 +10,7 @@
     <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>
     <datafield tag="245" ind1="0" ind2="0">
       <subfield code="a">Clinical cardiopulmonary physiology.</subfield>
-      <!-- Not required
       <subfield code="c">Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]</subfield>
-      -->
     </datafield>
   </record>  
 </collection>
