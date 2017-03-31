@@ -43,14 +43,13 @@ cornell:inst1 a bf:Instance ;
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
 . 
 
-
 cornell:item1 a bf:Item .
 
 
 
 ###########################################################
 #####
-##### MORE COMPLETE VERSION (needs some negotiation)
+##### MORE COMPLETE VERSION (needs further investigation)
 #####
 ###########################################################
 
@@ -111,7 +110,6 @@ cornell:inst1 a bf:Instance ;
         ] ;        
     ] ; 
     
-    # Property of Instance, not Title
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     
     bf:issuance [
