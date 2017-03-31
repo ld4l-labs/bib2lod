@@ -100,7 +100,7 @@ cornell:work1 a bf:Work, bf:Text ;
 
 cornell:inst1 a bf:Instance ; 
 
-    bf:hasItem cornell:item1 ; # Not sure about this; do we always create an Item from the record?
+    bf:hasItem cornell:item1 ; 
 
     bf:title [
         a bf:Title ;
@@ -138,5 +138,5 @@ cornell:inst1 a bf:Instance ;
     ]    
 . 
 
-# Not sure about this; do we always create an Item from the record?
+
 cornell:item1 a bf:Item .

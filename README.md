@@ -20,6 +20,7 @@
 * Edit the configuration file to set appropriate input source and output destination.
 * Within `InputService`, change the `source` attribute to point either to a single file of MARCXML, or to a directory containing MARCXML files.
   * Each input file must have a filename extension of `.xml`
+  * Sample minimal record is in sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml.
 * Within `OutputService`, change the `destination` attribute to point to your desired output directory. 
   * _You **must** create this directory before running the program._
 
