@@ -1,0 +1,14 @@
+language: java
+jdk:
+  - oraclejdk8
+sudo: false
+script: mvn test
+after_success:
+  - mvn clean test jacoco:report coveralls:report
+  
+# safelist
+branches:
+  only:
+  - master
+  - develop
+ 
