@@ -11,7 +11,7 @@
   * Most of the architecture is in place.
 
 ## Build
-* Clone the respository from [https://github.com/ld4l-labs/bib2lod]()
+* Clone the repository from [https://github.com/ld4l-labs/bib2lod]()
 * run `mvn install`
 * Copy the executable jar from `target/bib2lod.jar` to your preferred work location.
 * Copy the example configuration file from `src/main/resources/example.config.json` to your preferred work location. Rename it appropriately. For example, `first.config.json`.
