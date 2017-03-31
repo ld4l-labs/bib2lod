@@ -138,30 +138,8 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
         return new SimpleEntity(type);
     }
 
-//    @Override
-//    public Entity createEntity(Resource ontClass) {
-//        // TODO Auto-generated method stub
-//        throw new RuntimeException("Bib2LodObjectFactory.createEntity() not implemented.");
-//    }
-
     @Override
     public Entity createEntity(Entity entity) {
       return new SimpleEntity(entity);
     }
-
-//    @Override
-//    public Type createType(Resource ontClass) {
-//        return new SimpleType(ontClass);
-//    }
-//
-//    @Override
-//    public Link createLink(Property property) {
-//        return new SimpleLink(property);
-//    }
-//
-//    @Override
-//    public Link createLink(OntologyProperty ontProperty) {
-//        return new SimpleLink(ontProperty);
-//    }
-//
 }
