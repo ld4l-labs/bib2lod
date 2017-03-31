@@ -8,12 +8,16 @@ import org.apache.jena.rdf.model.ResourceFactory;
 //LD4L, BF, etc. Each enum would define, not just properties in that namespace,
 //but the entire set of terms defined by the application profile/set of
 //target ontologies.
-public enum DatatypeProp {
+public enum DatatypeProp implements OntologyProp {
 
-    LABEL(Namespace.RDF, "label"),
+    // rdfs:label is an AnnotationProperty, but it doesn't matter here.
+    LABEL(Namespace.RDFS, "label"),
     RANK(Namespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Namespace.BIBFRAME, "responsibilityStatement"),
-    VALUE(Namespace.RDFS, "value");
+    // rdf:value is an RDF property, not an owl:DatatypeProperty. However, we 
+    // are using it with Literal objects. If it needs to be used with non-literal
+    // objects, it can also be defined in ObjectProp.
+    VALUE(Namespace.RDF, "value");
     
     private String uri;
     private Property property;

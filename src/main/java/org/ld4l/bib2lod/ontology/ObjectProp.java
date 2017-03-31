@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 //LD4L, BF, etc. Each enum would define, not just properties in that namespace,
 //but the entire set of terms defined by the application profile/set of
 //target ontologies.
-public enum ObjectProp {
+public enum ObjectProp implements OntologyProp {
 
     HAS_ITEM(Namespace.BIBFRAME, "hasItem"),
     HAS_PART(Namespace.DCTERMS, "hasPart"),

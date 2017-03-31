@@ -6,7 +6,7 @@ import org.apache.jena.rdf.model.Property;
  * Represents the ontology properties defined in the target set of ontologies/
  * application profile.
  */
-public interface OntologyProperty {
+public interface OntologyProp {
 
     public String uri();
     
