@@ -26,9 +26,9 @@
 ## Run
 * Execute the jar file, referencing the configuration file on the command line:
   * `java -jar bib2lod.jar -c first.config.json`
-* Output will be written to the directory specified in the configuration file. 
+* Output will be written in N-TRIPLE format to the directory specified in the configuration file. 
   * One output file will be created for each input file. 
   * The name of the output file will be the same as the corresponding input file, but the extension will be `.nt`.
 * A log directory will be created as `target/logs` in your work location directory. 
-  * A log file of the run will be created as `target/logs/bib2log.log`
+  * A log file of the run will be created as `target/logs/bib2lod.log`
   * An existing log file will not be overwritten, but will be renamed with a timestamp, such as `bib2lod-2017-03-31-14-38-47-1.log`

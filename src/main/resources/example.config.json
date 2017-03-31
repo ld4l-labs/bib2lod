@@ -15,9 +15,6 @@
       "class": "org.ld4l.bib2lod.uris.RandomUriMinter"
     } 
   ],
-  "Cleaner": {
-    "class": "org.ld4l.bib2lod.cleaning.MarcxmlCleaner"
-  },
   "Converter": {
     "class": "org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter"
   }
