@@ -26,7 +26,6 @@ public class ConfigurationNodeTest {
     private static final String CLASSNAME1 = "classname1";
     private static final String CLASSNAME2 = "classname2";
     private ConfigurationNode config;
-    private ConfigurationNode config2;
     private ConfigurationNode child1;
 
     // ----------------------------------------------------------------------

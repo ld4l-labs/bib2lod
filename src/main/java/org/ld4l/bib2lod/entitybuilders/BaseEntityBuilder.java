@@ -2,8 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.List;
-
 import org.ld4l.bib2lod.entities.Entity;
 
 /**
@@ -19,6 +17,6 @@ public abstract class BaseEntityBuilder implements EntityBuilder {
      * @see org.ld4l.bib2lod.entitybuilders.EntityBuilder#build()
      */
     @Override
-    public abstract List<Entity> build() throws EntityBuilderException;
+    public abstract Entity build() throws EntityBuilderException;
 
 }

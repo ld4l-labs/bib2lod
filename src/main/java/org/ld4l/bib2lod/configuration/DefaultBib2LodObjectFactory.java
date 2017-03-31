@@ -5,19 +5,12 @@ package org.ld4l.bib2lod.configuration;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
 import org.ld4l.bib2lod.entities.SimpleEntity;
-import org.ld4l.bib2lod.entities.SimpleLink;
-import org.ld4l.bib2lod.entities.SimpleType;
-import org.ld4l.bib2lod.entities.Type;
-import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
@@ -145,29 +138,30 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
         return new SimpleEntity(type);
     }
 
-    @Override
-    public Entity createEntity(Resource ontClass) {
-        return new SimpleEntity(ontClass);
-    }
-    
-    @Override
-    public Type createType(OntologyClass ontClass) {
-        return new SimpleType(ontClass);
-    }
-    
-    @Override
-    public Type createType(Resource ontClass) {
-        return new SimpleType(ontClass);
-    }
+//    @Override
+//    public Entity createEntity(Resource ontClass) {
+//        // TODO Auto-generated method stub
+//        throw new RuntimeException("Bib2LodObjectFactory.createEntity() not implemented.");
+//    }
 
     @Override
-    public Link createLink(Property property) {
-        return new SimpleLink(property);
+    public Entity createEntity(Entity entity) {
+      return new SimpleEntity(entity);
     }
 
-    @Override
-    public Link createLink(OntologyProperty ontProperty) {
-        return new SimpleLink(ontProperty);
-    }
-
+//    @Override
+//    public Type createType(Resource ontClass) {
+//        return new SimpleType(ontClass);
+//    }
+//
+//    @Override
+//    public Link createLink(Property property) {
+//        return new SimpleLink(property);
+//    }
+//
+//    @Override
+//    public Link createLink(OntologyProperty ontProperty) {
+//        return new SimpleLink(ontProperty);
+//    }
+//
 }

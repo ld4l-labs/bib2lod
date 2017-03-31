@@ -3,13 +3,10 @@ package org.ld4l.bib2lod.ontology;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public enum InstanceClass implements OntologyClass {
-    
-    ARCHIVAL(Namespace.BIBFRAME, "Archival"),
-    ELECTRONIC(Namespace.BIBFRAME, "Electronic"),
-    INSTANCE(Namespace.BIBFRAME, "Instance"),
-    MANUSCRIPT(Namespace.BIBFRAME, "Manuscript"),
-    PRINT(Namespace.BIBFRAME, "Print");
+public enum ItemClass implements Type {
+        
+    // There may not be any other Item classes
+    ITEM(Namespace.BIBFRAME, "Item");
     
     private String uri;
     private Resource ontClass;
@@ -17,7 +14,7 @@ public enum InstanceClass implements OntologyClass {
     /**
      * Constructor
      */
-    InstanceClass(Namespace namespace, String localName) {
+    ItemClass(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
@@ -32,8 +29,7 @@ public enum InstanceClass implements OntologyClass {
         return ontClass;
     } 
 
-    public static Resource superClass() {
-        return INSTANCE.ontClass;
+    public static Type superClass() {
+        return ITEM;
     }
-
 }

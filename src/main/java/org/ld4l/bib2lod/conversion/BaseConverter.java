@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration;
@@ -86,54 +85,36 @@ public abstract class BaseConverter implements Converter {
     }
 
     /**
-     * Converts a Record to an RDF Model.
+     * Converts a Record to an RDF Model. Starting with the primary 
+     * bibliographic resource (commonly an Instance)
      * @throws RecordConversionException 
      */
     protected Model convertRecord(Record record) 
             throws RecordConversionException  {
 
-        Model model = ModelFactory.createDefaultModel();
-
-        try {
-            List<Entity> entities = buildEntities(record);
+        // Build the primary Entity (e.g., an Instance) from the Record, 
+        // its dependent Entities, and links to the dependents.
+        Entity entity = buildEntity(record);
  
-            // Build a Resource from each Entity and attach it to the Entity.
-            for (Entity entity : entities) {
-                // If entity already has a Resource, it was built during a
-                // previous iteration.
-                if (entity.getResource() == null) {
-                    entity.buildResource();
-                }
-            }
-            
-            // Add the Resource for each Entity to the Model
-            for (Entity entity : entities) {
-                Resource resource = entity.getResource();
-                if (resource != null) {
-                    Model resourceModel = resource.getModel();
-                    // TODO I think adding an empty model generates an error.
-                    // Check.
-                    if (! resourceModel.isEmpty()) {
-                        model.add(entity.getResource().getModel());
-                    }
-                }
-            }
-            
-        } catch (EntityBuilderException e) {
-            throw new RecordConversionException(e);
-        }     
+        // Build a Resource from the Entity, including its dependent Entities.
+        // Each Resource is attached to its Entity.
+        entity.buildResource();
+
+        // Build the Model for this Record from the Entity's Resource and the
+        // Resources of its dependent Entities.
+        Model model = entity.buildModel();
         
         return model;
 
     }
     
     /**
-     * Builds the set of Entity objects from which the Resources will be built.
-     * Based on the input Record, this is input-specific.
+     * Builds the set of Entity objects from which the Model will be built.
+     * The implementing class is input-specific.
      * @throws EntityBuilderException 
      */
-    protected abstract List<Entity> buildEntities(Record record) 
+    protected abstract Entity buildEntity(Record record) 
             throws EntityBuilderException;
 
-    
+  
 }

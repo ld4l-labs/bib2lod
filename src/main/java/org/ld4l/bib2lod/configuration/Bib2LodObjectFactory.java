@@ -5,15 +5,10 @@ package org.ld4l.bib2lod.configuration;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
-import org.ld4l.bib2lod.entities.Type;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.RecordField;
 
@@ -70,6 +65,26 @@ public abstract class Bib2LodObjectFactory {
     // Vestigial methods
     // ----------------------------------------------------------------------
 
+  /**
+  * A problem occurred when trying to create an Object in the Factory.
+  */
+ public static class Bib2LodObjectFactoryException extends RuntimeException {
+     private static final long serialVersionUID = 1L;
+
+     public Bib2LodObjectFactoryException(String message, Throwable cause) {
+         super(message, cause);
+     }
+
+     public Bib2LodObjectFactoryException(String message) {
+         super(message);
+     }
+
+     public Bib2LodObjectFactoryException(Exception cause) {
+         super(cause);
+     }
+ }
+ 
+
     public EntityBuilder createEntityBuilder(
             Class<?> builderClass, Record record) {         
         try {
@@ -79,7 +94,7 @@ public abstract class Bib2LodObjectFactory {
         } catch (IllegalAccessException | IllegalArgumentException
                 | SecurityException | InvocationTargetException 
                 | NoSuchMethodException | InstantiationException e) {
-            throw new ConfigurationException(e);
+            throw new Bib2LodObjectFactoryException(e);
         } 
     }
 
@@ -94,22 +109,36 @@ public abstract class Bib2LodObjectFactory {
                 | IllegalAccessException | IllegalArgumentException
                 | SecurityException | InvocationTargetException 
                 | NoSuchMethodException e) {
-            throw new ConfigurationException(e);
+            throw new Bib2LodObjectFactoryException(e);
         } 
     }
-    
+
+    public EntityBuilder createEntityBuilder(Class<?> builderClass,
+            Record record, Entity relatedEntity) {
+        try {
+            return (EntityBuilder) builderClass
+                    .getConstructor(Record.class, Entity.class)                           
+                    .newInstance(record, relatedEntity);
+        } catch (InstantiationException
+                | IllegalAccessException | IllegalArgumentException
+                | SecurityException | InvocationTargetException 
+                | NoSuchMethodException e) {
+            throw new Bib2LodObjectFactoryException(e);
+        }         
+    }
 
     public abstract Entity createEntity(Type type);
     
-    public abstract Entity createEntity(Resource ontClass);
-    
-    public abstract Type createType(OntologyClass ontClass);
-    
-    public abstract Type createType(Resource ontClass);
-    
-    public abstract Link createLink(Property property);
+//    public abstract Entity createEntity(Resource ontClass);
 
-    public abstract Link createLink(OntologyProperty ontProperty);
-
+    public abstract Entity createEntity(Entity entity);
+    
+//    public abstract Type createType(OntologyClass ontClass);
+//    
+//    public abstract Type createType(Resource ontClass);
+//    
+//    public abstract Link createLink(Property property);
+//
+//    public abstract Link createLink(OntologyProperty ontProperty);
 
 }

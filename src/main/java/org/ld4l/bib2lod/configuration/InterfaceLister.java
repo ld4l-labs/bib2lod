@@ -19,11 +19,9 @@ import org.apache.logging.log4j.Logger;
 public class InterfaceLister {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final Class<?> instanceClass;
     private final Set<Class<?>> interfaces = new HashSet<>();
 
     public InterfaceLister(Class<?> instanceClass) {
-        this.instanceClass = instanceClass;
         explore(instanceClass);
     }
 

@@ -2,8 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.List;
-
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
 import org.ld4l.bib2lod.entities.Entity;
@@ -38,24 +36,25 @@ public interface EntityBuilder {
         return Bib2LodObjectFactory.getFactory().createEntityBuilder(
                 builderClass, record);
     }
-    
+        
     public static EntityBuilder instance(Class<?> builderClass, 
             RecordField field, Entity relatedEntity) {
         return Bib2LodObjectFactory.getFactory().createEntityBuilder(
                 builderClass, field, relatedEntity);
     }
+    
+    public static EntityBuilder instance(Class<?> builderClass, Record record, 
+            Entity relatedEntity) {
+        return Bib2LodObjectFactory.getFactory().createEntityBuilder(
+                builderClass, record, relatedEntity);
+    }
 
     
     /**
-     * Builds an Entity.
+     * Builds an Entity, including its dependent Entities (e.g., Identifiers
+     * and Titles of Works and Instances).
      * @throws EntityBuilderException 
      */
-    // TODO It remains to be seen whether this should return a single Entity or
-    // a list of Entities. That is, might we build more than one Entity from a
-    // single EntityBuilder.build() call, or will the additional Entities always
-    // be built from a call to another EntityBuilder's build() method? For now,
-    // define return type as a list for flexibility. If not needed, change to
-    // Entity.
-    public List<Entity> build() throws EntityBuilderException;
+    public Entity build() throws EntityBuilderException;
 
 }

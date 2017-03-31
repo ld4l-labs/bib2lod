@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
@@ -22,8 +25,8 @@ import org.ld4l.bib2lod.uris.UriService;
  */
 public class SimpleEntity implements Entity {
     
-    private final HashMap<Link, List<Entity>> children;
-    private final Map<Link, List<Literal>> attributes;
+    private final HashMap<ObjectProp, List<Entity>> children;
+    private final Map<DatatypeProp, List<Literal>> attributes;
     private final List<Type> types;
     private Resource resource;
     
@@ -32,8 +35,8 @@ public class SimpleEntity implements Entity {
      * Constructors
      */
     private SimpleEntity() {
-        this.children = new HashMap<Link, List<Entity>>();
-        this.attributes = new HashMap<Link, List<Literal>>();
+        this.children = new HashMap<ObjectProp, List<Entity>>();
+        this.attributes = new HashMap<DatatypeProp, List<Literal>>();
         this.types = new ArrayList<Type>();
     }
 
@@ -41,43 +44,76 @@ public class SimpleEntity implements Entity {
         this();
         types.add(type);
     }
-    
-    public SimpleEntity(Resource ontClass) {
+
+    /**
+     * Copy constructor.
+     * Use to copy the contents of non-reusable resources. For example, create
+     * create a copy of an Instance Title to assign to a Work, where Title and
+     * TitleElements are non-reusable, and thus the Work cannot simply prop to
+     * the Instance Title.
+     */
+    public SimpleEntity(Entity original) {
         this();
-        types.add(Type.instance(ontClass));
-    }
-    
-    
-    @Override
-    public void addChild(Link link, Entity entity) {
         
-        if (children.containsKey(link)) {
-            List<Entity> list = children.get(link);
+        // Attributes and types are simply copied
+        this.attributes.putAll(original.getAttributes());
+        this.types.addAll(original.getTypes());
+        
+        // Copy the dependent Entities in each child 
+        for (Entry<ObjectProp, List<Entity>> child : original.getChildren().entrySet()) {
+            ObjectProp prop = child.getKey();
+            List<Entity> originalEntities = child.getValue();
+            List<Entity> newEntities = new ArrayList<Entity>();
+            for (Entity entity : originalEntities) {
+                Entity copy = Entity.instance(entity);
+                newEntities.add(copy);
+            }
+            this.children.put(prop, newEntities);
+        } 
+    }
+
+    @Override
+    public void addChild(ObjectProp prop, Entity entity) {
+        
+        if (children.containsKey(prop)) {
+            List<Entity> list = children.get(prop);
             list.add(entity);  
         } else {
-            children.put(link, Arrays.asList(entity));
+            children.put(prop, Arrays.asList(entity));
         }  
     }
     
     @Override
-    public void addChildren(Link link, List<Entity> entities) {
+    public void addChildren(ObjectProp prop, List<Entity> entities) {
         
-        if (children.containsKey(link)) {
-            List<Entity> list = children.get(link);
+        if (entities.isEmpty()) {
+            return;
+        }       
+        if (children.containsKey(prop)) {
+            List<Entity> list = children.get(prop);
             list.addAll(entities);  
         } else {
-            children.put(link,  entities);
+            children.put(prop,  entities);
         }          
     }
     
     @Override
-    public HashMap<Link, List<Entity>> getChildren() {
+    public HashMap<ObjectProp, List<Entity>> getChildren() {
         return children;
     }
     
     @Override
-    public List<Entity> getChildren(Link link) {
-        return children.get(link);
+    public List<Entity> getChildren(ObjectProp prop) {
+        return children.get(prop);
+    }
+    
+    @Override
+    public Entity getChild(ObjectProp prop) {
+        List<Entity> entities = children.get(prop);
+        if (!entities.isEmpty()) {
+            return entities.get(0);
+        }
+        return null;
     }
     
     @Override
@@ -91,40 +127,50 @@ public class SimpleEntity implements Entity {
     }
     
     @Override
-    public void addAttribute(Link link, String string) {
-        addAttribute(link, ResourceFactory.createStringLiteral(string));
+    public void addAttribute(DatatypeProp prop, String string) {
+        addAttribute(prop, ResourceFactory.createStringLiteral(string));
     }
     
     @Override
-    public void addAttribute(Link link, Literal value) {
+    public void addAttribute(DatatypeProp prop, int i) {
+        Literal literal = ResourceFactory.createTypedLiteral(
+                Integer.toString(i), XSDDatatype.XSDinteger);
+        addAttribute(prop, literal);
+    }
+    
+    @Override
+    public void addAttribute(DatatypeProp prop, Literal value) {
         
-        if (attributes.containsKey(link)) {
-            List<Literal> list = attributes.get(link);
+        if (attributes.containsKey(prop)) {
+            List<Literal> list = attributes.get(prop);
             list.add(value);
         } else {
-            attributes.put(link, Arrays.asList(value));
+            attributes.put(prop, Arrays.asList(value));
         }
     }
     
     @Override
-    public void addAttributes(Link link, List<Literal> values) {
+    public void addAttributes(DatatypeProp prop, List<Literal> values) {
         
-        if (attributes.containsKey(link)) {
-            List<Literal> list = attributes.get(link);
+        if (values.isEmpty()) {
+            return;
+        }
+        if (attributes.containsKey(prop)) {
+            List<Literal> list = attributes.get(prop);
             list.addAll(values);  
         } else {
-            attributes.put(link, values);
-        }          
+            attributes.put(prop, values);
+        }            
     }
     
     @Override
-    public Map<Link, List<Literal>> getAttributes() {
+    public Map<DatatypeProp, List<Literal>> getAttributes() {
         return attributes;
     }
     
     @Override
-    public List<Literal> getAttributes(Link link) {
-        return attributes.get(link);
+    public List<Literal> getAttributes(DatatypeProp prop) {
+        return attributes.get(prop);
     }
 
     @Override
@@ -138,31 +184,21 @@ public class SimpleEntity implements Entity {
     }
 
     @Override
-    public void addType(OntologyClass ontClass) {
-        types.add(Type.instance(ontClass));
-    }
-    
-    @Override
     public void buildResource() {
-        // Build children of this Entity before building the Entity. Then
-        // when building the linking assertion from this Entity to the child, 
-        // we have the URI of the child's Resource.
+        // Build children of this Entity before building the Entity, so that
+        // when building the assertion linking this Entity to the child, we
+        // have the URI of the child's Resource.
         buildChildResources();
         buildThisResource();
     }
     
     private void buildChildResources() {
 
-        Map<Link, List<Entity>> children = getChildren();
-        for (Entry<Link, List<Entity>> entry : children.entrySet()) {
+        Map<ObjectProp, List<Entity>> children = getChildren();
+        for (Entry<ObjectProp, List<Entity>> entry : children.entrySet()) {
             List<Entity> entities = entry.getValue();
             for (Entity childEntity : entities) {
-                // If childEntity already has a Resource, it was built on an
-                // earlier iteration through the Resource-building loop in the
-                // Converter. 
-                if (childEntity.getResource() == null) {
-                    childEntity.buildResource();
-                }
+                childEntity.buildResource();
             }
         }        
     }
@@ -175,29 +211,53 @@ public class SimpleEntity implements Entity {
         
         // Add type assertions
         for (Type type : types) {
-            resource.addProperty(RDF.type, type.getUri());
+            resource.addProperty(RDF.type, type.ontClass());
         }
         
         // Add relationships to children
-        for (Entry<Link, List<Entity>> child : children.entrySet()) {
-            Link link = child.getKey();
-            List<Entity> childEntities = children.get(link);
+        for (Entry<ObjectProp, List<Entity>> child : children.entrySet()) {
+            ObjectProp prop = child.getKey();
+            List<Entity> childEntities = children.get(prop);
             for (Entity childEntity : childEntities) {
-                resource.addProperty(
-                        link.getProperty(), childEntity.getResource());
+                resource.addProperty(prop.property(), childEntity.getResource());         
             }          
         }
         
         // Add attributes       
-        for (Entry<Link, List<Literal>> attribute : attributes.entrySet()) {
-            Link link = attribute.getKey();
-            List<Literal> literals = getAttributes(link);
+        for (Entry<DatatypeProp, List<Literal>> attribute : attributes.entrySet()) {
+            DatatypeProp prop = attribute.getKey();
+            List<Literal> literals = getAttributes(prop);
             for (Literal literal : literals) {
-                resource.addLiteral(link.getProperty(), literal);
+                resource.addLiteral(prop.property(), literal);
             }
         }
         
         setResource(resource);        
+    }
+    
+    @Override
+    public Model buildModel() {
+        
+        Model model = ModelFactory.createDefaultModel();
+        model.add(buildChildModels());
+        model.add(resource.getModel());
+        return model;
+    }
+    
+    private Model buildChildModels() {
+        
+        Model model = ModelFactory.createDefaultModel();
+        
+        for (Entry<ObjectProp, List<Entity>> child : children.entrySet()) {
+            ObjectProp prop = child.getKey();
+            List<Entity> childEntities = children.get(prop);
+            for (Entity childEntity : childEntities) {
+                Model childModel = childEntity.buildModel();
+                model.add(childModel);
+            }          
+        }
+        
+        return model;
     }
 
 }

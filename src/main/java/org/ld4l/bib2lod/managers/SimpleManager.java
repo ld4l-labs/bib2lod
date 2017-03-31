@@ -11,9 +11,7 @@ import org.ld4l.bib2lod.configuration.AttributeCascader;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.CommandLineOptions;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.configuration.ConfigurationNode;
 import org.ld4l.bib2lod.configuration.ConfigurationOverrider;
-import org.ld4l.bib2lod.configuration.Configurator;
 import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.JsonConfigurationFileParser;
 import org.ld4l.bib2lod.conversion.Converter;
@@ -105,75 +103,6 @@ public final class SimpleManager {
             }
         } finally {
             // TODO write the report.
-        }
-    }
-    
-    /**
-     * StubConverter implements the following Json.
-     * 
-     * <pre>
-    {
-        "local_namespace": "http://data.ld4l.org/cornell/",
-        "InputService": {
-         "class": "org.ld4l.bib2lod.io.FileInputService",
-         "source": "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml",
-         "extension": "xml"
-        }, 
-        "OutputService": {
-         "class": "org.ld4l.bib2lod.io.FileOutputService",
-         "destination": "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/",
-         "format": "N-TRIPLE"
-        },
-        "UriService": [
-         { 
-             "class": "org.ld4l.bib2lod.uri.RandomUriMinter"
-         } 
-        ],
-        "Cleaner": {
-         "class": "org.ld4l.bib2lod.cleaning.MarcxmlCleaner"
-        },
-        "Converter": {
-         "class": "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter"
-        }
-    }                                                                                             
-      * </pre>
-     */
-    private static class StubConfigurator implements Configurator {
-        @Override
-        public Configuration getTopLevelConfiguration() {
-            return new ConfigurationNode.Builder()
-                    .addAttribute("local_namespace",
-                            "http://data.ld4l.org/cornell/")
-                    .addChild("InputService",
-                            new ConfigurationNode.Builder()
-                                    .setClassName(
-                                            "org.ld4l.bib2lod.io.FileInputService")
-                                    .addAttribute("source",
-                                            "/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml")
-                                    .addAttribute("extension", "xml").build())
-                    .addChild("OutputService",
-                            new ConfigurationNode.Builder()
-                                    .setClassName(
-                                            "org.ld4l.bib2lod.io.FileOutputService")
-                                    .addAttribute("destination",
-                                            "/Users/rjy7/Workspace/bib2lod/src/test/resources/output/")
-                                    .addAttribute("format", "N-TRIPLE").build())
-                    .addChild("UriService",
-                            new ConfigurationNode.Builder()
-                                    .setClassName(
-                                            "org.ld4l.bib2lod.uri.RandomUriMinter")
-                                    .build())
-                    .addChild("Cleaner",
-                            new ConfigurationNode.Builder()
-                                    .setClassName(
-                                            "org.ld4l.bib2lod.cleaning.MarcxmlCleaner")
-                                    .build())
-                    .addChild("Converter",
-                            new ConfigurationNode.Builder()
-                                    .setClassName(
-                                            "org.ld4l.bib2lod.conversion.to_rdf.ld4l.MarcxmlConverter")
-                                    .build())
-                    .build();
         }
     }
 }

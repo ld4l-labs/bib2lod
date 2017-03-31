@@ -8,8 +8,15 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
+import org.ld4l.bib2lod.ontology.TitleType;
+import org.ld4l.bib2lod.ontology.TitleElementType;
+import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlSubfield;
 
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
@@ -17,8 +24,6 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    //private List<MarcxmlDataField> dataFields;
     
     private final MarcxmlRecord record;
     private final Entity bibEntity;
@@ -30,71 +35,90 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
      * being built is the title
      * @throws EntityBuilderException 
      */
-    public MarcxmlTitleBuilder(MarcxmlRecord record, 
-            Entity bibEntity) throws EntityBuilderException {
-        this.record = record;
+    public MarcxmlTitleBuilder(Record record, Entity bibEntity)
+             throws EntityBuilderException {
+        this.record = (MarcxmlRecord) record;
         this.bibEntity = bibEntity;
-        
-
     }
 
     @Override
-    public List<Entity> build() throws EntityBuilderException {
+    public Entity build() throws EntityBuilderException {
         
-        List<Entity> entities = new ArrayList<Entity>();
+        // The title
+        entity = Entity.instance(TitleType.superClass());
         
-        //Entity title = Entity.instance(); // instantiate with Title superclass
-//        String titleLabel = null;
-//        
-//        MarcxmlDataField field245 = record.getDataField("245");
-//        MarcxmlDataField field130 = record.getDataField("130");
-//        MarcxmlDataField field240 = record.getDataField("240");
-//        
-//        if (field245 != null) {
-//            // Full title always comes from 245. If 130 and/or 240 are present,
-//            // the $a fields are the same.
-//            // 245$a stores full title
-//            titleLabel = field245.getSubfield("a").getTextValue();
-//        }
-        
+        String titleLabel = null;
+      
         // Could there be a 130 or 240 without 245? Then need to look for
         // $a in those fields if no 245.
-           
-        // Return an empty list if the title has no text value.
-//        if (titleLabel != null) {
-//            title.setRdfsLabel(titleLabel);
-//            
-//            // Build TitleElements
-//            List<TitleElement> titleElements = 
-//                    buildTitleElements(field245, titleLabel);
-//            
-//            // TODO Add values from 130 or 240
-//            // NB If 130 is present, 240 is ignored
-//        
-//            title.addTitleElements(titleElements);
-//            entities.add(title);
-//            entities.addAll(titleElements);
-//        }
-
-        return entities;
+        
+        MarcxmlDataField field245 = record.getDataField("245");
+        MarcxmlDataField field130 = record.getDataField("130");
+        MarcxmlDataField field240 = record.getDataField("240");
+      
+        if (field245 != null) {
+            for (MarcxmlSubfield subfield : field245.getSubfields()) {
+ 
+                // 245$a always stores the full title. If 130 and/or 240 are 
+                // present,the $a fields should be the same.
+                if (subfield.getCode().equals("a")) {
+                    titleLabel = subfield.getTextValue();
+                    entity.addAttribute(DatatypeProp.LABEL, titleLabel);
+                }
+                
+                if (subfield.getCode().equals("c")) {
+                    bibEntity.addAttribute(DatatypeProp.RESPONSIBILITY_STATEMENT,
+                            subfield.getTextValue());
+                }
+                
+                // TODO Convert other subfields
+            }
+        }
+        
+        // TODO convert other subfields from 130/240
+        
+        List<Entity> titleElements = buildTitleElements(field245, titleLabel);
+        entity.addChildren(ObjectProp.HAS_PART, titleElements);
+        
+        // TODO Figure out how to recognize the preferred title vs other titles
+        bibEntity.addChild(ObjectProp.HAS_PREFERRED_TITLE, entity);
+        
+        return entity;
     }
     
     private List<Entity> buildTitleElements(
             MarcxmlField field, String titleLabel) {
-         
+                 
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
         List<Entity> titleElements = new ArrayList<Entity>();
-
-        // MainTitleElement label = titleLabel minus parts.
-        // Temporarily, build only the MainTitleElement and assign it same label
-        // as title.
-//        titleElements.add(new TitleElement(
-//                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel));
         
-        // TODO set ranks
+        /*
+         * Assign ranks as follows:
+         * NonSortElement - 0
+         * MainTitleElement - 10
+         * SubtitleElement - 20
+         * PartNumberElement - 30
+         * PartNameElement - 40
+         * The gaps allow for multiple elements of one type.
+         */
         
-        return titleElements;
+        // Create MainTitleElement last, since its label is the Title label
+        // minus the other element labels.
+        Entity mainTitleElement = buildTitleElement(
+                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel, 10); 
+        titleElements.add(mainTitleElement);
+        
+        return titleElements;               
     }
-
+        
+    private Entity buildTitleElement(
+            TitleElementType elementClass, String label, int rank) {
+        
+         Entity titleElement = Entity.instance(elementClass);
+         titleElement.addAttribute(DatatypeProp.LABEL, label);
+         titleElement.addAttribute(DatatypeProp.RANK, rank);  
+         return titleElement;
+    }
+    
 }

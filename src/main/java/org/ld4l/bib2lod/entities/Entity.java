@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.ontology.OntologyClass;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
+import org.ld4l.bib2lod.ontology.Type;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -17,43 +20,51 @@ public interface Entity {
     
     /**
      * Factory methods
-     */
-    public static Entity instance(Type type) {
-        return Bib2LodObjectFactory.getFactory().createEntity(type);
-    }
-    
-    public static Entity instance(Resource ontClass) {
+     */ 
+    public static Entity instance(Type ontClass) {
         return Bib2LodObjectFactory.getFactory().createEntity(ontClass);
     }
+    
+    public static Entity instance(Entity entity) {
+        return Bib2LodObjectFactory.getFactory().createEntity(entity);
+    }
 
-    public void addChild(Link link, Entity entity);
+    public void addChild(ObjectProp prop, Entity entity);
     
-    public void addChildren(Link link, List<Entity> entities);
+    public void addChildren(ObjectProp prop, List<Entity> entities);
     
-    public HashMap<Link, List<Entity>> getChildren();
+    public HashMap<ObjectProp, List<Entity>> getChildren();
     
-    public List<Entity> getChildren(Link link); 
+    public List<Entity> getChildren(ObjectProp prop); 
+    
+    /**
+     * Use when only a single child with this link is expected. Others are
+     * discarded.
+     */
+    public Entity getChild(ObjectProp prop);  
     
     public void addType(Type type);
     
     public List<Type> getTypes();
     
-    public void addAttribute(Link link, String textValue);
+    public void addAttribute(DatatypeProp prop, String textValue);
     
-    public void addAttribute(Link link, Literal value);
+    public void addAttribute(DatatypeProp prop, int i);
     
-    public void addAttributes(Link link, List<Literal> values);
+    public void addAttribute(DatatypeProp prop, Literal value);
     
-    public Map<Link, List<Literal>> getAttributes();
+    public void addAttributes(DatatypeProp prop, List<Literal> values);
     
-    public List<Literal> getAttributes(Link link);
+    public Map<DatatypeProp, List<Literal>> getAttributes();
+    
+    public List<Literal> getAttributes(DatatypeProp prop);
     
     public void buildResource();
     
     public void setResource(Resource resource);
     
     public Resource getResource();
+                      
+    public Model buildModel();
 
-    void addType(OntologyClass ontClass);
-    
 }

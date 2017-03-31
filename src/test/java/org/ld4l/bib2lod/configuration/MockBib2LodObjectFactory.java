@@ -4,13 +4,8 @@ package org.ld4l.bib2lod.configuration;
 
 import java.util.List;
 
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.Link;
-import org.ld4l.bib2lod.entities.Type;
-import org.ld4l.bib2lod.ontology.OntologyClass;
-import org.ld4l.bib2lod.ontology.OntologyProperty;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
@@ -50,38 +45,28 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         return (List<T>) instances.getValues(class1);
     }
 
-
     // ----------------------------------------------------------------------
     // Un-implemented methods
     // ----------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.configuration.Bib2LodObjectFactory#createEntity(org.ld4l.bib2lod.ontology.Type)
+     */
     @Override
     public Entity createEntity(Type type) {
+        // TODO Auto-generated method stub
         throw new RuntimeException("Bib2LodObjectFactory.createEntity() not implemented.");
+        
     }
 
+    /* (non-Javadoc)
+     * @see org.ld4l.bib2lod.configuration.Bib2LodObjectFactory#createEntity(org.ld4l.bib2lod.entities.Entity)
+     */
     @Override
-    public Entity createEntity(Resource ontClass) {
+    public Entity createEntity(Entity entity) {
+        // TODO Auto-generated method stub
         throw new RuntimeException("Bib2LodObjectFactory.createEntity() not implemented.");
+        
     }
 
-    @Override
-    public Type createType(OntologyClass ontClass) {
-        throw new RuntimeException("Bib2LodObjectFactory.createType() not implemented.");
-    }
-
-    @Override
-    public Type createType(Resource ontClass) {
-        throw new RuntimeException("Bib2LodObjectFactory.createType() not implemented.");
-    }
-
-    @Override
-    public Link createLink(Property property) {
-        throw new RuntimeException("Bib2LodObjectFactory.createLink() not implemented.");
-    }
-
-    @Override
-    public Link createLink(OntologyProperty ontProperty) {
-        throw new RuntimeException("Bib2LodObjectFactory.createLink() not implemented.");
-    }
 }
