@@ -131,7 +131,7 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
     public void omnibusSuccess() {
         String jsonString = "" //
                 + "{ \n " //
-                + "    \"local_namespace\": \"http://data.ld4l.org/cornell/\", \n " //
+                + "    \"localNamespace\": \"http://data.ld4l.org/cornell/\", \n " //
                 + "    \"InputService\": { \n " //
                 + "        \"class\": \"org.ld4l.bib2lod.io.FileInputService\", \n " //
                 + "        \"source\": \"/Users/rjy7/Workspace/bib2lod/src/test/resources/input/102063.min.xml\", \n " //
@@ -162,7 +162,7 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
                 + "}";
 
         expected = new Builder()
-                .addAttribute("local_namespace",
+                .addAttribute("localNamespace",
                         "http://data.ld4l.org/cornell/")
                 .addChild("InputService", new Builder()
                         .setClassName("org.ld4l.bib2lod.io.FileInputService")
