@@ -20,13 +20,14 @@
 * Edit the configuration file to set appropriate input source and output destination.
 * Within `InputService`, change the `source` attribute to point either to a single file of MARCXML, or to a directory containing MARCXML files.
   * Each input file must have a filename extension of `.xml`
+  * Sample minimal record is in sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml.
 * Within `OutputService`, change the `destination` attribute to point to your desired output directory. 
   * _You **must** create this directory before running the program._
 
 ## Run
 * Execute the jar file, referencing the configuration file on the command line:
   * `java -jar bib2lod.jar -c first.config.json`
-* Output will be written as N-TRIPLES to the directory specified in the configuration file. 
+* Output will be written in N-TRIPLE format to the directory specified in the configuration file. 
   * One output file will be created for each input file. 
   * The name of the output file will be the same as the corresponding input file, but the extension will be `.nt`.
 * A log directory will be created as `target/logs` in your work location directory. 
