@@ -1,0 +1,140 @@
+###########################################################
+#####
+##### CURRENT VERSION
+#####
+###########################################################
+
+
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix cornell: <http://data.ld4l.org/cornell/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ld4l: <http://bib.ld4l.org/ontology/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+    
+cornell:work1 a bf:Work;    
+
+    bf:hasInstance cornell:inst1 ;
+    
+    bf:title [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology." 
+        ] ;
+    ] 
+. 
+
+cornell:inst1 a bf:Instance ; 
+
+    bf:hasItem cornell:item1 ; 
+
+    bf:title [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology."
+        ] ;        
+    ] ; 
+    
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+. 
+
+cornell:item1 a bf:Item .
+
+
+
+###########################################################
+#####
+##### MORE COMPLETE VERSION (needs further investigation)
+#####
+###########################################################
+
+
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix cornell: <http://data.ld4l.org/cornell/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ld4l: <http://bib.ld4l.org/ontology/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+    
+cornell:work1 a bf:Work, bf:Text ;    
+
+    bf:hasInstance cornell:inst1 ;
+    
+    bf:title [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology." 
+        ] ;
+    ] ; 
+    
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> ;
+    
+    bf:adminMetadata [
+        a bf:AdminMetadata ;
+        bf:identifiedBy [ # Identifies Instance or AdminMetadata?
+            a bf:Local ;
+            rdf:value "102063" ;
+            ld4l:hasSource </http://uri/to/nnc> # URI to NNC
+        ] ;
+        bf:status [
+            a bf:Status ;
+            bf:code "c"
+        ] ;
+        bf:encodingLevel [ # Property doesn't exist
+           a bf:EncodingLevel ; # Class doesn't exist
+           bf:code "1 "
+        ] ;
+        bf:creationDate "1986-05-06"
+    ]     
+. 
+
+
+cornell:inst1 a bf:Instance ; 
+
+    bf:hasItem cornell:item1 ; 
+
+    bf:title [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology."
+        ] ;        
+    ] ; 
+    
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+    
+    bf:issuance [
+        a bf:Issuance ;
+        # Should not code MARC into the RDF. Possibly can make an exception for AdminMetadata, but not other resources.
+        bf:code "m" 
+    ] ;
+    
+    ld4l:hasActivity [
+        a ld4l:PublicationActivity ;
+        dcterms:date "1957" ;
+        ld4l:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
+    ] ; 
+    
+    bf:illustrativeContent <http://id.loc.gov/authorities/genreForms/gf2014026048> ;
+    
+    bf:adminMetadata [
+        a bf:AdminMetadata ;
+        bf:identifiedBy [ # Identifies Instance or AdminMetadata?
+            a bf:Local ;
+            rdf:value "102063" ;
+            ld4l:hasSource </http://uri/to/nnc> # URI to NNC
+        ]  
+    ]    
+. 
+
+
+cornell:item1 a bf:Item .
