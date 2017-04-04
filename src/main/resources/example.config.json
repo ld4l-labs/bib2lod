@@ -2,12 +2,12 @@
   "localNamespace": "http://data.ld4l.org/cornell/",
   "InputService": {
     "class": "org.ld4l.bib2lod.io.FileInputService",
-    "source": "/Users/user/projects/bib2lod/sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml",
+    "source": "sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml",
     "extension": "xml"
   }, 
   "OutputService": {
     "class": "org.ld4l.bib2lod.io.FileOutputService",
-    "destination": "/Users/user/projects/bib2lod/output/",
+    "destination": "output/",
     "format": "N-TRIPLE"
   },
   "UriService": [
