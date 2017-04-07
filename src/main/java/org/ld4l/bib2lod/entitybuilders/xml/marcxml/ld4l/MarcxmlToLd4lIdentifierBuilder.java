@@ -1,11 +1,11 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
+package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.DatatypeProp;
-import org.ld4l.bib2lod.ontology.IdentifierType;
-import org.ld4l.bib2lod.ontology.ObjectProp;
+import org.ld4l.bib2lod.entitybuilders.Entity;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
@@ -13,7 +13,7 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 /**
  * Builds an Identifier for a bib resource from a field in the record.
  */
-public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder { 
+public class MarcxmlToLd4lIdentifierBuilder extends MarcxmlToLd4lEntityBuilder { 
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -26,7 +26,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
      * @param bibEntity - the related entity 
      * @throws EntityBuilderException 
      */
-    public MarcxmlIdentifierBuilder(RecordField field, Entity bibEntity) 
+    public MarcxmlToLd4lIdentifierBuilder(RecordField field, Entity bibEntity) 
             throws EntityBuilderException {
         this.field = (MarcxmlField) field;
         this.bibEntity = bibEntity;
@@ -42,7 +42,7 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
           identifier = buildFromDataField();
         }
 
-        bibEntity.addChild(ObjectProp.IDENTIFIED_BY, identifier);
+        bibEntity.addChild(Ld4lObjectProp.IDENTIFIED_BY, identifier);
  
         return identifier;
     }
@@ -54,9 +54,9 @@ public class MarcxmlIdentifierBuilder extends MarcxmlEntityBuilder {
     private Entity buildFromControlField() {
         
         if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
-            Entity identifier = Entity.instance(IdentifierType.superClass());
-            identifier.addType(IdentifierType.LOCAL);
-            identifier.addAttribute(DatatypeProp.VALUE, field.getTextValue());
+            Entity identifier = new Entity(Ld4lIdentifierType.superClass());
+            identifier.addType(Ld4lIdentifierType.LOCAL);
+            identifier.addAttribute(Ld4lDatatypeProp.VALUE, field.getTextValue());
             return identifier;             
         }
         

@@ -4,18 +4,18 @@ package org.ld4l.bib2lod.conversion.xml.marcxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.conversion.xml.XmlConverter;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.conversion.BaseConverter;
+import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.entitybuilders.xml.marcxml.MarcxmlInstanceBuilder;
+import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.MarcxmlToLd4lInstanceBuilder;
 import org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser;
 import org.ld4l.bib2lod.record.Record;
 
 /**
  * Converts MARCXML records
  */
-public class MarcxmlConverter extends XmlConverter {
+public class MarcxmlConverter extends BaseConverter{
     
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -47,7 +47,7 @@ public class MarcxmlConverter extends XmlConverter {
         // application profile.
         EntityBuilder instanceBuilder = 
                 EntityBuilder.instance(
-                        MarcxmlInstanceBuilder.class, record);
+                        MarcxmlToLd4lInstanceBuilder.class, record);
                
         return instanceBuilder.build();
         

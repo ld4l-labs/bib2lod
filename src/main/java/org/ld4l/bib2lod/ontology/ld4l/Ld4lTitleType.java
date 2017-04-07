@@ -1,20 +1,25 @@
-package org.ld4l.bib2lod.ontology;
+package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Type;
 
-public enum ItemClass implements Type {
-        
-    // There may not be any other Item classes
-    ITEM(Namespace.BIBFRAME, "Item");
-    
+/**
+ * Enumerates the Title types used in the LD4L BIBFRAME 2 extension and
+ * application profile.
+ */
+public enum Ld4lTitleType implements Type {
+
+    ABBREVIATED_TITLE(Ld4lNamespace.LD4L, "AbbreviatedTitle"),
+    TITLE(Ld4lNamespace.BIBFRAME, "Title");
+ 
     private String uri;
     private Resource ontClass;
     
     /**
      * Constructor
      */
-    ItemClass(Namespace namespace, String localName) {
+    Ld4lTitleType(Ld4lNamespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
@@ -30,6 +35,7 @@ public enum ItemClass implements Type {
     } 
 
     public static Type superClass() {
-        return ITEM;
+        return TITLE;
     }
+
 }

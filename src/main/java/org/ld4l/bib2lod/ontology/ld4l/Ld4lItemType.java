@@ -1,12 +1,17 @@
-package org.ld4l.bib2lod.ontology;
+package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Type;
 
-public enum IdentifierType implements Type {
-
-    IDENTIFIER(Namespace.BIBFRAME, "Identifier"),
-    LOCAL(Namespace.BIBFRAME, "Local");
+/**
+ * Enumerates the Item types used in the LD4L BIBFRAME 2 extension and
+ * application profile.
+ */
+public enum Ld4lItemType implements Type {
+        
+    // There may not be any other Item classes
+    ITEM(Ld4lNamespace.BIBFRAME, "Item");
     
     private String uri;
     private Resource ontClass;
@@ -14,8 +19,8 @@ public enum IdentifierType implements Type {
     /**
      * Constructor
      */
-    IdentifierType(Namespace namespace, String name) {
-        this.uri = namespace.uri() + name;
+    Ld4lItemType(Ld4lNamespace namespace, String localName) {
+        this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
     
@@ -30,7 +35,6 @@ public enum IdentifierType implements Type {
     } 
 
     public static Type superClass() {
-        return IDENTIFIER;
+        return ITEM;
     }
-
 }

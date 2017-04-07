@@ -1,12 +1,17 @@
-package org.ld4l.bib2lod.ontology;
+package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Type;
 
-public enum WorkClass implements Type {
+/**
+ * Enumerates the Identifier types used in the LD4L BIBFRAME 2 extension and
+ * application profile.
+ */
+public enum Ld4lIdentifierType implements Type {
 
-    TEXT(Namespace.BIBFRAME, "Text"),
-    WORK(Namespace.BIBFRAME, "Work");
+    IDENTIFIER(Ld4lNamespace.BIBFRAME, "Identifier"),
+    LOCAL(Ld4lNamespace.BIBFRAME, "Local");
     
     private String uri;
     private Resource ontClass;
@@ -14,7 +19,7 @@ public enum WorkClass implements Type {
     /**
      * Constructor
      */
-    WorkClass(Namespace namespace, String name) {
+    Ld4lIdentifierType(Ld4lNamespace namespace, String name) {
         this.uri = namespace.uri() + name;
         this.ontClass = ResourceFactory.createResource(uri);
     }
@@ -30,6 +35,7 @@ public enum WorkClass implements Type {
     } 
 
     public static Type superClass() {
-        return WORK;
+        return IDENTIFIER;
     }
+
 }

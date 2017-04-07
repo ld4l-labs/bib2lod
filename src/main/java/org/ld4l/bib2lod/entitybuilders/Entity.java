@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entities;
+package org.ld4l.bib2lod.entitybuilders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,19 +14,19 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
-import org.ld4l.bib2lod.ontology.DatatypeProp;
-import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.uris.UriService;
 
 /**
  * An object built from the input record representing a single resource in the
  * output model. 
  */
-public class SimpleEntity implements Entity {
+public final class Entity {
     
-    private final HashMap<ObjectProp, List<Entity>> children;
-    private final Map<DatatypeProp, List<Literal>> attributes;
+    private final HashMap<Ld4lObjectProp, List<Entity>> children;
+    private final Map<Ld4lDatatypeProp, List<Literal>> attributes;
     private final List<Type> types;
     private Resource resource;
     
@@ -34,13 +34,13 @@ public class SimpleEntity implements Entity {
     /**
      * Constructors
      */
-    private SimpleEntity() {
-        this.children = new HashMap<ObjectProp, List<Entity>>();
-        this.attributes = new HashMap<DatatypeProp, List<Literal>>();
+    private Entity() {
+        this.children = new HashMap<Ld4lObjectProp, List<Entity>>();
+        this.attributes = new HashMap<Ld4lDatatypeProp, List<Literal>>();
         this.types = new ArrayList<Type>();
     }
 
-    public SimpleEntity(Type type) {
+    public Entity(Type type) {
         this();
         types.add(type);
     }
@@ -52,7 +52,7 @@ public class SimpleEntity implements Entity {
      * TitleElements are non-reusable, and thus the Work cannot simply prop to
      * the Instance Title.
      */
-    public SimpleEntity(Entity original) {
+    public Entity(Entity original) {
         this();
         
         // Attributes and types are simply copied
@@ -60,20 +60,19 @@ public class SimpleEntity implements Entity {
         this.types.addAll(original.getTypes());
         
         // Copy the dependent Entities in each child 
-        for (Entry<ObjectProp, List<Entity>> child : original.getChildren().entrySet()) {
-            ObjectProp prop = child.getKey();
+        for (Entry<Ld4lObjectProp, List<Entity>> child : original.getChildren().entrySet()) {
+            Ld4lObjectProp prop = child.getKey();
             List<Entity> originalEntities = child.getValue();
             List<Entity> newEntities = new ArrayList<Entity>();
             for (Entity entity : originalEntities) {
-                Entity copy = Entity.instance(entity);
+                Entity copy = new Entity(entity);
                 newEntities.add(copy);
             }
             this.children.put(prop, newEntities);
         } 
     }
 
-    @Override
-    public void addChild(ObjectProp prop, Entity entity) {
+    public void addChild(Ld4lObjectProp prop, Entity entity) {
         
         if (children.containsKey(prop)) {
             List<Entity> list = children.get(prop);
@@ -83,8 +82,7 @@ public class SimpleEntity implements Entity {
         }  
     }
     
-    @Override
-    public void addChildren(ObjectProp prop, List<Entity> entities) {
+    public void addChildren(Ld4lObjectProp prop, List<Entity> entities) {
         
         if (entities.isEmpty()) {
             return;
@@ -97,18 +95,15 @@ public class SimpleEntity implements Entity {
         }          
     }
     
-    @Override
-    public HashMap<ObjectProp, List<Entity>> getChildren() {
+    public HashMap<Ld4lObjectProp, List<Entity>> getChildren() {
         return children;
     }
     
-    @Override
-    public List<Entity> getChildren(ObjectProp prop) {
+    public List<Entity> getChildren(Ld4lObjectProp prop) {
         return children.get(prop);
     }
     
-    @Override
-    public Entity getChild(ObjectProp prop) {
+    public Entity getChild(Ld4lObjectProp prop) {
         List<Entity> entities = children.get(prop);
         if (!entities.isEmpty()) {
             return entities.get(0);
@@ -116,30 +111,25 @@ public class SimpleEntity implements Entity {
         return null;
     }
     
-    @Override
     public void addType(Type type) {
         types.add(type);
     }
     
-    @Override
     public List<Type> getTypes() {
         return types;
     }
     
-    @Override
-    public void addAttribute(DatatypeProp prop, String string) {
+    public void addAttribute(Ld4lDatatypeProp prop, String string) {
         addAttribute(prop, ResourceFactory.createStringLiteral(string));
     }
     
-    @Override
-    public void addAttribute(DatatypeProp prop, int i) {
+    public void addAttribute(Ld4lDatatypeProp prop, int i) {
         Literal literal = ResourceFactory.createTypedLiteral(
                 Integer.toString(i), XSDDatatype.XSDinteger);
         addAttribute(prop, literal);
     }
     
-    @Override
-    public void addAttribute(DatatypeProp prop, Literal value) {
+    public void addAttribute(Ld4lDatatypeProp prop, Literal value) {
         
         if (attributes.containsKey(prop)) {
             List<Literal> list = attributes.get(prop);
@@ -149,8 +139,7 @@ public class SimpleEntity implements Entity {
         }
     }
     
-    @Override
-    public void addAttributes(DatatypeProp prop, List<Literal> values) {
+    public void addAttributes(Ld4lDatatypeProp prop, List<Literal> values) {
         
         if (values.isEmpty()) {
             return;
@@ -163,27 +152,22 @@ public class SimpleEntity implements Entity {
         }            
     }
     
-    @Override
-    public Map<DatatypeProp, List<Literal>> getAttributes() {
+    public Map<Ld4lDatatypeProp, List<Literal>> getAttributes() {
         return attributes;
     }
     
-    @Override
-    public List<Literal> getAttributes(DatatypeProp prop) {
+    public List<Literal> getAttributes(Ld4lDatatypeProp prop) {
         return attributes.get(prop);
     }
 
-    @Override
     public void setResource(Resource resource) {
         this.resource = resource;
     }
 
-    @Override
     public Resource getResource() {
         return resource;
     }
 
-    @Override
     public void buildResource() {
         // Build children of this Entity before building the Entity, so that
         // when building the assertion linking this Entity to the child, we
@@ -194,8 +178,8 @@ public class SimpleEntity implements Entity {
     
     private void buildChildResources() {
 
-        Map<ObjectProp, List<Entity>> children = getChildren();
-        for (Entry<ObjectProp, List<Entity>> entry : children.entrySet()) {
+        Map<Ld4lObjectProp, List<Entity>> children = getChildren();
+        for (Entry<Ld4lObjectProp, List<Entity>> entry : children.entrySet()) {
             List<Entity> entities = entry.getValue();
             for (Entity childEntity : entities) {
                 childEntity.buildResource();
@@ -215,8 +199,8 @@ public class SimpleEntity implements Entity {
         }
         
         // Add relationships to children
-        for (Entry<ObjectProp, List<Entity>> child : children.entrySet()) {
-            ObjectProp prop = child.getKey();
+        for (Entry<Ld4lObjectProp, List<Entity>> child : children.entrySet()) {
+            Ld4lObjectProp prop = child.getKey();
             List<Entity> childEntities = children.get(prop);
             for (Entity childEntity : childEntities) {
                 resource.addProperty(prop.property(), childEntity.getResource());         
@@ -224,8 +208,8 @@ public class SimpleEntity implements Entity {
         }
         
         // Add attributes       
-        for (Entry<DatatypeProp, List<Literal>> attribute : attributes.entrySet()) {
-            DatatypeProp prop = attribute.getKey();
+        for (Entry<Ld4lDatatypeProp, List<Literal>> attribute : attributes.entrySet()) {
+            Ld4lDatatypeProp prop = attribute.getKey();
             List<Literal> literals = getAttributes(prop);
             for (Literal literal : literals) {
                 resource.addLiteral(prop.property(), literal);
@@ -235,7 +219,6 @@ public class SimpleEntity implements Entity {
         setResource(resource);        
     }
     
-    @Override
     public Model buildModel() {
         
         Model model = ModelFactory.createDefaultModel();
@@ -248,8 +231,8 @@ public class SimpleEntity implements Entity {
         
         Model model = ModelFactory.createDefaultModel();
         
-        for (Entry<ObjectProp, List<Entity>> child : children.entrySet()) {
-            ObjectProp prop = child.getKey();
+        for (Entry<Ld4lObjectProp, List<Entity>> child : children.entrySet()) {
+            Ld4lObjectProp prop = child.getKey();
             List<Entity> childEntities = children.get(prop);
             for (Entity childEntity : childEntities) {
                 Model childModel = childEntity.buildModel();

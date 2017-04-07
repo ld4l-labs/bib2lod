@@ -1,17 +1,17 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
+package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.ontology.DatatypeProp;
-import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.TitleType;
-import org.ld4l.bib2lod.ontology.TitleElementType;
+import org.ld4l.bib2lod.entitybuilders.Entity;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
@@ -21,7 +21,7 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
  */
-public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
+public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -35,7 +35,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
      * being built is the title
      * @throws EntityBuilderException 
      */
-    public MarcxmlTitleBuilder(Record record, Entity bibEntity)
+    public MarcxmlToLd4lTitleBuilder(Record record, Entity bibEntity)
              throws EntityBuilderException {
         this.record = (MarcxmlRecord) record;
         this.bibEntity = bibEntity;
@@ -45,7 +45,7 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
     public Entity build() throws EntityBuilderException {
         
         // The title
-        entity = Entity.instance(TitleType.superClass());
+        entity = new Entity(Ld4lTitleType.superClass());
         
         String titleLabel = null;
       
@@ -63,11 +63,11 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
                 // present,the $a fields should be the same.
                 if (subfield.getCode().equals("a")) {
                     titleLabel = subfield.getTextValue();
-                    entity.addAttribute(DatatypeProp.LABEL, titleLabel);
+                    entity.addAttribute(Ld4lDatatypeProp.LABEL, titleLabel);
                 }
                 
                 if (subfield.getCode().equals("c")) {
-                    bibEntity.addAttribute(DatatypeProp.RESPONSIBILITY_STATEMENT,
+                    bibEntity.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT,
                             subfield.getTextValue());
                 }
                 
@@ -78,10 +78,10 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // TODO convert other subfields from 130/240
         
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
-        entity.addChildren(ObjectProp.HAS_PART, titleElements);
+        entity.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
-        bibEntity.addChild(ObjectProp.HAS_PREFERRED_TITLE, entity);
+        bibEntity.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, entity);
         
         return entity;
     }
@@ -106,18 +106,18 @@ public class MarcxmlTitleBuilder extends MarcxmlEntityBuilder {
         // Create MainTitleElement last, since its label is the Title label
         // minus the other element labels.
         Entity mainTitleElement = buildTitleElement(
-                TitleElementType.MAIN_TITLE_ELEMENT, titleLabel, 10); 
+                Ld4lTitleElementType.MAIN_TITLE_ELEMENT, titleLabel, 10); 
         titleElements.add(mainTitleElement);
         
         return titleElements;               
     }
         
     private Entity buildTitleElement(
-            TitleElementType elementClass, String label, int rank) {
+            Ld4lTitleElementType elementClass, String label, int rank) {
         
-         Entity titleElement = Entity.instance(elementClass);
-         titleElement.addAttribute(DatatypeProp.LABEL, label);
-         titleElement.addAttribute(DatatypeProp.RANK, rank);  
+         Entity titleElement = new Entity(elementClass);
+         titleElement.addAttribute(Ld4lDatatypeProp.LABEL, label);
+         titleElement.addAttribute(Ld4lDatatypeProp.RANK, rank);  
          return titleElement;
     }
     

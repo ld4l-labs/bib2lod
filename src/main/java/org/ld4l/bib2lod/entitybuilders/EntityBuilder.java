@@ -4,7 +4,6 @@ package org.ld4l.bib2lod.entitybuilders;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
-import org.ld4l.bib2lod.entities.Entity;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.RecordField;
 

@@ -1,10 +1,10 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml;
+package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.InstanceType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
@@ -12,7 +12,7 @@ import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
+public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private final MarcxmlRecord record;
 
@@ -20,10 +20,10 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
      * Constructor
      * @throws EntityBuilderException 
      */
-    public MarcxmlInstanceBuilder(Record record) 
+    public MarcxmlToLd4lInstanceBuilder(Record record) 
             throws EntityBuilderException {
         this.record = (MarcxmlRecord) record;
-        this.entity = Entity.instance(InstanceType.superClass());
+        this.entity = new Entity(Ld4lInstanceType.superClass());
     }
 
     /* (non-Javadoc)
@@ -49,7 +49,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
 
         if (controlField001 != null) {
             EntityBuilder.instance(
-                    MarcxmlIdentifierBuilder.class, controlField001, entity)
+                    MarcxmlToLd4lIdentifierBuilder.class, controlField001, entity)
                 .build();                
         }
         
@@ -60,7 +60,7 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
     private void buildTitles() throws EntityBuilderException { 
         
         // NB There may be multiple, so this isn't sufficient.
-        EntityBuilder.instance(MarcxmlTitleBuilder.class, record, entity).build();
+        EntityBuilder.instance(MarcxmlToLd4lTitleBuilder.class, record, entity).build();
     }
     
     private void buildWorks() throws EntityBuilderException {
@@ -71,11 +71,11 @@ public class MarcxmlInstanceBuilder extends MarcxmlEntityBuilder {
         // but new resources.
         // Need method of EntityBuilder.clone() or copy?
         
-        EntityBuilder.instance(MarcxmlWorkBuilder.class, record, entity).build();
+        EntityBuilder.instance(MarcxmlToLd4lWorkBuilder.class, record, entity).build();
     }
     
     private void buildItem() throws EntityBuilderException {
-        EntityBuilder.instance(MarcxmlItemBuilder.class, record, entity).build();
+        EntityBuilder.instance(MarcxmlToLd4lItemBuilder.class, record, entity).build();
     }   
         
 }

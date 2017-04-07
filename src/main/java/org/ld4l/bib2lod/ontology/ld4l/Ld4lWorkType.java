@@ -1,21 +1,26 @@
-package org.ld4l.bib2lod.ontology;
+package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Type;
 
-public enum TitleClass implements Type {
+/**
+ * Enumerates the Work types used in the LD4L BIBFRAME 2 extension and
+ * application profile.
+ */
+public enum Ld4lWorkType implements Type {
 
-    ABBREVIATED_TITLE(Namespace.LD4L, "AbbreviatedTitle"),
-    TITLE(Namespace.BIBFRAME, "Title");
- 
+    TEXT(Ld4lNamespace.BIBFRAME, "Text"),
+    WORK(Ld4lNamespace.BIBFRAME, "Work");
+    
     private String uri;
     private Resource ontClass;
     
     /**
      * Constructor
      */
-    TitleClass(Namespace namespace, String localName) {
-        this.uri = namespace.uri() + localName;
+    Ld4lWorkType(Ld4lNamespace namespace, String name) {
+        this.uri = namespace.uri() + name;
         this.ontClass = ResourceFactory.createResource(uri);
     }
     
@@ -30,7 +35,6 @@ public enum TitleClass implements Type {
     } 
 
     public static Type superClass() {
-        return TITLE;
+        return WORK;
     }
-
 }

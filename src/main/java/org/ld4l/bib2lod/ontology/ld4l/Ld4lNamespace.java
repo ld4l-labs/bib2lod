@@ -1,15 +1,16 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.ontology;
+package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Define the ontology namespaces.
+ * Enumerates the ontology namespaces used in the LD4L BIBFRAME 2 extension and
+ * application profile.
  */
 // TODO See if we can use ontology files to define these instead.
-public enum Namespace {
+public enum Ld4lNamespace {
 
     BIBFRAME("http://id.loc.gov/ontologies/bibframe/", "bf"),
     DCTERMS("http://purl.org/dc/terms/", "dcterms"),    
@@ -30,7 +31,7 @@ public enum Namespace {
     private final String uri;
     private final String prefix;
     
-    Namespace(String uri, String prefix) {
+    Ld4lNamespace(String uri, String prefix) {
         this.uri = uri;
         this.prefix = prefix;
     }
