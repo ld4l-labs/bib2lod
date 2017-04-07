@@ -37,6 +37,7 @@ cornell:inst1 a bf:Instance ;
         dcterms:hasPart [
             a ld4l:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology."
+            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;        
     ] ; 
     
