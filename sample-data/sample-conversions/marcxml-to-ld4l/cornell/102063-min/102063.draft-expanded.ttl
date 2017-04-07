@@ -1,54 +1,5 @@
 ###########################################################
 #####
-##### CURRENT VERSION
-#####
-###########################################################
-
-
-@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
-@prefix cornell: <http://data.ld4l.org/cornell/> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix ld4l: <http://bib.ld4l.org/ontology/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-
-    
-cornell:work1 a bf:Work;    
-
-    bf:hasInstance cornell:inst1 ;
-    
-    bf:title [
-        a bf:Title ;
-        rdfs:label "Clinical cardiopulmonary physiology." ;
-        dcterms:hasPart [
-            a ld4l:MainTitleElement ;
-            rdfs:label "Clinical cardiopulmonary physiology." 
-        ] ;
-    ] 
-. 
-
-cornell:inst1 a bf:Instance ; 
-
-    bf:hasItem cornell:item1 ; 
-
-    bf:title [
-        a bf:Title ;
-        rdfs:label "Clinical cardiopulmonary physiology." ;
-        dcterms:hasPart [
-            a ld4l:MainTitleElement ;
-            rdfs:label "Clinical cardiopulmonary physiology."
-        ] ;        
-    ] ; 
-    
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
-. 
-
-cornell:item1 a bf:Item .
-
-
-
-###########################################################
-#####
 ##### MORE COMPLETE VERSION (needs further investigation)
 #####
 ###########################################################
@@ -106,7 +57,8 @@ cornell:inst1 a bf:Instance ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
             a ld4l:MainTitleElement ;
-            rdfs:label "Clinical cardiopulmonary physiology."
+            rdfs:label "Clinical cardiopulmonary physiology." ;
+            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;        
     ] ; 
     
