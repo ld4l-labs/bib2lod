@@ -1,5 +1,3 @@
-##### EXPECTED OUTPUT FROM CONVERSION OF 102063.min.xml, NOT NECESSARILY "CORRECT"
-
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -21,29 +19,22 @@ cornell:work1 a bf:Work;
     ] 
 . 
 
-cornell:inst1 a bf:Instance ;
+cornell:inst1 a bf:Instance ; 
 
-    bf:instanceOf cornell:work1 ;
-    
     bf:hasItem cornell:item1 ; 
 
-    bf:identifiedBy [
-        a bf:Identifier ;
-        a bf:Local ; 
-        rdf:value "102063"
-    ] ;
-
-    ld4l:hasPreferredTitle [
+    bf:title [
         a bf:Title ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
             a ld4l:MainTitleElement ;
-            rdfs:label "Clinical cardiopulmonary physiology." ;
-	    vivo:rank 10
+            rdfs:label "Clinical cardiopulmonary physiology."
+            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;        
     ] ; 
     
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
 . 
 
 cornell:item1 a bf:Item .
+
