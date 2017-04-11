@@ -2,6 +2,9 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
@@ -11,7 +14,9 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlLeader extends MarcxmlField {
     
-    private static final Logger LOGGER = LogManager.getLogger();    
+    private static final Logger LOGGER = LogManager.getLogger();  
+    
+    Map<Integer, String> fields;
 
     /**
      * Constructor
@@ -19,6 +24,7 @@ public class MarcxmlLeader extends MarcxmlField {
     public MarcxmlLeader(Element leader) {
         super(leader);
     }
+
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.record.RecordElement#isValid()

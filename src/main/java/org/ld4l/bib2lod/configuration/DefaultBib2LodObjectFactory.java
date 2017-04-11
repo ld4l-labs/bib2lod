@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
 /**
  * Create instances of various classes, as directed by the configuration.
  * 
- * Pass configuration objects to these instance if appropriate.
+ * Pass configuration objects to these instances if appropriate.
  * 
  * Serve these instances on request.
  */
@@ -128,17 +128,4 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
         }
     }
 
-    // ----------------------------------------------------------------------
-    // Vestigial methods
-    // ----------------------------------------------------------------------
-
-    @Override
-    public Entity createEntity(Type type) {
-        return new Entity(type);
-    }
-
-    @Override
-    public Entity createEntity(Entity entity) {
-      return new Entity(entity);
-    }
 }

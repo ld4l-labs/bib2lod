@@ -2,19 +2,27 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.ontology.Type;
+
 /**
  * An abstract implementation.
  */
 public abstract class BaseEntityBuilder implements EntityBuilder {
-   
-    // The Entity being built
-    protected Entity entity; 
-
+    
     /*
      * (non-Javadoc)
      * @see org.ld4l.bib2lod.entitybuilders.EntityBuilder#build()
      */
+//    @Override
+//    public abstract Entity build(Map<String, Object> params) 
+//            throws EntityBuilderException;
+//        
+    
     @Override
-    public abstract Entity build() throws EntityBuilderException;
-
+    public EntityBuilder getBuilder(Class<? extends Type> type) {
+        EntityBuilders builders = Bib2LodObjectFactory.getFactory()
+                .instanceForInterface(EntityBuilders.class);
+        return builders.getBuilder(type);
+    }
 }

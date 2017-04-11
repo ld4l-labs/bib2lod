@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -25,27 +26,17 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private final MarcxmlRecord record;
-    private final Entity bibEntity;
-   
-    /**
-     * Constructor
-     * @param record - the MARCXML record
-     * @param bibEntity - the bib entity (Work or Instance) of which the title
-     * being built is the title
-     * @throws EntityBuilderException 
-     */
-    public MarcxmlToLd4lTitleBuilder(Record record, Entity bibEntity)
-             throws EntityBuilderException {
-        this.record = (MarcxmlRecord) record;
-        this.bibEntity = bibEntity;
-    }
+    private MarcxmlRecord record;
+    private Entity bibEntity;
+    private Entity title;
+    
 
     @Override
-    public Entity build() throws EntityBuilderException {
+    public Entity build(BuildParams params) throws EntityBuilderException {
         
-        // The title
-        entity = new Entity(Ld4lTitleType.superClass());
+        this.record = (MarcxmlRecord) params.getRecord();
+        this.bibEntity = params.getRelatedEntity();
+        this.title = new Entity(Ld4lTitleType.superClass());
         
         String titleLabel = null;
       
@@ -63,7 +54,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
                 // present,the $a fields should be the same.
                 if (subfield.getCode().equals("a")) {
                     titleLabel = subfield.getTextValue();
-                    entity.addAttribute(Ld4lDatatypeProp.LABEL, titleLabel);
+                    title.addAttribute(Ld4lDatatypeProp.LABEL, titleLabel);
                 }
                 
                 if (subfield.getCode().equals("c")) {
@@ -78,12 +69,12 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         // TODO convert other subfields from 130/240
         
         List<Entity> titleElements = buildTitleElements(field245, titleLabel);
-        entity.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
+        title.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
-        bibEntity.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, entity);
+        bibEntity.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, title);
         
-        return entity;
+        return title;
     }
     
     private List<Entity> buildTitleElements(

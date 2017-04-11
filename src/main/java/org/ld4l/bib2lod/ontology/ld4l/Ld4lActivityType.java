@@ -5,14 +5,10 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
-/**
- * Enumerates the Item types used in the LD4L BIBFRAME 2 extension and
- * application profile.
- */
-public enum Ld4lItemType implements Type {
-        
-    // There may not be any other Item classes
-    ITEM(Ld4lNamespace.BIBFRAME, "Item");
+public enum Ld4lActivityType implements Type {
+    
+    ACTIVITY(Ld4lNamespace.LD4L, "Activity"),
+    PUBLISHER_ACTIVITY(Ld4lNamespace.LD4L, "PublisherActivity");
     
     private final String uri;
     private final Resource ontClass;
@@ -20,22 +16,24 @@ public enum Ld4lItemType implements Type {
     /**
      * Constructor
      */
-    Ld4lItemType(Namespace namespace, String localName) {
+    Ld4lActivityType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
-        this.ontClass = ResourceFactory.createResource(uri);
+        this.ontClass = ResourceFactory.createResource(uri);        
     }
-    
+
     @Override
     public String uri() {
-        return uri;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public Resource ontClass() {
-        return ontClass;
-    } 
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     public static Type superClass() {
-        return ITEM;
+        return ACTIVITY;
     }
 }

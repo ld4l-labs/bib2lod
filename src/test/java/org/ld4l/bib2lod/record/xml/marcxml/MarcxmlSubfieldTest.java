@@ -22,9 +22,6 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     private static final String NO_CODE = 
             "<subfield>(CStRLIN)NYCX86B63464</subfield>";
     
-    private static final String INVALID_CODE_FORMAT = 
-            "<subfield code='ab'>(CStRLIN)NYCX86B63464</subfield>";
-    
     private static final String NO_VALUE = 
             "<subfield code='a'></subfield>";
     
@@ -43,13 +40,6 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     public void noCode_Invalid() throws Exception {
         MarcxmlSubfield subfield = 
                 buildSubfieldFromString(NO_CODE);
-        Assert.assertFalse(subfield.isValid());
-    }
-    
-    @Test
-    public void invalidCode_Invalid() throws Exception {
-        MarcxmlSubfield subfield = 
-                buildSubfieldFromString(INVALID_CODE_FORMAT);
         Assert.assertFalse(subfield.isValid());
     }
 

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
@@ -93,8 +94,9 @@ public class BaseConverterTest extends AbstractTestClass {
         }
 
         @Override
-        public Entity build() throws EntityBuilderException {
-            return null;            
+        public Entity build(BuildParams params) throws EntityBuilderException {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 

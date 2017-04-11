@@ -138,12 +138,6 @@ public class MarcxmlDataField extends MarcxmlField {
             return false;
         }
         */
-        if (! isValidIndicator(ind1)) {
-            return false;
-        }
-        if (! isValidIndicator(ind2)) {
-            return false;
-        }
         if (subfields.isEmpty()) {
             return false;
         }
@@ -155,20 +149,4 @@ public class MarcxmlDataField extends MarcxmlField {
         return true;
     }
     
-    /**
-     * Return true iff the indicator value is valid. In this test we do not
-     * consider the indicator values with respect to specific fields, but only
-     * formal, non-field-specific validity. 
-     */
-    private boolean isValidIndicator(Integer indicator) {
-        
-        if (indicator == null) {
-            return true;
-        }
-        if (indicator <= 9) {
-            return true;
-        }
-        return false;
-    }
-
 }

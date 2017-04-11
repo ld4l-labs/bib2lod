@@ -37,11 +37,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
                 "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
             "</datafield>";
 
-    private static final String INVALID_INDICATOR_FORMAT = 
-            "<datafield tag='245' ind1='10' ind2='0'>" +
-                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
-            "</datafield>";   
-
     private static final String INVALID_SUBFIELD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
                 "<subfield>Clinical cardiopulmonary physiology.</subfield>" +
@@ -89,13 +84,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
                 buildDataFieldFromString(INVALID_TAG_FORMAT);
         Assert.assertFalse(dataField.isValid());
     }
-    
-    @Test
-    public void invalidIndicatorFormat_Invalid() throws Exception {
-        MarcxmlDataField dataField = 
-                buildDataFieldFromString(INVALID_INDICATOR_FORMAT);
-        Assert.assertFalse(dataField.isValid());
-    }            
     
     @Test
     public void invalidSubfield_Invalid() throws Exception {

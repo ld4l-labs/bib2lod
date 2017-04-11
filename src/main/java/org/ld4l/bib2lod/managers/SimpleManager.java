@@ -67,8 +67,6 @@ public final class SimpleManager {
         Bib2LodObjectFactory.setFactoryInstance(
                 new DefaultBib2LodObjectFactory(configuration));
 
-        // Configuration configuration = new
-        // StubConfigurator().getTopLevelConfiguration();
     }
 
     /**

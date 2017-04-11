@@ -74,7 +74,7 @@ public interface Configuration {
     String getClassName();
 
     /**
-     * Indicates a problem when applying the onfiguration.
+     * Indicates a problem when applying the configuration.
      */
     public static class ConfigurationException extends RuntimeException {
 

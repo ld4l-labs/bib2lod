@@ -1,6 +1,6 @@
 ###########################################################
 #####
-##### CURRENT VERSION (may need corrections)
+##### CURRENT VERSION 
 #####
 ###########################################################
 
@@ -9,11 +9,12 @@
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix ld4l: <http://bib.ld4l.org/ontology/> .
+@prefix lexvo: <http://purl.org/dc/terms/language> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vivo: <http://vivoweb.org/ontology/core#> .
     
-cornell:work1 a bf:Work;    
+cornell:work1 a bf:Work , bf:Text ;    
 
     ld4l:hasPreferredTitle [
         a bf:Title ;
@@ -21,9 +22,11 @@ cornell:work1 a bf:Work;
         dcterms:hasPart [
             a ld4l:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology." ;
-	    vivo:rank 10
+	        vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;
-    ] 
+    ] ;
+    
+    dcterms:language lexvo:eng 
 . 
 
 cornell:inst1 a bf:Instance ; 
@@ -35,7 +38,7 @@ cornell:inst1 a bf:Instance ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
             a ld4l:MainTitleElement ;
-            rdfs:label "Clinical cardiopulmonary physiology."
+            rdfs:label "Clinical cardiopulmonary physiology." ;
             vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;        
     ] ; 

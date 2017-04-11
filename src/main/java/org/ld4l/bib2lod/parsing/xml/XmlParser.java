@@ -25,10 +25,6 @@ import org.xml.sax.SAXException;
 /**
  * Parses XML input records.
  */
-// TODO Maybe make this an interface, so that we can provide a 
-// parseRecord(Element record) method. Then need a BaseXmlParser implementation
-// to provide the common XML parseRecord() method. Doing with generic methods
-// in Parser now
 public abstract class XmlParser extends BaseParser {
     
     private static final Logger LOGGER = LogManager.getLogger(); 

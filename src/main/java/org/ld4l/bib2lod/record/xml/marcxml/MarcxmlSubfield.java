@@ -34,15 +34,14 @@ public class MarcxmlSubfield extends MarcxmlField {
     public boolean isValid() {
 
         // Here we test only the code format, not whether specific codes are
-        // valid with specific data fields.
+        // valid for specific data fields.
         if (code == null) {
             return false;
         }
-        if (code.equals(" ")) {
+        if (code.equals("")) {
             return false;
         }
-        // Empty string or more than one character
-        if (code.length() != 1) {
+        if (code.equals(" ")) {
             return false;
         }
         if (textValue == null) {

@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
 /**
@@ -13,13 +14,13 @@ public enum Ld4lIdentifierType implements Type {
     IDENTIFIER(Ld4lNamespace.BIBFRAME, "Identifier"),
     LOCAL(Ld4lNamespace.BIBFRAME, "Local");
     
-    private String uri;
-    private Resource ontClass;
+    private final String uri;
+    private final Resource ontClass;
     
     /**
      * Constructor
      */
-    Ld4lIdentifierType(Ld4lNamespace namespace, String name) {
+    Ld4lIdentifierType(Namespace namespace, String name) {
         this.uri = namespace.uri() + name;
         this.ontClass = ResourceFactory.createResource(uri);
     }
