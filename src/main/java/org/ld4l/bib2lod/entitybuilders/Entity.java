@@ -48,10 +48,10 @@ public final class Entity {
      * Constructors
      */
     private Entity() {
-        this.children = new HashMap<Ld4lObjectProp, List<Entity>>();
-        this.attributes = new HashMap<Ld4lDatatypeProp, List<Literal>>();
-        this.externals = new HashMap<Ld4lObjectProp, List<String>>();
-        this.types = new ArrayList<Type>();
+        this.children = new HashMap<>();
+        this.attributes = new HashMap<>();
+        this.externals = new HashMap<>();
+        this.types = new ArrayList<>();
     }
 
     public Entity(Type type) {

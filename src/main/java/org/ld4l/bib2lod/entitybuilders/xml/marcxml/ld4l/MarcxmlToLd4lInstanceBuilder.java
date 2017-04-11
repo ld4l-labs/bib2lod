@@ -2,9 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
@@ -23,27 +20,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private MarcxmlRecord record;
     private Entity instance;
-
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build()
-     */
-//    @Override
-//    public Entity build(Map<String, Object> params) throws EntityBuilderException {
-//
-//        this.record = (MarcxmlRecord) params.get("record");
-//        this.instance = new Entity(Ld4lInstanceType.superClass());
-//        
-//        // TODO Add instance subtypes 
-//        
-//        buildIdentifiers();
-//        buildTitles();
-//        buildWorks();
-//        buildItem();
-//        buildPublisherActivity();
-//        
-//        return instance;
-//    }
   
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {

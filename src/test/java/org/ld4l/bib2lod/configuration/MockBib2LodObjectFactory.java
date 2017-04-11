@@ -4,8 +4,6 @@ package org.ld4l.bib2lod.configuration;
 
 import java.util.List;
 
-import org.ld4l.bib2lod.entitybuilders.Entity;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**

@@ -100,7 +100,6 @@ public abstract class BaseConverter implements Converter {
      */
     protected Model convertRecord(Record record) 
             throws RecordConversionException, EntityBuilderException  {
-        
 
         // Build the primary Entity (e.g., an Instance) from the Record, 
         // its dependent Entities, and links to the dependents.
@@ -118,9 +117,6 @@ public abstract class BaseConverter implements Converter {
     }
     
     protected EntityBuilder getBuilder(Class<? extends Type> type) {
-//        EntityBuilders builders = Bib2LodObjectFactory.getFactory()
-//                .instanceForInterface(EntityBuilders.class);
-//        return builders.getBuilder(type);
         return entityBuilders.getBuilder(type);
     }
     

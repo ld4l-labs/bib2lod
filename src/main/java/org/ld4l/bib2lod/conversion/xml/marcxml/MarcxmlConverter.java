@@ -50,25 +50,12 @@ public class MarcxmlConverter extends BaseConverter{
          * on this model. We may need to inspect the leader first to determine
          * what kind of work it is. Interesting dependency of converter on the
          * application profile.
-         */
-        
+         */       
         EntityBuilder instanceBuilder = getBuilder(Ld4lInstanceType.class);
-        
-        // Build the parameter map that is sent to the builder.
-        // TODO Now needs to be a map of strings to objects; should we instead
-        // have a BuildParams object? Then not as flexible, though. Here there is
-        // no type-safety either.
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("record", record);
-//        return instanceBuilder.build(params);
-        
         BuildParams params = new BuildParams()
                 .setRecord(record);
         return instanceBuilder.build(params);
-        
-//        instanceBuilder.setRecord(record)
-//            .build();
-    
+
     }
   
 }

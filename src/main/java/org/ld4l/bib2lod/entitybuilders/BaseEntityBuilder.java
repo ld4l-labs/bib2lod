@@ -8,16 +8,8 @@ import org.ld4l.bib2lod.ontology.Type;
 /**
  * An abstract implementation.
  */
-public abstract class BaseEntityBuilder implements EntityBuilder {
-    
-    /*
-     * (non-Javadoc)
-     * @see org.ld4l.bib2lod.entitybuilders.EntityBuilder#build()
-     */
-//    @Override
-//    public abstract Entity build(Map<String, Object> params) 
-//            throws EntityBuilderException;
-//        
+public abstract class BaseEntityBuilder implements EntityBuilder { 
+
     
     @Override
     public EntityBuilder getBuilder(Class<? extends Type> type) {

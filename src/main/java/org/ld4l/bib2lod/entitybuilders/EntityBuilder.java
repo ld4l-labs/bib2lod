@@ -2,11 +2,8 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.Map;
-
 import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.RecordField;
+
 
 /**
  * Builds an Entity from a Record

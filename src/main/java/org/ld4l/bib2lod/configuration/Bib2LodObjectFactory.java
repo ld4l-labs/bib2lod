@@ -8,7 +8,6 @@ import java.util.List;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.RecordField;
 
