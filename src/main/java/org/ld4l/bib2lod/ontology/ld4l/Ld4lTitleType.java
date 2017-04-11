@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
 /**
@@ -13,13 +14,13 @@ public enum Ld4lTitleType implements Type {
     ABBREVIATED_TITLE(Ld4lNamespace.LD4L, "AbbreviatedTitle"),
     TITLE(Ld4lNamespace.BIBFRAME, "Title");
  
-    private String uri;
-    private Resource ontClass;
+    private final String uri;
+    private final Resource ontClass;
     
     /**
      * Constructor
      */
-    Ld4lTitleType(Ld4lNamespace namespace, String localName) {
+    Ld4lTitleType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }

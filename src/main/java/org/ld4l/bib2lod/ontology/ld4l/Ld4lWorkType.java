@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
 /**
@@ -10,16 +11,24 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lWorkType implements Type {
 
+    AUDIO(Ld4lNamespace.BIBFRAME, "Audio"),
+    CARTOGRAPHY(Ld4lNamespace.BIBFRAME, "Cartography"),
+    MIXED_MATERIAL(Ld4lNamespace.BIBFRAME, "MixedMaterial"),
+    MOVING_IMAGE(Ld4lNamespace.BIBFRAME, "MovingImage"),
+    NOTATED_MUSIC(Ld4lNamespace.BIBFRAME, "NotatedMusic"),
+    OBJECT(Ld4lNamespace.BIBFRAME, "Object"),
+    SOFTWARE(Ld4lNamespace.LD4L, "Software"),
+    STILL_IMAGE(Ld4lNamespace.BIBFRAME, "StillImage"),
     TEXT(Ld4lNamespace.BIBFRAME, "Text"),
     WORK(Ld4lNamespace.BIBFRAME, "Work");
     
-    private String uri;
-    private Resource ontClass;
+    private final String uri;
+    private final Resource ontClass;
     
     /**
      * Constructor
      */
-    Ld4lWorkType(Ld4lNamespace namespace, String name) {
+    Ld4lWorkType(Namespace namespace, String name) {
         this.uri = namespace.uri() + name;
         this.ontClass = ResourceFactory.createResource(uri);
     }

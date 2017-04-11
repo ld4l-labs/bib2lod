@@ -1,7 +1,5 @@
 package org.ld4l.bib2lod.ontology;
 
-import org.apache.jena.rdf.model.Property;
-
 /**
  * Represents the ontology properties defined in the target set of ontologies/
  * application profile.
@@ -10,9 +8,8 @@ import org.apache.jena.rdf.model.Property;
  * TODO Consider reading in the ontology files to either replace or 
  * facilitate/enhance this.
  */
-public interface OntologyProp {
+public interface Namespace {
 
     public String uri();
-    
-    public Property property();
+    public String prefix();
 }

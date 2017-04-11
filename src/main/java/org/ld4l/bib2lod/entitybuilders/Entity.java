@@ -25,9 +25,22 @@ import org.ld4l.bib2lod.uris.UriService;
  */
 public final class Entity {
     
-    private final HashMap<Ld4lObjectProp, List<Entity>> children;
-    private final Map<Ld4lDatatypeProp, List<Literal>> attributes;
-    private final List<Type> types;
+    // Relationships of this entity to other local entities
+    private HashMap<Ld4lObjectProp, List<Entity>> children;
+    
+    // Attributes of this entity
+    private Map<Ld4lDatatypeProp, List<Literal>> attributes;
+    
+    // Relationships of this entity to external resources. Map values are
+    // URIs of these resources. Since we already know the URIs of the external
+    // resources, and we will not make local assertions about them, there is no
+    // need to create an Entity.
+    private HashMap<Ld4lObjectProp, List<String>> externals;
+    
+    // The types the entity belongs to
+    private List<Type> types;
+    
+    // The resource built from this entity
     private Resource resource;
     
 
@@ -37,6 +50,7 @@ public final class Entity {
     private Entity() {
         this.children = new HashMap<Ld4lObjectProp, List<Entity>>();
         this.attributes = new HashMap<Ld4lDatatypeProp, List<Literal>>();
+        this.externals = new HashMap<Ld4lObjectProp, List<String>>();
         this.types = new ArrayList<Type>();
     }
 
@@ -60,7 +74,8 @@ public final class Entity {
         this.types.addAll(original.getTypes());
         
         // Copy the dependent Entities in each child 
-        for (Entry<Ld4lObjectProp, List<Entity>> child : original.getChildren().entrySet()) {
+        for (Entry<Ld4lObjectProp, List<Entity>> child : 
+                    original.getChildren().entrySet()) {
             Ld4lObjectProp prop = child.getKey();
             List<Entity> originalEntities = child.getValue();
             List<Entity> newEntities = new ArrayList<Entity>();
@@ -110,6 +125,32 @@ public final class Entity {
         }
         return null;
     }
+    
+    public void addExternal(Ld4lObjectProp prop, String uri) {
+        if (externals.containsKey(prop)) {
+            List<String> list = externals.get(prop);
+            list.add(uri);  
+        } else {
+            externals.put(prop, Arrays.asList(uri));
+        }         
+    }
+    
+    public HashMap<Ld4lObjectProp, List<String>> getExternals() {
+        return externals;
+    }
+    
+    public List<String> getExternals(Ld4lObjectProp prop) {
+        return externals.get(prop);
+    }
+    
+    public String getExternal(Ld4lObjectProp prop) {
+        List<String> uris = externals.get(prop);
+        if (!uris.isEmpty()) {
+            return uris.get(0);
+        }
+        return null;
+    }
+    
     
     public void addType(Type type) {
         types.add(type);
@@ -169,6 +210,11 @@ public final class Entity {
     }
 
     public void buildResource() {
+        
+        if (this.resource != null) {
+            return;
+        }
+        
         // Build children of this Entity before building the Entity, so that
         // when building the assertion linking this Entity to the child, we
         // have the URI of the child's Resource.
@@ -201,20 +247,31 @@ public final class Entity {
         // Add relationships to children
         for (Entry<Ld4lObjectProp, List<Entity>> child : children.entrySet()) {
             Ld4lObjectProp prop = child.getKey();
-            List<Entity> childEntities = children.get(prop);
+            List<Entity> childEntities = child.getValue();
             for (Entity childEntity : childEntities) {
                 resource.addProperty(prop.property(), childEntity.getResource());         
             }          
         }
         
         // Add attributes       
-        for (Entry<Ld4lDatatypeProp, List<Literal>> attribute : attributes.entrySet()) {
+        for (Entry<Ld4lDatatypeProp, List<Literal>> attribute : 
+                    attributes.entrySet()) {
             Ld4lDatatypeProp prop = attribute.getKey();
-            List<Literal> literals = getAttributes(prop);
+            List<Literal> literals = attribute.getValue();
             for (Literal literal : literals) {
                 resource.addLiteral(prop.property(), literal);
             }
         }
+        
+        // Add relationships to external resources (stored as URIs)
+        for (Entry<Ld4lObjectProp, List<String>> external : externals.entrySet()) {
+            Ld4lObjectProp prop = external.getKey();
+            List<String> uris = external.getValue();
+            for (String externalUri : uris) {
+                resource.addProperty(prop.property(), 
+                        ResourceFactory.createResource(externalUri));       
+            }          
+        }        
         
         setResource(resource);        
     }

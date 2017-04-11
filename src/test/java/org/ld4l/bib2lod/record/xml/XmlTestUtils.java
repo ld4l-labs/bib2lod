@@ -37,16 +37,16 @@ public final class XmlTestUtils {
     public static XmlElement buildElementFromString(
             Class<?> elementClass, String s) throws RecordFieldException {
         
-        Element element;
         try {
-            element = DocumentBuilderFactory
+            Element element = DocumentBuilderFactory
                     .newInstance()
                     .newDocumentBuilder()
                     .parse(new ByteArrayInputStream(s.getBytes()))
                     .getDocumentElement();
+            return XmlElement.instance(elementClass, element);  
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new RecordFieldException(e);
         }
-        return XmlElement.instance(elementClass, element);        
+              
     }
 }

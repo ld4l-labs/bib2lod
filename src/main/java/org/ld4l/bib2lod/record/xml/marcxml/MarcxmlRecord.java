@@ -56,6 +56,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
         if (leaderNodes.getLength() == 0) {
             return null;
         }
+               
         // There should be only one leader - ignore any others.
         return new MarcxmlLeader((Element) leaderNodes.item(0));        
     }

@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
 /**
@@ -16,13 +17,13 @@ public enum Ld4lInstanceType implements Type {
     MANUSCRIPT(Ld4lNamespace.BIBFRAME, "Manuscript"),
     PRINT(Ld4lNamespace.BIBFRAME, "Print");
     
-    private String uri;
-    private Resource ontClass;
+    private final String uri;
+    private final Resource ontClass;
     
     /**
      * Constructor
      */
-    Ld4lInstanceType(Ld4lNamespace namespace, String localName) {
+    Ld4lInstanceType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri);
     }
