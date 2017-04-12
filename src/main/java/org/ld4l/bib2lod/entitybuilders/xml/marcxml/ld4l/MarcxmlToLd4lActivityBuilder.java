@@ -49,11 +49,9 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
                     ((MarcxmlControlField) field).getControlNumber().equals("008")) {    
-                String text = field.getTextValue();
-                if (text.isEmpty()) {
-                    return;
-                }
-                String location = text.substring(15,18);
+                // We know that field.getTextValue() is not empty due to 
+                // earlier validity checks.
+                String location = field.getTextValue().substring(15,18);
                 if (!location.isEmpty()) {
                     activity.addExternal(Ld4lObjectProp.IS_AT_LOCATION, 
                             Ld4lNamespace.COUNTRIES.uri() + location);
@@ -67,18 +65,14 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
                     ((MarcxmlControlField) field).getControlNumber().equals("008")) {
-                String text = field.getTextValue();
-                if (text.isEmpty()) {
-                    return;
-                }
-                String year = text.substring(7,11);
+                // We know that field.getTextValue() is not empty due to 
+                // earlier validity checks.
+                String year = field.getTextValue().substring(7,11);
                 if (! year.isEmpty()) {
                     activity.addAttribute(Ld4lDatatypeProp.DATE, year);
                 }
             }
         }        
     }
-    
-    
 
 }

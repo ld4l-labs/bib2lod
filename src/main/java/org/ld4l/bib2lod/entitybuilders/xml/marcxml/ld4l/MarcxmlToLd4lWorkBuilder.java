@@ -48,12 +48,10 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         
         addTitle();
         
-        addWorkTypeFromLeader();
-        
-        addLanguageFrom008();
+        addWorkTypes();        
+        addLanguages();
         
         instance.addChild(Ld4lObjectProp.IS_INSTANCE_OF, work);
-
         return work;
     }
     
@@ -66,8 +64,9 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         
     }
     
-    private void addWorkTypeFromLeader() {
+    private void addWorkTypes() {
 
+        // Work type from leader
         MarcxmlLeader leader = record.getLeader();
         char code = leader.getTextValue().charAt(6);
         Type type = codes.get(code); 
@@ -76,8 +75,9 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         }           
     }
     
-    private void addLanguageFrom008() {
+    private void addLanguages() {
         
+        // Language from 008
         MarcxmlControlField field008 = record.getControlField("008");
         String code = field008.getTextValue().substring(35,38);
         if (code != null && code.length() > 0) {
