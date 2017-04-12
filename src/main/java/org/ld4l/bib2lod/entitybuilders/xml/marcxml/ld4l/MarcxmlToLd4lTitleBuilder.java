@@ -13,7 +13,6 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
-import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;

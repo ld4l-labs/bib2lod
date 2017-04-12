@@ -23,14 +23,12 @@ public enum Ld4lActivityType implements Type {
 
     @Override
     public String uri() {
-        // TODO Auto-generated method stub
-        return null;
+        return uri;
     }
 
     @Override
     public Resource ontClass() {
-        // TODO Auto-generated method stub
-        return null;
+        return ontClass;
     }
 
     public static Type superClass() {

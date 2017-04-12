@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.record.Record;
 
 /**
- *
+ * An abstract implementation.
  */
 public abstract class BaseParser implements Parser {
 

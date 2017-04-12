@@ -27,7 +27,7 @@ cornell:work1 a bf:Work, bf:Text ;
         ] ;
     ] ; 
     
-    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> ;
+    dcterms:language <http://lexvo.org/id/iso639-3/eng> ;
     
     bf:adminMetadata [
         a bf:AdminMetadata ;

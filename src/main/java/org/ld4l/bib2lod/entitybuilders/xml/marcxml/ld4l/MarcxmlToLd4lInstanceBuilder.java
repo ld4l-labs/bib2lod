@@ -2,12 +2,10 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
@@ -23,27 +21,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private MarcxmlRecord record;
     private Entity instance;
-
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder#build()
-     */
-//    @Override
-//    public Entity build(Map<String, Object> params) throws EntityBuilderException {
-//
-//        this.record = (MarcxmlRecord) params.get("record");
-//        this.instance = new Entity(Ld4lInstanceType.superClass());
-//        
-//        // TODO Add instance subtypes 
-//        
-//        buildIdentifiers();
-//        buildTitles();
-//        buildWorks();
-//        buildItem();
-//        buildPublisherActivity();
-//        
-//        return instance;
-//    }
   
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -67,11 +44,7 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     private void buildIdentifiers() throws EntityBuilderException {
         
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("relatedEntity", instance);
         
-
-
         MarcxmlControlField controlField001 = 
                 record.getControlField("001");
 
@@ -94,9 +67,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("record", record);
-//        params.put("relatedEntity", instance);
         builder.build(params);
     }
     
@@ -109,9 +79,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         // Need method of EntityBuilder.clone() or copy?
         
         EntityBuilder builder = getBuilder(Ld4lWorkType.class);
-//        Map<String, Object> params = new HashMap<String, Object>();
-//        params.put("record", record);
-//        params.put("relatedEntity", instance);
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
@@ -130,10 +97,17 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private void buildPublisherActivity() throws EntityBuilderException {
         
-        // TODO - need to pass in ActivityType
-//        EntityBuilder.instance(
-//                MarcxmlToLd4lActivityBuilder.class, record, instance)
-//                        .build(Ld4lActivityType.PUBLISHER_ACTIVITY);
+        EntityBuilder builder = getBuilder(Ld4lActivityType.class);
+        
+        MarcxmlControlField field008 = record.getControlField("008");
+        if (field008 != null) {        
+            BuildParams params = new BuildParams()
+                    .setRecord(record)     
+                    .setField(field008)
+                    .setRelatedEntity(instance)
+                    .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
+            builder.build(params);
+        }
     }
         
 }

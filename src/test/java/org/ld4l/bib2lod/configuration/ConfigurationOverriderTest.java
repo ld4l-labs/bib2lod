@@ -2,16 +2,15 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-import org.ld4l.bib2lod.testing.AbstractTestClass;
-import static org.ld4l.bib2lod.configuration.ConfigurationOptions.AttributeOverride;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
+import org.junit.Test;
+import org.ld4l.bib2lod.configuration.ConfigurationNode.Builder;
+import org.ld4l.bib2lod.configuration.ConfigurationOptions.AttributeOverride;
+import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
  */

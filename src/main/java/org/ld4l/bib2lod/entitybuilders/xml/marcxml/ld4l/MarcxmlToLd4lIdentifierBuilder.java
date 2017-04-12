@@ -7,7 +7,6 @@ import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.record.RecordField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
 

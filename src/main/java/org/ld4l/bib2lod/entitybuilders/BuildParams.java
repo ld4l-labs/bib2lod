@@ -11,7 +11,16 @@ public class BuildParams {
     private Entity relatedEntity;
     private Type type;
     
-
+    public BuildParams() {
+        this.record = null;
+        this.field = null;
+        this.relatedEntity = null;
+        this.type = null;
+    }
+    
+    /**
+     * Returns null if setField() has not been called.
+     */
     public RecordField getField() {
         return field;
     }
@@ -26,12 +35,18 @@ public class BuildParams {
         return record;
     }
 
+    /**
+     * Returns null if setRecord() hasn't been called.
+     */
     public BuildParams setRecord(Record record) {
         this.record = record;
         // Return this for method chaining
         return this;
     }
 
+    /**
+     * Returns null if setRelatedEntity() has not been called.
+     */
     public Entity getRelatedEntity() {
         return relatedEntity;
     }
@@ -42,6 +57,10 @@ public class BuildParams {
         return this;
     }
 
+    /**
+     * Returns null if setType() has not been called.
+     * @return
+     */
     public Type getType() {
         return type;
     }

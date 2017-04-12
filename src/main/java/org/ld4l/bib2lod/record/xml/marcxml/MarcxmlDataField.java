@@ -36,7 +36,7 @@ public class MarcxmlDataField extends MarcxmlField {
 
         NodeList subfieldNodes = 
                 element.getElementsByTagName("subfield");
-        subfields = new ArrayList<MarcxmlSubfield>();
+        subfields = new ArrayList<>();
         for (int i = 0; i < subfieldNodes.getLength(); i++) {
             subfields.add(new MarcxmlSubfield(
                     (Element) subfieldNodes.item(i)));

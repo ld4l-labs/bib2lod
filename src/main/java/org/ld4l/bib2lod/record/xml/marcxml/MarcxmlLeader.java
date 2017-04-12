@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;

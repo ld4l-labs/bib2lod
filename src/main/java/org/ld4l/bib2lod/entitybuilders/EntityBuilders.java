@@ -3,7 +3,7 @@ package org.ld4l.bib2lod.entitybuilders;
 import java.util.HashMap;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configurable;
+
 import org.ld4l.bib2lod.ontology.Type;
 
 /**
