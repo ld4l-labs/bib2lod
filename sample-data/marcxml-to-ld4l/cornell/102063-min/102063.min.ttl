@@ -26,7 +26,7 @@ cornell:work1 a bf:Work , bf:Text ;
         ] ;
     ] ;
     
-    dcterms:language lexvo:eng 
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> 
 . 
 
 cornell:inst1 a bf:Instance ; 

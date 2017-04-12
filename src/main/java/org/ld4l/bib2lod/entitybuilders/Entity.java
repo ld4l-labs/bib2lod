@@ -29,6 +29,7 @@ public final class Entity {
     private HashMap<Ld4lObjectProp, List<Entity>> children;
     
     // Attributes of this entity
+    // TODO ** Attribute class has toLiteral() method
     private Map<Ld4lDatatypeProp, List<Literal>> attributes;
     
     // Relationships of this entity to external resources. Map values are

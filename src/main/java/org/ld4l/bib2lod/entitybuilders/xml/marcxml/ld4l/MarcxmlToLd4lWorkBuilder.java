@@ -77,14 +77,14 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private void addLanguages() {
         
+        /* TODO Codes not the same between lexvo and lc. Just use lc URIs for now. */
         // Language from 008
         MarcxmlControlField field008 = record.getControlField("008");
         String code = field008.getTextValue().substring(35,38);
         if (code != null && code.length() > 0) {
-            // Assumes LC codes are the same as Lexvo, which seems to be true.
-            // TODO Read lexvo dataset into a model and get language from it.
+            // Lexvo iso639-3 codes are not completely identical with LC 
             work.addExternal(Ld4lObjectProp.HAS_LANGUAGE, 
-                    Ld4lNamespace.LEXVO.uri() + code);
+                    Ld4lNamespace.LC_LANGUAGES.uri() + code);
         }
     }
 
