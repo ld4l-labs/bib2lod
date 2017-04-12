@@ -150,8 +150,7 @@ public final class Entity {
         }
         return null;
     }
-    
-    
+     
     public void addType(Type type) {
         types.add(type);
     }
@@ -161,6 +160,7 @@ public final class Entity {
     }
     
     public void addAttribute(Ld4lDatatypeProp prop, String string) {
+        // Doesn't add xsd:string explicitly.
         addAttribute(prop, ResourceFactory.createStringLiteral(string));
     }
     
@@ -210,11 +210,7 @@ public final class Entity {
     }
 
     public void buildResource() {
-        
-        if (this.resource != null) {
-            return;
-        }
-        
+
         // Build children of this Entity before building the Entity, so that
         // when building the assertion linking this Entity to the child, we
         // have the URI of the child's Resource.

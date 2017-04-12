@@ -9,15 +9,19 @@ import org.ld4l.bib2lod.ontology.OntologyProp;
  * application profile.
  */
 public enum Ld4lDatatypeProp implements OntologyProp {
-
-    // rdfs:label is an AnnotationProperty, but it doesn't matter here.
+    
+    DATE(Ld4lNamespace.DCTERMS, "date"),
+    /*
+     * rdfs:label is an rdf:Property with range rdfs:Literal, so acts like a
+     * datatype property for  our purposes.
+     */
     LABEL(Ld4lNamespace.RDFS, "label"),
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
     /*
-     * rdf:value is an RDF property, not an owl:DatatypeProperty. However, we 
-     * are using it with Literal objects. If it needs to be used with non-
-     * literal objects, it can also be defined in ObjectProp.
+     * rdf:value is an RDF property with range rdfs:Resource. However, we 
+     * are only using it with literal objects. If it needs to be used with non-
+     * literal objects, it can also be defined in Ld4lObjectProp.
      */
     VALUE(Ld4lNamespace.RDF, "value");
     

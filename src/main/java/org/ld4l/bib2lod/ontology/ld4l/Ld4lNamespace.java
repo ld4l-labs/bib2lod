@@ -10,13 +10,15 @@ import org.ld4l.bib2lod.ontology.Namespace;
  * Enumerates the ontology namespaces used in the LD4L BIBFRAME 2 extension and
  * application profile.
  */
+// TODO Any gain in using different enums for ontology namespaces and dataset
+// namespaces?
 public enum Ld4lNamespace implements Namespace {
 
+    // Ontologies
     BIBFRAME("http://id.loc.gov/ontologies/bibframe/", "bf"),
     DCTERMS("http://purl.org/dc/terms/", "dcterms"),    
     FOAF("http://xmlns.com/foaf/0.1/", "foaf"),
     LD4L("http://bib.ld4l.org/ontology/", "ld4l"),
-    LEXVO("http://lexvo.org/id/iso639-3/", "lexvo"),
     LINGVO("http://www.lingvoj.org/ontology#", "lingvo"),
     OA("http://www.w3.org/ns/oa#", "oa"),
     OWL("http://www.w3.org/2002/07/owl#", "owl"),
@@ -25,7 +27,11 @@ public enum Ld4lNamespace implements Namespace {
     RDFS("http://www.w3.org/2000/01/rdf-schema#", "rdfs"),
     SCHEMA("http://schema.org/", "schema"),
     SKOS("http://www.w3.org/2004/02/skos/core#", "skos"),
-    VIVO("http://vivoweb.org/ontology/core#", "vivo");
+    VIVO("http://vivoweb.org/ontology/core#", "vivo"),
+    
+    // Datasets/controlled vocabularies
+    COUNTRIES("http://id.loc.gov/vocabulary/countries/"),
+    LEXVO("http://lexvo.org/id/iso639-3/", "lexvo");
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
@@ -35,6 +41,10 @@ public enum Ld4lNamespace implements Namespace {
     Ld4lNamespace(String uri, String prefix) {
         this.uri = uri;
         this.prefix = prefix;
+    }
+    
+    Ld4lNamespace(String uri) {
+        this(uri, null);
     }
     
     @Override

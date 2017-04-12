@@ -9,12 +9,12 @@ import org.ld4l.bib2lod.ontology.Type;
  * An abstract implementation.
  */
 public abstract class BaseEntityBuilder implements EntityBuilder { 
-
-    
+ 
     @Override
     public EntityBuilder getBuilder(Class<? extends Type> type) {
         EntityBuilders builders = Bib2LodObjectFactory.getFactory()
                 .instanceForInterface(EntityBuilders.class);
         return builders.getBuilder(type);
     }
+    
 }
