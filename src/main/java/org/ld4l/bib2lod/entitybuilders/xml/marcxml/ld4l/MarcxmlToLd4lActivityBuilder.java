@@ -54,7 +54,7 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
                 String location = field.getTextValue().substring(15,18);
                 if (!location.isEmpty()) {
                     activity.addExternal(Ld4lObjectProp.IS_AT_LOCATION, 
-                            Ld4lNamespace.COUNTRIES.uri() + location);
+                            Ld4lNamespace.LC_COUNTRIES.uri() + location);
                 }
             }
         }       
