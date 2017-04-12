@@ -43,6 +43,12 @@ cornell:inst1 a bf:Instance ;
         ] ;        
     ] ; 
     
+    ld4l:hasActivity [
+        a ld4l:PublicationActivity ;
+        dcterms:date "1957" ;
+        ld4l:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
+    ] ; 
+    
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
 . 
 
