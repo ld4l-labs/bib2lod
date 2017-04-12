@@ -10,11 +10,13 @@ import org.ld4l.bib2lod.ontology.OntologyProp;
  */
 public enum Ld4lObjectProp implements OntologyProp {
 
+    HAS_ACTIVITY(Ld4lNamespace.LD4L, "hasActivity"),
     HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
     HAS_ITEM(Ld4lNamespace.BIBFRAME, "hasItem"),
     HAS_PART(Ld4lNamespace.DCTERMS, "hasPart"),
     HAS_PREFERRED_TITLE(Ld4lNamespace.LD4L, "hasPreferredTitle"),
     HAS_TITLE(Ld4lNamespace.BIBFRAME, "title"),
+    IS_AT_LOCATION(Ld4lNamespace.LD4L, "atLocation"),
     IS_IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf");
 
