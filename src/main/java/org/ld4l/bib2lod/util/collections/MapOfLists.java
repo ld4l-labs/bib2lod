@@ -25,11 +25,24 @@ public class MapOfLists<K, V> {
         return new HashSet<>(map.keySet());
     }
 
+// Doesn't work. Why not?
+//    public Set<Map.Entry<K, V>> entries() {
+//        return new HashSet<>(map.entrySet());
+//    }
+    
+
     /**
      * Add a value to a list. If the list does not exist, it will be created.
      */
     public void addValue(K key, V value) {
         getValues(key).add(value);
+    }
+    
+    /**
+     * Add values to a list. If the list does not exist, it will be created.
+     */
+    public void addValues(K key, List<V> values) {
+        getValues(key).addAll(values);
     }
 
     /**
