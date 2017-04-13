@@ -4,8 +4,9 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.ld4l.bib2lod.record.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -36,11 +37,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
             "<datafield tag='1234' ind1='0' ind2='0'>" +
                 "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
             "</datafield>";
-
-    private static final String INVALID_INDICATOR_FORMAT = 
-            "<datafield tag='245' ind1='10' ind2='0'>" +
-                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
-            "</datafield>";   
 
     private static final String INVALID_SUBFIELD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
@@ -89,13 +85,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
                 buildDataFieldFromString(INVALID_TAG_FORMAT);
         Assert.assertFalse(dataField.isValid());
     }
-    
-    @Test
-    public void invalidIndicatorFormat_Invalid() throws Exception {
-        MarcxmlDataField dataField = 
-                buildDataFieldFromString(INVALID_INDICATOR_FORMAT);
-        Assert.assertFalse(dataField.isValid());
-    }            
     
     @Test
     public void invalidSubfield_Invalid() throws Exception {

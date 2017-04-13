@@ -1,0 +1,45 @@
+package org.ld4l.bib2lod.ontology.ld4l;
+
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.ld4l.bib2lod.ontology.Namespace;
+import org.ld4l.bib2lod.ontology.Type;
+
+/**
+ * Enumerates the Title Element types used in the LD4L BIBFRAME 2 extension and
+ * application profile.
+ */
+public enum Ld4lTitleElementType implements Type {
+
+    NON_SORT_ELEMENT(Ld4lNamespace.LD4L, "NonSortTitleElement"),
+    MAIN_TITLE_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
+    PART_NAME_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
+    PART_NUMBER_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
+    SUBTITLE_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
+    TITLE_ELEMENT(Ld4lNamespace.LD4L, "TitleElement");
+ 
+    private final String uri;
+    private final Resource ontClass;
+    
+    /**
+     * Constructor
+     */
+    Ld4lTitleElementType(Namespace namespace, String localName) {
+        this.uri = namespace.uri() + localName;
+        this.ontClass = ResourceFactory.createResource(uri);
+    }
+    
+    @Override
+    public String uri() {
+        return uri;
+    }
+
+    @Override
+    public Resource ontClass() {
+        return ontClass;
+    } 
+
+    public static Type superClass() {
+        return TITLE_ELEMENT;
+    }
+}

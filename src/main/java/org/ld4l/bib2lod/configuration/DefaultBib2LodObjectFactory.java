@@ -8,15 +8,12 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.entities.SimpleEntity;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
  * Create instances of various classes, as directed by the configuration.
  * 
- * Pass configuration objects to these instance if appropriate.
+ * Pass configuration objects to these instances if appropriate.
  * 
  * Serve these instances on request.
  */
@@ -129,17 +126,4 @@ public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
         }
     }
 
-    // ----------------------------------------------------------------------
-    // Vestigial methods
-    // ----------------------------------------------------------------------
-
-    @Override
-    public Entity createEntity(Type type) {
-        return new SimpleEntity(type);
-    }
-
-    @Override
-    public Entity createEntity(Entity entity) {
-      return new SimpleEntity(entity);
-    }
 }

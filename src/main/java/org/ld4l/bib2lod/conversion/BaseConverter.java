@@ -9,15 +9,19 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilders;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.Parser.ParserException;
-import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.records.Record;
 
 /**
  * An abstract implementation.
@@ -26,12 +30,7 @@ public abstract class BaseConverter implements Converter {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
-    protected Configuration configuration;
-    
-    @Override
-    public void configure(Configuration c) {
-        this.configuration = c;
-    }
+    private EntityBuilders entityBuilders;
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
@@ -52,19 +51,22 @@ public abstract class BaseConverter implements Converter {
         }
         
         Model model = ModelFactory.createDefaultModel();
+        entityBuilders = EntityBuilders.instance();
         
         for (Record record : records) {
-            // TODO convertRecord() might return an empty model. Make sure this
-            // doesn't throw an error, else test for model not empty.
-            model.add(convertRecord(record));
+            try {
+                model.add(convertRecord(record));
+            } catch (EntityBuilderException e) {
+                // Continue to next record
+                continue;
+            }
         }
 
         try {
             output.writeModel(model);
             LOGGER.debug(model.toString());
         } catch (IOException | OutputServiceException e) {
-            // Caller (e.g., SimpleManager) should skip this input and go to 
-            // next input.
+            // Caller should catch the exception and continue to next input.
             throw new ConverterException(e);
         }
     }
@@ -88,9 +90,10 @@ public abstract class BaseConverter implements Converter {
      * Converts a Record to an RDF Model. Starting with the primary 
      * bibliographic resource (commonly an Instance)
      * @throws RecordConversionException 
+     * @throws EntityBuilderException 
      */
     protected Model convertRecord(Record record) 
-            throws RecordConversionException  {
+            throws RecordConversionException, EntityBuilderException  {
 
         // Build the primary Entity (e.g., an Instance) from the Record, 
         // its dependent Entities, and links to the dependents.
@@ -105,7 +108,10 @@ public abstract class BaseConverter implements Converter {
         Model model = entity.buildModel();
         
         return model;
-
+    }
+    
+    protected EntityBuilder getBuilder(Class<? extends Type> type) {
+        return entityBuilders.getBuilder(type);
     }
     
     /**

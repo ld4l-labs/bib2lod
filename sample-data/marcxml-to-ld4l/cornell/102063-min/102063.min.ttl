@@ -1,0 +1,57 @@
+###########################################################
+#####
+##### CURRENT VERSION 
+#####
+###########################################################
+
+
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix cornell: <http://data.ld4l.org/cornell/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ld4l: <http://bib.ld4l.org/ontology/> .
+@prefix lexvo: <http://purl.org/dc/terms/language> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vivo: <http://vivoweb.org/ontology/core#> .
+    
+cornell:work1 a bf:Work , bf:Text ;    
+
+    ld4l:hasPreferredTitle [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology." ;
+	        vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
+        ] ;
+    ] ;
+    
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> 
+. 
+
+cornell:inst1 a bf:Instance ; 
+
+    bf:hasItem cornell:item1 ; 
+
+    bf:title [
+        a bf:Title ;
+        rdfs:label "Clinical cardiopulmonary physiology." ;
+        dcterms:hasPart [
+            a ld4l:MainTitleElement ;
+            rdfs:label "Clinical cardiopulmonary physiology." ;
+            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
+        ] ;        
+    ] ; 
+    
+    ld4l:hasActivity [
+        rdfs:label "Publisher" ;
+        a ld4l:PublicationActivity ;
+        dcterms:date "1957" ;
+        ld4l:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
+    ] ; 
+    
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+. 
+
+cornell:item1 a bf:Item .
+

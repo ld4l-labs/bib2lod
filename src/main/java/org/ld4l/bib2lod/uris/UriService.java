@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configurable;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entity.Entity;
 
 /**
  * Provides URIs for org.ld4l.bib2lod.entities built by the converter.

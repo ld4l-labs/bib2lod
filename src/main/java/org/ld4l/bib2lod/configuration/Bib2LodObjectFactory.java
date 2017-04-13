@@ -6,11 +6,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.RecordField;
+import org.ld4l.bib2lod.records.Record;
+import org.ld4l.bib2lod.records.RecordField;
 
 /**
  * This base class holds the factory instance which others will use.
@@ -65,24 +64,24 @@ public abstract class Bib2LodObjectFactory {
     // Vestigial methods
     // ----------------------------------------------------------------------
 
-  /**
-  * A problem occurred when trying to create an Object in the Factory.
-  */
- public static class Bib2LodObjectFactoryException extends RuntimeException {
-     private static final long serialVersionUID = 1L;
-
-     public Bib2LodObjectFactoryException(String message, Throwable cause) {
-         super(message, cause);
-     }
-
-     public Bib2LodObjectFactoryException(String message) {
-         super(message);
-     }
-
-     public Bib2LodObjectFactoryException(Exception cause) {
-         super(cause);
-     }
- }
+    /**
+     * A problem occurred when trying to create an Object in the Factory.
+     */
+    public static class Bib2LodObjectFactoryException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+    
+        public Bib2LodObjectFactoryException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    
+        public Bib2LodObjectFactoryException(String message) {
+            super(message);
+        }
+    
+        public Bib2LodObjectFactoryException(Exception cause) {
+            super(cause);
+        }
+    }
  
 
     public EntityBuilder createEntityBuilder(
@@ -127,18 +126,5 @@ public abstract class Bib2LodObjectFactory {
         }         
     }
 
-    public abstract Entity createEntity(Type type);
-    
-//    public abstract Entity createEntity(Resource ontClass);
-
-    public abstract Entity createEntity(Entity entity);
-    
-//    public abstract Type createType(OntologyClass ontClass);
-//    
-//    public abstract Type createType(Resource ontClass);
-//    
-//    public abstract Link createLink(Property property);
-//
-//    public abstract Link createLink(OntologyProperty ontProperty);
 
 }

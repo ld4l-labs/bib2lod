@@ -14,9 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.parsing.BaseParser;
-import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.Record.RecordException;
-import org.ld4l.bib2lod.record.xml.XmlRecord;
+import org.ld4l.bib2lod.records.Record;
+import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,10 +25,6 @@ import org.xml.sax.SAXException;
 /**
  * Parses XML input records.
  */
-// TODO Maybe make this an interface, so that we can provide a 
-// parseRecord(Element record) method. Then need a BaseXmlParser implementation
-// to provide the common XML parseRecord() method. Doing with generic methods
-// in Parser now
 public abstract class XmlParser extends BaseParser {
     
     private static final Logger LOGGER = LogManager.getLogger(); 

@@ -9,7 +9,7 @@
 * **2017-03-31** Release 0.1 pushed to `master`.
   * Converts a minimal MARCXML record to N-TRIPLES.
   * Most of the architecture is in place.
-
+  
 ## Build
 * Clone the repository from [https://github.com/ld4l-labs/bib2lod]()
 * run `mvn install`
@@ -20,7 +20,7 @@
 * Edit the configuration file to set appropriate input source and output destination.
 * Within `InputService`, change the `source` attribute to point either to a single file of MARCXML, or to a directory containing MARCXML files.
   * Each input file must have a filename extension of `.xml`
-  * Sample minimal record is in sample-data/sample-conversions/marcxml-to-ld4l/cornell/102063-min/102063.min.xml.
+  * Sample minimal record is in `sample-data/marcxml-to-ld4l/cornell/102063-min/102063.min.xml`.
 * Within `OutputService`, change the `destination` attribute to point to your desired output directory. 
   * _You **must** create this directory before running the program._
 
@@ -33,3 +33,11 @@
 * A log directory will be created as `target/logs` in your work location directory. 
   * A log file of the run will be created as `target/logs/bib2lod.log`
   * An existing log file will not be overwritten, but will be renamed with a timestamp, such as `bib2lod-2017-03-31-14-38-47-1.log`
+  
+## Quick Start
+* git clone git@github.com:ld4l-labs/bib2lod.git
+* cd bib2lod
+* mvn install
+* mkdir output
+* java -jar target/bib2lod.jar -c src/main/resources/example.config.json
+* more output/102063.min.nt

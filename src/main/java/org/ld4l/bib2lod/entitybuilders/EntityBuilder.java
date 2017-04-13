@@ -2,18 +2,19 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
-import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.conversion.Converter.RecordConversionException;
-import org.ld4l.bib2lod.entities.Entity;
-import org.ld4l.bib2lod.record.Record;
-import org.ld4l.bib2lod.record.RecordField;
+import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.ontology.Type;
+
 
 /**
  * Builds an Entity from a Record
  */
 public interface EntityBuilder {
     
-    public static class EntityBuilderException extends RecordConversionException {
+    /**
+     * Signals a problem when building an Entity
+     */
+    public static class EntityBuilderException extends Exception {
         private static final long serialVersionUID = 1L;
 
         public EntityBuilderException(String message, Throwable cause) {
@@ -27,26 +28,19 @@ public interface EntityBuilder {
         public EntityBuilderException(Throwable cause) {
             super(cause);
         }
-    }  
+    } 
     
     /**
-     * Factory methods
-     */
-    public static EntityBuilder instance(Class<?> builderClass, Record record) {
-        return Bib2LodObjectFactory.getFactory().createEntityBuilder(
-                builderClass, record);
-    }
-        
-    public static EntityBuilder instance(Class<?> builderClass, 
-            RecordField field, Entity relatedEntity) {
-        return Bib2LodObjectFactory.getFactory().createEntityBuilder(
-                builderClass, field, relatedEntity);
-    }
-    
-    public static EntityBuilder instance(Class<?> builderClass, Record record, 
-            Entity relatedEntity) {
-        return Bib2LodObjectFactory.getFactory().createEntityBuilder(
-                builderClass, record, relatedEntity);
+     * Factory method
+     * @throws EntityBuilderException 
+     */ 
+    public static EntityBuilder instance(Class<? extends EntityBuilder> builderClass) 
+            throws EntityBuilderException {
+        try {
+            return builderClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new EntityBuilderException(e);
+        }
     }
 
     
@@ -55,6 +49,15 @@ public interface EntityBuilder {
      * and Titles of Works and Instances).
      * @throws EntityBuilderException 
      */
-    public Entity build() throws EntityBuilderException;
+    //public Entity build(Map<String, Object> params) throws EntityBuilderException;
+    public Entity build(BuildParams params) throws EntityBuilderException;
+
+    /**
+     * Retrieves the EntityBuilder for the specified type from the EntityBuilders
+     * instance.
+     * @param type
+     * @return
+     */
+    public EntityBuilder getBuilder(Class<? extends Type> type);
 
 }

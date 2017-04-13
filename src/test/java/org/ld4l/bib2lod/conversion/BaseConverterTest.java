@@ -10,15 +10,16 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.entities.Entity;
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.xml.XmlParser;
-import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.w3c.dom.Element;
 
@@ -93,8 +94,9 @@ public class BaseConverterTest extends AbstractTestClass {
         }
 
         @Override
-        public Entity build() throws EntityBuilderException {
-            return null;            
+        public Entity build(BuildParams params) throws EntityBuilderException {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 
