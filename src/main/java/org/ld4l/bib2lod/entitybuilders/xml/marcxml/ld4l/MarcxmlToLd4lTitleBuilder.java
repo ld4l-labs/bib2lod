@@ -67,7 +67,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         
         // TODO convert other subfields from 130/240
         
-        List<Entity> titleElements = buildTitleElements(field245, titleLabel);
+        List<Entity> titleElements = buildTitleElements(titleLabel);
         title.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
@@ -76,8 +76,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         return title;
     }
     
-    private List<Entity> buildTitleElements(
-            MarcxmlField field, String titleLabel) {
+    private List<Entity> buildTitleElements(String titleLabel) {
                  
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.
