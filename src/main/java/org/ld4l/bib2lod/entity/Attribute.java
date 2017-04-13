@@ -11,12 +11,12 @@ public class Attribute {
     
     private final String value;
     private final String lang;
-    private final XSDDatatype datatype;
+    private final Datatype datatype;
     
     /**
      * Constructors
      */
-    public Attribute(String value, String lang, XSDDatatype datatype) {
+    public Attribute(String value, String lang, Datatype datatype) {
         this.value = value;
         this.lang = lang;
         this.datatype = datatype;
@@ -30,15 +30,14 @@ public class Attribute {
         this(value, null, null);
     }
     
-    public Attribute(String value, XSDDatatype type) {
+    public Attribute(String value, Datatype type) {
         this(value, null, type);
     }
     
     public Attribute(int i) {
-        this(Integer.toString(i), null, XSDDatatype.XSDinteger);
+        this(Integer.toString(i), null, Datatype.INT);
     }
-    
-            
+               
     public String getValue() {
         return value;
     }
@@ -47,13 +46,14 @@ public class Attribute {
         return lang;
     }
     
-    public XSDDatatype getDatatype() {
+    public Datatype getDatatype() {
         return datatype;
     }
     
     public Literal toLiteral() {
         if (datatype != null) {
-            return ResourceFactory.createTypedLiteral(value, datatype);
+            return ResourceFactory.createTypedLiteral(
+                    value, datatype.xsdDatatype());
         }
         if (lang != null) {
             return ResourceFactory.createLangLiteral(value, lang);
