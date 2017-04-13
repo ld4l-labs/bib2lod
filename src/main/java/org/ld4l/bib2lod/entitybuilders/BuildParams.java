@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders;
 
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.record.Record;
 import org.ld4l.bib2lod.record.RecordField;

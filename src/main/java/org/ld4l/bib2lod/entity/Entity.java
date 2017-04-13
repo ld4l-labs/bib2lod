@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entitybuilders;
+package org.ld4l.bib2lod.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,17 +25,17 @@ import org.ld4l.bib2lod.uris.UriService;
  */
 public final class Entity {
     
-    // Relationships of this entity to other local entities
+    // Relationships of this entity to other local entities (objects of object
+    // properties)
     private HashMap<Ld4lObjectProp, List<Entity>> children;
     
-    // Attributes of this entity
-    // TODO ** Attribute class has toLiteral() method
-    private Map<Ld4lDatatypeProp, List<Literal>> attributes;
+    // Attributes of this entity (objects of datatype properties)
+    private Map<Ld4lDatatypeProp, List<Attribute>> attributes;
     
     // Relationships of this entity to external resources. Map values are
-    // URIs of these resources. Since we already know the URIs of the external
-    // resources, and we will not make local assertions about them, there is no
-    // need to create an Entity.
+    // lists of URIs of these resources. Since we already know the URIs of the 
+    // external resources, and we will not make local assertions about them, 
+    // there is no need to create an Entity.
     private HashMap<Ld4lObjectProp, List<String>> externals;
     
     // The types the entity belongs to
@@ -161,44 +161,41 @@ public final class Entity {
     }
     
     public void addAttribute(Ld4lDatatypeProp prop, String string) {
-        // Doesn't add xsd:string explicitly.
-        addAttribute(prop, ResourceFactory.createStringLiteral(string));
+        addAttribute(prop, new Attribute(string));
     }
     
     public void addAttribute(Ld4lDatatypeProp prop, int i) {
-        Literal literal = ResourceFactory.createTypedLiteral(
-                Integer.toString(i), XSDDatatype.XSDinteger);
-        addAttribute(prop, literal);
+        addAttribute(prop, new Attribute(i));                
     }
     
-    public void addAttribute(Ld4lDatatypeProp prop, Literal value) {
+    public void addAttribute(Ld4lDatatypeProp prop, Attribute value) {
         
         if (attributes.containsKey(prop)) {
-            List<Literal> list = attributes.get(prop);
+            List<Attribute> list = attributes.get(prop);
             list.add(value);
         } else {
             attributes.put(prop, Arrays.asList(value));
         }
     }
     
-    public void addAttributes(Ld4lDatatypeProp prop, List<Literal> values) {
+    public void addAttributes(Ld4lDatatypeProp prop, List<Attribute> values) {
         
         if (values.isEmpty()) {
             return;
         }
         if (attributes.containsKey(prop)) {
-            List<Literal> list = attributes.get(prop);
+            List<Attribute> list = attributes.get(prop);
             list.addAll(values);  
         } else {
             attributes.put(prop, values);
         }            
     }
     
-    public Map<Ld4lDatatypeProp, List<Literal>> getAttributes() {
+    public Map<Ld4lDatatypeProp, List<Attribute>> getAttributes() {
         return attributes;
     }
     
-    public List<Literal> getAttributes(Ld4lDatatypeProp prop) {
+    public List<Attribute> getAttributes(Ld4lDatatypeProp prop) {
         return attributes.get(prop);
     }
 
@@ -251,12 +248,11 @@ public final class Entity {
         }
         
         // Add attributes       
-        for (Entry<Ld4lDatatypeProp, List<Literal>> attribute : 
+        for (Entry<Ld4lDatatypeProp, List<Attribute>> entry : 
                     attributes.entrySet()) {
-            Ld4lDatatypeProp prop = attribute.getKey();
-            List<Literal> literals = attribute.getValue();
-            for (Literal literal : literals) {
-                resource.addLiteral(prop.property(), literal);
+            Ld4lDatatypeProp prop = entry.getKey();
+            for (Attribute attr : entry.getValue()) {
+                resource.addLiteral(prop.property(), attr.toLiteral());
             }
         }
         
@@ -268,7 +264,7 @@ public final class Entity {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));       
             }          
-        }        
+        }
         
         setResource(resource);        
     }
@@ -292,8 +288,7 @@ public final class Entity {
                 Model childModel = childEntity.buildModel();
                 model.add(childModel);
             }          
-        }
-        
+        }        
         return model;
     }
 
