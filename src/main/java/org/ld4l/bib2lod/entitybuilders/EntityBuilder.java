@@ -37,7 +37,7 @@ public interface EntityBuilder {
     public static EntityBuilder instance(Class<? extends EntityBuilder> builderClass) 
             throws EntityBuilderException {
         try {
-            return (EntityBuilder) builderClass.newInstance();
+            return builderClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new EntityBuilderException(e);
         }
