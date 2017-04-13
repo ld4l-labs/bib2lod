@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.Type;
@@ -17,7 +18,7 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
     private MarcxmlRecord record;
     private MarcxmlField field;
     private Entity activity;
-    private Type type;
+    private Ld4lActivityType type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -26,8 +27,11 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
         this.field = (MarcxmlField) params.getField();
         
         Type typeParam = params.getType();
-        this.type = typeParam != null ? typeParam : Ld4lActivityType.superClass();
+        this.type = (Ld4lActivityType) (typeParam != null ? 
+                typeParam : Ld4lActivityType.superClass());
         this.activity = new Entity(type);
+        
+        addLabel();
     
         // Add publication year and place from 008
         // TODO Move to a method once we see what other attributes we need to
@@ -38,6 +42,10 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
 
         bibEntity.addChild(Ld4lObjectProp.HAS_ACTIVITY, activity);
         return activity;
+    }
+    
+    private void addLabel() {
+        activity.addAttribute(Ld4lDatatypeProp.LABEL, new Attribute(type.label()));
     }
     
     private void addAgent() {
