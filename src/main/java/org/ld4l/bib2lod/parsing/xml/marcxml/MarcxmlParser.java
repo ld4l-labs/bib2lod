@@ -5,7 +5,7 @@ package org.ld4l.bib2lod.parsing.xml.marcxml;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.parsing.xml.XmlParser;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
 /**
  *

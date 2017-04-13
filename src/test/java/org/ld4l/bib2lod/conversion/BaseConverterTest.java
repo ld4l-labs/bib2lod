@@ -19,7 +19,7 @@ import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.parsing.xml.XmlParser;
-import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.w3c.dom.Element;
 

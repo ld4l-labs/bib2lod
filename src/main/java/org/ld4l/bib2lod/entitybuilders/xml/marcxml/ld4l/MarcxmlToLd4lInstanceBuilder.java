@@ -11,8 +11,8 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
 /**
  * Builds an Instance from a Record.

@@ -8,8 +8,10 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.ld4l.bib2lod.record.Record.RecordException;
-import org.ld4l.bib2lod.record.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.XmlElement;
+import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 

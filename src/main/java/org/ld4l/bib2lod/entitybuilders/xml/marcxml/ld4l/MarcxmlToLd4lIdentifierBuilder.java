@@ -7,8 +7,8 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 
 /**
  * Builds an Identifier for a bib resource from a field in the record.

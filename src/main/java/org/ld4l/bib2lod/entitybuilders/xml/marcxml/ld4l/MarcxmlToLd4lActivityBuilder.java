@@ -7,9 +7,9 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
 public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
     
