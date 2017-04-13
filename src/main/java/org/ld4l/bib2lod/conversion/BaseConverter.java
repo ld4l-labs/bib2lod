@@ -30,13 +30,7 @@ public abstract class BaseConverter implements Converter {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
-    protected Configuration configuration;
     private EntityBuilders entityBuilders;
-    
-    @Override
-    public void configure(Configuration c) {
-        this.configuration = c;
-    }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
