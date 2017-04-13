@@ -25,10 +25,13 @@ public class MapOfLists<K, V> {
         return new HashSet<>(map.keySet());
     }
 
-// Doesn't work. Why not?
-//    public Set<Map.Entry<K, V>> entries() {
-//        return new HashSet<>(map.entrySet());
-//    }
+    public Set<List<V>> values() {
+        return new HashSet<List<V>>(map.values());
+    }
+    
+    public Set<Map.Entry<K, List<V>>> entries() {
+        return new HashSet<Map.Entry<K, List<V>>>(map.entrySet());
+    }
     
 
     /**
