@@ -1,10 +1,10 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.record.xml;
+package org.ld4l.bib2lod.records.xml;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.records.Record;
 import org.w3c.dom.Element;
 
 /**

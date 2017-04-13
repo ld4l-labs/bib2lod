@@ -5,7 +5,7 @@ package org.ld4l.bib2lod.parsing;
 import java.util.List;
 
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
-import org.ld4l.bib2lod.record.Record;
+import org.ld4l.bib2lod.records.Record;
 
 /**
  * Parses input into Record and RecordElement objects.

@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.record;
+package org.ld4l.bib2lod.records;
 
 /**
  * Represents an element in a record. RecordElement objects should be immutable,  

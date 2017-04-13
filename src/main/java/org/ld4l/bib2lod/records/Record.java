@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.record;
+package org.ld4l.bib2lod.records;
 
 /**
  * Represents an input record. Record objects should be immutable, providing no 

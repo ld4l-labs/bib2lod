@@ -45,11 +45,7 @@ public class SimpleManagerTest extends AbstractTestClass {
             outputCount = 0;
             // outputs = new ArrayList<InputDescriptor>();
         }
-        
-        @Override
-        public void configure(Configuration config) {
-            // Nothing to do.
-        }
+       
         
        @Override
         public void convert(InputDescriptor input, OutputDescriptor output) 
