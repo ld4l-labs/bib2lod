@@ -8,3 +8,6 @@
 # Python tests
 /.cache/
 *.pyc
+
+**/.DS_Store
+
