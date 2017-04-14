@@ -2,13 +2,13 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.ld4l.bib2lod.ontology.OntologyProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 
 /**
  * Enumerates the object properties used in the LD4L BIBFRAME 2 extension and
  * application profile.
  */
-public enum Ld4lObjectProp implements OntologyProp {
+public enum Ld4lObjectProp implements ObjectProp {
 
     HAS_ACTIVITY(Ld4lNamespace.LD4L, "hasActivity"),
     HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),

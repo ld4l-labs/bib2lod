@@ -60,8 +60,7 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         Entity instanceTitle = 
                 instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE);        
         Entity workTitle = new Entity(instanceTitle);
-        work.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);    
-        
+        work.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);            
     }
     
     private void addWorkTypes() {
