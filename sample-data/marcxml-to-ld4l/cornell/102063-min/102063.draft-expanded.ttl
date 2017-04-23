@@ -13,9 +13,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
     
-cornell:work1 a bf:Work, bf:Text ;    
-
-    bf:hasInstance cornell:inst1 ;
+cornell:work1 a bf:Work, bf:Text ;   
     
     bf:title [
         a bf:Title ;
@@ -50,6 +48,8 @@ cornell:work1 a bf:Work, bf:Text ;
 
 
 cornell:inst1 a bf:Instance ; 
+
+    bf:instanceOf cornell:work1 ; 
 
     bf:hasItem cornell:item1 ; 
 
