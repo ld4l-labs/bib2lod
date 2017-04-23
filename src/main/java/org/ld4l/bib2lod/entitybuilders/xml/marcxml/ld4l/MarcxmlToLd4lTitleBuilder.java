@@ -67,10 +67,10 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         // TODO convert other subfields from 130/240
         
         List<Entity> titleElements = buildTitleElements(titleLabel);
-        title.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
+        title.addRelationships(Ld4lObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
-        bibEntity.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, title);
+        bibEntity.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, title);
         
         return title;
     }

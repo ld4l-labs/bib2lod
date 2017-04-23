@@ -22,7 +22,7 @@ public final class Entity {
     
     // Relationships of this entity to other local entities (objects of object
     // properties)
-    private MapOfLists<ObjectProp, Entity> children;
+    private MapOfLists<ObjectProp, Entity> relationships;
     
     // Attributes of this entity (objects of datatype properties)
     private MapOfLists<DatatypeProp, Attribute> attributes;
@@ -31,7 +31,7 @@ public final class Entity {
     // lists of URIs of these resources. Since we already know the URIs of the 
     // external resources, and we will not make local assertions about them, 
     // there is no need to create an Entity.
-    private MapOfLists<ObjectProp, String> externals;
+    private MapOfLists<ObjectProp, String> externalRelationships;
     
     // The types the entity belongs to
     private List<Type> types;
@@ -44,9 +44,9 @@ public final class Entity {
      * Constructors
      */
     private Entity() {
-        this.children = new MapOfLists<>();
+        this.relationships = new MapOfLists<>();
         this.attributes = new MapOfLists<>();
-        this.externals = new MapOfLists<>();
+        this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
     }
 
@@ -71,55 +71,55 @@ public final class Entity {
         // Attributes, types, and externals are simply copied
         this.attributes = original.attributes.duplicate();
         this.types = original.getTypes();
-        this.externals = original.externals.duplicate();
+        this.externalRelationships = original.externalRelationships.duplicate();
         
-        // Create new child entities
-        this.children = new MapOfLists<>();      
-        for (ObjectProp prop : original.children.keys()) {
-            List<Entity> originalChildren = original.children.getValues(prop);
+        // Create new relationships to "child" entities
+        this.relationships = new MapOfLists<>();      
+        for (ObjectProp prop : original.relationships.keys()) {
+            List<Entity> originalChildren = original.relationships.getValues(prop);
             List<Entity> newChildren = new ArrayList<Entity>();
             for (Entity originalChild : originalChildren) {
                 Entity copy = new Entity(originalChild);
                 newChildren.add(copy);
             }
-            children.addValues(prop, newChildren);
+            relationships.addValues(prop, newChildren);
         }  
     }
 
-    public void addChild(ObjectProp prop, Entity entity) {
-        children.addValue(prop, entity);
+    public void addRelationship(ObjectProp prop, Entity entity) {
+        relationships.addValue(prop, entity);
     }
     
-    public void addChildren(ObjectProp prop, List<Entity> entities) {
-        children.addValues(prop, entities);        
+    public void addRelationships(ObjectProp prop, List<Entity> entities) {
+        relationships.addValues(prop, entities);        
     }
     
-    public MapOfLists<ObjectProp, Entity> getChildren() {
-        return children;
+    public MapOfLists<ObjectProp, Entity> getRelationships() {
+        return relationships;
     }
     
     public List<Entity> getChildren(ObjectProp prop) {
-        return children.getValues(prop);
+        return relationships.getValues(prop);
     }
     
     public Entity getChild(ObjectProp prop) {
-        return children.getValue(prop);
+        return relationships.getValue(prop);
     }
     
-    public void addExternal(ObjectProp prop, String uri) {
-        externals.addValue(prop, uri);       
+    public void addExternalRelationship(ObjectProp prop, String uri) {
+        externalRelationships.addValue(prop, uri);       
     }
     
-    public MapOfLists<ObjectProp, String> getExternals() {
-        return externals;
+    public MapOfLists<ObjectProp, String> getExternalRelationships() {
+        return externalRelationships;
     }
     
     public List<String> getExternals(ObjectProp prop) {
-        return externals.getValues(prop);
+        return externalRelationships.getValues(prop);
     }
     
     public String getExternal(ObjectProp prop) {
-        return externals.getValue(prop);
+        return externalRelationships.getValue(prop);
     }
      
     public void addType(Type type) {
@@ -173,8 +173,8 @@ public final class Entity {
     
     private void buildChildResources() {
         
-        for (ObjectProp prop : children.keys()) {
-            for (Entity entity : children.getValues(prop)) {
+        for (ObjectProp prop : relationships.keys()) {
+            for (Entity entity : relationships.getValues(prop)) {
                 entity.buildResource();
             }
         }
@@ -192,8 +192,8 @@ public final class Entity {
         }
         
         // Add relationships to children
-        for (ObjectProp prop : children.keys()) {
-            List<Entity> childEntities = children.getValues(prop);
+        for (ObjectProp prop : relationships.keys()) {
+            List<Entity> childEntities = relationships.getValues(prop);
             for (Entity entity : childEntities) {
                 resource.addProperty(prop.property(), entity.getResource());
             }
@@ -206,8 +206,8 @@ public final class Entity {
             }
         }
         
-        for (ObjectProp prop : externals.keys()) {
-            for (String externalUri : externals.getValues(prop)) {
+        for (ObjectProp prop : externalRelationships.keys()) {
+            for (String externalUri : externalRelationships.getValues(prop)) {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
@@ -228,8 +228,8 @@ public final class Entity {
         
         Model model = ModelFactory.createDefaultModel(); 
 
-        for (ObjectProp prop : children.keys()) {
-            for (Entity entity : children.getValues(prop)) {
+        for (ObjectProp prop : relationships.keys()) {
+            for (Entity entity : relationships.getValues(prop)) {
                 Model childModel = entity.buildModel();
                 model.add(childModel);
             }
