@@ -8,7 +8,7 @@
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix ld4l: <http://bib.ld4l.org/ontology/> .
+@prefix bib: <http://bibliotek-o.org/ontology/> .
 @prefix lexvo: <http://purl.org/dc/terms/language> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -16,11 +16,11 @@
     
 cornell:work1 a bf:Work , bf:Text ;    
 
-    ld4l:hasPreferredTitle [
+    bib:hasPreferredTitle [
         a bf:Title ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
-            a ld4l:MainTitleElement ;
+            a bib:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology." ;
 	        vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;
@@ -31,26 +31,28 @@ cornell:work1 a bf:Work , bf:Text ;
 
 cornell:inst1 a bf:Instance ; 
 
+    bf:instanceOf cornell:work1 ;
+
     bf:hasItem cornell:item1 ; 
 
     bf:title [
         a bf:Title ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
-            a ld4l:MainTitleElement ;
+            a bib:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology." ;
             vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
         ] ;        
     ] ; 
     
-    ld4l:hasActivity [
+    bib:hasActivity [
         rdfs:label "Publisher" ;
-        a ld4l:PublicationActivity ;
+        a bib:PublicationActivity ;
         dcterms:date "1957" ;
-        ld4l:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
+        bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 
     
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
 . 
 
 cornell:item1 a bf:Item .

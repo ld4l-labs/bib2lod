@@ -11,7 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lTitleType implements Type {
 
-    ABBREVIATED_TITLE(Ld4lNamespace.LD4L, "AbbreviatedTitle"),
+    ABBREVIATED_TITLE(Ld4lNamespace.BIBLIOTEKO, "AbbreviatedTitle"),
     TITLE(Ld4lNamespace.BIBFRAME, "Title");
  
     private final String uri;

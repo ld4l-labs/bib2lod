@@ -21,7 +21,7 @@ public class MarcxmlToLd4lItemBuilder extends MarcxmlToLd4lEntityBuilder {
         
         // TODO Fill in other data about Item from other fields in the record
         
-        instance.addChild(Ld4lObjectProp.HAS_ITEM, item);
+        instance.addRelationship(Ld4lObjectProp.HAS_ITEM, item);
                 
         return item; 
     }

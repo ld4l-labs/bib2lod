@@ -1,23 +1,18 @@
 package org.ld4l.bib2lod.entity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.uris.UriService;
+import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -27,16 +22,16 @@ public final class Entity {
     
     // Relationships of this entity to other local entities (objects of object
     // properties)
-    private HashMap<Ld4lObjectProp, List<Entity>> children;
+    private MapOfLists<ObjectProp, Entity> relationships;
     
     // Attributes of this entity (objects of datatype properties)
-    private Map<Ld4lDatatypeProp, List<Attribute>> attributes;
+    private MapOfLists<DatatypeProp, Attribute> attributes;
     
     // Relationships of this entity to external resources. Map values are
     // lists of URIs of these resources. Since we already know the URIs of the 
     // external resources, and we will not make local assertions about them, 
     // there is no need to create an Entity.
-    private HashMap<Ld4lObjectProp, List<String>> externals;
+    private MapOfLists<ObjectProp, String> externalRelationships;
     
     // The types the entity belongs to
     private List<Type> types;
@@ -49,9 +44,9 @@ public final class Entity {
      * Constructors
      */
     private Entity() {
-        this.children = new HashMap<>();
-        this.attributes = new HashMap<>();
-        this.externals = new HashMap<>();
+        this.relationships = new MapOfLists<>();
+        this.attributes = new MapOfLists<>();
+        this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
     }
 
@@ -62,94 +57,69 @@ public final class Entity {
 
     /**
      * Copy constructor.
-     * Use to copy the contents of non-reusable resources. For example, create
-     * create a copy of an Instance Title to assign to a Work, where Title and
-     * TitleElements are non-reusable, and thus the Work cannot simply prop to
-     * the Instance Title.
+     * Use to copy the contents of an Entity with non-reusable child Entities. 
+     * For example, create a copy of an Instance Title to assign to a Work, 
+     * where Title and TitleElements are non-reusable. New Title and TitleElement
+     * Entities must be created with the same attributes and relationship
+     * structure as the original.
+     * 
+     * Note that this should NOT be used to make an identical copy of the 
+     * original Entity. Use MapOfLists.duplicate() for that purpose.
      */
     public Entity(Entity original) {
-        this();
         
-        // Attributes and types are simply copied
-        this.attributes.putAll(original.getAttributes());
-        this.types.addAll(original.getTypes());
+        // Attributes, types, and externals are simply copied
+        this.attributes = original.attributes.duplicate();
+        this.types = original.getTypes();
+        this.externalRelationships = original.externalRelationships.duplicate();
         
-        // Copy the dependent Entities in each child 
-        for (Entry<Ld4lObjectProp, List<Entity>> child : 
-                    original.getChildren().entrySet()) {
-            Ld4lObjectProp prop = child.getKey();
-            List<Entity> originalEntities = child.getValue();
-            List<Entity> newEntities = new ArrayList<Entity>();
-            for (Entity entity : originalEntities) {
-                Entity copy = new Entity(entity);
-                newEntities.add(copy);
+        // Create new relationships to "child" entities
+        this.relationships = new MapOfLists<>();      
+        for (ObjectProp prop : original.relationships.keys()) {
+            List<Entity> originalChildren = original.relationships.getValues(prop);
+            List<Entity> newChildren = new ArrayList<Entity>();
+            for (Entity originalChild : originalChildren) {
+                Entity copy = new Entity(originalChild);
+                newChildren.add(copy);
             }
-            this.children.put(prop, newEntities);
-        } 
-    }
-
-    public void addChild(Ld4lObjectProp prop, Entity entity) {
-        
-        if (children.containsKey(prop)) {
-            List<Entity> list = children.get(prop);
-            list.add(entity);  
-        } else {
-            children.put(prop, Arrays.asList(entity));
+            relationships.addValues(prop, newChildren);
         }  
     }
-    
-    public void addChildren(Ld4lObjectProp prop, List<Entity> entities) {
-        
-        if (entities.isEmpty()) {
-            return;
-        }       
-        if (children.containsKey(prop)) {
-            List<Entity> list = children.get(prop);
-            list.addAll(entities);  
-        } else {
-            children.put(prop,  entities);
-        }          
+
+    public void addRelationship(ObjectProp prop, Entity entity) {
+        relationships.addValue(prop, entity);
     }
     
-    public HashMap<Ld4lObjectProp, List<Entity>> getChildren() {
-        return children;
+    public void addRelationships(ObjectProp prop, List<Entity> entities) {
+        relationships.addValues(prop, entities);        
     }
     
-    public List<Entity> getChildren(Ld4lObjectProp prop) {
-        return children.get(prop);
+    public MapOfLists<ObjectProp, Entity> getRelationships() {
+        return relationships;
     }
     
-    public Entity getChild(Ld4lObjectProp prop) {
-        List<Entity> entities = children.get(prop);
-        if (!entities.isEmpty()) {
-            return entities.get(0);
-        }
-        return null;
+    public List<Entity> getChildren(ObjectProp prop) {
+        return relationships.getValues(prop);
     }
     
-    public void addExternal(Ld4lObjectProp prop, String uri) {
-        if (externals.containsKey(prop)) {
-            List<String> list = externals.get(prop);
-            list.add(uri);  
-        } else {
-            externals.put(prop, Arrays.asList(uri));
-        }         
+    public Entity getChild(ObjectProp prop) {
+        return relationships.getValue(prop);
     }
     
-    public HashMap<Ld4lObjectProp, List<String>> getExternals() {
-        return externals;
+    public void addExternalRelationship(ObjectProp prop, String uri) {
+        externalRelationships.addValue(prop, uri);       
     }
     
-    public List<String> getExternals(Ld4lObjectProp prop) {
-        return externals.get(prop);
+    public MapOfLists<ObjectProp, String> getExternalRelationships() {
+        return externalRelationships;
     }
     
-    public String getExternal(Ld4lObjectProp prop) {
-        List<String> uris = externals.get(prop);
-        if (!uris.isEmpty()) {
-            return uris.get(0);
-        }
-        return null;
+    public List<String> getExternals(ObjectProp prop) {
+        return externalRelationships.getValues(prop);
+    }
+    
+    public String getExternal(ObjectProp prop) {
+        return externalRelationships.getValue(prop);
     }
      
     public void addType(Type type) {
@@ -160,43 +130,28 @@ public final class Entity {
         return types;
     }
     
-    public void addAttribute(Ld4lDatatypeProp prop, String string) {
+    public void addAttribute(DatatypeProp prop, String string) {
         addAttribute(prop, new Attribute(string));
     }
     
-    public void addAttribute(Ld4lDatatypeProp prop, int i) {
+    public void addAttribute(DatatypeProp prop, int i) {
         addAttribute(prop, new Attribute(i));                
     }
     
-    public void addAttribute(Ld4lDatatypeProp prop, Attribute value) {
-        
-        if (attributes.containsKey(prop)) {
-            List<Attribute> list = attributes.get(prop);
-            list.add(value);
-        } else {
-            attributes.put(prop, Arrays.asList(value));
-        }
+    public void addAttribute(DatatypeProp prop, Attribute value) {
+        attributes.addValue(prop, value);
     }
     
-    public void addAttributes(Ld4lDatatypeProp prop, List<Attribute> values) {
-        
-        if (values.isEmpty()) {
-            return;
-        }
-        if (attributes.containsKey(prop)) {
-            List<Attribute> list = attributes.get(prop);
-            list.addAll(values);  
-        } else {
-            attributes.put(prop, values);
-        }            
+    public void addAttributes(DatatypeProp prop, List<Attribute> values) {
+        attributes.addValues(prop, values);          
     }
     
-    public Map<Ld4lDatatypeProp, List<Attribute>> getAttributes() {
+    public MapOfLists<DatatypeProp, Attribute> getAttributes() {
         return attributes;
     }
     
-    public List<Attribute> getAttributes(Ld4lDatatypeProp prop) {
-        return attributes.get(prop);
+    public List<Attribute> getValues(DatatypeProp prop) {
+        return attributes.getValues(prop);
     }
 
     public void setResource(Resource resource) {
@@ -217,14 +172,12 @@ public final class Entity {
     }
     
     private void buildChildResources() {
-
-        Map<Ld4lObjectProp, List<Entity>> children = getChildren();
-        for (Entry<Ld4lObjectProp, List<Entity>> entry : children.entrySet()) {
-            List<Entity> entities = entry.getValue();
-            for (Entity childEntity : entities) {
-                childEntity.buildResource();
+        
+        for (ObjectProp prop : relationships.keys()) {
+            for (Entity entity : relationships.getValues(prop)) {
+                entity.buildResource();
             }
-        }        
+        }
     }
     
     private void buildThisResource() {
@@ -239,32 +192,26 @@ public final class Entity {
         }
         
         // Add relationships to children
-        for (Entry<Ld4lObjectProp, List<Entity>> child : children.entrySet()) {
-            Ld4lObjectProp prop = child.getKey();
-            List<Entity> childEntities = child.getValue();
-            for (Entity childEntity : childEntities) {
-                resource.addProperty(prop.property(), childEntity.getResource());         
-            }          
-        }
-        
-        // Add attributes       
-        for (Entry<Ld4lDatatypeProp, List<Attribute>> entry : 
-                    attributes.entrySet()) {
-            Ld4lDatatypeProp prop = entry.getKey();
-            for (Attribute attr : entry.getValue()) {
-                resource.addLiteral(prop.property(), attr.toLiteral());
+        for (ObjectProp prop : relationships.keys()) {
+            List<Entity> childEntities = relationships.getValues(prop);
+            for (Entity entity : childEntities) {
+                resource.addProperty(prop.property(), entity.getResource());
             }
         }
         
-        // Add relationships to external resources (stored as URIs)
-        for (Entry<Ld4lObjectProp, List<String>> external : externals.entrySet()) {
-            Ld4lObjectProp prop = external.getKey();
-            List<String> uris = external.getValue();
-            for (String externalUri : uris) {
-                resource.addProperty(prop.property(), 
-                        ResourceFactory.createResource(externalUri));       
-            }          
+        // Add attributes       
+        for (DatatypeProp prop : attributes.keys()) {
+            for (Attribute attr : attributes.getValues(prop)) {
+                resource.addProperty(prop.property(), attr.toLiteral());
+            }
         }
+        
+        for (ObjectProp prop : externalRelationships.keys()) {
+            for (String externalUri : externalRelationships.getValues(prop)) {
+                resource.addProperty(prop.property(), 
+                        ResourceFactory.createResource(externalUri));
+            }
+        }        
         
         setResource(resource);        
     }
@@ -279,16 +226,14 @@ public final class Entity {
     
     private Model buildChildModels() {
         
-        Model model = ModelFactory.createDefaultModel();
-        
-        for (Entry<Ld4lObjectProp, List<Entity>> child : children.entrySet()) {
-            Ld4lObjectProp prop = child.getKey();
-            List<Entity> childEntities = children.get(prop);
-            for (Entity childEntity : childEntities) {
-                Model childModel = childEntity.buildModel();
+        Model model = ModelFactory.createDefaultModel(); 
+
+        for (ObjectProp prop : relationships.keys()) {
+            for (Entity entity : relationships.getValues(prop)) {
+                Model childModel = entity.buildModel();
                 model.add(childModel);
-            }          
-        }        
+            }
+        }       
         return model;
     }
 

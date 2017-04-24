@@ -18,7 +18,7 @@ public enum Ld4lNamespace implements Namespace {
     BIBFRAME("http://id.loc.gov/ontologies/bibframe/", "bf"),
     DCTERMS("http://purl.org/dc/terms/", "dcterms"),    
     FOAF("http://xmlns.com/foaf/0.1/", "foaf"),
-    LD4L("http://bib.ld4l.org/ontology/", "ld4l"),
+    BIBLIOTEKO("http://bibliotek-o.org/ontology/", "bib"),
     LINGVO("http://www.lingvoj.org/ontology#", "lingvo"),
     OA("http://www.w3.org/ns/oa#", "oa"),
     OWL("http://www.w3.org/2002/07/owl#", "owl"),

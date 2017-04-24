@@ -17,7 +17,7 @@ public enum Ld4lWorkType implements Type {
     MOVING_IMAGE(Ld4lNamespace.BIBFRAME, "MovingImage"),
     NOTATED_MUSIC(Ld4lNamespace.BIBFRAME, "NotatedMusic"),
     OBJECT(Ld4lNamespace.BIBFRAME, "Object"),
-    SOFTWARE(Ld4lNamespace.LD4L, "Software"),
+    SOFTWARE(Ld4lNamespace.BIBLIOTEKO, "Software"),
     STILL_IMAGE(Ld4lNamespace.BIBFRAME, "StillImage"),
     TEXT(Ld4lNamespace.BIBFRAME, "Text"),
     WORK(Ld4lNamespace.BIBFRAME, "Work");

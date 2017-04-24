@@ -3,15 +3,27 @@ jdk:
   - oraclejdk8
 sudo: false
 install:
-  - pip install rdiffb
+  # Install Python via conda so we don't have to use sudo
+  # see https://conda.io/docs/travis.html
+  - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-environment python=2.7
+  - source activate test-environment
+  - pip install rdiffb pytest
+  - mvn install
 script:
   - mvn test
+  - py.test
 after_success:
   - mvn clean test jacoco:report coveralls:report
   
-## safelist
-#branches:
-#  only:
-#  - master
-#  - develop
- 
+# safelist
+branches:
+  only:
+  - master
+  - develop
