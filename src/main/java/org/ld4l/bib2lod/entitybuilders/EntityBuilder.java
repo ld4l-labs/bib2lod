@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.entitybuilders;
 
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.ontology.Type;
 
 
@@ -36,7 +37,7 @@ public interface EntityBuilder {
     public static EntityBuilder instance(Class<? extends EntityBuilder> builderClass) 
             throws EntityBuilderException {
         try {
-            return (EntityBuilder) builderClass.newInstance();
+            return builderClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new EntityBuilderException(e);
         }

@@ -3,7 +3,6 @@
 package org.ld4l.bib2lod.conversion;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
@@ -11,7 +10,7 @@ import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
  * Orchestrates the conversion of an input object containing one or more
  * records.
  */
-public interface Converter extends Configurable {
+public interface Converter {
 
     /**
      * Signals a problem during conversion of an input.

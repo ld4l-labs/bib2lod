@@ -7,16 +7,15 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlDataField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlSubfield;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
@@ -67,7 +66,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         
         // TODO convert other subfields from 130/240
         
-        List<Entity> titleElements = buildTitleElements(field245, titleLabel);
+        List<Entity> titleElements = buildTitleElements(titleLabel);
         title.addChildren(Ld4lObjectProp.HAS_PART, titleElements);
         
         // TODO Figure out how to recognize the preferred title vs other titles
@@ -76,8 +75,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
         return title;
     }
     
-    private List<Entity> buildTitleElements(
-            MarcxmlField field, String titleLabel) {
+    private List<Entity> buildTitleElements(String titleLabel) {
                  
         // TODO: get title  parts from subfields
         // Send each substring to the appropriate method.

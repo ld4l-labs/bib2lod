@@ -25,11 +25,26 @@ public class MapOfLists<K, V> {
         return new HashSet<>(map.keySet());
     }
 
+    public Set<List<V>> values() {
+        return new HashSet<List<V>>(map.values());
+    }
+    
+    public Set<Map.Entry<K, List<V>>> entries() {
+        return new HashSet<Map.Entry<K, List<V>>>(map.entrySet());
+    }
+
     /**
      * Add a value to a list. If the list does not exist, it will be created.
      */
     public void addValue(K key, V value) {
         getValues(key).add(value);
+    }
+    
+    /**
+     * Add values to a list. If the list does not exist, it will be created.
+     */
+    public void addValues(K key, List<V> values) {
+        getValues(key).addAll(values);
     }
 
     /**

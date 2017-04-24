@@ -3,15 +3,15 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.Entity;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlLeader;
-import org.ld4l.bib2lod.record.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
 public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
     
@@ -48,12 +48,10 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         
         addTitle();
         
-        addWorkTypeFromLeader();
-        
-        addLanguageFrom008();
+        addWorkTypes();        
+        addLanguages();
         
         instance.addChild(Ld4lObjectProp.IS_INSTANCE_OF, work);
-
         return work;
     }
     
@@ -62,12 +60,12 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         Entity instanceTitle = 
                 instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE);        
         Entity workTitle = new Entity(instanceTitle);
-        work.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);    
-        
+        work.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);            
     }
     
-    private void addWorkTypeFromLeader() {
+    private void addWorkTypes() {
 
+        // Work type from leader
         MarcxmlLeader leader = record.getLeader();
         char code = leader.getTextValue().charAt(6);
         Type type = codes.get(code); 
@@ -76,15 +74,16 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         }           
     }
     
-    private void addLanguageFrom008() {
+    private void addLanguages() {
         
+        /* TODO Codes not the same between lexvo and lc. Just use lc URIs for now. */
+        // Language from 008
         MarcxmlControlField field008 = record.getControlField("008");
         String code = field008.getTextValue().substring(35,38);
         if (code != null && code.length() > 0) {
-            // Assumes LC codes are the same as Lexvo, which seems to be true.
-            // TODO Read lexvo dataset into a model and get language from it.
+            // Lexvo iso639-3 codes are not completely identical with LC 
             work.addExternal(Ld4lObjectProp.HAS_LANGUAGE, 
-                    Ld4lNamespace.LEXVO.uri() + code);
+                    Ld4lNamespace.LC_LANGUAGES.uri() + code);
         }
     }
 

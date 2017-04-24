@@ -30,7 +30,8 @@ public enum Ld4lNamespace implements Namespace {
     VIVO("http://vivoweb.org/ontology/core#", "vivo"),
     
     // Datasets/controlled vocabularies
-    COUNTRIES("http://id.loc.gov/vocabulary/countries/"),
+    LC_COUNTRIES("http://id.loc.gov/vocabulary/countries/"),   
+    LC_LANGUAGES("http://id.loc.gov/vocabulary/languages/"),
     LEXVO("http://lexvo.org/id/iso639-3/", "lexvo");
 
     private static final Logger LOGGER = LogManager.getLogger(); 

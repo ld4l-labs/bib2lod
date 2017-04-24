@@ -2,13 +2,13 @@ package org.ld4l.bib2lod.ontology.ld4l;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.ld4l.bib2lod.ontology.OntologyProp;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
 
 /**
  * Enumerates the datatype properties used in the LD4L BIBFRAME 2 extension and
  * application profile.
  */
-public enum Ld4lDatatypeProp implements OntologyProp {
+public enum Ld4lDatatypeProp implements DatatypeProp {
     
     DATE(Ld4lNamespace.DCTERMS, "date"),
     /*
