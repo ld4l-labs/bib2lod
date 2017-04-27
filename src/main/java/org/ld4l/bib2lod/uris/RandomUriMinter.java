@@ -23,7 +23,7 @@ public class RandomUriMinter extends BaseUriService {
     public String getUri(Entity entity, Iterator<UriService> it, String string) {
         String localName = getLocalName(entity);
         if (string != null) {
-            localName += "_" + string;
+            localName += string;
         }
         return buildUri(localName);
     }
