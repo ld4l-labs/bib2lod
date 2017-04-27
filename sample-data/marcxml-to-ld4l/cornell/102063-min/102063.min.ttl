@@ -35,7 +35,7 @@ cornell:inst1 a bf:Instance ;
 
     bf:hasItem cornell:item1 ; 
 
-    bf:title [
+    bib:hasPreferredTitle [
         a bf:Title ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [

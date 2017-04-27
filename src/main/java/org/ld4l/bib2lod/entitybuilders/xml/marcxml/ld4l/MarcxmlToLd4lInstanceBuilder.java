@@ -3,9 +3,12 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
@@ -20,7 +23,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private MarcxmlRecord record;
-    private Entity instance;
+    private InstanceEntity instance;
   
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -28,7 +31,7 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         // Use this if it generates better error messages 
         // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
         this.record = (MarcxmlRecord) params.getRecord();  
-        this.instance = new Entity(Ld4lInstanceType.superClass());
+        this.instance = new InstanceEntity(Ld4lInstanceType.superClass());
         
         // TODO Add instance subtypes 
         
@@ -52,8 +55,14 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
             BuildParams params = new BuildParams()
                     .setRelatedEntity(instance)
                     .setField(controlField001);
-            builder.build(params);  
+            builder.build(params);
         } 
+        
+        for (Type type: instance.getTypes()) {
+            if (type.equals(Ld4lIdentifierType.LOCAL)) {
+                
+            }
+        }
         
         // TODO Get other identifiers from other datafields
 

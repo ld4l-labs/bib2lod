@@ -18,23 +18,23 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  * An object built from the input record representing a single resource in the
  * output model. 
  */
-public final class Entity {
+public class Entity {
     
     // Relationships of this entity to other local entities (objects of object
     // properties)
-    private MapOfLists<ObjectProp, Entity> relationships;
+    protected MapOfLists<ObjectProp, Entity> relationships;
     
     // Attributes of this entity (objects of datatype properties)
-    private MapOfLists<DatatypeProp, Attribute> attributes;
+    protected MapOfLists<DatatypeProp, Attribute> attributes;
     
     // Relationships of this entity to external resources. Map values are
     // lists of URIs of these resources. Since we already know the URIs of the 
     // external resources, and we will not make local assertions about them, 
     // there is no need to create an Entity.
-    private MapOfLists<ObjectProp, String> externalRelationships;
+    protected MapOfLists<ObjectProp, String> externalRelationships;
     
     // The types the entity belongs to
-    private List<Type> types;
+    protected List<Type> types;
     
     // The resource built from this entity
     private Resource resource;
@@ -43,7 +43,7 @@ public final class Entity {
     /**
      * Constructors
      */
-    private Entity() {
+    protected Entity() {
         this.relationships = new MapOfLists<>();
         this.attributes = new MapOfLists<>();
         this.externalRelationships = new MapOfLists<>();
@@ -150,6 +150,10 @@ public final class Entity {
         return attributes;
     }
     
+    public Attribute getAttribute(DatatypeProp prop) {
+        return attributes.getValue(prop);
+    }
+    
     public List<Attribute> getValues(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
@@ -182,8 +186,8 @@ public final class Entity {
     
     private void buildThisResource() {
 
-        Model model = ModelFactory.createDefaultModel();
-        String uri = UriService.getUri(this);
+        Model model = ModelFactory.createDefaultModel();       
+        String uri = getUri();
         Resource resource = model.createResource(uri);
         
         // Add type assertions
@@ -236,5 +240,8 @@ public final class Entity {
         }       
         return model;
     }
-
+    
+    protected String getUri() {
+        return UriService.getUri(this);
+    }
 }

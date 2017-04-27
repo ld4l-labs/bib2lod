@@ -20,13 +20,16 @@ public class RandomUriMinter extends BaseUriService {
     private String LOCAL_NAME_ALPHA_PREFIX = "n";
     
     @Override
-    public String getUri(Entity entity, Iterator<UriService> it) {
+    public String getUri(Entity entity, Iterator<UriService> it, String string) {
         String localName = getLocalName(entity);
+        if (string != null) {
+            localName += "_" + string;
+        }
         return buildUri(localName);
     }
-
+    
     /**
-     * Generates a local name from a random, hashed UUID. An alphabetic 
+     * Returns a local name from a random, hashed UUID. An alphabetic 
      * character is prefixed to simplify interactions with serializations and
      * APIs that do not allow or understand local names beginning with 
      * non-alphabetic characters.
@@ -47,5 +50,6 @@ public class RandomUriMinter extends BaseUriService {
         long hash64 = MurmurHash.hash64(s);
         return Long.toHexString(hash64);        
     }
+    
 
 }
