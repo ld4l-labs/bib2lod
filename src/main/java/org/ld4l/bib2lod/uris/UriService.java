@@ -48,27 +48,34 @@ public interface UriService extends Configurable {
      * @return - a URI String 
      */
     public static String getUri(Entity entity) {
-        
+        return getUri(entity, (String) null);
+    }
+
+    /**
+     * Returns a URI for an Entity
+     * @return - a URI String 
+     */
+    public static String getUri(Entity entity, String string) {
         String uri = null;
         
         // Use an iterator so each service can call the next service if needed.
         Iterator<UriService> it = instances().iterator();
         
         if (it.hasNext()) {
-            uri = it.next().getUri(entity, it);
+            uri = it.next().getUri(entity, it, string);
         }
      
         if (uri == null) {
             throw new NullUriException(entity);
         }
         
-        return uri;
+        return uri;       
     }
     
     /**
      * Iterates through the specified URIs to return a URI for an Entity
      * @return - a URI String 
      */
-    String getUri(Entity entity, Iterator<UriService> it);
+    String getUri(Entity entity, Iterator<UriService> it, String string);
 
 }

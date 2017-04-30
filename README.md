@@ -10,6 +10,14 @@
   * Converts a minimal MARCXML record to N-TRIPLES.
   * Most of the architecture is in place.
   
+## Quick Start
+* `git clone git@github.com:ld4l-labs/bib2lod.git`
+* `cd bib2lod`
+* `mvn install`
+* `mkdir output`
+* `java -jar target/bib2lod.jar -c src/main/resources/example.config.json`
+* `more output/102063.min.nt`
+  
 ## Build
 * Clone the repository from [https://github.com/ld4l-labs/bib2lod]()
 * run `mvn install`
@@ -34,10 +42,4 @@
   * A log file of the run will be created as `target/logs/bib2lod.log`
   * An existing log file will not be overwritten, but will be renamed with a timestamp, such as `bib2lod-2017-03-31-14-38-47-1.log`
   
-## Quick Start
-* git clone git@github.com:ld4l-labs/bib2lod.git
-* cd bib2lod
-* mvn install
-* mkdir output
-* java -jar target/bib2lod.jar -c src/main/resources/example.config.json
-* more output/102063.min.nt
+

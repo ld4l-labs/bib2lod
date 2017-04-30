@@ -51,7 +51,7 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         addWorkTypes();        
         addLanguages();
         
-        instance.addChild(Ld4lObjectProp.IS_INSTANCE_OF, work);
+        instance.addRelationship(Ld4lObjectProp.IS_INSTANCE_OF, work);
         return work;
     }
     
@@ -60,7 +60,7 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         Entity instanceTitle = 
                 instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE);        
         Entity workTitle = new Entity(instanceTitle);
-        work.addChild(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);            
+        work.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);            
     }
     
     private void addWorkTypes() {
@@ -82,7 +82,7 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         String code = field008.getTextValue().substring(35,38);
         if (code != null && code.length() > 0) {
             // Lexvo iso639-3 codes are not completely identical with LC 
-            work.addExternal(Ld4lObjectProp.HAS_LANGUAGE, 
+            work.addExternalRelationship(Ld4lObjectProp.HAS_LANGUAGE, 
                     Ld4lNamespace.LC_LANGUAGES.uri() + code);
         }
     }

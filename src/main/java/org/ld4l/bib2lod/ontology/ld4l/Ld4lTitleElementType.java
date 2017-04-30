@@ -11,12 +11,12 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lTitleElementType implements Type {
 
-    NON_SORT_ELEMENT(Ld4lNamespace.LD4L, "NonSortTitleElement"),
-    MAIN_TITLE_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
-    PART_NAME_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
-    PART_NUMBER_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
-    SUBTITLE_ELEMENT(Ld4lNamespace.LD4L, "MainTitleElement"),
-    TITLE_ELEMENT(Ld4lNamespace.LD4L, "TitleElement");
+    NON_SORT_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "NonSortTitleElement"),
+    MAIN_TITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
+    PART_NAME_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
+    PART_NUMBER_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
+    SUBTITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
+    TITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "TitleElement");
  
     private final String uri;
     private final Resource ontClass;

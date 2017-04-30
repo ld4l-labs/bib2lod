@@ -7,8 +7,8 @@ import org.ld4l.bib2lod.ontology.Type;
 
 public enum Ld4lActivityType implements Type {
     
-    ACTIVITY(Ld4lNamespace.LD4L, "Activity", "Activity"),
-    PUBLISHER_ACTIVITY(Ld4lNamespace.LD4L, "PublisherActivity", "Publisher");
+    ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
+    PUBLISHER_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publisher");
     
     private final String uri;
     private final Resource ontClass;
