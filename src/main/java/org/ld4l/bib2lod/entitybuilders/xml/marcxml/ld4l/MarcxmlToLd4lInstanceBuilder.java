@@ -58,12 +58,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
             builder.build(params);
         } 
         
-        for (Type type: instance.getTypes()) {
-            if (type.equals(Ld4lIdentifierType.LOCAL)) {
-                
-            }
-        }
-        
         // TODO Get other identifiers from other datafields
 
     }

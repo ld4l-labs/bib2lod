@@ -52,6 +52,7 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
         addLanguages();
         
         instance.addRelationship(Ld4lObjectProp.IS_INSTANCE_OF, work);
+
         return work;
     }
     

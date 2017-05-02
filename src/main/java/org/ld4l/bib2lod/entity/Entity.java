@@ -39,6 +39,9 @@ public class Entity {
     // The resource built from this entity
     private Resource resource;
     
+    // The model built from this entity's resource
+    private Model model;
+    
 
     /**
      * Constructors
@@ -49,6 +52,7 @@ public class Entity {
         this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
         this.resource = null;
+        this.model = null;
     }
 
     public Entity(Type type) {
@@ -159,23 +163,15 @@ public class Entity {
         return attributes.getValues(prop);
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
     public void buildResource() {
         
-//        if (resource != null) {
-//            return;
-//        }
+        if (resource != null) {
+            return;
+        }
 
         Model model = ModelFactory.createDefaultModel();       
         String uri = getUri();
-        Resource resource = model.createResource(uri);
+        this.resource = model.createResource(uri);
         
         // Add type assertions
         for (Type type : types) {
@@ -204,32 +200,26 @@ public class Entity {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
-        }        
-        
-        setResource(resource);        
+        }          
     }
     
-    public Model buildModel() {
+    public Model getModel() {
         
-        Model model = ModelFactory.createDefaultModel();
-        model.add(buildChildModels());
-        model.add(resource.getModel());
-        return model;
-    }
-    
-    private Model buildChildModels() {
-        
-        Model model = ModelFactory.createDefaultModel(); 
+        if (model == null) {
+            this.model = ModelFactory.createDefaultModel();
 
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                Model childModel = entity.buildModel();
-                model.add(childModel);
-            }
-        }       
+            for (ObjectProp prop : relationships.keys()) {
+                for (Entity entity : relationships.getValues(prop)) {
+                    model.add(entity.getModel());
+                }
+            }    
+
+            model.add(resource.getModel());
+        }
+
         return model;
     }
-    
+
     protected String getUri() {
         return UriService.getUri(this);
     }
