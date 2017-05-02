@@ -48,6 +48,7 @@ public class Entity {
         this.attributes = new MapOfLists<>();
         this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
+        this.resource = null;
     }
 
     public Entity(Type type) {
@@ -167,24 +168,10 @@ public class Entity {
     }
 
     public void buildResource() {
-
-        // Build children of this Entity before building the Entity, so that
-        // when building the assertion linking this Entity to the child, we
-        // have the URI of the child's Resource.
-        buildChildResources();
-        buildThisResource();
-    }
-    
-    private void buildChildResources() {
         
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                entity.buildResource();
-            }
-        }
-    }
-    
-    private void buildThisResource() {
+//        if (resource != null) {
+//            return;
+//        }
 
         Model model = ModelFactory.createDefaultModel();       
         String uri = getUri();
@@ -199,7 +186,9 @@ public class Entity {
         for (ObjectProp prop : relationships.keys()) {
             List<Entity> childEntities = relationships.getValues(prop);
             for (Entity entity : childEntities) {
-                resource.addProperty(prop.property(), entity.getResource());
+                // Build  out child resource
+                entity.buildResource();
+                resource.addProperty(prop.property(), entity.resource);
             }
         }
         
