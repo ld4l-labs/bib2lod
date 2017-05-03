@@ -103,9 +103,8 @@ public abstract class BaseConverter implements Converter {
 
         // Build the Model for this Record from the Entity's Resource and the
         // Resources of its dependent Entities.
-        Model model = entity.buildModel();
-        
-        return model;
+        return entity.getModel();
+
     }
     
     protected EntityBuilder getBuilder(Class<? extends Type> type) {

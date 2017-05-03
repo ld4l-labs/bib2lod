@@ -39,6 +39,9 @@ public class Entity {
     // The resource built from this entity
     private Resource resource;
     
+    // The model built from this entity's resource
+    private Model model;
+    
 
     /**
      * Constructors
@@ -48,6 +51,8 @@ public class Entity {
         this.attributes = new MapOfLists<>();
         this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
+        this.resource = null;
+        this.model = null;
     }
 
     public Entity(Type type) {
@@ -158,37 +163,15 @@ public class Entity {
         return attributes.getValues(prop);
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
     public void buildResource() {
-
-        // Build children of this Entity before building the Entity, so that
-        // when building the assertion linking this Entity to the child, we
-        // have the URI of the child's Resource.
-        buildChildResources();
-        buildThisResource();
-    }
-    
-    private void buildChildResources() {
         
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                entity.buildResource();
-            }
+        if (resource != null) {
+            return;
         }
-    }
-    
-    private void buildThisResource() {
 
         Model model = ModelFactory.createDefaultModel();       
         String uri = getUri();
-        Resource resource = model.createResource(uri);
+        this.resource = model.createResource(uri);
         
         // Add type assertions
         for (Type type : types) {
@@ -199,7 +182,9 @@ public class Entity {
         for (ObjectProp prop : relationships.keys()) {
             List<Entity> childEntities = relationships.getValues(prop);
             for (Entity entity : childEntities) {
-                resource.addProperty(prop.property(), entity.getResource());
+                // Build  out child resource
+                entity.buildResource();
+                resource.addProperty(prop.property(), entity.resource);
             }
         }
         
@@ -215,32 +200,26 @@ public class Entity {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
-        }        
-        
-        setResource(resource);        
+        }          
     }
     
-    public Model buildModel() {
+    public Model getModel() {
         
-        Model model = ModelFactory.createDefaultModel();
-        model.add(buildChildModels());
-        model.add(resource.getModel());
-        return model;
-    }
-    
-    private Model buildChildModels() {
-        
-        Model model = ModelFactory.createDefaultModel(); 
+        if (model == null) {
+            this.model = ModelFactory.createDefaultModel();
 
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                Model childModel = entity.buildModel();
-                model.add(childModel);
-            }
-        }       
+            for (ObjectProp prop : relationships.keys()) {
+                for (Entity entity : relationships.getValues(prop)) {
+                    model.add(entity.getModel());
+                }
+            }    
+
+            model.add(resource.getModel());
+        }
+
         return model;
     }
-    
+
     protected String getUri() {
         return UriService.getUri(this);
     }
