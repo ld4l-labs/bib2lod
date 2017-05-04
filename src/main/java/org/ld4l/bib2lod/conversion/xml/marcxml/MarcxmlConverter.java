@@ -19,17 +19,6 @@ import org.ld4l.bib2lod.records.Record;
 public class MarcxmlConverter extends BaseConverter{
     
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    private static final Class<?> PARSER_CLASS = MarcxmlParser.class;
-
-    /*
-     * (non-Javadoc)
-     * @see org.ld4l.bib2lod.conversion.BaseConverter#getParserClass()
-     */
-    @Override
-    public Class<?> getParserClass() {
-        return PARSER_CLASS;
-    }
 
 
     @Override

@@ -40,7 +40,7 @@ public abstract class BaseConverter implements Converter {
         Parser parser;
         List<Record> records;
         
-        parser = getParser();
+        parser = Parser.instance();
         try {
             records = parser.parse(input);
         } catch (ParserException e) {
@@ -69,20 +69,6 @@ public abstract class BaseConverter implements Converter {
         }
     }
 
-    /**
-     * Returns the class of the Parser to instantiate as defined by the concrete
-     * Converter class.
-     */
-    protected abstract Class<?> getParserClass();
-    
-    /**
-     * Instantiates a Parser for this Converter. The Parser class is defined by
-     * the concrete implementation.
-     */
-    private Parser getParser() {
-        Class<?> parserClass = getParserClass();
-        return Parser.instance(parserClass);        
-    }
 
     /**
      * Converts a Record to an RDF Model. Starting with the primary 

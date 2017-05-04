@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.parsing;
 
 import java.util.List;
 
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.records.Record;
 
@@ -46,25 +47,14 @@ public interface Parser {
 
     /**
      * Factory method
-     * @param parserClass - the class of parser to instantiate
-     * @throws ParserException 
      */
-    static Parser instance(Class<?> parserClass) 
-            throws ParserInstantiationException {
-        try {
-            return (Parser) parserClass
-                    .newInstance();
-        } catch (InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | SecurityException e) {
-            throw new ParserInstantiationException(e);
-        }     
+    static Parser instance() {
+        return Bib2LodObjectFactory.getFactory()
+                .instanceForInterface(Parser.class);
     }
 
     /**
      * Parses input into a list of Record objects.
-     * @param input - an InputDescriptor
-     * @return a list of Record objects
      * @throws ParserException
      */
     public List<Record> parse(InputDescriptor input) throws ParserException;   

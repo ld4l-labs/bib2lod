@@ -40,11 +40,6 @@ public class BaseConverterTest extends AbstractTestClass {
     public static class MockConverter extends BaseConverter {
 
         @Override
-        protected Class<?> getParserClass() {
-            return MockXmlParser.class;
-        }
-
-        @Override
         protected Entity buildEntity(Record record)
                 throws EntityBuilderException {
             throw new RuntimeException("Method not yet implemented.");
