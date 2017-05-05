@@ -48,7 +48,7 @@ class TestBib2lod(TestCase):
 
     def test02_cornell_ld4l_conversion(self):
         """Test Cornel LD4L conversions based on sample configuration file."""
-        indirs = 'sample-data/sample-conversions/marcxml-to-ld4l/cornell'
+        indirs = 'sample-data/marcxml-to-ld4l/cornell'
         outdir = self.tmpdir
         for indir in glob.glob(os.path.join(indirs, '*')):
             # FIXME - should look for *.xml in each dir and then build tests on that
