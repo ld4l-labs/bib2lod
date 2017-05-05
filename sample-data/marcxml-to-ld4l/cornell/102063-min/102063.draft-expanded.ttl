@@ -72,7 +72,7 @@ cornell:inst1 a bf:Instance ;
     ] ;
     
     bib:hasActivity [
-        a bib:PublicationActivity ;
+        a bib:PublisherActivity ;
         dcterms:date "1957" ;
         bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 

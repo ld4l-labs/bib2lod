@@ -8,12 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.MockBib2LodObjectFactory;
+import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
+import org.ld4l.bib2lod.managers.SimpleManagerTest.MockConverter;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
@@ -61,9 +67,12 @@ public class XmlParserTest extends AbstractTestClass {
         }
     }
     
+    /*
+     * A concrete implementation needed to test abstract class XmlParser.
+     */
     public static class MockXmlParser extends XmlParser {
 
-        private static final String RECORD_TAG_NAME = "record";  
+        private static final String RECORD_TAG_NAME = "record";
         private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
 
         @Override
@@ -118,24 +127,40 @@ public class XmlParserTest extends AbstractTestClass {
         }
     }    
     
-    private Parser parser;
     
-    private static final String OPEN_ROOT_ELEMENT = "<collection>";
-    private static final String CLOSE_ROOT_ELEMENT = "</collection>";
+    private static final String ROOT_ELEMENT_OPEN = "<collection>";
+    private static final String ROOT_ELEMENT_CLOSE = "</collection>";
 
     private static final String VALID_RECORD = 
             "<record><child>valid record</child></record>";   
      
     private static final String INVALID_RECORD = "<record>invalid record</record>"; 
     
-    private static final String RECORDS = OPEN_ROOT_ELEMENT + VALID_RECORD +
-                 INVALID_RECORD + CLOSE_ROOT_ELEMENT;
+    private static final String RECORDS = ROOT_ELEMENT_OPEN + VALID_RECORD +
+                 INVALID_RECORD + ROOT_ELEMENT_CLOSE;
+    
+    private static final String NO_RECORDS = ROOT_ELEMENT_OPEN + ROOT_ELEMENT_CLOSE;
+    
+    // private static final String INVALID_XML = "<record>Test";
+ 
+    private MockBib2LodObjectFactory factory;
+    private Parser parser;
+    
 
     @Before
     public void setup() {
-        parser = Parser.instance(MockXmlParser.class);
-    }        
-
+        factory = new MockBib2LodObjectFactory();        
+        Bib2LodObjectFactory.setFactoryInstance(factory);
+        factory.addInstance(Converter.class, new MockConverter());
+        factory.addInstance(Parser.class, new MockXmlParser());
+        parser = Parser.instance();
+    }  
+    
+    @After
+    public void teardown() {
+        Bib2LodObjectFactory.unsetFactoryInstance();
+    }
+    
     
     // ----------------------------------------------------------------------
     // The tests
@@ -147,5 +172,13 @@ public class XmlParserTest extends AbstractTestClass {
         List<Record> records = parser.parse(descriptor);
         Assert.assertEquals(1,  records.size());       
     }
+    
+    @Test
+    public void noRecords_Succeeds() throws Exception {
+        InputDescriptor descriptor = new MockInputDescriptor(NO_RECORDS);
+        List<Record> records = parser.parse(descriptor);
+        Assert.assertTrue(records.isEmpty());     
+    }
+   
     
 }

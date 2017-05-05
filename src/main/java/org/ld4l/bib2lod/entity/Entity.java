@@ -18,36 +18,41 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  * An object built from the input record representing a single resource in the
  * output model. 
  */
-public final class Entity {
+public class Entity {
     
     // Relationships of this entity to other local entities (objects of object
     // properties)
-    private MapOfLists<ObjectProp, Entity> relationships;
+    protected MapOfLists<ObjectProp, Entity> relationships;
     
     // Attributes of this entity (objects of datatype properties)
-    private MapOfLists<DatatypeProp, Attribute> attributes;
+    protected MapOfLists<DatatypeProp, Attribute> attributes;
     
     // Relationships of this entity to external resources. Map values are
     // lists of URIs of these resources. Since we already know the URIs of the 
     // external resources, and we will not make local assertions about them, 
     // there is no need to create an Entity.
-    private MapOfLists<ObjectProp, String> externalRelationships;
+    protected MapOfLists<ObjectProp, String> externalRelationships;
     
     // The types the entity belongs to
-    private List<Type> types;
+    protected List<Type> types;
     
     // The resource built from this entity
     private Resource resource;
+    
+    // The model built from this entity's resource
+    private Model model;
     
 
     /**
      * Constructors
      */
-    private Entity() {
+    protected Entity() {
         this.relationships = new MapOfLists<>();
         this.attributes = new MapOfLists<>();
         this.externalRelationships = new MapOfLists<>();
         this.types = new ArrayList<>();
+        this.resource = null;
+        this.model = null;
     }
 
     public Entity(Type type) {
@@ -150,41 +155,23 @@ public final class Entity {
         return attributes;
     }
     
+    public Attribute getAttribute(DatatypeProp prop) {
+        return attributes.getValue(prop);
+    }
+    
     public List<Attribute> getValues(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
     public void buildResource() {
-
-        // Build children of this Entity before building the Entity, so that
-        // when building the assertion linking this Entity to the child, we
-        // have the URI of the child's Resource.
-        buildChildResources();
-        buildThisResource();
-    }
-    
-    private void buildChildResources() {
         
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                entity.buildResource();
-            }
+        if (resource != null) {
+            return;
         }
-    }
-    
-    private void buildThisResource() {
 
-        Model model = ModelFactory.createDefaultModel();
-        String uri = UriService.getUri(this);
-        Resource resource = model.createResource(uri);
+        Model model = ModelFactory.createDefaultModel();       
+        String uri = getUri();
+        this.resource = model.createResource(uri);
         
         // Add type assertions
         for (Type type : types) {
@@ -195,7 +182,9 @@ public final class Entity {
         for (ObjectProp prop : relationships.keys()) {
             List<Entity> childEntities = relationships.getValues(prop);
             for (Entity entity : childEntities) {
-                resource.addProperty(prop.property(), entity.getResource());
+                // Build  out child resource
+                entity.buildResource();
+                resource.addProperty(prop.property(), entity.resource);
             }
         }
         
@@ -211,30 +200,27 @@ public final class Entity {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
-        }        
-        
-        setResource(resource);        
+        }          
     }
     
-    public Model buildModel() {
+    public Model getModel() {
         
-        Model model = ModelFactory.createDefaultModel();
-        model.add(buildChildModels());
-        model.add(resource.getModel());
-        return model;
-    }
-    
-    private Model buildChildModels() {
-        
-        Model model = ModelFactory.createDefaultModel(); 
+        if (model == null) {
+            this.model = ModelFactory.createDefaultModel();
 
-        for (ObjectProp prop : relationships.keys()) {
-            for (Entity entity : relationships.getValues(prop)) {
-                Model childModel = entity.buildModel();
-                model.add(childModel);
-            }
-        }       
+            for (ObjectProp prop : relationships.keys()) {
+                for (Entity entity : relationships.getValues(prop)) {
+                    model.add(entity.getModel());
+                }
+            }    
+
+            model.add(resource.getModel());
+        }
+
         return model;
     }
 
+    protected String getUri() {
+        return UriService.getUri(this);
+    }
 }

@@ -2,14 +2,9 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
-import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.records.Record;
-import org.ld4l.bib2lod.records.RecordField;
 
 /**
  * This base class holds the factory instance which others will use.
@@ -40,6 +35,13 @@ public abstract class Bib2LodObjectFactory {
             return instance;
         }
     }
+    
+    /*
+     * TODO Used in testing. Discuss with Jim.
+     */
+    public static void unsetFactoryInstance() {
+        instance = null;
+    }
 
     /**
      * Return the first instance that was created for this interface. Never
@@ -58,73 +60,5 @@ public abstract class Bib2LodObjectFactory {
      *             if no instances are found.
      */
     public abstract <T> List<T> instancesForInterface(Class<T> interfaze);
-
-    
-    // ----------------------------------------------------------------------
-    // Vestigial methods
-    // ----------------------------------------------------------------------
-
-    /**
-     * A problem occurred when trying to create an Object in the Factory.
-     */
-    public static class Bib2LodObjectFactoryException extends RuntimeException {
-        private static final long serialVersionUID = 1L;
-    
-        public Bib2LodObjectFactoryException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    
-        public Bib2LodObjectFactoryException(String message) {
-            super(message);
-        }
-    
-        public Bib2LodObjectFactoryException(Exception cause) {
-            super(cause);
-        }
-    }
- 
-
-    public EntityBuilder createEntityBuilder(
-            Class<?> builderClass, Record record) {         
-        try {
-            return (EntityBuilder) builderClass
-                    .getConstructor(Record.class)                     
-                    .newInstance(record);
-        } catch (IllegalAccessException | IllegalArgumentException
-                | SecurityException | InvocationTargetException 
-                | NoSuchMethodException | InstantiationException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        } 
-    }
-
-    
-    public EntityBuilder createEntityBuilder(Class<?> builderClass,
-            RecordField field, Entity relatedEntity) {
-        try {
-            return (EntityBuilder) builderClass
-                    .getConstructor(RecordField.class, Entity.class)                           
-                    .newInstance(field, relatedEntity);
-        } catch (InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | SecurityException | InvocationTargetException 
-                | NoSuchMethodException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        } 
-    }
-
-    public EntityBuilder createEntityBuilder(Class<?> builderClass,
-            Record record, Entity relatedEntity) {
-        try {
-            return (EntityBuilder) builderClass
-                    .getConstructor(Record.class, Entity.class)                           
-                    .newInstance(record, relatedEntity);
-        } catch (InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | SecurityException | InvocationTargetException 
-                | NoSuchMethodException e) {
-            throw new Bib2LodObjectFactoryException(e);
-        }         
-    }
-
 
 }

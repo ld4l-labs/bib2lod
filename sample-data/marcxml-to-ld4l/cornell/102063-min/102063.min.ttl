@@ -35,7 +35,7 @@ cornell:inst1 a bf:Instance ;
 
     bf:hasItem cornell:item1 ; 
 
-    bf:title [
+    bib:hasPreferredTitle [
         a bf:Title ;
         rdfs:label "Clinical cardiopulmonary physiology." ;
         dcterms:hasPart [
@@ -47,7 +47,7 @@ cornell:inst1 a bf:Instance ;
     
     bib:hasActivity [
         rdfs:label "Publisher" ;
-        a bib:PublicationActivity ;
+        a bib:PublisherActivity ;
         dcterms:date "1957" ;
         bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 
