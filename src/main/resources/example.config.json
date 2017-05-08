@@ -24,7 +24,7 @@
   "Parser": {
     "class": "org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser"
   },
-  "EntityBuilders": {
-    "class": "org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.MarcxmlToLd4lEntityBuilders"
+  "EntityBuilderFactory": {
+    "class": "org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory"
   }
 }                         

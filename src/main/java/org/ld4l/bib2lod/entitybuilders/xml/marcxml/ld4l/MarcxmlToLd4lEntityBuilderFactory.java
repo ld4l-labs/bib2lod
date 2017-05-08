@@ -2,7 +2,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import java.util.HashMap;
 
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilders;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
@@ -12,7 +12,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
 
-public class MarcxmlToLd4lEntityBuilders extends BaseEntityBuilders {
+public class MarcxmlToLd4lEntityBuilderFactory extends BaseEntityBuilderFactory {
 
     private static HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> typeToBuilder = 
             new HashMap<>();

@@ -53,8 +53,8 @@ public interface EntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException;
 
     /**
-     * Retrieves the EntityBuilder for the specified type from the EntityBuilders
-     * instance.
+     * Retrieves the EntityBuilder for the specified type from the 
+     * EntityBuilderFactory instance.
      * @param type
      * @return
      */

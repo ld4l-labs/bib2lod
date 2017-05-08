@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilders;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
@@ -28,7 +28,7 @@ public abstract class BaseConverter implements Converter {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private EntityBuilders entityBuilders;
+    private EntityBuilderFactory entityBuilderFactory;
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
@@ -49,7 +49,7 @@ public abstract class BaseConverter implements Converter {
         }
         
         Model model = ModelFactory.createDefaultModel();
-        entityBuilders = EntityBuilders.instance();
+        entityBuilderFactory = EntityBuilderFactory.instance();
         
         for (Record record : records) {
             try {
@@ -94,7 +94,7 @@ public abstract class BaseConverter implements Converter {
     }
     
     protected EntityBuilder getBuilder(Class<? extends Type> type) {
-        return entityBuilders.getBuilder(type);
+        return entityBuilderFactory.getBuilder(type);
     }
     
     /**

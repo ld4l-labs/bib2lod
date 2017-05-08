@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.Type;
 
-public abstract class BaseEntityBuilders implements EntityBuilders {
+public abstract class BaseEntityBuilderFactory implements EntityBuilderFactory {
 
     // Maps an ontology Type to an EntityBuilder class used to build Entities
     // of that type.
@@ -15,13 +15,13 @@ public abstract class BaseEntityBuilders implements EntityBuilders {
     /**
      * Constructor
      */
-    public BaseEntityBuilders() {
+    public BaseEntityBuilderFactory() {
         builderMap = new HashMap<>();
         instantiateBuilders();
     }
               
     @Override 
-    public void instantiateBuilders() throws EntityBuildersException {
+    public void instantiateBuilders() throws EntityBuilderFactoryException {
         
         for (Entry<Class<? extends Type>, Class<? extends EntityBuilder>> entry : 
                     getTypeToBuilderClassMap().entrySet()) {
@@ -29,7 +29,7 @@ public abstract class BaseEntityBuilders implements EntityBuilders {
             try {
                 builder = EntityBuilder.instance(entry.getValue());
             } catch (EntityBuilderException e) {
-                throw new EntityBuildersException(e);
+                throw new EntityBuilderFactoryException(e);
             }
             builderMap.put(entry.getKey(), builder);
         }

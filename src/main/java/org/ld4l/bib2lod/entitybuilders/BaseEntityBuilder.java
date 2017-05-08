@@ -12,8 +12,8 @@ public abstract class BaseEntityBuilder implements EntityBuilder {
  
     @Override
     public EntityBuilder getBuilder(Class<? extends Type> type) {
-        EntityBuilders builders = Bib2LodObjectFactory.getFactory()
-                .instanceForInterface(EntityBuilders.class);
+        EntityBuilderFactory builders = Bib2LodObjectFactory.getFactory()
+                .instanceForInterface(EntityBuilderFactory.class);
         return builders.getBuilder(type);
     }
     
