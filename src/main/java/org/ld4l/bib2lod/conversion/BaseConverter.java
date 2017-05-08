@@ -59,6 +59,11 @@ public abstract class BaseConverter implements Converter {
                 continue;
             }
         }
+        
+        // TODO Add when I'm sure this works
+//        if (model.isEmpty()) {
+//            return;
+//        }
 
         try {
             output.writeModel(model);

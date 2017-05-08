@@ -36,12 +36,6 @@ public abstract class Bib2LodObjectFactory {
         }
     }
     
-    /*
-     * TODO Used in testing. Discuss with Jim.
-     */
-    public static void unsetFactoryInstance() {
-        instance = null;
-    }
 
     /**
      * Return the first instance that was created for this interface. Never

@@ -42,7 +42,7 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
     public <T> List<T> instancesForInterface(Class<T> class1) {
         return (List<T>) instances.getValues(class1);
     }
-
+    
 
 
 }
