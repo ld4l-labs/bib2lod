@@ -40,7 +40,7 @@ class TestBib2lod(TestCase):
     def test01_config_errors(self):
         """Test simple errors attempting to run bib2lod."""
         out = run_bib2lod([])
-        self.assertIn(b"You must provide a value after '-c'", out)
+        self.assertIn(b"You must provide a parameter after '-c'", out)
         out = run_bib2lod(['DOES_NOT_EXIST'])
         self.assertIn(b"Configuration file does not exist", out)
         out = run_bib2lod(['tests_functional/testdata/bad1.json'])
