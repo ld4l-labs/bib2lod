@@ -167,7 +167,7 @@ public class SimpleManagerTest extends AbstractTestClass {
     @Ignore
     @Test
     public void converterError_IgnoresInput() {
-        SimpleManager.convert();
+//        SimpleManager.convert();
         MockConverter converter = (MockConverter) factory.instanceForInterface(Converter.class);
         Assert.assertEquals(2, converter.getOutputCount());     
     }
