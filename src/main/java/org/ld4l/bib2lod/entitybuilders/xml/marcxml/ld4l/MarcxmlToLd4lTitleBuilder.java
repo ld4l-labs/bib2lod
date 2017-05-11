@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.datatypes.BibliotekoDatatype.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -16,6 +17,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+
 
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
@@ -57,7 +59,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
                 
                 if (subfield.getCode().equals("c")) {
                     bibEntity.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT,
-                            subfield.getTextValue());
+                            subfield.getTextValue(), BibDatatype.LEGACY_SOURCE_DATA);
                 }
                 
                 // TODO Convert other subfields

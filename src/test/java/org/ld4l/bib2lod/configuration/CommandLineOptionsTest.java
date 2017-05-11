@@ -2,7 +2,8 @@
 
 package org.ld4l.bib2lod.configuration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 

@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.ld4l.bib2lod.datatypes.Datatype;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
@@ -137,6 +138,10 @@ public class Entity {
     
     public void addAttribute(DatatypeProp prop, String string) {
         addAttribute(prop, new Attribute(string));
+    }
+    
+    public void addAttribute(DatatypeProp prop, String string, Datatype type) {
+        addAttribute(prop, new Attribute(string, type));
     }
     
     public void addAttribute(DatatypeProp prop, int i) {

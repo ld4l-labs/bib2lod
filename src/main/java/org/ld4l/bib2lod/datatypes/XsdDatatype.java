@@ -1,11 +1,12 @@
-package org.ld4l.bib2lod.entity;
+package org.ld4l.bib2lod.datatypes;
 
+import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 
 /**
  * Represents the XSD datatypes of Attributes.
  */
-public enum Datatype {
+public enum XsdDatatype implements Datatype {
 
     DATE(XSDDatatype.XSDdate),
     INT(XSDDatatype.XSDint),
@@ -13,11 +14,13 @@ public enum Datatype {
     
     private XSDDatatype xsdDatatype;
     
-    private Datatype(XSDDatatype type) {
+    private XsdDatatype(XSDDatatype type) {
         this.xsdDatatype = type;
     }
     
-    public XSDDatatype xsdDatatype() {
+    @Override
+    public RDFDatatype rdfType() {
         return xsdDatatype;
     }
+
 }
