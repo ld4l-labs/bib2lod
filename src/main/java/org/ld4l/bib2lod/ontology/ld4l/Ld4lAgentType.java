@@ -5,11 +5,9 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
-public enum Ld4lActivityType implements Type {
+public enum Ld4lAgentType implements Type {
     
-    ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
-    PUBLISHER_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publisher"),
-    ORIGINATOR_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "OriginatorActivity", "Originator");
+    AGENT(Ld4lNamespace.FOAF, "Agent");
     
     private final String uri;
     private final Resource ontClass;
@@ -18,18 +16,13 @@ public enum Ld4lActivityType implements Type {
     /**
      * Constructor
      */
-    Ld4lActivityType(Namespace namespace, String localName) {
+    Ld4lAgentType(Namespace namespace, String localName) {
         this(namespace, localName, null);
     }
     
-    Ld4lActivityType(Namespace namespace, String localName, String label) {
+    Ld4lAgentType(Namespace namespace, String localName, String label) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri); 
-        /*
-         * TODO Here's a case where reading in the ontology file would be really
-         * useful: the rdfs:label can be retrieved from the property definition
-         * rather than hard-coded here.
-         */
         this.label = label;
     }
     
@@ -49,6 +42,6 @@ public enum Ld4lActivityType implements Type {
     }
 
     public static Type superClass() {
-        return ACTIVITY;
+        return AGENT;
     }
 }
