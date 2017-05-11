@@ -45,7 +45,7 @@ public class Entity {
     
 
     /**
-     * Constructors
+     * Constructor
      */
     protected Entity() {
         this.relationships = new MapOfLists<>();
@@ -56,6 +56,9 @@ public class Entity {
         this.model = null;
     }
 
+    /**
+     * Constructor
+     */
     public Entity(Type type) {
         this();
         types.add(type);
@@ -200,6 +203,7 @@ public class Entity {
             }
         }
         
+        // Add relationships to external URIs
         for (ObjectProp prop : externalRelationships.keys()) {
             for (String externalUri : externalRelationships.getValues(prop)) {
                 resource.addProperty(prop.property(), 
