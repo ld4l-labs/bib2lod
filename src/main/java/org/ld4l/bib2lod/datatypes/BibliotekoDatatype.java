@@ -5,10 +5,14 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 
+/**
+ * Groups the bibliotek-o custom datatypes together and provides an enum to
+ * designate possible values.
+ */
 public class BibliotekoDatatype {
     
     public enum BibDatatype implements Datatype {
-        LEGACY_SOURCE_DATA(LegacySourceDataType.getType());
+        LEGACY_SOURCE_DATA(LegacySourceDataType.getRdfDatatype());
         
         private RDFDatatype type;
         
@@ -22,13 +26,17 @@ public class BibliotekoDatatype {
         }
     }
 
+    /**
+     * A bibliotek-o custom datatype to flag legacy source data for future
+     * parsing and normalization.
+     */
     public static class LegacySourceDataType extends BaseDatatype {
         
         public static final String TYPE_URI = NAMESPACE + "legacySourceData";               
         public static final RDFDatatype TYPE = new LegacySourceDataType();
         
         static {
-            TYPE_MAPPER.registerDatatype(TYPE);
+            TypeMapper.getInstance().registerDatatype(TYPE);
         }
         
         /* Private constructor, since global instance */
@@ -54,13 +62,12 @@ public class BibliotekoDatatype {
             return lexicalForm;
         }
         
-        public static RDFDatatype getType() {
+        public static RDFDatatype getRdfDatatype() {
             return TYPE;
         }
         
     }
     
     private static final String NAMESPACE = "http://bibliotek-o.org/datatypes/";
-    private static final TypeMapper TYPE_MAPPER = TypeMapper.getInstance();
 
 }
