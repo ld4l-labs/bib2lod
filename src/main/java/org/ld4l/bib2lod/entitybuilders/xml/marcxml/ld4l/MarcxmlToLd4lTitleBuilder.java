@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.datatypes.BibliotekoDatatype.BibDatatype;
+import org.ld4l.bib2lod.datatypes.BibliotekoCustomDatatype.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -59,7 +59,7 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
                 
                 if (subfield.getCode().equals("c")) {
                     bibEntity.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT,
-                            subfield.getTextValue(), BibDatatype.LEGACY_SOURCE_DATA);
+                            subfield.getTextValue());
                 }
                 
                 // TODO Convert other subfields
