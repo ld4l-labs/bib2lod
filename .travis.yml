@@ -18,8 +18,7 @@ install:
   - mvn install
 script:
   - mvn test
-## Test broken so removing for now
-##  - py.test
+  - py.test
 after_success:
   - mvn clean test jacoco:report coveralls:report
   

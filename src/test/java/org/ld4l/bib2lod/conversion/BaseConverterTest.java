@@ -120,8 +120,6 @@ public class BaseConverterTest extends AbstractTestClass {
     }
     
 
-    private Parser parser;
-    private MockConverter converter;
 
     private static final String OPEN_ROOT_ELEMENT = "<collection>";
     private static final String CLOSE_ROOT_ELEMENT = "</collection>";
@@ -142,9 +140,13 @@ public class BaseConverterTest extends AbstractTestClass {
 //    
 //    private static final String RECORDS = OPEN_ROOT_ELEMENT + VALID_RECORD_1 +
 //                 INVALID_RECORD + VALID_RECORD_2 + CLOSE_ROOT_ELEMENT;
+    
+
+    private Parser parser;
+    private MockConverter converter;
 
     @Before
-    public void setup() {
+    public void setUp() {
         converter = new MockConverter();  
     }        
    
