@@ -182,21 +182,21 @@ public class XmlParserTest extends AbstractTestClass {
     private Parser parser;
     
     @BeforeClass
-    public static void setupOnce() {
+    public static void setUpOnce() {
         factory = new MockBib2LodObjectFactory();        
         Bib2LodObjectFactory.setFactoryInstance(factory);        
     }
     
 
     @Before
-    public void setup() {
+    public void setUp() {
         factory.addInstance(Converter.class, new MockConverter());
         factory.addInstance(Parser.class, new MockXmlParser());
         parser = Parser.instance();
     }  
     
     @After
-    public void teardown() {
+    public void tearDown() {
         factory.unsetInstances();
     }
     
