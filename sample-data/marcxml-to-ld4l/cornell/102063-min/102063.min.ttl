@@ -57,7 +57,7 @@ cornell:inst1 a bf:Instance ;
         bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 
     
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
 . 
 
 cornell:item1 a bf:Item .
