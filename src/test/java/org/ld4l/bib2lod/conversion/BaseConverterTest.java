@@ -144,7 +144,7 @@ public class BaseConverterTest extends AbstractTestClass {
 //                 INVALID_RECORD + VALID_RECORD_2 + CLOSE_ROOT_ELEMENT;
 
     @Before
-    public void setup() {
+    public void setUp() {
         converter = new MockConverter();  
     }        
    
