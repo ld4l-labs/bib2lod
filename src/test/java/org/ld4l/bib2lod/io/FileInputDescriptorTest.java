@@ -33,7 +33,7 @@ public class FileInputDescriptorTest extends AbstractTestClass {
     private File inputFile;
 
     @Before
-    public void setup() {
+    public void setUp() {
         inputFile = new File(folder.getRoot(), SOME_FILE);
     }
 

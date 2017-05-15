@@ -148,7 +148,7 @@ public class SimpleManagerTest extends AbstractTestClass {
     private MockBib2LodObjectFactory factory;
 
     @Before
-    public void setup() {
+    public void setUp() {
         factory = new MockBib2LodObjectFactory();
         factory.addInstance(Converter.class, new MockConverter());
         factory.addInstance(InputService.class, new MockInputService());
