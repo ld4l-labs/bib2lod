@@ -2,7 +2,10 @@
 
 package org.ld4l.bib2lod.managers;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +17,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.configuration.ConfigurationOverrider;
 import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.JsonConfigurationFileParser;
+import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.io.InputService;
@@ -40,8 +44,8 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-            setup(args);
-            convert();
+        	SimpleManager fm = new SimpleManager(args);
+        	fm.convert();
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -49,12 +53,14 @@ public final class SimpleManager {
             LOGGER.error("CONVERSION FAILED TO COMPLETE");
         }
     }
-
+    
     /**
      * Parse the command line options, read the config file and adjust as
-     * necessary. Set up the object factory.
+     * necessary.
+     * 
+     * @param args - Command line arguments most likely passed from main().
      */
-    private static void setup(String[] args) {
+    public SimpleManager(String[] args) {
         CommandLineOptions commandLine = new CommandLineOptions(args);
 
         Configuration configuration;
@@ -63,19 +69,49 @@ public final class SimpleManager {
         configuration = new ConfigurationOverrider(commandLine)
                 .override(configuration);
         configuration = new AttributeCascader().cascade(configuration);
-
-        Bib2LodObjectFactory.setFactoryInstance(
-                new DefaultBib2LodObjectFactory(configuration));
-
+        setupObjectFactory(configuration);
+    }
+    
+    /**
+     * Reads the config file to set up application without any (command line) adjustments. 
+     * 
+     * @param jsonConfigFilePath - Path to the JSON configuration file.
+     */
+    public SimpleManager(String jsonConfigFilePath) {
+    	
+    	InputStream jsonInput = null;
+    	try {
+    		jsonInput = readConfigFile(jsonConfigFilePath);
+    		Configuration configuration = new JsonConfigurationFileParser(jsonInput)
+    				.getTopLevelConfiguration();
+    		setupObjectFactory(configuration);
+    	} finally {
+			if (jsonInput != null) {
+				try {
+					jsonInput.close();
+				} catch (IOException e) {}
+			}
+		}
+    }
+    
+    /**
+     * Reads the config file to set up application without any (command line) adjustments. 
+     * 
+     * @param jsonInput - InputStream of the JSON configuration file.
+     */
+    public SimpleManager(FileInputStream jsonInput) {
+        Configuration configuration = new JsonConfigurationFileParser(jsonInput)
+    			.getTopLevelConfiguration();
+        setupObjectFactory(configuration);
     }
 
     /**
-     * Converts all of the inputs from the InputService
+     * Converts all of the inputs from the InputService.
      * 
      * @param configuration - the program Configuration 
      * @throws ConverterException
      */
-    protected static void convert() {
+    private void convert() {
 
         try {
             Converter converter = Converter.instance();
@@ -101,6 +137,45 @@ public final class SimpleManager {
             }
         } finally {
             // TODO write the report.
+        }
+    }
+    
+    /*
+     * Set up the object factory.
+     */
+    private void setupObjectFactory(Configuration configuration) {
+    	configuration = new AttributeCascader().cascade(configuration);
+        Bib2LodObjectFactory.setFactoryInstance(
+                new DefaultBib2LodObjectFactory(configuration));
+    }
+    
+    /**
+     * Reads in JSON configuration file.
+     * 
+     * @param jsonConfigFilePath - Path to JSON configuration file.
+     * @return The InputStream of the configuration file.
+     */
+    private InputStream readConfigFile(String jsonConfigFilePath) {
+        try {
+            if (jsonConfigFilePath == null) {
+                throw new ConfigurationException(
+                        "No configuration file specified.");
+            }
+
+            File file = new File(jsonConfigFilePath).getAbsoluteFile();
+            if (!file.isFile()) {
+                throw new ConfigurationException(
+                        "Configuration file does not exist: " + file);
+            }
+            if (!file.canRead()) {
+                throw new ConfigurationException(
+                        "No permission to read configuration file: " + file);
+            }
+
+            return new FileInputStream(file);
+        } catch (IOException e) {
+            throw new ConfigurationException(
+                    "Failed to open the configuration file: " + jsonConfigFilePath, e);
         }
     }
 }
