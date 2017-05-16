@@ -54,14 +54,6 @@ public final class SimpleManager {
         }
     }
     
-    /*
-     * Private constructor - do not use since configuration will not have been set up.
-     */
-    @SuppressWarnings("unused")
-	private SimpleManager() {
-    	super();
-    }
-    
     /**
      * Parse the command line options, read the config file and adjust as
      * necessary.
@@ -69,7 +61,6 @@ public final class SimpleManager {
      * @param args - Command line arguments most likely passed from main().
      */
     public SimpleManager(String[] args) {
-    	super();
         CommandLineOptions commandLine = new CommandLineOptions(args);
 
         Configuration configuration;
@@ -87,11 +78,20 @@ public final class SimpleManager {
      * @param jsonConfigFilePath - Path to the JSON configuration file.
      */
     public SimpleManager(String jsonConfigFilePath) {
-    	super();
-    	InputStream jsonInput = readConfigFile(jsonConfigFilePath);
-        Configuration configuration = new JsonConfigurationFileParser(jsonInput)
-    			.getTopLevelConfiguration();
-        setupObjectFactory(configuration);
+    	
+    	InputStream jsonInput = null;
+    	try {
+    		jsonInput = readConfigFile(jsonConfigFilePath);
+    		Configuration configuration = new JsonConfigurationFileParser(jsonInput)
+    				.getTopLevelConfiguration();
+    		setupObjectFactory(configuration);
+    	} finally {
+			if (jsonInput != null) {
+				try {
+					jsonInput.close();
+				} catch (IOException e) {}
+			}
+		}
     }
     
     /**
@@ -100,7 +100,6 @@ public final class SimpleManager {
      * @param jsonInput - InputStream of the JSON configuration file.
      */
     public SimpleManager(FileInputStream jsonInput) {
-    	super();
         Configuration configuration = new JsonConfigurationFileParser(jsonInput)
     			.getTopLevelConfiguration();
         setupObjectFactory(configuration);
