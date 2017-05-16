@@ -11,21 +11,14 @@ public enum Ld4lAgentType implements Type {
     
     private final String uri;
     private final Resource ontClass;
-    private final String label;
     
     /**
      * Constructor
      */
     Ld4lAgentType(Namespace namespace, String localName) {
-        this(namespace, localName, null);
-    }
-    
-    Ld4lAgentType(Namespace namespace, String localName, String label) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri); 
-        this.label = label;
-    }
-    
+    }    
 
     @Override
     public String uri() {
@@ -35,10 +28,6 @@ public enum Ld4lAgentType implements Type {
     @Override
     public Resource ontClass() {
         return ontClass;
-    }
-    
-    public String label() {
-        return label;
     }
 
     public static Type superClass() {
