@@ -69,7 +69,7 @@ public final class SimpleManager {
         configuration = new ConfigurationOverrider(commandLine)
                 .override(configuration);
         configuration = new AttributeCascader().cascade(configuration);
-        setupObjectFactory(configuration);
+        setUpObjectFactory(configuration);
     }
     
     /**
@@ -84,7 +84,7 @@ public final class SimpleManager {
     		jsonInput = readConfigFile(jsonConfigFilePath);
     		Configuration configuration = new JsonConfigurationFileParser(jsonInput)
     				.getTopLevelConfiguration();
-    		setupObjectFactory(configuration);
+    		setUpObjectFactory(configuration);
     	} finally {
 			if (jsonInput != null) {
 				try {
@@ -102,7 +102,7 @@ public final class SimpleManager {
     public SimpleManager(FileInputStream jsonInput) {
         Configuration configuration = new JsonConfigurationFileParser(jsonInput)
     			.getTopLevelConfiguration();
-        setupObjectFactory(configuration);
+        setUpObjectFactory(configuration);
     }
 
     /**
@@ -143,7 +143,7 @@ public final class SimpleManager {
     /*
      * Set up the object factory.
      */
-    private void setupObjectFactory(Configuration configuration) {
+    private void setUpObjectFactory(Configuration configuration) {
     	configuration = new AttributeCascader().cascade(configuration);
         Bib2LodObjectFactory.setFactoryInstance(
                 new DefaultBib2LodObjectFactory(configuration));
