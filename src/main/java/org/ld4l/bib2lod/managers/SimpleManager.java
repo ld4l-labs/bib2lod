@@ -44,8 +44,8 @@ public final class SimpleManager {
         LOGGER.info("START CONVERSION.");
 
         try {
-        	SimpleManager fm = new SimpleManager(args);
-        	fm.convert();
+        	SimpleManager manager = new SimpleManager(args);
+        	manager.convert();
             LOGGER.info("END CONVERSION.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -111,33 +111,14 @@ public final class SimpleManager {
      * @param configuration - the program Configuration 
      * @throws ConverterException
      */
-    private void convert() {
+    void convert() {
 
-        try {
-            Converter converter = Converter.instance();
-            InputService inputService = InputService.instance();
-            OutputService outputService = OutputService.instance();
-
-            Iterator<InputDescriptor> inputs = inputService.getDescriptors()
-                    .iterator();
-            while (inputs.hasNext()) {
-                try (
-                    InputDescriptor input = inputs.next();
-                    OutputDescriptor output = outputService
-                            .openSink(input.getMetadata())
-                ) {
-                    converter.convert(input, output);
-                } catch (InputServiceException | OutputServiceException
-                        | IOException | ConverterException e) {
-                    // Log the error and continue to the next input.
-                    // TODO We may want a more sophisticated reporting mechanism 
-                    // for this type of error.
-                    e.printStackTrace();
-                }
-            }
-        } finally {
-            // TODO write the report.
-        }
+        Converter converter = Converter.instance();
+        InputService inputService = InputService.instance();
+        OutputService outputService = OutputService.instance();
+        converter.convertAll(inputService, outputService);
+        
+        // TODO Write report
     }
     
     /*

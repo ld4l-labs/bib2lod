@@ -3,7 +3,9 @@
 package org.ld4l.bib2lod.conversion;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 
 /**
@@ -57,7 +59,16 @@ public interface Converter {
         return Bib2LodObjectFactory.getFactory()
                 .instanceForInterface(Converter.class);
     }
+    
+    /**
+     * Converts all inputs to outputs.
+     */
+    public void convertAll(InputService inputs, OutputService outputs);
 
+    /** 
+     * Converts a single input to a single output.
+     * @throws ConverterException
+     */
     public void convert(InputDescriptor input, OutputDescriptor output)
             throws ConverterException;
 

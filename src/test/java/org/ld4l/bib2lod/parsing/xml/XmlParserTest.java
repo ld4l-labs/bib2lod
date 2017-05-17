@@ -18,7 +18,6 @@ import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
-import org.ld4l.bib2lod.managers.SimpleManagerTest.MockConverter;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
@@ -151,7 +150,7 @@ public class XmlParserTest extends AbstractTestClass {
 
     @Before
     public void setUp() {
-        factory.addInstance(Converter.class, new MockConverter());
+        //factory.addInstance(Converter.class, new MockConverter());
         factory.addInstance(Parser.class, new MockXmlParser());
         parser = Parser.instance();
     }  

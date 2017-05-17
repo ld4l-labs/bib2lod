@@ -6,8 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -16,14 +16,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.parsing.BaseParser;
@@ -32,7 +32,6 @@ import org.ld4l.bib2lod.records.BaseRecord;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
  * Tests abstract class BaseConverter.
@@ -43,6 +42,39 @@ public class BaseConverterTest extends AbstractTestClass {
     // Mocking infrastructure
     // ----------------------------------------------------------------------
 
+    /**
+     * A concrete implementation to test abstract class BaseConverter.
+     */
+    public static class MockConverter_IgnoresSingleInputConversionException extends BaseConverter {
+
+        private int inputCount;
+        private int outputCount;
+
+        public MockConverter_IgnoresSingleInputConversionException() {
+            inputCount = 0;
+            outputCount = 0;
+        }
+       
+        @Override
+        public void convert(InputDescriptor input, OutputDescriptor output) 
+                throws ConverterException {
+            inputCount++;
+            if (inputCount == 2) {
+                throw new ConverterException("Skip this input");
+            }
+            outputCount++;
+        }
+        
+        public int getOutputCount() {
+            return outputCount;
+        }
+      
+        @Override
+        protected Entity buildEntity(Record record)
+                throws EntityBuilderException {
+            throw new RuntimeException("Method not yet implemented.");
+        }        
+    }
 
     /**
      * A concrete implementation to test abstract class BaseConverter.
@@ -114,12 +146,29 @@ public class BaseConverterTest extends AbstractTestClass {
             return true;
         }   
     }
+    
+    public static class MockInputService implements InputService {
+        
+        @Override
+        public void configure(Configuration config) {
+            throw new RuntimeException("Method not implemented.");        
+        }
+
+        @Override
+        public Iterable<InputDescriptor> getDescriptors() {
+            List<InputDescriptor> descriptors = new ArrayList<>();
+            descriptors.add(new MockInputDescriptor());
+            descriptors.add(new MockInputDescriptor());
+            descriptors.add(new MockInputDescriptor());
+            return Collections.unmodifiableList(descriptors);
+        }     
+    }
 
     public static class MockInputDescriptor implements InputDescriptor {
 
         @Override
         public InputMetadata getMetadata() {
-            throw new RuntimeException("Method not implemented.");
+            return null;
         }
 
         @Override
@@ -129,8 +178,22 @@ public class BaseConverterTest extends AbstractTestClass {
 
         @Override
         public synchronized void close() throws InputServiceException, IOException {
-            throw new RuntimeException("Method not implemented.");          
+              
         }
+    }
+    
+    public static class MockOutputService implements OutputService {
+
+        @Override
+        public void configure(Configuration config) {
+            throw new RuntimeException("Method not implemented.");           
+        }
+
+        @Override
+        public OutputDescriptor openSink(InputMetadata metadata)
+                throws OutputServiceException, IOException {
+            return null;
+        }       
     }
     
     public class MockOutputDescriptor implements OutputDescriptor {
@@ -155,8 +218,7 @@ public class BaseConverterTest extends AbstractTestClass {
     }
 
     private static BaseMockBib2LodObjectFactory factory;
-    private Converter converter;
-    private InputDescriptor input;
+    private InputDescriptor input; 
     private OutputDescriptor output;
     
     @BeforeClass
@@ -166,9 +228,12 @@ public class BaseConverterTest extends AbstractTestClass {
     
     @Before
     public void setUp() {
-        factory.addInstance(OutputDescriptor.class, new MockOutputDescriptor());
         input = new MockInputDescriptor();
         output = new MockOutputDescriptor();
+        
+        // Suppress output when BaseConverter throws an exception.
+        suppressSysout();
+        suppressSyserr();
     }  
     
     @After
@@ -179,36 +244,40 @@ public class BaseConverterTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
+
+    @Test
+    public void singleInputConversionException_Succeeds() throws Exception {
+        InputService inputService = new MockInputService();
+        OutputService outputService = new MockOutputService();
+        Converter converter = new MockConverter_IgnoresSingleInputConversionException();
+        converter.convertAll(inputService, outputService);
+    }
     
     @Test
     public void nullRecordList_Succeeds() throws Exception {
         factory.addInstance(Parser.class, new MockParser_ReturnsNullRecordList());
-        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
-        converter = Converter.instance();
+        Converter converter = new MockConverter_ThrowsRecordConversionException();
         converter.convert(input, output);
     }
 
     @Test
     public void emptyRecordList_Succeeds() throws Exception {
         factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecordList());
-        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
-        converter = Converter.instance();
+        Converter converter = new MockConverter_ThrowsRecordConversionException();
         converter.convert(input, output);
     }
     
     @Test
     public void convertRecordException_Succeeds() throws Exception {
         factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
-        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
-        converter = Converter.instance();
+        Converter converter = new MockConverter_ThrowsRecordConversionException();
         converter.convert(input, output);        
     }
     
     @Test
     public void emptyModel_Succeeds() throws Exception {
         factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
-        factory.addInstance(Converter.class, new MockConverter_ReturnsEmptyModel());
-        converter = Converter.instance();
+        Converter converter = new MockConverter_ReturnsEmptyModel();
         converter.convert(input, output);  
     }
 }
