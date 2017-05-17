@@ -28,6 +28,12 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
 /**
  * Tests class SimpleManager.
  */
+
+/*
+ * Test plan:
+ * error in converting input is ignored - go to next input
+ * error in writing output - go to next input
+ */
 public class SimpleManagerTest extends AbstractTestClass {
     
     // ----------------------------------------------------------------------

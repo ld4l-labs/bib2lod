@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.parsing.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configurable;
 import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.Converter;
+import org.ld4l.bib2lod.conversion.BaseConverterTest.MockBib2LodObjectFactory;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
@@ -36,7 +39,6 @@ import org.w3c.dom.NodeList;
  */
 public class XmlParserTest extends AbstractTestClass {
     
-    
     // ----------------------------------------------------------------------
     // Mocking infrastructure
     // ----------------------------------------------------------------------
@@ -44,7 +46,13 @@ public class XmlParserTest extends AbstractTestClass {
     public static class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
         MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
-        
+
+        MockBib2LodObjectFactory() throws NoSuchFieldException, SecurityException {
+            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
+            field.setAccessible(true);
+            field = null;
+            Bib2LodObjectFactory.setFactoryInstance(this); 
+        }
         public <T> void addInstance(Class<T> interfaze, T instance) {
             addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
         }
@@ -70,8 +78,7 @@ public class XmlParserTest extends AbstractTestClass {
         
         public void unsetInstances() {
             instances = new MapOfLists<>();
-        }
-        
+        }   
     }
     
     public static class MockInputDescriptor implements InputDescriptor {
@@ -175,16 +182,13 @@ public class XmlParserTest extends AbstractTestClass {
                  INVALID_RECORD + ROOT_ELEMENT_CLOSE;
     
     private static final String NO_RECORDS = ROOT_ELEMENT_OPEN + ROOT_ELEMENT_CLOSE;
-    
-    // private static final String INVALID_XML = "<record>Test";
  
     private static MockBib2LodObjectFactory factory;
     private Parser parser;
     
     @BeforeClass
-    public static void setUpOnce() {
-        factory = new MockBib2LodObjectFactory();        
-        Bib2LodObjectFactory.setFactoryInstance(factory);        
+    public static void setUpOnce() throws Exception {
+        factory = new MockBib2LodObjectFactory();     
     }
     
 
@@ -205,13 +209,15 @@ public class XmlParserTest extends AbstractTestClass {
     // The tests
     // ----------------------------------------------------------------------
     
+    @Ignore
     @Test
     public void invalidRecord_Ignored() throws Exception {
         InputDescriptor descriptor = new MockInputDescriptor(RECORDS);
         List<Record> records = parser.parse(descriptor);
-        Assert.assertEquals(1,  records.size());       
+        Assert.assertEquals(1, records.size());       
     }
     
+    @Ignore
     @Test
     public void noRecords_Succeeds() throws Exception {
         InputDescriptor descriptor = new MockInputDescriptor(NO_RECORDS);

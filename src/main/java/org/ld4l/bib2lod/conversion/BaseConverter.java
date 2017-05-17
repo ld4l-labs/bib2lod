@@ -48,22 +48,23 @@ public abstract class BaseConverter implements Converter {
             throw new ConverterException(e);
         }
         
+        if (records == null) {
+            return;
+        }
+        
         Model model = ModelFactory.createDefaultModel();
         entityBuilderFactory = EntityBuilderFactory.instance();
         
         for (Record record : records) {
             try {
-                model.add(convertRecord(record));
-            } catch (EntityBuilderException e) {
+                Model recordModel = convertRecord(record);
+                model.add(recordModel);
+                //model.add(convertRecord(record));
+            } catch (RecordConversionException e) {
                 // Continue to next record
                 continue;
             }
         }
-        
-        // TODO Add when I'm sure this works
-//        if (model.isEmpty()) {
-//            return;
-//        }
 
         try {
             output.writeModel(model);
@@ -79,22 +80,26 @@ public abstract class BaseConverter implements Converter {
      * Converts a Record to an RDF Model. Starting with the primary 
      * bibliographic resource (commonly an Instance)
      * @throws RecordConversionException 
-     * @throws EntityBuilderException 
      */
     protected Model convertRecord(Record record) 
-            throws RecordConversionException, EntityBuilderException  {
+            throws RecordConversionException  {
 
-        // Build the primary Entity (e.g., an Instance) from the Record, 
-        // its dependent Entities, and links to the dependents.
-        Entity entity = buildEntity(record);
- 
-        // Build a Resource from the Entity, including its dependent Entities.
-        // Each Resource is attached to its Entity.
-        entity.buildResource();
-
-        // Build the Model for this Record from the Entity's Resource and the
-        // Resources of its dependent Entities.
-        return entity.getModel();
+        try {
+            // Build the primary Entity (e.g., an Instance) from the Record, 
+            // its dependent Entities, and links to the dependents.
+            Entity entity = buildEntity(record);
+     
+            // Build a Resource from the Entity, including its dependent Entities.
+            // Each Resource is attached to its Entity.
+            entity.buildResource();
+    
+            // Build the Model for this Record from the Entity's Resource and the
+            // Resources of its dependent Entities.
+            return entity.getModel();
+            
+        } catch (EntityBuilderException e) {
+            throw new RecordConversionException(e);
+        }
 
     }
     

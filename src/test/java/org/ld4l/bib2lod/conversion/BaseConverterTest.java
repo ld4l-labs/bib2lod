@@ -2,42 +2,111 @@
 
 package org.ld4l.bib2lod.conversion;
 
-import static org.junit.Assert.fail;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
+import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
-import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
+import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
+import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
+import org.ld4l.bib2lod.parsing.BaseParser;
 import org.ld4l.bib2lod.parsing.Parser;
-import org.ld4l.bib2lod.parsing.xml.XmlParser;
+import org.ld4l.bib2lod.records.BaseRecord;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.w3c.dom.Element;
+import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
  * Tests abstract class BaseConverter.
- */
-/*
- * test plan:
- * - invalid record is ignored
- * - invalid input is ignored (or in SimpleManagerTest?)
  */
 public class BaseConverterTest extends AbstractTestClass {
  
     // ----------------------------------------------------------------------
     // Mocking infrastructure
     // ----------------------------------------------------------------------
+
+    public static class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
+
+        MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
+        
+        MockBib2LodObjectFactory() throws NoSuchFieldException, SecurityException {
+            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
+            field.setAccessible(true);
+            field = null;
+            Bib2LodObjectFactory.setFactoryInstance(this); 
+        }
+        
+        public <T> void addInstance(Class<T> interfaze, T instance) {
+            addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
+        }
+        
+        public <T> void addInstance(Class<T> interfaze, T instance, Configuration config) {
+            if (instance instanceof Configurable) {
+                ((Configurable) instance).configure(config);
+            }
+            instances.addValue(interfaze, instance);
+        }
+        
+        @SuppressWarnings("unchecked")
+        @Override
+        public <T> T instanceForInterface(Class<T> class1) {
+            return (T) instances.getValue(class1);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public <T> List<T> instancesForInterface(Class<T> class1) {
+            return (List<T>) instances.getValues(class1);
+        }
+        
+        public void unsetInstances() {
+            instances = new MapOfLists<>();
+        }       
+    }
     
-    public static class MockConverter extends BaseConverter {
+    /**
+     * A concrete implementation to test abstract class BaseConverter.
+     */
+    public static class MockConverter_ThrowsRecordConversionException extends BaseConverter {
+        
+        @Override 
+        public Model convertRecord(Record record) throws RecordConversionException {
+            throw new RecordConversionException("Error");
+        }
+
+        @Override
+        protected Entity buildEntity(Record record)
+                throws EntityBuilderException {
+            throw new RuntimeException("Method not yet implemented.");
+        }
+    }
+
+    /**
+     * A concrete implementation needed to test abstract class BaseConverter.
+     */
+    public static class MockConverter_ReturnsEmptyModel extends BaseConverter {
+        
+        @Override 
+        public Model convertRecord(Record record) throws RecordConversionException {
+            return ModelFactory.createDefaultModel();
+        }
 
         @Override
         protected Entity buildEntity(Record record)
@@ -46,62 +115,44 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }
     
-    public static class MockXmlParser extends XmlParser {
-
-        private static final String RECORD_TAG_NAME = "record";   
-        private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
+    public static class MockParser_ReturnsNullRecordList extends BaseParser {
 
         @Override
-        protected String getRecordTagName() {
-            return RECORD_TAG_NAME;
-        }
-
-        @Override
-        protected Class<?> getRecordClass() {
-            return RECORD_CLASS;
-        }
-    }
-
-    public static class MockXmlRecord implements Record { // extends BaseXmlRecord {
-        
-        private String textValue;
-
-        public MockXmlRecord(Element record) {
-            //super(record);
-            textValue = record.getFirstChild().getTextContent();    
-        }
-
-        @Override
-        public boolean isValid() {
-            if (! textValue.isEmpty()) {
-                return false;
-            }
-            return true;
-        }
-    }
-    
-    public static class MockEntityBuilder extends BaseEntityBuilder {
-        
-        private Record record;
-
-        public MockEntityBuilder(Record record) {
-            this.record = record;
-        }
-
-        @Override
-        public Entity build(BuildParams params) throws EntityBuilderException {
-            // TODO Auto-generated method stub
+        public List<Record> parse(InputDescriptor input)
+                throws ParserException {
             return null;
         }
     }
+    
+    public static class MockParser_ReturnsEmptyRecordList extends BaseParser {
+
+        @Override
+        public List<Record> parse(InputDescriptor input)
+                throws ParserException {
+            return new ArrayList<Record>();
+        }
+    }  
+    
+    public static class MockParser_ReturnsEmptyRecord extends BaseParser {
+
+        @Override
+        public List<Record> parse(InputDescriptor input)
+                throws ParserException {
+            List<Record> records = new ArrayList<>();
+            records.add(new MockRecord());
+            return records;
+        }
+    }   
+    
+    public static class MockRecord extends BaseRecord {
+
+        @Override
+        public boolean isValid() {
+            return true;
+        }   
+    }
 
     public static class MockInputDescriptor implements InputDescriptor {
-        
-        private final String inputString;
-        
-        public MockInputDescriptor(String input) {
-            this.inputString = input;
-        }
 
         @Override
         public InputMetadata getMetadata() {
@@ -119,71 +170,82 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }
     
+    public class MockOutputDescriptor implements OutputDescriptor {
+        
+        private OutputStream output;
+        
+        public MockOutputDescriptor() {
+            this.output = new ByteArrayOutputStream();
+        }
 
+        @Override
+        public void writeModel(Model model)
+                throws IOException, OutputServiceException {
+            model.write(output);
+        }
 
-    private static final String OPEN_ROOT_ELEMENT = "<collection>";
-    private static final String CLOSE_ROOT_ELEMENT = "</collection>";
+        @Override
+        public void close() throws IOException, OutputServiceException {
+            throw new RuntimeException("Method not implemented");         
+        }
+        
+    }
 
-    private static final String VALID_RECORD_1 = 
-            "<record><child>valid record 1</child></record>"; 
+    private static MockBib2LodObjectFactory factory;
+    private Converter converter;
+    private InputDescriptor input;
+    private OutputDescriptor output;
     
-    private static final String VALID_RECORD_2 = 
-            "<record><child>valid record 2</child></record>"; 
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        factory = new MockBib2LodObjectFactory();  
+    }
     
-    private static final String VALID_RECORD_3 = 
-            "<record><child>valid record 3</child></record>"; 
-     
-    private static final String RECORDS = OPEN_ROOT_ELEMENT + VALID_RECORD_1 +
-               VALID_RECORD_2 + VALID_RECORD_3 + CLOSE_ROOT_ELEMENT;
-     
-//    private static final String INVALID_RECORD = "<record>invalid record</record>"; 
-//    
-//    private static final String RECORDS = OPEN_ROOT_ELEMENT + VALID_RECORD_1 +
-//                 INVALID_RECORD + VALID_RECORD_2 + CLOSE_ROOT_ELEMENT;
-    
-
-    private Parser parser;
-    private MockConverter converter;
-
     @Before
     public void setUp() {
-        converter = new MockConverter();  
-    }        
+        factory.addInstance(OutputDescriptor.class, new MockOutputDescriptor());
+        input = new MockInputDescriptor();
+        output = new MockOutputDescriptor();
+    }  
+    
+    @After
+    public void tearDown() {
+        factory.unsetInstances();
+    }      
    
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
     
-    // NOTE: Ignoring an invalid record during parsing is tested by the 
-    // parser tests.
-
-    @Ignore
     @Test
-    public void entityBuilderException_IgnoresRecord() throws Exception {
-        // TODO Test what happens when buildEntities() throws an error -
-        // record should be skipped.
-        fail("entityBuilderException_IgnoresRecord not yet implemented.");
+    public void nullRecordList_Succeeds() throws Exception {
+        factory.addInstance(Parser.class, new MockParser_ReturnsNullRecordList());
+        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
+        converter = Converter.instance();
+        converter.convert(input, output);
     }
 
-    @Ignore
     @Test
-    public void emptyEntityList_Succeeds() throws Exception {
-        // Test what happens when no entities are returned from buildEntities()
-        fail("emptyEntityList_Succeeds not yet implemented.");
+    public void emptyRecordList_Succeeds() throws Exception {
+        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecordList());
+        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
+        converter = Converter.instance();
+        converter.convert(input, output);
     }
     
-    @Ignore
     @Test
-    public void modelBuilderException_IgnoresRecord() {
-        // TODO Test what happens when buildModels() throws an error -
-        // record should be skipped.
-        fail("modelBuilderException_IgnoresRecord not yet implemented.");
+    public void convertRecordException_Succeeds() throws Exception {
+        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
+        factory.addInstance(Converter.class, new MockConverter_ThrowsRecordConversionException());
+        converter = Converter.instance();
+        converter.convert(input, output);        
     }
     
-    @Ignore
     @Test
-    public void emptyModel_Succeeds() {
-        // TODO Test what happens if an empty Model is returned from buildModel()
-        fail("emptyModel_Succeeds not yet implemented.");
+    public void emptyModel_Succeeds() throws Exception {
+        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
+        factory.addInstance(Converter.class, new MockConverter_ReturnsEmptyModel());
+        converter = Converter.instance();
+        converter.convert(input, output);  
     }
 }
