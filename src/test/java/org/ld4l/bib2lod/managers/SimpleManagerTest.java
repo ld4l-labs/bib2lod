@@ -11,11 +11,10 @@ import java.util.List;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.Configuration;
-import org.ld4l.bib2lod.configuration.MockBib2LodObjectFactory;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
@@ -24,6 +23,7 @@ import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 
 /**
  * Tests class SimpleManager.
@@ -151,15 +151,19 @@ public class SimpleManagerTest extends AbstractTestClass {
         }
     }
     
-    private MockBib2LodObjectFactory factory;
+    private static BaseMockBib2LodObjectFactory factory;
+    
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        factory = new BaseMockBib2LodObjectFactory();  
+    }
 
     @Before
-    public void setUp() {
-        factory = new MockBib2LodObjectFactory();
+    public void setUp() throws Exception {
+
         factory.addInstance(Converter.class, new MockConverter());
         factory.addInstance(InputService.class, new MockInputService());
         factory.addInstance(OutputService.class, new MockOutputService());
-        Bib2LodObjectFactory.setFactoryInstance(factory);
   
         // Suppress output when SimpleManager throws an exception.
         suppressSysout();

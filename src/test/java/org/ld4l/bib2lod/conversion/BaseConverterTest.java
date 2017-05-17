@@ -31,6 +31,7 @@ import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.records.BaseRecord;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
@@ -42,45 +43,7 @@ public class BaseConverterTest extends AbstractTestClass {
     // Mocking infrastructure
     // ----------------------------------------------------------------------
 
-    public static class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
-        MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
-        
-        MockBib2LodObjectFactory() throws NoSuchFieldException, SecurityException {
-            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
-            field.setAccessible(true);
-            field = null;
-            Bib2LodObjectFactory.setFactoryInstance(this); 
-        }
-        
-        public <T> void addInstance(Class<T> interfaze, T instance) {
-            addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
-        }
-        
-        public <T> void addInstance(Class<T> interfaze, T instance, Configuration config) {
-            if (instance instanceof Configurable) {
-                ((Configurable) instance).configure(config);
-            }
-            instances.addValue(interfaze, instance);
-        }
-        
-        @SuppressWarnings("unchecked")
-        @Override
-        public <T> T instanceForInterface(Class<T> class1) {
-            return (T) instances.getValue(class1);
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public <T> List<T> instancesForInterface(Class<T> class1) {
-            return (List<T>) instances.getValues(class1);
-        }
-        
-        public void unsetInstances() {
-            instances = new MapOfLists<>();
-        }       
-    }
-    
     /**
      * A concrete implementation to test abstract class BaseConverter.
      */
@@ -191,14 +154,14 @@ public class BaseConverterTest extends AbstractTestClass {
         
     }
 
-    private static MockBib2LodObjectFactory factory;
+    private static BaseMockBib2LodObjectFactory factory;
     private Converter converter;
     private InputDescriptor input;
     private OutputDescriptor output;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
-        factory = new MockBib2LodObjectFactory();  
+        factory = new BaseMockBib2LodObjectFactory();  
     }
     
     @Before

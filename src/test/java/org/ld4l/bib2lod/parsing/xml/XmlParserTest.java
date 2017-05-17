@@ -4,7 +4,6 @@ package org.ld4l.bib2lod.parsing.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.Configurable;
-import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.conversion.Converter;
-import org.ld4l.bib2lod.conversion.BaseConverterTest.MockBib2LodObjectFactory;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
@@ -29,7 +24,7 @@ import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
 import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.util.collections.MapOfLists;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -42,44 +37,6 @@ public class XmlParserTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     // Mocking infrastructure
     // ----------------------------------------------------------------------
-    
-    public static class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
-
-        MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
-
-        MockBib2LodObjectFactory() throws NoSuchFieldException, SecurityException {
-            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
-            field.setAccessible(true);
-            field = null;
-            Bib2LodObjectFactory.setFactoryInstance(this); 
-        }
-        public <T> void addInstance(Class<T> interfaze, T instance) {
-            addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
-        }
-        
-        public <T> void addInstance(Class<T> interfaze, T instance, Configuration config) {
-            if (instance instanceof Configurable) {
-                ((Configurable) instance).configure(config);
-            }
-            instances.addValue(interfaze, instance);
-        }
-        
-        @SuppressWarnings("unchecked")
-        @Override
-        public <T> T instanceForInterface(Class<T> class1) {
-            return (T) instances.getValue(class1);
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public <T> List<T> instancesForInterface(Class<T> class1) {
-            return (List<T>) instances.getValues(class1);
-        }
-        
-        public void unsetInstances() {
-            instances = new MapOfLists<>();
-        }   
-    }
     
     public static class MockInputDescriptor implements InputDescriptor {
         
@@ -183,12 +140,12 @@ public class XmlParserTest extends AbstractTestClass {
     
     private static final String NO_RECORDS = ROOT_ELEMENT_OPEN + ROOT_ELEMENT_CLOSE;
  
-    private static MockBib2LodObjectFactory factory;
+    private static BaseMockBib2LodObjectFactory factory;
     private Parser parser;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
-        factory = new MockBib2LodObjectFactory();     
+        factory = new BaseMockBib2LodObjectFactory();     
     }
     
 
