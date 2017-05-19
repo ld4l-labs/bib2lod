@@ -32,7 +32,8 @@ public enum Ld4lNamespace implements Namespace {
     // Datasets/controlled vocabularies
     LC_COUNTRIES("http://id.loc.gov/vocabulary/countries/"),   
     LC_LANGUAGES("http://id.loc.gov/vocabulary/languages/"),
-    LEXVO("http://lexvo.org/id/iso639-3/", "lexvo");
+    LEXVO("http://lexvo.org/id/iso639-3/", "lexvo"),
+    VIAF("http://viaf.org/viaf/");
 
     private static final Logger LOGGER = LogManager.getLogger(); 
     

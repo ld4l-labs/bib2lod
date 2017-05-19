@@ -25,7 +25,12 @@ public enum Ld4lObjectProp implements ObjectProp {
     IS_IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf"),
     HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
-    IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf");
+    IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf"),
+    HAS_BODY(Ld4lNamespace.OA, "hasBody"),
+    HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
+    HAS_TARGET(Ld4lNamespace.OA, "hasTarget"),
+    MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy"),
+    CREATOR(Ld4lNamespace.DCTERMS, "creator");
 
    
     private String uri;
