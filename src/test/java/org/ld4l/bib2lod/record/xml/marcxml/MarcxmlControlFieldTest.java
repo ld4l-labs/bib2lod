@@ -5,9 +5,10 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlControlField.
@@ -73,8 +74,8 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     private MarcxmlControlField buildControlFieldFromString(String s) 
-            throws RecordFieldException {
-        return (MarcxmlControlField) XmlTestUtils.buildElementFromString(
-                MarcxmlControlField.class, s);
+            throws RecordException {
+        Element element = XmlTestUtils.buildElementFromString(s);
+        return new MarcxmlControlField(element); 
     }
 }

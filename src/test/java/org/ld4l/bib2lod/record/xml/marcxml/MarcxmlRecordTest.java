@@ -156,7 +156,7 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     
     private MarcxmlRecord buildRecordFromString(String s)
             throws RecordException {
-        Element element = XmlTestUtils.buildRecordElementFromString(s);
+        Element element = XmlTestUtils.buildElementFromString(s);
         return new MarcxmlRecord(element);
     }
   

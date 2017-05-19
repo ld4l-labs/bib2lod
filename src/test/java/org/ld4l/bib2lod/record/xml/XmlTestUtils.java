@@ -9,8 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.ld4l.bib2lod.records.Record.RecordException;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.XmlElement;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
@@ -19,7 +17,7 @@ import org.xml.sax.SAXException;
  */
 public final class XmlTestUtils {
 
-    public static Element buildRecordElementFromString(
+    public static Element buildElementFromString(
             String s) throws RecordException {
         try {
             return DocumentBuilderFactory
@@ -30,21 +28,5 @@ public final class XmlTestUtils {
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new RecordException(e);
         }
-    }
-    
-    public static XmlElement buildElementFromString(
-            Class<?> elementClass, String s) throws RecordFieldException {
-        
-        try {
-            Element element = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(new ByteArrayInputStream(s.getBytes()))
-                    .getDocumentElement();
-            return XmlElement.instance(elementClass, element);  
-        } catch (SAXException | IOException | ParserConfigurationException e) {
-            throw new RecordFieldException(e);
-        }
-              
     }
 }

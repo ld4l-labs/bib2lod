@@ -5,9 +5,10 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlLeader.
@@ -50,8 +51,8 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     private MarcxmlLeader buildLeaderFromString(String s) 
-            throws RecordFieldException {
-        return (MarcxmlLeader) XmlTestUtils.buildElementFromString(
-                MarcxmlLeader.class, s);
+            throws RecordException {
+        Element element = XmlTestUtils.buildElementFromString(s);
+        return new MarcxmlLeader(element);
     }
 }
