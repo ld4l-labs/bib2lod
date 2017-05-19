@@ -20,22 +20,32 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlRecordTest extends AbstractTestClass {
     
-    private static final String TWO_LEADERS = 
-        "<record>" + 
-            "<leader>01050cam a22003011  4500</leader>" +
-            "<leader>1234567</leader>" +
-        "</record>";
-    
-    private static final String DUPLICATE_CONTROL_NUMBERS = 
-            "<record>" + 
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='001'>duplicate field</controlfield>" +
-            "</record>";
-    
     private static final String MINIMAL_VALID_RECORD = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
+                "</datafield>" +
+            "</record>";
+
+    private static final String TWO_LEADERS = 
+            "<record>" + 
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<leader>1234567</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
+                "</datafield>" +
+            "</record>";
+    
+    private static final String DUPLICATE_CONTROL_NUMBERS = 
+            "<record>" + 
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='001'>duplicate field</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
@@ -71,6 +81,7 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     
     private static final String RECORD_NO_DATA_FIELDS = 
             "<record>" + 
+                "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
             "</record>";
@@ -115,39 +126,38 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     
     @Test
     public void testValidRecord_Valid() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(MINIMAL_VALID_RECORD);
-        Assert.assertTrue(record.isValid());
-        
+        // No exception
+       buildRecordFromString(MINIMAL_VALID_RECORD);
     }
     
     @Test
     public void testRecordNoLeader_Invalid() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(RECORD_NO_LEADER);
-        Assert.assertFalse(record.isValid());
+        expectException(RecordException.class, "no leader");
+        buildRecordFromString(RECORD_NO_LEADER);
     }
     
     @Test
     public void testRecordNo001_Invalid() throws Exception {
+        expectException(RecordException.class, "no 001");
         MarcxmlRecord record = buildRecordFromString(RECORD_NO_001);
-        Assert.assertFalse(record.isValid());
     }
     
     @Test
     public void testRecordNo008_Invalid() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(RECORD_NO_008);
-        Assert.assertFalse(record.isValid());
+        expectException(RecordException.class, "no 008");
+        buildRecordFromString(RECORD_NO_008);
     }
     
     @Test
     public void testRecordNoDataFields_Invalid() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(RECORD_NO_DATA_FIELDS);
-        Assert.assertFalse(record.isValid());
+        expectException(RecordException.class, "245, 240, 130");
+        buildRecordFromString(RECORD_NO_DATA_FIELDS);
     }
 
     @Test
     public void testRecordNoTitle_Invalid() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(RECORD_NO_TITLE_FIELD);
-        Assert.assertFalse(record.isValid());
+        expectException(RecordException.class, "245, 240, 130");
+        buildRecordFromString(RECORD_NO_TITLE_FIELD);
     }
     
     // ----------------------------------------------------------------------

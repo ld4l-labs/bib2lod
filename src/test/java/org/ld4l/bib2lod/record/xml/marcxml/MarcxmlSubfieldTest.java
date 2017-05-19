@@ -2,10 +2,10 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
 import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.w3c.dom.Element;
@@ -40,32 +40,27 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     
     @Test
     public void noCode_Invalid() throws Exception {
-        MarcxmlSubfield subfield = 
-                buildSubfieldFromString(NO_CODE);
-        Assert.assertFalse(subfield.isValid());
+        expectException(RecordFieldException.class, "is empty");
+        buildSubfieldFromString(NO_CODE);
     }
 
     @Test
     public void noValue_Invalid() throws Exception {
-        MarcxmlSubfield subfield = 
-                buildSubfieldFromString(NO_VALUE);
-        Assert.assertFalse(subfield.isValid());
+        expectException(RecordFieldException.class, "value is null");
+        buildSubfieldFromString(NO_VALUE);
     }
-    
+
     @Test
     public void noTextValue_Invalid() throws Exception {
-        MarcxmlSubfield subfield = 
-                buildSubfieldFromString(NO_TEXT_VALUE);
-        Assert.assertFalse(subfield.isValid());
+        expectException(RecordFieldException.class, "value is null");
+        buildSubfieldFromString(NO_TEXT_VALUE);
     }
-    
+
     @Test
     public void validSubfield_Valid() throws Exception {
-        MarcxmlSubfield subfield = 
-                buildSubfieldFromString(VALID_SUBFIELD);
-        Assert.assertTrue(subfield.isValid());
-    }
-    
+        // No exception
+        buildSubfieldFromString(VALID_SUBFIELD);
+    }    
 
     // ----------------------------------------------------------------------
     // Helper methods

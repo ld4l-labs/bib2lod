@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.w3c.dom.Element;
 
 /**
@@ -20,23 +21,18 @@ public class MarcxmlLeader extends MarcxmlField {
     /**
      * Constructor
      */
-    public MarcxmlLeader(Element leader) {
+    public MarcxmlLeader(Element leader) throws RecordException{
         super(leader);
+        isValid();
     }
 
-
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
-     */
-    @Override
-    public boolean isValid() {
+    private void isValid() throws RecordFieldException {
         if (textValue == null) {
-            return false;
+            throw new RecordFieldException("text value is null");
         }
         if (textValue.isEmpty()) {
-            return false;
+            throw new RecordFieldException("text value is empty");
         }
-        return true;
     }
     
 }

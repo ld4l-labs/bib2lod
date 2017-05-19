@@ -59,10 +59,7 @@ public abstract class XmlParser extends BaseParser {
                 Record record = createRecord(recordElement);
                 // TODO Or do in XmlRecord.instance() method and have it return 
                 // null if not valid?
-                // Skip an invalid record.
-                if (record.isValid()) {
-                    records.add(record);
-                }
+                records.add(record);
             } catch (RecordException e) {
                 // Skip this record
                 continue;
@@ -79,8 +76,8 @@ public abstract class XmlParser extends BaseParser {
     protected abstract String getRecordTagName();
     
     /**
-     * Returns the Record instantiated from the XML record element.
+     * Creates a new Record from the XML Element
      */
-    protected abstract XmlRecord createRecord(Element recordElement) throws RecordException;
-
+    protected abstract XmlRecord createRecord(Element recordElement)
+            throws RecordException;
 }

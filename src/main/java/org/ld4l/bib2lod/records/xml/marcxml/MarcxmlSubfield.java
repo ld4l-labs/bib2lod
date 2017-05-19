@@ -18,39 +18,35 @@ public class MarcxmlSubfield extends MarcxmlField {
     /**
      * Constructor
      */
-    public MarcxmlSubfield(Element element) {
+    public MarcxmlSubfield(Element element) throws RecordFieldException {
         super(element);       
         code = element.getAttribute("code");
+        isValid();
     }
 
     public String getCode() {
         return code;
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
-     */
-    @Override
-    public boolean isValid() {
+    private void isValid() throws RecordFieldException {
 
         // Here we test only the code format, not whether specific codes are
         // valid for specific data fields.
         if (code == null) {
-            return false;
+            throw new RecordFieldException("code is null");
         }
         if (code.equals("")) {
-            return false;
+            throw new RecordFieldException("code is empty");
         }
         if (code.equals(" ")) {
-            return false;
+            throw new RecordFieldException("code is blank");
         }
         if (textValue == null) {
-            return false;
+            throw new RecordFieldException("text value is null");
         }
         if (textValue.isEmpty()) {
-            return false;
+            throw new RecordFieldException("texst value is null");
         }
-        return true;
     }
 
 }

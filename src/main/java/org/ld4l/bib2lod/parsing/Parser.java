@@ -61,6 +61,4 @@ public interface Parser {
      */
     public List<Record> parse(InputDescriptor input) throws ParserException;   
     
-    public boolean isValidRecord(Record record);
-    
 }

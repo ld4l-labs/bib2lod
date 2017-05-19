@@ -19,9 +19,10 @@ public class MarcxmlControlField extends MarcxmlField {
     /**
      * Constructor
      */
-    public MarcxmlControlField(Element element) {
+    public MarcxmlControlField(Element element) throws RecordFieldException {
         super(element);
         controlNumber = element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
+        isValid();
     }
     
     public String getControlNumber() {
@@ -32,27 +33,22 @@ public class MarcxmlControlField extends MarcxmlField {
         return CONTROL_NUMBER_ATTRIBUTE_NAME;
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
-     */
-    @Override
-    public boolean isValid() {
+    private void isValid() throws RecordFieldException {
         
         if (controlNumber == null) {
-            return false;
+            throw new RecordFieldException("control number is null");
         }
         if (controlNumber.equals("")) {
-            return false;
+            throw new RecordFieldException("control number is empty");
         }
         if (controlNumber.length() != 3) {
-            return false;
+            throw new RecordFieldException("control number is not three characters");
         }
         if (textValue == null) {
-            return false;
+            throw new RecordFieldException("text value is null");
         }
         if (textValue.isEmpty()) {
-            return false;
+            throw new RecordFieldException("text value is empty");
         }
-        return true;
     }
 }

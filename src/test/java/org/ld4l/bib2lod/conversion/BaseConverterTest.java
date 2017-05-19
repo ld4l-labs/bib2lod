@@ -140,11 +140,7 @@ public class BaseConverterTest extends AbstractTestClass {
     }   
     
     public static class MockRecord extends BaseRecord {
-
-        @Override
-        public boolean isValid() {
-            return true;
-        }   
+        // Nothing to see here.
     }
     
     public static class MockInputService implements InputService {

@@ -85,8 +85,9 @@ public class XmlParserTest extends AbstractTestClass {
         
         private List<MockXmlRecordElement> children;
 
-        public MockXmlRecord(Element record) {
+        public MockXmlRecord(Element record) throws RecordException {
             children = buildChildren(record);
+            isValid();
         }
         
         private List<MockXmlRecordElement> buildChildren(Element record) {
@@ -100,12 +101,10 @@ public class XmlParserTest extends AbstractTestClass {
             return children;
         }
 
-        @Override
-        public boolean isValid() {      
+        private void isValid() throws RecordException {      
             if (children.isEmpty()) {
-                return false;
+                throw new RecordException("No children");
             }
-            return true;
         }
     }
 
@@ -115,11 +114,6 @@ public class XmlParserTest extends AbstractTestClass {
             super(element);
         }
 
-        @Override
-        public boolean isValid() {
-            // This suffices for current tests
-            return true;
-        }
     }    
     
     

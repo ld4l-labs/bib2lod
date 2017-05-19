@@ -2,10 +2,10 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
 import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.w3c.dom.Element;
@@ -30,20 +30,20 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
     
     @Test
     public void noValue_Invalid() throws Exception {
-        MarcxmlLeader leader = buildLeaderFromString(NO_VALUE);
-        Assert.assertFalse(leader.isValid());
+        expectException(RecordFieldException.class, "is null");
+        buildLeaderFromString(NO_VALUE);
     }
     
     @Test
     public void noTextValue_Invalid() throws Exception {
-        MarcxmlLeader leader = buildLeaderFromString(NO_TEXT_VALUE);
-        Assert.assertFalse(leader.isValid());
+        expectException(RecordFieldException.class, "is null");
+        buildLeaderFromString(NO_TEXT_VALUE);
     }
     
     @Test
     public void validLeader_Valid() throws Exception {
-        MarcxmlLeader leader = buildLeaderFromString(VALID_LEADER);
-        Assert.assertTrue(leader.isValid());
+        // No exception
+       buildLeaderFromString(VALID_LEADER);
     }
 
     // ----------------------------------------------------------------------
