@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,18 +13,14 @@ import org.ld4l.bib2lod.configuration.AttributeCascader;
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.CommandLineOptions;
 import org.ld4l.bib2lod.configuration.Configuration;
+import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.configuration.ConfigurationOverrider;
 import org.ld4l.bib2lod.configuration.DefaultBib2LodObjectFactory;
 import org.ld4l.bib2lod.configuration.JsonConfigurationFileParser;
-import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
 import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.io.InputService;
-import org.ld4l.bib2lod.io.InputService.InputDescriptor;
-import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.io.OutputService;
-import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
-import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 
 /**
  * Orchestrates conversion of a directory of files or a single file.
@@ -55,7 +50,7 @@ public final class SimpleManager {
     }
     
     /**
-     * Parse the command line options, read the config file and adjust as
+     * Parses the command line options, reads the config file and adjusts as
      * necessary.
      * 
      * @param args - Command line arguments most likely passed from main().

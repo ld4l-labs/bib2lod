@@ -79,8 +79,8 @@ public abstract class XmlParser extends BaseParser {
     protected abstract String getRecordTagName();
     
     /**
-     * Returns the Record class to instantiate.
+     * Returns the Record instantiated from the XML record element.
      */
-    protected abstract XmlRecord createRecord(Element recordElement)throws RecordException;
+    protected abstract XmlRecord createRecord(Element recordElement) throws RecordException;
 
 }
