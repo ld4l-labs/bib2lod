@@ -8,22 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
+import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
 import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -77,10 +74,10 @@ public class XmlParserTest extends AbstractTestClass {
             return RECORD_TAG_NAME;
         }
 
-        @Override
         protected XmlRecord createRecord(Element recordElement)
                 throws RecordException {
             return new MockXmlRecord(recordElement);
+
         }
     }
 
@@ -139,46 +136,36 @@ public class XmlParserTest extends AbstractTestClass {
     
     private static final String NO_RECORDS = ROOT_ELEMENT_OPEN + ROOT_ELEMENT_CLOSE;
  
-    private static BaseMockBib2LodObjectFactory factory;
     private Parser parser;
-    
-    @BeforeClass
-    public static void setUpOnce() throws Exception {
-        factory = new BaseMockBib2LodObjectFactory();     
-    }
-    
 
     @Before
     public void setUp() {
-        //factory.addInstance(Converter.class, new MockConverter());
-        factory.addInstance(Parser.class, new MockXmlParser());
-        parser = Parser.instance();
+        parser = new MockXmlParser(); 
     }  
-    
-    @After
-    public void tearDown() {
-        factory.unsetInstances();
-    }
-    
     
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
     
-    @Ignore
     @Test
     public void invalidRecord_Ignored() throws Exception {
-        InputDescriptor descriptor = new MockInputDescriptor(RECORDS);
-        List<Record> records = parser.parse(descriptor);
+        List<Record> records = getRecords(RECORDS);
         Assert.assertEquals(1, records.size());       
     }
     
-    @Ignore
     @Test
     public void noRecords_Succeeds() throws Exception {
-        InputDescriptor descriptor = new MockInputDescriptor(NO_RECORDS);
-        List<Record> records = parser.parse(descriptor);
+        List<Record> records = getRecords(NO_RECORDS);
         Assert.assertTrue(records.isEmpty());     
+    }
+    
+    // ----------------------------------------------------------------------
+    // Helper methods
+    // ----------------------------------------------------------------------
+    
+    private List<Record> getRecords(String input) throws ParserException {
+        InputDescriptor descriptor = new MockInputDescriptor(input);
+        return parser.parse(descriptor);
     }
  
 }

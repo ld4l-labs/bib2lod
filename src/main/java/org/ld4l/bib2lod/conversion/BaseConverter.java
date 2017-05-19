@@ -10,15 +10,14 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.conversion.Converter.ConverterException;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.io.InputService;
-import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.ontology.Type;
@@ -40,7 +39,8 @@ public abstract class BaseConverter implements Converter {
      * @see org.ld4l.bib2lod.conversion.Converter#convertAll(org.ld4l.bib2lod.io.InputService, org.ld4l.bib2lod.io.OutputService)
      */
     @Override
-    public void convertAll(InputService inputService, OutputService outputService) {
+    public void convertAll(InputService inputService, 
+            OutputService outputService) throws ConverterException {
         
         Iterator<InputDescriptor> inputs = inputService.getDescriptors()
                 .iterator();
@@ -48,15 +48,15 @@ public abstract class BaseConverter implements Converter {
             try (
                 InputDescriptor input = inputs.next();
                 OutputDescriptor output = outputService
-                        .openSink(input.getMetadata())
+                        .openSink(input.getMetadata());
             ) {
                 convert(input, output);
             } catch (InputServiceException | OutputServiceException
-                    | IOException | ConverterException e) {
-                // Log the error and continue to the next input.
-                // TODO We may want a more sophisticated reporting mechanism 
-                // for this type of error.
-                e.printStackTrace();
+                    | IOException e) {
+                throw new ConverterException(e);
+            } catch (ConverterException e) {
+                // Go to next input. 
+                // TODO Log error
             }
         }       
     }
@@ -77,6 +77,10 @@ public abstract class BaseConverter implements Converter {
         } catch (ParserException e) {
             // Caller should catch the exception and continue to next input.
             throw new ConverterException(e);
+        }
+        
+        if (records == null) {
+            return;
         }
         
         Model model = ModelFactory.createDefaultModel();
@@ -127,7 +131,6 @@ public abstract class BaseConverter implements Converter {
         } catch (EntityBuilderException e) {
             throw new RecordConversionException(e);
         }
-
     }
     
     protected EntityBuilder getBuilder(Class<? extends Type> type) {

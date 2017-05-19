@@ -16,10 +16,13 @@ public class BaseMockBib2LodObjectFactory extends Bib2LodObjectFactory {
     MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
     
     public BaseMockBib2LodObjectFactory() throws Exception {
-        Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
-        field.setAccessible(true);
-        field = null;
-        Bib2LodObjectFactory.setFactoryInstance(this); 
+        try {
+            Bib2LodObjectFactory.setFactoryInstance(this);
+        } catch (IllegalStateException e) {
+            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
+            field.setAccessible(true); 
+            field.set(null, this);           
+        }
     }
     
     public <T> void addInstance(Class<T> interfaze, T instance) {

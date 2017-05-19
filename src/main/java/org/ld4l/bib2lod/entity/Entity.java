@@ -170,15 +170,17 @@ public class Entity {
     public List<Attribute> getValues(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
-
-    public void buildResource() {
+    
+    /**
+     * Build the Entity's Resource with a specified URI
+     */
+    public void buildResource(String uri) {
         
         if (resource != null) {
             return;
         }
-
+        
         Model model = ModelFactory.createDefaultModel();       
-        String uri = getUri();
         this.resource = model.createResource(uri);
         
         // Add type assertions
@@ -209,7 +211,21 @@ public class Entity {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
-        }          
+        }   
+    }
+
+    public void buildResource() {
+        
+        if (resource != null) {
+            return;
+        }
+
+        String uri = getUri();
+        this.buildResource(uri);    
+    }
+    
+    public Resource getResource() {
+        return this.resource;
     }
     
     public Model getModel() {

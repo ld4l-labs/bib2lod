@@ -45,12 +45,12 @@ public class BaseConverterTest extends AbstractTestClass {
     /**
      * A concrete implementation to test abstract class BaseConverter.
      */
-    public static class MockConverter_IgnoresSingleInputConversionException extends BaseConverter {
+    public static class MockConverter1 extends BaseConverter {
 
         private int inputCount;
         private int outputCount;
 
-        public MockConverter_IgnoresSingleInputConversionException() {
+        public MockConverter1() {
             inputCount = 0;
             outputCount = 0;
         }
@@ -79,7 +79,7 @@ public class BaseConverterTest extends AbstractTestClass {
     /**
      * A concrete implementation to test abstract class BaseConverter.
      */
-    public static class MockConverter_ThrowsRecordConversionException extends BaseConverter {
+    public static class MockConverter2 extends BaseConverter {
         
         @Override 
         public Model convertRecord(Record record) throws RecordConversionException {
@@ -96,7 +96,7 @@ public class BaseConverterTest extends AbstractTestClass {
     /**
      * A concrete implementation needed to test abstract class BaseConverter.
      */
-    public static class MockConverter_ReturnsEmptyModel extends BaseConverter {
+    public static class MockConverter3 extends BaseConverter {
         
         @Override 
         public Model convertRecord(Record record) throws RecordConversionException {
@@ -110,7 +110,16 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }
     
-    public static class MockParser_ReturnsEmptyRecordList extends BaseParser {
+    public static class MockParser1 extends BaseParser {
+
+        @Override
+        public List<Record> parse(InputDescriptor input)
+                throws ParserException {
+            return null;
+        }
+    }
+    
+    public static class MockParser2 extends BaseParser {
 
         @Override
         public List<Record> parse(InputDescriptor input)
@@ -119,7 +128,7 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }  
     
-    public static class MockParser_ReturnsEmptyRecord extends BaseParser {
+    public static class MockParser3 extends BaseParser {
 
         @Override
         public List<Record> parse(InputDescriptor input)
@@ -169,7 +178,7 @@ public class BaseConverterTest extends AbstractTestClass {
 
         @Override
         public synchronized void close() throws InputServiceException, IOException {
-              // Nothing to do
+              
         }
     }
     
@@ -189,7 +198,6 @@ public class BaseConverterTest extends AbstractTestClass {
     
     public class MockOutputDescriptor implements OutputDescriptor {
         
-        @SuppressWarnings("hiding")
         private OutputStream output;
         
         public MockOutputDescriptor() {
@@ -222,10 +230,6 @@ public class BaseConverterTest extends AbstractTestClass {
     public void setUp() {
         input = new MockInputDescriptor();
         output = new MockOutputDescriptor();
-        
-        // Suppress output when BaseConverter throws an exception.
-        suppressSysout();
-        suppressSyserr();
     }  
     
     @After
@@ -241,28 +245,35 @@ public class BaseConverterTest extends AbstractTestClass {
     public void singleInputConversionException_Succeeds() throws Exception {
         InputService inputService = new MockInputService();
         OutputService outputService = new MockOutputService();
-        Converter converter = new MockConverter_IgnoresSingleInputConversionException();
+        Converter converter = new MockConverter1();
         converter.convertAll(inputService, outputService);
     }
     
     @Test
+    public void nullRecordList_Succeeds() throws Exception {
+        factory.addInstance(Parser.class, new MockParser1());
+        Converter converter = new MockConverter2();
+        converter.convert(input, output);
+    }
+
+    @Test
     public void emptyRecordList_Succeeds() throws Exception {
-        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecordList());
-        Converter converter = new MockConverter_ThrowsRecordConversionException();
+        factory.addInstance(Parser.class, new MockParser2());
+        Converter converter = new MockConverter2();
         converter.convert(input, output);
     }
     
     @Test
     public void convertRecordException_Succeeds() throws Exception {
-        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
-        Converter converter = new MockConverter_ThrowsRecordConversionException();
+        factory.addInstance(Parser.class, new MockParser3());
+        Converter converter = new MockConverter2();
         converter.convert(input, output);        
     }
     
     @Test
     public void emptyModel_Succeeds() throws Exception {
-        factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecord());
-        Converter converter = new MockConverter_ReturnsEmptyModel();
+        factory.addInstance(Parser.class, new MockParser3());
+        Converter converter = new MockConverter3();
         converter.convert(input, output);  
     }
 }

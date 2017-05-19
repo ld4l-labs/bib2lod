@@ -62,8 +62,10 @@ public interface Converter {
     
     /**
      * Converts all inputs to outputs.
+     * @throws ConverterException 
      */
-    public void convertAll(InputService inputs, OutputService outputs);
+    public void convertAll(InputService inputs, OutputService outputs) 
+            throws ConverterException;
 
     /** 
      * Converts a single input to a single output.

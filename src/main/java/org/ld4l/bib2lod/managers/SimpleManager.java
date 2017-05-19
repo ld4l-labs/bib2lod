@@ -50,7 +50,7 @@ public final class SimpleManager {
     }
     
     /**
-     * Parses the command line options, reads the config file and adjusts as
+     * Parses the command line options, reads the config file, and adjusts as
      * necessary.
      * 
      * @param args - Command line arguments most likely passed from main().
@@ -102,22 +102,24 @@ public final class SimpleManager {
 
     /**
      * Converts all of the inputs from the InputService.
-     * 
-     * @param configuration - the program Configuration 
-     * @throws ConverterException
      */
     void convert() {
 
         Converter converter = Converter.instance();
         InputService inputService = InputService.instance();
         OutputService outputService = OutputService.instance();
-        converter.convertAll(inputService, outputService);
+        try {
+            converter.convertAll(inputService, outputService);
+        } catch (ConverterException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         // TODO Write report
     }
     
-    /*
-     * Set up the object factory.
+    /**
+     * Sets up the object factory.
      */
     private void setUpObjectFactory(Configuration configuration) {
     	configuration = new AttributeCascader().cascade(configuration);
