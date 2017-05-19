@@ -5,7 +5,10 @@ package org.ld4l.bib2lod.parsing.xml.marcxml;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.parsing.xml.XmlParser;
+import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -15,7 +18,6 @@ public class MarcxmlParser extends XmlParser {
     private static final Logger LOGGER = LogManager.getLogger(); 
               
     private static final String RECORD_TAG_NAME = "record";   
-    private static final Class<?> RECORD_CLASS = MarcxmlRecord.class;
     
     /*
      * (non-Javadoc)
@@ -28,11 +30,12 @@ public class MarcxmlParser extends XmlParser {
     
     /*
      * (non-Javadoc)
-     * @see org.ld4l.bib2lod.parsing.XmlParser#getRecordClass()
+     * @see org.ld4l.bib2lod.parsing.XmlParser#createRecord()
      */
     @Override
-    protected Class<?> getRecordClass() {
-        return RECORD_CLASS;
+    protected XmlRecord createRecord(Element recordElement)
+            throws RecordException {
+        return new MarcxmlRecord(recordElement);
     }
 
 }

@@ -13,6 +13,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlRecord.
@@ -153,10 +154,10 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     // Helper methods
     // ----------------------------------------------------------------------
     
-    private MarcxmlRecord buildRecordFromString(String s) 
+    private MarcxmlRecord buildRecordFromString(String s)
             throws RecordException {
-        return (MarcxmlRecord) XmlTestUtils.buildRecordFromString(
-                MarcxmlRecord.class, s);
+        Element element = XmlTestUtils.buildRecordElementFromString(s);
+        return new MarcxmlRecord(element);
     }
   
 }

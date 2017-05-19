@@ -14,12 +14,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
 import org.ld4l.bib2lod.parsing.Parser;
 import org.ld4l.bib2lod.records.Record;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
 import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -71,7 +71,6 @@ public class XmlParserTest extends AbstractTestClass {
     public static class MockXmlParser extends XmlParser {
 
         private static final String RECORD_TAG_NAME = "record";
-        private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
 
         @Override
         protected String getRecordTagName() {
@@ -79,8 +78,9 @@ public class XmlParserTest extends AbstractTestClass {
         }
 
         @Override
-        protected Class<?> getRecordClass() {
-            return RECORD_CLASS;
+        protected XmlRecord createRecord(Element recordElement)
+                throws RecordException {
+            return new MockXmlRecord(recordElement);
         }
     }
 
