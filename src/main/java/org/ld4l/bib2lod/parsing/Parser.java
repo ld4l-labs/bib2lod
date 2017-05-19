@@ -54,7 +54,9 @@ public interface Parser {
     }
 
     /**
-     * Parses input into a list of Record objects.
+     * Parses input into a list of Record objects. May return an empty list.
+     * Never returns null.
+     * 
      * @throws ParserException
      */
     public List<Record> parse(InputDescriptor input) throws ParserException;   

@@ -79,10 +79,6 @@ public abstract class BaseConverter implements Converter {
             throw new ConverterException(e);
         }
         
-        if (records == null) {
-            return;
-        }
-        
         Model model = ModelFactory.createDefaultModel();
         entityBuilderFactory = EntityBuilderFactory.instance();
         

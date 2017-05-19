@@ -110,15 +110,6 @@ public class BaseConverterTest extends AbstractTestClass {
         }
     }
     
-    public static class MockParser_ReturnsNullRecordList extends BaseParser {
-
-        @Override
-        public List<Record> parse(InputDescriptor input)
-                throws ParserException {
-            return null;
-        }
-    }
-    
     public static class MockParser_ReturnsEmptyRecordList extends BaseParser {
 
         @Override
@@ -178,7 +169,7 @@ public class BaseConverterTest extends AbstractTestClass {
 
         @Override
         public synchronized void close() throws InputServiceException, IOException {
-              
+              // Nothing to do
         }
     }
     
@@ -198,6 +189,7 @@ public class BaseConverterTest extends AbstractTestClass {
     
     public class MockOutputDescriptor implements OutputDescriptor {
         
+        @SuppressWarnings("hiding")
         private OutputStream output;
         
         public MockOutputDescriptor() {
@@ -253,13 +245,6 @@ public class BaseConverterTest extends AbstractTestClass {
         converter.convertAll(inputService, outputService);
     }
     
-    @Test
-    public void nullRecordList_Succeeds() throws Exception {
-        factory.addInstance(Parser.class, new MockParser_ReturnsNullRecordList());
-        Converter converter = new MockConverter_ThrowsRecordConversionException();
-        converter.convert(input, output);
-    }
-
     @Test
     public void emptyRecordList_Succeeds() throws Exception {
         factory.addInstance(Parser.class, new MockParser_ReturnsEmptyRecordList());
