@@ -31,8 +31,4 @@ public enum Ld4lAnnotationType implements Type {
     public Resource ontClass() {
         return ontClass;
     }
-
-    public static Type superClass() {
-        return ANNOTATION;
-    }
 }

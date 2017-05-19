@@ -8,7 +8,7 @@ import org.ld4l.bib2lod.ontology.Namespace;
 /**
  * Enumerates named individuals related to Bibliotek-o.
  */
-public enum Ld4lNamedIndividualType implements NamedIndividual {
+public enum Ld4lNamedIndividual implements NamedIndividual {
     
 	DESCRIBING(Ld4lNamespace.OA, "describing"),
 	SUMMARIZING(Ld4lNamespace.BIBLIOTEKO, "summarizing"),
@@ -21,7 +21,7 @@ public enum Ld4lNamedIndividualType implements NamedIndividual {
     /**
      * Constructor
      */
-    Ld4lNamedIndividualType(Namespace namespace, String localName) {
+    Ld4lNamedIndividual(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.resource = ResourceFactory.createResource(uri);
     }
