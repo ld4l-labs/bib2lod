@@ -7,6 +7,7 @@ import org.ld4l.bib2lod.ontology.Type;
 
 public enum Ld4lAgentType implements Type {
     
+    /* List in alpha order */
     AGENT(Ld4lNamespace.FOAF, "Agent");
     
     private final String uri;

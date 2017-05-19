@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lLocationType implements Type {
         
+    /* List in alpha order */
     LOCATION(Ld4lNamespace.PROV, "Location");
     
     private final String uri;

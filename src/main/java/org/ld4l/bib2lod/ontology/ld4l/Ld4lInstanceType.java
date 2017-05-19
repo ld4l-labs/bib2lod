@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lInstanceType implements Type {
     
+    /* List in alpha order */
     ARCHIVAL(Ld4lNamespace.BIBFRAME, "Archival"),
     ELECTRONIC(Ld4lNamespace.BIBFRAME, "Electronic"),
     INSTANCE(Ld4lNamespace.BIBFRAME, "Instance"),

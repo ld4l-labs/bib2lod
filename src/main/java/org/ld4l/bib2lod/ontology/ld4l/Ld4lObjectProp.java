@@ -10,27 +10,29 @@ import org.ld4l.bib2lod.ontology.ObjectProp;
  */
 public enum Ld4lObjectProp implements ObjectProp {
 
+    /* List in alpha order */
+    CREATED(Ld4lNamespace.DCTERMS, "created"),
+    CREATOR(Ld4lNamespace.DCTERMS, "creator"),
     HAS_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "hasActivity"),
-    IS_ACTIVITY_OF(Ld4lNamespace.BIBLIOTEKO, "isActivityOf"),
-    HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
+    HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
+    HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
+    HAS_BODY(Ld4lNamespace.OA, "hasBody"),
     HAS_INSTANCE(Ld4lNamespace.BIBFRAME, "hasInstance"),
     HAS_ITEM(Ld4lNamespace.BIBFRAME, "hasItem"),
+    HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
     HAS_PART(Ld4lNamespace.DCTERMS, "hasPart"),
     HAS_PREFERRED_TITLE(Ld4lNamespace.BIBLIOTEKO, "hasPreferredTitle"),
+    HAS_TARGET(Ld4lNamespace.OA, "hasTarget"),
     HAS_TITLE(Ld4lNamespace.BIBFRAME, "title"),
-    IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
     IDENTIFIES(Ld4lNamespace.BIBFRAME, "identifies"),
+    IS_ACTIVITY_OF(Ld4lNamespace.BIBLIOTEKO, "isActivityOf"),
+    IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf"),
     IS_AT_LOCATION(Ld4lNamespace.BIBLIOTEKO, "atLocation"),
-    IS_LOCATION_OF(Ld4lNamespace.BIBLIOTEKO, "isLocationOf"),
     IS_IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf"),
-    HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
-    IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf"),
-    HAS_BODY(Ld4lNamespace.OA, "hasBody"),
-    HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
-    HAS_TARGET(Ld4lNamespace.OA, "hasTarget"),
-    MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy"),
-    CREATOR(Ld4lNamespace.DCTERMS, "creator");
+    IS_LOCATION_OF(Ld4lNamespace.BIBLIOTEKO, "isLocationOf"),
+    IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
+    MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy");
 
    
     private String uri;
