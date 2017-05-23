@@ -28,13 +28,18 @@ public class MarcxmlToLd4lIdentifierBuilder extends MarcxmlToLd4lEntityBuilder {
         this.field = (MarcxmlField) params.getField();
         this.identifier = new Entity(Ld4lIdentifierType.superClass());
         
-        if (field instanceof MarcxmlControlField) {
-            buildFromControlField();
-        } else {
-            buildFromDataField();
+        if (field != null) {
+            if (field instanceof MarcxmlControlField) {
+                buildFromControlField();
+            } else {
+                buildFromDataField();
+            }
         }
 
-        bibEntity.addRelationship(Ld4lObjectProp.IS_IDENTIFIED_BY, identifier);
+        if (bibEntity != null) {
+            bibEntity.addRelationship(
+                    Ld4lObjectProp.IS_IDENTIFIED_BY, identifier);
+        }
  
         return identifier;
     }
