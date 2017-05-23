@@ -31,8 +31,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         this.record = (MarcxmlRecord) params.getRecord();  
         this.instance = new InstanceEntity(Ld4lInstanceType.superClass());
         
-        // TODO Add instance subtypes 
-        
         buildIdentifiers();
         buildTitles();
         buildWorks();
@@ -55,9 +53,6 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
                     .setField(controlField001);
             builder.build(params);
         } 
-        
-        // TODO Get other identifiers from other datafields
-
     }
     
     private void buildTitles() throws EntityBuilderException { 
