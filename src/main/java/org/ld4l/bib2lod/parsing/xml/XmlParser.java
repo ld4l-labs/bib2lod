@@ -57,11 +57,9 @@ public abstract class XmlParser extends BaseParser {
             Element recordElement = (Element) nodes.item(i);
             try {
                 Record record = createRecord(recordElement);
-                // TODO Or do in XmlRecord.instance() method and have it return 
-                // null if not valid?
                 records.add(record);
             } catch (RecordException e) {
-                // Skip this record
+                // Skip an invalid record
                 continue;
             }
         }

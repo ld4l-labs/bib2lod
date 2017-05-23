@@ -9,13 +9,14 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 public class MarcxmlToLd4lItemBuilder extends MarcxmlToLd4lEntityBuilder {
     
     private Entity instance;
-    private MarcxmlRecord record;
+    // Not sure if record is needed
+    // private MarcxmlRecord record;
     private Entity item;
     
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
-        this.record = (MarcxmlRecord) params.getRecord();
+        // this.record = (MarcxmlRecord) params.getRecord();
         this.instance = params.getRelatedEntity();
         this.item = new Entity(Ld4lItemType.superClass());
         

@@ -49,7 +49,6 @@ public interface EntityBuilder {
      * and Titles of Works and Instances).
      * @throws EntityBuilderException 
      */
-    //public Entity build(Map<String, Object> params) throws EntityBuilderException;
     public Entity build(BuildParams params) throws EntityBuilderException;
 
     /**

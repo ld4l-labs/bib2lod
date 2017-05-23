@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.records.Record;
 /**
  * Converts MARCXML records
  */
-public class MarcxmlConverter extends BaseConverter{
+public class MarcxmlConverter extends BaseConverter {
     
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -39,7 +39,5 @@ public class MarcxmlConverter extends BaseConverter{
         BuildParams params = new BuildParams()
                 .setRecord(record);
         return instanceBuilder.build(params);
-
-    }
-  
+    } 
 }
