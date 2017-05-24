@@ -14,11 +14,12 @@ import org.ld4l.bib2lod.ontology.Namespace;
 // namespaces?
 public enum Ld4lNamespace implements Namespace {
 
-    // Ontologies
+    /* Ontologies */
+    /* List in alpha order */
     BIBFRAME("http://id.loc.gov/ontologies/bibframe/", "bf"),
+    BIBLIOTEKO("http://bibliotek-o.org/ontology/", "bib"),
     DCTERMS("http://purl.org/dc/terms/", "dcterms"),    
     FOAF("http://xmlns.com/foaf/0.1/", "foaf"),
-    BIBLIOTEKO("http://bibliotek-o.org/ontology/", "bib"),
     LINGVO("http://www.lingvoj.org/ontology#", "lingvo"),
     OA("http://www.w3.org/ns/oa#", "oa"),
     OWL("http://www.w3.org/2002/07/owl#", "owl"),
@@ -29,7 +30,8 @@ public enum Ld4lNamespace implements Namespace {
     SKOS("http://www.w3.org/2004/02/skos/core#", "skos"),
     VIVO("http://vivoweb.org/ontology/core#", "vivo"),
     
-    // Datasets/controlled vocabularies
+    /* Datasets/controlled vocabularies */
+    /* List in alpha order */
     LC_COUNTRIES("http://id.loc.gov/vocabulary/countries/"),   
     LC_LANGUAGES("http://id.loc.gov/vocabulary/languages/"),
     LEXVO("http://lexvo.org/id/iso639-3/", "lexvo"),

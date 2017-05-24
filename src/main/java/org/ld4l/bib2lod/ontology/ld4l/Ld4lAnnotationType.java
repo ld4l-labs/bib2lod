@@ -7,6 +7,10 @@ import org.ld4l.bib2lod.ontology.Type;
 
 public enum Ld4lAnnotationType implements Type {
     
+    /* List in alpha order */
+    /* NB Unlike other Type enums, these don't represent a single class hierarchy.
+     * TODO Is there a better way to do this?
+     */
     ANNOTATION(Ld4lNamespace.OA, "Annotation"),
     MOTIVATION(Ld4lNamespace.OA, "Motivation"),
     TEXTUAL_BODY(Ld4lNamespace.OA, "TextualBody");

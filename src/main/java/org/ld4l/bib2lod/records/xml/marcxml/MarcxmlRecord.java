@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.BaseXmlRecord;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -37,7 +38,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
     /**
      * Constructor
      */
-    public MarcxmlRecord(Element record) {
+    public MarcxmlRecord(Element record) throws RecordException {
         super(record);
         
         leader = buildLeader(record);
@@ -45,13 +46,16 @@ public class MarcxmlRecord extends BaseXmlRecord {
         controlFields = buildControlFields(record);
         
         dataFields = buildDataFields(record);
+        
+        isValid();
     }
     
     /**
      * Builds this Record's leader from the MARCXML input. Only a single leader
      * is allowed; others are ignored. Returns null if no leader node is found.
      */
-    private final MarcxmlLeader buildLeader(Element record) {
+    private final MarcxmlLeader buildLeader(Element record) 
+            throws RecordException {
         NodeList leaderNodes = record.getElementsByTagName(Field.LEADER.tagName);
         if (leaderNodes.getLength() == 0) {
             return null;
@@ -67,7 +71,8 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * are no control fields.
      * @param record 
      */
-    private final List<MarcxmlControlField> buildControlFields(Element record) {
+    private final List<MarcxmlControlField> buildControlFields(Element record) 
+            throws RecordFieldException {
         
         List<MarcxmlControlField> controlFields = 
                 new ArrayList<MarcxmlControlField>();
@@ -96,7 +101,8 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * none.
      * @param record 
      */
-    private final List<MarcxmlDataField> buildDataFields(Element record) {
+    private final List<MarcxmlDataField> buildDataFields(Element record) 
+            throws RecordFieldException {
         
         List<MarcxmlDataField> dataFields = new ArrayList<MarcxmlDataField>();
         
@@ -110,47 +116,29 @@ public class MarcxmlRecord extends BaseXmlRecord {
         return dataFields;
      }
     
-    /*
-     * (non-Javadoc)
-     * @see org.ld4l.bib2lod.record.Record#isValid()
-     */
-    @Override
     // TODO This is the definition of a minimal record in Voyager. Not sure how
     // widely applicable it is. If it doesn't apply to other ILSs, create
     // subclass VoyagerMarcxmlRecord and put Voyager-specific tests 
     // there.
-    public boolean isValid() {
+    private void isValid() throws RecordException {
         
-        if (!hasLeader()) {
-            return false;
-        }
-        
-        if (!hasRequiredControlFields()) {
-            return false;
-        }
-        
-        if (!hasRequiredDataFields()) {
-            return false;
-        }
+        checkLeader();
 
-        return true;
+        checkRequiredControlFields();
+
+        checkRequiredDataFields();
     }
     
-    private boolean hasLeader() {
-        return leader != null;
+    private void checkLeader() throws RecordException {
+        if (leader == null) {
+            throw new RecordException("Record has no leader");
+        }
     }
     
-    private boolean hasRequiredControlFields() {
-
-        if (controlFields.isEmpty()) {
-            return false;
-        }
+    private void checkRequiredControlFields() throws RecordException {
         boolean has001 = false;
         boolean has008 = false;
         for (MarcxmlControlField controlField : controlFields) {
-            if (!controlField.isValid()) { 
-                return false;
-            }
             if (controlField.getControlNumber().equals("001")) {
                 has001 = true;
             }
@@ -158,27 +146,24 @@ public class MarcxmlRecord extends BaseXmlRecord {
                 has008 = true;
             }            
         }
-        if (!has001 || !has008) {
-            return false;
-        }   
-        return true;
+        if (!has001) {
+            throw new RecordException("Record has no 001 control field");
+        }
+        if (!has008) {
+            throw new RecordException("Record has no 008 control field");
+        }
     }
     
-    private boolean hasRequiredDataFields() {
-        if (dataFields.isEmpty()) {
-            return false;
-        }
+    private void checkRequiredDataFields() throws RecordException {
         for (MarcxmlDataField dataField : dataFields) {
-            if (!dataField.isValid()) {
-                return false;
-            }
             String dataFieldName = dataField.getName();
             if (dataFieldName.equals("245") || dataFieldName.equals("240") || 
                     dataFieldName.equals("130")) {
-                return true;
+                return;
             }
         }
-        return true;               
+        throw new RecordException("Record does not contain any of these data "
+                + "fields: 245, 240, 130");
     }
  
     /**

@@ -7,9 +7,9 @@ import org.apache.jena.datatypes.TypeMapper;
 
 /**
  * Groups the bibliotek-o custom datatypes together and provides an enum to
- * designate possible values.
+ * designate values.
  */
-public class BibliotekoCustomDatatype {
+public class Ld4lCustomDatatypes {
     
     public enum BibDatatype implements Datatype {
         LEGACY_SOURCE_DATA(LegacySourceDataType.getRdfDatatype());

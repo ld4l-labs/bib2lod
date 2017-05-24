@@ -17,7 +17,7 @@ public class Attribute {
     /**
      * Constructor
      */
-    // Only called from other public constructors
+    // Only called from this class's other public constructors
     private Attribute(String value, String lang, Datatype datatype) {
         this.value = value;
         this.lang = lang;

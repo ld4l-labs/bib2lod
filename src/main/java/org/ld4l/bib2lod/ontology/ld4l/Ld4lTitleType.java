@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lTitleType implements Type {
 
+    /* List in alpha order */
     ABBREVIATED_TITLE(Ld4lNamespace.BIBLIOTEKO, "AbbreviatedTitle"),
     TITLE(Ld4lNamespace.BIBFRAME, "Title");
  

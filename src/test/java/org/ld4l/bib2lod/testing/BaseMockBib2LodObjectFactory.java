@@ -1,20 +1,29 @@
-/* $This file is distributed under the terms of the license in /doc/license.txt$ */
+package org.ld4l.bib2lod.testing;
 
-package org.ld4l.bib2lod.configuration;
-
+import java.lang.reflect.Field;
 import java.util.List;
 
+import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
+import org.ld4l.bib2lod.configuration.Configurable;
+import org.ld4l.bib2lod.configuration.Configuration;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 
 /**
- * TODO
+ * A base mock implementation that test classes can use or extend.
  */
-public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
-    // ----------------------------------------------------------------------
-    // Stub infrastructure
-    // ----------------------------------------------------------------------
+public class BaseMockBib2LodObjectFactory extends Bib2LodObjectFactory {
 
     MapOfLists<Class<?>, Object> instances = new MapOfLists<>();
+    
+    public BaseMockBib2LodObjectFactory() throws Exception {
+        try {
+            Bib2LodObjectFactory.setFactoryInstance(this);
+        } catch (IllegalStateException e) {
+            Field field = Bib2LodObjectFactory.class.getDeclaredField("instance");
+            field.setAccessible(true); 
+            field.set(null, this);           
+        }
+    }
     
     public <T> void addInstance(Class<T> interfaze, T instance) {
         addInstance(interfaze, instance, Configuration.EMPTY_CONFIGURATION);
@@ -27,10 +36,6 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         instances.addValue(interfaze, instance);
     }
     
-    // ----------------------------------------------------------------------
-    // Stub methods
-    // ----------------------------------------------------------------------
-
     @SuppressWarnings("unchecked")
     @Override
     public <T> T instanceForInterface(Class<T> class1) {
@@ -43,6 +48,8 @@ public class MockBib2LodObjectFactory extends Bib2LodObjectFactory {
         return (List<T>) instances.getValues(class1);
     }
     
-
+    public void unsetInstances() {
+        instances = new MapOfLists<>();
+    }       
 
 }

@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lIdentifierType implements Type {
 
+    /* List in alpha order */
     IDENTIFIER(Ld4lNamespace.BIBFRAME, "Identifier"),
     LOCAL(Ld4lNamespace.BIBFRAME, "Local");
     

@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lWorkType implements Type {
 
+    /* List in alpha order */
     AUDIO(Ld4lNamespace.BIBFRAME, "Audio"),
     CARTOGRAPHY(Ld4lNamespace.BIBFRAME, "Cartography"),
     MIXED_MATERIAL(Ld4lNamespace.BIBFRAME, "MixedMaterial"),

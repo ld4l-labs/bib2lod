@@ -52,18 +52,14 @@ public abstract class XmlParser extends BaseParser {
         NodeList nodes = doc.getElementsByTagName(getRecordTagName());
         
         List<Record> records = new ArrayList<Record>();
-        Class<?> recordClass = getRecordClass();
         
         for (int i = 0; i < nodes.getLength(); i++) {
             Element recordElement = (Element) nodes.item(i);
             try {
-                Record record = XmlRecord.instance(recordClass, recordElement);
+                Record record = createRecord(recordElement);
                 // TODO Or do in XmlRecord.instance() method and have it return 
                 // null if not valid?
-                // Skip an invalid record.
-                if (record.isValid()) {
-                    records.add(record);
-                }
+                records.add(record);
             } catch (RecordException e) {
                 // Skip this record
                 continue;
@@ -80,8 +76,8 @@ public abstract class XmlParser extends BaseParser {
     protected abstract String getRecordTagName();
     
     /**
-     * Returns the Record class to instantiate.
+     * Creates a new Record from the XML Element
      */
-    protected abstract Class<?> getRecordClass();
-
+    protected abstract XmlRecord createRecord(Element recordElement)
+            throws RecordException;
 }

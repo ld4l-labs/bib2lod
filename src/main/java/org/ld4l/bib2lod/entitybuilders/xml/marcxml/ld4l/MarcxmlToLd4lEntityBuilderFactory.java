@@ -14,21 +14,21 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
 
 public class MarcxmlToLd4lEntityBuilderFactory extends BaseEntityBuilderFactory {
 
-    private static HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> typeToBuilder = 
+    private static HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> typeToBuilderClass = 
             new HashMap<>();
     static {
-        typeToBuilder.put(Ld4lActivityType.class, MarcxmlToLd4lActivityBuilder.class);
-        typeToBuilder.put(Ld4lIdentifierType.class, MarcxmlToLd4lIdentifierBuilder.class);
-        typeToBuilder.put(Ld4lInstanceType.class, MarcxmlToLd4lInstanceBuilder.class);
-        typeToBuilder.put(Ld4lItemType.class, MarcxmlToLd4lItemBuilder.class);
-        typeToBuilder.put(Ld4lWorkType.class, MarcxmlToLd4lWorkBuilder.class);
-        typeToBuilder.put(Ld4lTitleType.class, MarcxmlToLd4lTitleBuilder.class);
+        typeToBuilderClass.put(Ld4lActivityType.class, MarcxmlToLd4lActivityBuilder.class);
+        typeToBuilderClass.put(Ld4lIdentifierType.class, MarcxmlToLd4lIdentifierBuilder.class);
+        typeToBuilderClass.put(Ld4lInstanceType.class, MarcxmlToLd4lInstanceBuilder.class);
+        typeToBuilderClass.put(Ld4lItemType.class, MarcxmlToLd4lItemBuilder.class);
+        typeToBuilderClass.put(Ld4lWorkType.class, MarcxmlToLd4lWorkBuilder.class);
+        typeToBuilderClass.put(Ld4lTitleType.class, MarcxmlToLd4lTitleBuilder.class);
     }
     
     @Override
     public HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> 
             getTypeToBuilderClassMap() {
-        return typeToBuilder;
+        return typeToBuilderClass;
     }
       
 }

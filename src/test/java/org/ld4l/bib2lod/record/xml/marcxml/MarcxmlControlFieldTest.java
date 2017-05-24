@@ -2,12 +2,13 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlControlField.
@@ -36,36 +37,32 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
     
     @Test
     public void noValue_Invalid() throws Exception {
-        MarcxmlControlField controlField = 
-                buildControlFieldFromString(NO_VALUE);
-        Assert.assertFalse(controlField.isValid());
+        expectException(RecordFieldException.class, "is null");
+        buildControlFieldFromString(NO_VALUE);
     }
-    
+
     @Test
     public void noControlNumber_Invalid() throws Exception {
-        MarcxmlControlField controlField = 
-                buildControlFieldFromString(NO_CONTROL_NUMBER);
-        Assert.assertFalse(controlField.isValid());
+        expectException(RecordFieldException.class, "is empty");
+        buildControlFieldFromString(NO_CONTROL_NUMBER);
     }
 
     @Test
     public void invalidControlNumberFormat_Invalid() throws Exception {
-        MarcxmlControlField controlField = 
-                buildControlFieldFromString(INVALID_CONTROL_NUMBER_FORMAT);
-        Assert.assertFalse(controlField.isValid());
+        expectException(RecordFieldException.class, "three characters");
+        buildControlFieldFromString(INVALID_CONTROL_NUMBER_FORMAT);
     }
-    
+
     @Test
     public void noTextValue_Invalid() throws Exception {
-        MarcxmlControlField controlField = buildControlFieldFromString(NO_TEXT_VALUE);
-        Assert.assertFalse(controlField.isValid());
+        expectException(RecordFieldException.class, "is null");
+        buildControlFieldFromString(NO_TEXT_VALUE);
     }
-    
+
     @Test
     public void validControlField_Valid() throws Exception {
-        MarcxmlControlField controlField = 
-                buildControlFieldFromString(VALID_CONTROL_FIELD);
-        Assert.assertTrue(controlField.isValid());   
+        // No exception
+        buildControlFieldFromString(VALID_CONTROL_FIELD);
     }
         
     // ----------------------------------------------------------------------
@@ -73,8 +70,8 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     private MarcxmlControlField buildControlFieldFromString(String s) 
-            throws RecordFieldException {
-        return (MarcxmlControlField) XmlTestUtils.buildElementFromString(
-                MarcxmlControlField.class, s);
+            throws RecordException {
+        Element element = XmlTestUtils.buildElementFromString(s);
+        return new MarcxmlControlField(element); 
     }
 }

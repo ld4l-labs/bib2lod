@@ -39,15 +39,4 @@ public interface Record {
               super(cause);
           }
     }
-    
-    /**
-     * Returns true iff the record is valid.
-     * @return
-     */
-    // TODO Change return type to String: return an error message to be logged
-    // for auditing, empty string if valid.
-    public boolean isValid();
-    
-
-   
 }
