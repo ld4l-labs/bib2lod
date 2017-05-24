@@ -30,7 +30,9 @@ public enum Ld4lObjectProp implements ObjectProp {
     HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
     HAS_TARGET(Ld4lNamespace.OA, "hasTarget"),
     MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy"),
-    CREATOR(Ld4lNamespace.DCTERMS, "creator");
+    CREATOR(Ld4lNamespace.DCTERMS, "creator"),
+    ELECTRONIC_LOCATOR(Ld4lNamespace.BIBFRAME, "electronicLocator"),
+;
 
    
     private String uri;
