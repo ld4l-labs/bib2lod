@@ -69,13 +69,12 @@ public class MarcxmlDataField extends MarcxmlField {
     }
     
     /**
-     * Returns a list of subfields of the datafield with the specified code.
+     * Returns a list of subfields of this datafield with the specified code.
      * Use with repeating subfields. Returns an empty List if no subfields 
      * found.
      * @param String code - the value of the code attribute
      */
     public List<MarcxmlSubfield> getSubfields(String code) {
-        List<MarcxmlSubfield> subfields = new ArrayList<MarcxmlSubfield>();
         for (MarcxmlSubfield subfield : subfields) {
             if (subfield.getCode().equals(code)) {
                 subfields.add(subfield);
@@ -85,9 +84,10 @@ public class MarcxmlDataField extends MarcxmlField {
     }
     
     /**
-     * Returns the subfield of the datafield with the specified code. Used for 
+     * Returns the subfield of the datafield with the specified code. Use for 
      * non-repeating  subfields. If sent a repeating subfield, returns the first 
      * encountered. Returns null if no subfield found. 
+     * @param String code - the value of the code attribute
      */
     public MarcxmlSubfield getSubfield(String code) {
         
