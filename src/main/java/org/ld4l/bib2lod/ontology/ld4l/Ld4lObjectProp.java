@@ -28,7 +28,7 @@ public enum Ld4lObjectProp implements ObjectProp {
     IS_ACTIVITY_OF(Ld4lNamespace.BIBLIOTEKO, "isActivityOf"),
     IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf"),
     IS_AT_LOCATION(Ld4lNamespace.BIBLIOTEKO, "atLocation"),
-    IS_IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
+    IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf"),
     IS_LOCATION_OF(Ld4lNamespace.BIBLIOTEKO, "isLocationOf"),
     IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
