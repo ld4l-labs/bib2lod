@@ -12,11 +12,11 @@ public enum Ld4lObjectProp implements ObjectProp {
 
     /* List in alpha order */
     CREATED(Ld4lNamespace.DCTERMS, "created"),
-    CREATOR(Ld4lNamespace.DCTERMS, "creator"),
     HAS_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "hasActivity"),
     HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
     HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
     HAS_BODY(Ld4lNamespace.OA, "hasBody"),
+    HAS_CREATOR(Ld4lNamespace.DCTERMS, "creator"),
     HAS_INSTANCE(Ld4lNamespace.BIBFRAME, "hasInstance"),
     HAS_ITEM(Ld4lNamespace.BIBFRAME, "hasItem"),
     HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
