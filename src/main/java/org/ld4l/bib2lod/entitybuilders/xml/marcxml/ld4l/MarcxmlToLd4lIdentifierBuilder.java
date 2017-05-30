@@ -34,7 +34,7 @@ public class MarcxmlToLd4lIdentifierBuilder extends MarcxmlToLd4lEntityBuilder {
             buildFromDataField();
         }
 
-        bibEntity.addRelationship(Ld4lObjectProp.IS_IDENTIFIED_BY, identifier);
+        bibEntity.addRelationship(Ld4lObjectProp.IDENTIFIED_BY, identifier);
  
         return identifier;
     }
