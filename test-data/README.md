@@ -29,7 +29,7 @@ Functional and integration tests should accept three arguments:
 
 `$ test -p marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
 
-#### Interpretation of path argument:
+#### Interpretation of path argument
 
 * Directory: Recurse the directory tree starting from the specified directory. The test should be executed on any pair of test files (as defined above) encountered along the way. 
 * File: Execute the test on the corresponding test output file in the same directory.
@@ -42,11 +42,15 @@ The program should halt execution and log an error to stderr in the following ca
 * Directory input: directory not found or unreadable
 * File input: file not found or unreadable
 
+### Logging
+
+#### Warnings
+
 A warning should be logged to stdout and execution should continue in the following cases:
 
 * Input file found with no corresponding output file
 
-### Result log
+#### Results
 
 The following results should be logged to stdout:
 
