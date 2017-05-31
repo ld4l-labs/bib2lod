@@ -15,17 +15,21 @@ For example, `102063.min.xml` and `102063.min.ttl` represent a pair of test file
 Functional and integration tests should accept three arguments:
 
 `-p` Path relative to the test-data directory of either a directory or a file. A directory name may or may not end in a slash. A filename must have an extension.
+
 `-i` Test input file extension. If the path specifies an input file, this should be omitted, and if present will be ignored.
+
 `-o` Test output file extension
 
 
-#### Sample test commands
+#### Examples
 
 `$ test -p marcxml-to-biblioteko/cornell/ -i xml -o ttl`
+
 `$ test -p marcxml-to-biblioteko/cornell/102063-min -i xml -o ttl`
+
 `$ test -p marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
 
-#### Path argument
+#### Interpretation of path argument:
 
 * Directory: Recurse the directory tree starting from the specified directory. The test should be executed on any pair of test files (as defined above) encountered along the way. 
 * File: Execute the test on the corresponding test output file in the same directory.
