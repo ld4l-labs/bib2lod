@@ -4,8 +4,10 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
@@ -18,13 +20,13 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
+public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     
     private MarcxmlRecord record;
     private InstanceEntity instance;
   
     @Override
-    public Entity build(BuildParams params) throws EntityBuilderException {
+    public Entity build(BuildParams params) {
 
         // Use this if it generates better error messages 
         // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
@@ -40,7 +42,7 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         return instance;
     }
     
-    private void buildIdentifiers() throws EntityBuilderException {
+    private void buildIdentifiers() {
         
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
         
@@ -51,11 +53,13 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
             BuildParams params = new BuildParams()
                     .setRelatedEntity(instance)
                     .setField(controlField001);
-            builder.build(params);
+            try {
+                builder.build(params);
+            } catch (EntityBuilderException e) { }
         } 
     }
     
-    private void buildTitles() throws EntityBuilderException { 
+    private void buildTitles() { 
         
         // NB There may be multiple, so this isn't sufficient.
         
@@ -63,10 +67,12 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        builder.build(params);
+        try {
+            builder.build(params);
+        } catch (EntityBuilderException e) { }
     }
     
-    private void buildWorks() throws EntityBuilderException {
+    private void buildWorks() {
         // NB There are special cases where one Instance has multiple Works.
         
         // For now, the work will take its title from the instance title
@@ -78,31 +84,38 @@ public class MarcxmlToLd4lInstanceBuilder extends MarcxmlToLd4lEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        builder.build(params);
+        try {
+            builder.build(params);
+        } catch (EntityBuilderException e) { }
     }
     
-    private void buildItem() throws EntityBuilderException {
+    private void buildItem() {
         
         EntityBuilder builder = getBuilder(Ld4lItemType.class);
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);        
-        builder.build(params);
+        try {
+            builder.build(params);
+        } catch (EntityBuilderException e) { }
     }   
     
-    private void buildPublisherActivity() throws EntityBuilderException {
+    private void buildPublisherActivity()  {
         
         EntityBuilder builder = getBuilder(Ld4lActivityType.class);
         
         MarcxmlControlField field008 = record.getControlField("008");
+
         if (field008 != null) {        
             BuildParams params = new BuildParams()
                     .setRecord(record)     
                     .setField(field008)
                     .setRelatedEntity(instance)
                     .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-            builder.build(params);
+            try {
+                builder.build(params);
+            } catch (EntityBuilderException e) { }
         }
     }
         

@@ -2,7 +2,9 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -12,7 +14,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
+public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
     
     private Entity bibEntity;
     private MarcxmlRecord record;
@@ -22,9 +24,20 @@ public class MarcxmlToLd4lActivityBuilder extends MarcxmlToLd4lEntityBuilder {
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
+
         this.bibEntity = params.getRelatedEntity();
-        this.record = (MarcxmlRecord) params.getRecord();
+        if (bibEntity == null) {
+            throw new EntityBuilderException(
+                    "A related entity is required to build an activity.");
+        }
+
         this.field = (MarcxmlField) params.getField();
+        if (field == null) {
+            throw new EntityBuilderException(
+                    "An input field is required to build an activity.");
+        }
+        
+        this.record = (MarcxmlRecord) params.getRecord();
         
         Type typeParam = params.getType();
         this.type = (Ld4lActivityType) (typeParam != null ? 

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -21,7 +22,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
  */
-public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
+public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -32,9 +33,19 @@ public class MarcxmlToLd4lTitleBuilder extends MarcxmlToLd4lEntityBuilder {
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
-        
+
         this.record = (MarcxmlRecord) params.getRecord();
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build a title.");
+        }
+ 
         this.bibEntity = params.getRelatedEntity();
+        if (bibEntity == null) {
+            throw new EntityBuilderException(
+                    "A related entity is required to build a title.");
+        }
+        
         this.title = new Entity(Ld4lTitleType.superClass());
         
         String titleLabel = null;

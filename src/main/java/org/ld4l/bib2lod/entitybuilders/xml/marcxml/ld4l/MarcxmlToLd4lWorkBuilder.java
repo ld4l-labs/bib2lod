@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -13,7 +15,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
+public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
     
     private MarcxmlRecord record;
     private Entity instance;
@@ -43,7 +45,17 @@ public class MarcxmlToLd4lWorkBuilder extends MarcxmlToLd4lEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
         
         this.record = (MarcxmlRecord) params.getRecord();
-        this.instance = params.getRelatedEntity();  
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build a work.");
+        }
+
+        this.instance = params.getRelatedEntity();
+        if (instance == null) {
+            throw new EntityBuilderException(
+                    "An instance is required to build a work.");
+        }
+        
         this.work = new Entity(Ld4lWorkType.superClass());
         
         addTitle();
