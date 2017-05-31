@@ -13,9 +13,9 @@ public enum Ld4lNamedIndividual implements NamedIndividual {
     
     /* List in alpha order */
     _134059638(Ld4lNamespace.VIAF, "134059638"),
-	DESCRIBING(Ld4lNamespace.OA, "describing", Ld4lAnnotationType.MOTIVATION),
-	PROVIDING_PURPOSE(Ld4lNamespace.BIBLIOTEKO, "providingPurpose", Ld4lAnnotationType.MOTIVATION),
-	SUMMARIZING(Ld4lNamespace.BIBLIOTEKO, "summarizing", Ld4lAnnotationType.MOTIVATION);
+	DESCRIBING(Ld4lNamespace.OA, "describing", Ld4lMotivationType.MOTIVATION),
+	PROVIDING_PURPOSE(Ld4lNamespace.BIBLIOTEKO, "providingPurpose", Ld4lMotivationType.MOTIVATION),
+	SUMMARIZING(Ld4lNamespace.BIBLIOTEKO, "summarizing", Ld4lMotivationType.MOTIVATION);
 
     private String uri;
     private Resource resource;

@@ -5,10 +5,10 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.ld4l.bib2lod.ontology.Namespace;
 import org.ld4l.bib2lod.ontology.Type;
 
-public enum Ld4lAnnotationType implements Type {
-    
+public enum Ld4lTextualBodyType implements Type {
+
     /* List in alpha order */
-    ANNOTATION(Ld4lNamespace.OA, "Annotation");
+    TEXTUAL_BODY(Ld4lNamespace.OA, "TextualBody");
     
     private final String uri;
     private final Resource ontClass;
@@ -16,7 +16,7 @@ public enum Ld4lAnnotationType implements Type {
     /**
      * Constructor
      */
-    Ld4lAnnotationType(Namespace namespace, String localName) {
+    Ld4lTextualBodyType(Namespace namespace, String localName) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri); 
     }    
