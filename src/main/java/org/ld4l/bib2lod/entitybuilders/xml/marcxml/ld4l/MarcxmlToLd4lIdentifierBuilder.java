@@ -38,7 +38,7 @@ public class MarcxmlToLd4lIdentifierBuilder extends MarcxmlToLd4lEntityBuilder {
 
         if (bibEntity != null) {
             bibEntity.addRelationship(
-                    Ld4lObjectProp.IS_IDENTIFIED_BY, identifier);
+                    Ld4lObjectProp.IDENTIFIED_BY, identifier);
         }
  
         return identifier;

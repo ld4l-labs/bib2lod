@@ -10,13 +10,14 @@ import org.ld4l.bib2lod.ontology.ObjectProp;
  */
 public enum Ld4lObjectProp implements ObjectProp {
 
-    /* List in alpha order */
+    /* List in alpha order, use initial verb form (HAS_ or IS_ if not already verbal in any form, including past and passive participles. */
     CREATED(Ld4lNamespace.DCTERMS, "created"),
-    CREATOR(Ld4lNamespace.DCTERMS, "creator"),
     HAS_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "hasActivity"),
     HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
     HAS_ANNOTATION(Ld4lNamespace.BIBLIOTEKO, "isTargetOf"),
     HAS_BODY(Ld4lNamespace.OA, "hasBody"),
+    HAS_CREATOR(Ld4lNamespace.DCTERMS, "creator"),
+    HAS_ELECTRONIC_LOCATOR(Ld4lNamespace.BIBFRAME, "electronicLocator"),
     HAS_INSTANCE(Ld4lNamespace.BIBFRAME, "hasInstance"),
     HAS_ITEM(Ld4lNamespace.BIBFRAME, "hasItem"),
     HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
@@ -28,7 +29,7 @@ public enum Ld4lObjectProp implements ObjectProp {
     IS_ACTIVITY_OF(Ld4lNamespace.BIBLIOTEKO, "isActivityOf"),
     IS_AGENT_OF(Ld4lNamespace.BIBLIOTEKO, "isAgentOf"),
     IS_AT_LOCATION(Ld4lNamespace.BIBLIOTEKO, "atLocation"),
-    IS_IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
+    IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf"),
     IS_LOCATION_OF(Ld4lNamespace.BIBLIOTEKO, "isLocationOf"),
     IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
