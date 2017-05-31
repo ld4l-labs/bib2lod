@@ -4,6 +4,7 @@ package org.ld4l.bib2lod.configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,9 +15,14 @@ import org.ld4l.bib2lod.configuration.Configuration.ConfigurationException;
  * 
  * <pre>
  * Valid arguments are:
- * -c ConfigurationFile
- * -o InputService:source=some.file   --   adds a value
- * -o OutputService:ext               --   removes values
+ * 
+ * option           example value                   description
+ * ------------------------------------------------------------------------
+ * -c or --config   ./ConfigurationFile             path to the config file
+ * -a or --add      InputService:source=some.file   add a config value
+ * -s or --set      Cleaner:class=some.Class        replace config values
+ *                  Cleaner:class                   remove config values
+ * -d or --drop     OutputService:ext               remove config values
  * 
  * If no -c is specified, we will accept an environment variable instead.
  * </pre>
@@ -45,51 +51,29 @@ public class CommandLineOptions implements ConfigurationOptions {
     private void parseArguments(String... args) {
         for (Iterator<String> it = Arrays.asList(args).iterator(); it
                 .hasNext();) {
-            String key = it.next();
-            if (key.equals("-c") || key.equals("-o")) {
-                if (!it.hasNext()) {
-                    throw new ConfigurationException(
-                            "You must provide a value after '" + key + "'");
-                }
-                String value = it.next();
-                if (value.startsWith("-")) {
-                    throw new ConfigurationException(
-                            "You must provide a value between keys '" + key
-                                    + "' and '" + value + "'");
-                }
-                if (key.equals("-c")) {
-                    configFile = value;
-                } else {
-                    parseOverride(value);
-                }
-            } else {
+            String keyString = it.next();
+            String parameterString = it.hasNext() ? it.next() : null;
+
+            Key key = Key.parse(keyString);
+            Parameter parameter = Parameter.parse(parameterString);
+
+            if (parameter == null) {
                 throw new ConfigurationException(
-                        "The only valid options are -c for the config file, "
-                                + "and -o for an attribute override: '" + key
+                        "You must provide a parameter after '" + keyString
                                 + "'");
             }
-        }
-    }
 
-    private void parseOverride(String spec) {
-        int firstEquals = spec.indexOf('=');
-        String namestring;
-        String value;
-        if (firstEquals == -1) {
-            namestring = spec;
-            value = null;
-        } else {
-            namestring = spec.substring(0, firstEquals);
-            value = spec.substring(firstEquals + 1);
+            if (key == Key.CONFIG) {
+                if (parameter.value != null) {
+                    throw new ConfigurationException(
+                            "Command line parameter may not include an "
+                                    + "equals sign: '" + parameterString + "'");
+                }
+                configFile = parameter.name;
+            } else {
+                overrides.addAll(key.process(parameter));
+            }
         }
-
-        if (namestring.contains(" ")) {
-            throw new ConfigurationException(
-                    "An override may not contain spaces to the left of "
-                            + "the equals sign: '" + spec + "'");
-        }
-
-        overrides.add(new AttributeOverride(value, namestring.split(":")));
     }
 
     @Override
@@ -100,6 +84,106 @@ public class CommandLineOptions implements ConfigurationOptions {
     @Override
     public List<AttributeOverride> getOverrides() {
         return overrides;
+    }
+
+    private enum Key {
+        CONFIG("-c", "--config") {
+            @Override
+            List<AttributeOverride> process(Parameter p) {
+                return null;
+            }
+        },
+        ADD("-a", "--add") {
+            @Override
+            List<AttributeOverride> process(Parameter p) {
+                if (p.value == null) {
+                    throw new ConfigurationException(
+                            "The parameter for 'add' must include a "
+                                    + "replacement value.");
+                }
+                return Collections.singletonList(
+                        new AttributeOverride(p.value, p.name.split(":")));
+            }
+        },
+        DROP("-d", "--drop") {
+            @Override
+            List<AttributeOverride> process(Parameter p) {
+                if (p.value != null) {
+                    throw new ConfigurationException(
+                            "The parameter for 'drop' must not include a "
+                                    + "replacement value.");
+                }
+                return Collections.singletonList(
+                        new AttributeOverride(null, p.name.split(":")));
+            }
+        },
+        SET("-s", "--set") {
+            @Override
+            List<AttributeOverride> process(Parameter p) {
+                String[] path = p.name.split(":");
+                List<AttributeOverride> list = new ArrayList<>();
+
+                list.add(new AttributeOverride(null, path));
+                if (p.value != null) {
+                    list.add(new AttributeOverride(p.value, path));
+                }
+                
+                return list;
+            }
+        };
+
+        private String[] strings;
+
+        Key(String... strings) {
+            this.strings = strings;
+        }
+
+        abstract List<AttributeOverride> process(Parameter v);
+
+        static Key parse(String s) {
+            for (Key k : Key.values()) {
+                for (String keyString : k.strings) {
+                    if (keyString.equals(s)) {
+                        return k;
+                    }
+                }
+            }
+            throw new ConfigurationException(
+                    "Valid options are -c, -a, -s, -d, --config, "
+                            + "--add, --set, --delete: '" + s + "'");
+        }
+    }
+
+    private static class Parameter {
+        static Parameter parse(String s) {
+            if (s == null || s.startsWith("-")) {
+                return null;
+            }
+
+            int firstEquals = s.indexOf('=');
+            if (firstEquals == -1) {
+                return new Parameter(s, null);
+            } else {
+                return new Parameter(s.substring(0, firstEquals),
+                        s.substring(firstEquals + 1));
+            }
+
+        }
+
+        private final String name;
+        private final String value;
+
+        public Parameter(String name, String value) {
+            this.name = name;
+            this.value = value;
+
+            if (name.contains(" ")) {
+                throw new ConfigurationException(
+                        "A parameter may not contain spaces to the left of "
+                                + "the equals sign: '" + name + "'");
+            }
+        }
+
     }
 
 }

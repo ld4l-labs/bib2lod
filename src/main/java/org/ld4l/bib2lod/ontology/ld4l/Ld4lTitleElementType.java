@@ -11,8 +11,9 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lTitleElementType implements Type {
 
-    NON_SORT_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "NonSortTitleElement"),
+    /* List in alpha order */
     MAIN_TITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
+    NON_SORT_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "NonSortTitleElement"),
     PART_NAME_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
     PART_NUMBER_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),
     SUBTITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "MainTitleElement"),

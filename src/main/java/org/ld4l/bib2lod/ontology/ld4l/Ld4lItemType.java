@@ -11,7 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lItemType implements Type {
         
-    // There may not be any other Item classes
+    /* List in alpha order */
     ITEM(Ld4lNamespace.BIBFRAME, "Item");
     
     private final String uri;

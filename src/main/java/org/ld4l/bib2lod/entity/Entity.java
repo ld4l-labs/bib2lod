@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.ld4l.bib2lod.datatypes.Datatype;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
@@ -44,7 +45,7 @@ public class Entity {
     
 
     /**
-     * Constructors
+     * Constructor
      */
     protected Entity() {
         this.relationships = new MapOfLists<>();
@@ -55,6 +56,9 @@ public class Entity {
         this.model = null;
     }
 
+    /**
+     * Constructor
+     */
     public Entity(Type type) {
         this();
         types.add(type);
@@ -139,6 +143,10 @@ public class Entity {
         addAttribute(prop, new Attribute(string));
     }
     
+    public void addAttribute(DatatypeProp prop, String string, Datatype type) {
+        addAttribute(prop, new Attribute(string, type));
+    }
+    
     public void addAttribute(DatatypeProp prop, int i) {
         addAttribute(prop, new Attribute(i));                
     }
@@ -162,15 +170,17 @@ public class Entity {
     public List<Attribute> getValues(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
-
-    public void buildResource() {
+    
+    /**
+     * Build the Entity's Resource with a specified URI
+     */
+    public void buildResource(String uri) {
         
         if (resource != null) {
             return;
         }
-
+        
         Model model = ModelFactory.createDefaultModel();       
-        String uri = getUri();
         this.resource = model.createResource(uri);
         
         // Add type assertions
@@ -195,12 +205,27 @@ public class Entity {
             }
         }
         
+        // Add relationships to external URIs
         for (ObjectProp prop : externalRelationships.keys()) {
             for (String externalUri : externalRelationships.getValues(prop)) {
                 resource.addProperty(prop.property(), 
                         ResourceFactory.createResource(externalUri));
             }
-        }          
+        }   
+    }
+
+    public void buildResource() {
+        
+        if (resource != null) {
+            return;
+        }
+
+        String uri = getUri();
+        this.buildResource(uri);    
+    }
+    
+    public Resource getResource() {
+        return this.resource;
     }
     
     public Model getModel() {

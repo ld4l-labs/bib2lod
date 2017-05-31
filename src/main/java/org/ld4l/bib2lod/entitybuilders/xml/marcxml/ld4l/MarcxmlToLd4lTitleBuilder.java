@@ -17,6 +17,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
+
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
  */

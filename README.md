@@ -42,4 +42,81 @@
   * A log file of the run will be created as `target/logs/bib2lod.log`
   * An existing log file will not be overwritten, but will be renamed with a timestamp, such as `bib2lod-2017-03-31-14-38-47-1.log`
   
+### Command line options
+As illustrated above, the command to run the converter looks like this:
 
+    java -jar bib2lod.jar [options]
+    
+Where options are:
+
+* -c __path__, --config __path__
+  * Specify the path to the configuration file. 
+    The path may be relative or absolute.
+* -a __spec=value__, --add __spec=value__
+  * Add a value to the configuration at the specified location. 
+    For example, if the configuration file contains this section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES"
+            },
+    Then this command line option
+
+            --add OutputService:destination=./output
+    will have this effect on the relevant section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES",
+              "destination": "./output"
+            },
+    Note that `--add` cannot be used to replace an existing value 
+    in the configuration file. It will merely add an additional 
+    value at the same location. To replace an existing value, 
+    use `--set`.
+    
+* -d __spec__, --drop __spec__
+  * Remove a value from the configuration at the specified location.
+    For example, if the configuration file contains this section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES"
+              "destination": "./output"
+            },
+    Then this command line option
+
+            --drop OutputService:destination
+    will have this effect on the relevant section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES",
+            },
+    If there are multiple values at the specified location, 
+    `--drop` will remove all of them. If there are no such values,
+    `--drop` will have no effect.
+
+* -s __spec=value__, --set __spec=value__
+  * Set a value into the configuration at the specified location,
+    replacing any existing value. For example, if the 
+    configuration file contains this section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES"
+              "destination": "./output"
+            },
+    Then this command line option
+
+            --set OutputService:destination=newOutput
+    will have this effect on the relevant section:
+
+            "OutputService": {
+              "class": "org.ld4l.bib2lod.io.FileOutputService",
+              "format": "N-TRIPLES",
+              "destination": "newOutput"
+            },
+    If there are multiple values at the specified location, 
+    `--set` will replace all of them. If there are no such values,
+    `--set` proceeds like `--add`.

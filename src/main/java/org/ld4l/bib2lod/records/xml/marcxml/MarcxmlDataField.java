@@ -26,7 +26,7 @@ public class MarcxmlDataField extends MarcxmlField {
     /**
      * Constructor
      */
-    public MarcxmlDataField(Element element) {
+    public MarcxmlDataField(Element element) throws RecordFieldException {
         super(element);
             
         tag = element.getAttribute("tag");
@@ -41,6 +41,7 @@ public class MarcxmlDataField extends MarcxmlField {
             subfields.add(new MarcxmlSubfield(
                     (Element) subfieldNodes.item(i)));
         }
+        isValid();
     }
     
     private Integer getIndicatorValue(String ind, Element element) {
@@ -68,13 +69,12 @@ public class MarcxmlDataField extends MarcxmlField {
     }
     
     /**
-     * Returns a list of subfields of the datafield with the specified code.
+     * Returns a list of subfields of this datafield with the specified code.
      * Use with repeating subfields. Returns an empty List if no subfields 
      * found.
      * @param String code - the value of the code attribute
      */
     public List<MarcxmlSubfield> getSubfields(String code) {
-        List<MarcxmlSubfield> subfields = new ArrayList<MarcxmlSubfield>();
         for (MarcxmlSubfield subfield : subfields) {
             if (subfield.getCode().equals(code)) {
                 subfields.add(subfield);
@@ -84,9 +84,10 @@ public class MarcxmlDataField extends MarcxmlField {
     }
     
     /**
-     * Returns the subfield of the datafield with the specified code. Used for 
+     * Returns the subfield of the datafield with the specified code. Use for 
      * non-repeating  subfields. If sent a repeating subfield, returns the first 
      * encountered. Returns null if no subfield found. 
+     * @param String code - the value of the code attribute
      */
     public MarcxmlSubfield getSubfield(String code) {
         
@@ -114,39 +115,29 @@ public class MarcxmlDataField extends MarcxmlField {
         
     }
 
-    /* (non-Javadoc)
-     * @see org.ld4l.bib2lod.record.RecordElement#isValid()
-     */
-    @Override
-    public boolean isValid() {
+    private void isValid() throws RecordFieldException {
         
         if (tag == null) {
-            return false;
+            throw new RecordFieldException("tag is null");
         }
         if (tag.equals("")) {
-            return false;
+            throw new RecordFieldException("tag is empty");
         }
         if (tag.equals(" ")) {
-            return false;
+            throw new RecordFieldException("tag is blank");
         }
         if (Integer.parseInt(tag) > 999) {
-            return false;
+            throw new RecordFieldException("tag is greater than 999");
         }
         /*
          * Bad test: when pretty-printed there is whitespace inside the element.
         if (textValue != null) {
-            return false;
+            throw new RecordFieldException("");
         }
         */
         if (subfields.isEmpty()) {
-            return false;
+            throw new RecordFieldException("field has no subfields");
         }
-        for (MarcxmlSubfield subfield : subfields) {
-            if (! subfield.isValid()) {
-                return false;
-            }
-        }
-        return true;
     }
     
 }

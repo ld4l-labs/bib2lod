@@ -2,12 +2,13 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.record.xml.XmlTestUtils;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlDataField.
@@ -55,56 +56,53 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     
     @Test
     public void noValue_Invalid() throws Exception {
-        MarcxmlDataField dataField = buildDataFieldFromString(NO_VALUE);
-        Assert.assertFalse(dataField.isValid());
+        expectException(RecordFieldException.class, "no subfields");
+        buildDataFieldFromString(NO_VALUE);
     }
-    
+
     @Test
     public void nonSubfieldChild_Ignored() throws Exception {
-        MarcxmlDataField dataField = 
-                buildDataFieldFromString(NON_SUBFIELD_CHILD);
-        Assert.assertTrue(dataField.isValid());
+        // No exception
+        buildDataFieldFromString(NON_SUBFIELD_CHILD);
     }
-    
+
     @Test
     public void noTag_Invalid() throws Exception {
-        MarcxmlDataField dataField = buildDataFieldFromString(NO_TAG);
-        Assert.assertFalse(dataField.isValid());
+        expectException(RecordFieldException.class, "tag is empty");
+        buildDataFieldFromString(NO_TAG);
     }
-    
+
     @Test
     public void emptyTag_Invalid() throws Exception {
-        MarcxmlDataField dataField = 
-                buildDataFieldFromString(EMPTY_TAG);
-        Assert.assertFalse(dataField.isValid());
+        expectException(RecordFieldException.class, "tag is blank");
+        buildDataFieldFromString(EMPTY_TAG);
     }
-    
+
     @Test
     public void invalidTagFormat_Invalid() throws Exception {
-        MarcxmlDataField dataField = 
-                buildDataFieldFromString(INVALID_TAG_FORMAT);
-        Assert.assertFalse(dataField.isValid());
+        expectException(RecordFieldException.class, "greater than 999");
+        buildDataFieldFromString(INVALID_TAG_FORMAT);
     }
-    
+
     @Test
     public void invalidSubfield_Invalid() throws Exception {
-        MarcxmlDataField dataField = buildDataFieldFromString(INVALID_SUBFIELD);
-        Assert.assertFalse(dataField.isValid());
+        expectException(RecordFieldException.class, "code is empty");
+        buildDataFieldFromString(INVALID_SUBFIELD);
     }
     
     @Test
     public void validDataField_Valid() throws Exception {
-        MarcxmlDataField dataField = buildDataFieldFromString(VALID_DATAFIELD);
-        Assert.assertTrue(dataField.isValid());
+        // No exception
+        buildDataFieldFromString(VALID_DATAFIELD);
     }
     
     // ----------------------------------------------------------------------
     // Helper methods
     // ----------------------------------------------------------------------
     
-    private MarcxmlDataField buildDataFieldFromString(String s) 
-            throws RecordFieldException {
-        return (MarcxmlDataField) XmlTestUtils.buildElementFromString(
-                MarcxmlDataField.class, s);
+    private MarcxmlDataField buildDataFieldFromString(String s)
+            throws RecordException {
+        Element element = XmlTestUtils.buildElementFromString(s);
+        return new MarcxmlDataField(element);
     }
 }

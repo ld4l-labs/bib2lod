@@ -23,7 +23,7 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class FileOutputServiceTest extends AbstractTestClass {
 
-    private static final String NTRIPLES = "N-TRIPLE";
+    private static final String NTRIPLES = "N-TRIPLES";
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();

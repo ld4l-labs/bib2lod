@@ -40,7 +40,7 @@ class TestBib2lod(TestCase):
     def test01_config_errors(self):
         """Test simple errors attempting to run bib2lod."""
         out = run_bib2lod([])
-        self.assertIn(b"You must provide a value after '-c'", out)
+        self.assertIn(b"You must provide a parameter after '-c'", out)
         out = run_bib2lod(['DOES_NOT_EXIST'])
         self.assertIn(b"Configuration file does not exist", out)
         out = run_bib2lod(['tests_functional/testdata/bad1.json'])
@@ -48,7 +48,7 @@ class TestBib2lod(TestCase):
 
     def test02_cornell_ld4l_conversion(self):
         """Test Cornel LD4L conversions based on sample configuration file."""
-        indirs = 'sample-data/sample-conversions/marcxml-to-ld4l/cornell'
+        indirs = 'sample-data/marcxml-to-ld4l/cornell'
         outdir = self.tmpdir
         for indir in glob.glob(os.path.join(indirs, '*')):
             # FIXME - should look for *.xml in each dir and then build tests on that

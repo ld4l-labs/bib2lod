@@ -3,6 +3,7 @@
 package org.ld4l.bib2lod.conversion;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
@@ -12,8 +13,11 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilders;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.io.InputService;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
+import org.ld4l.bib2lod.io.InputService.InputServiceException;
+import org.ld4l.bib2lod.io.OutputService;
 import org.ld4l.bib2lod.io.OutputService.OutputDescriptor;
 import org.ld4l.bib2lod.io.OutputService.OutputServiceException;
 import org.ld4l.bib2lod.ontology.Type;
@@ -28,7 +32,34 @@ public abstract class BaseConverter implements Converter {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private EntityBuilders entityBuilders;
+    private EntityBuilderFactory entityBuilderFactory;
+    
+    /*
+     * (non-Javadoc)
+     * @see org.ld4l.bib2lod.conversion.Converter#convertAll(org.ld4l.bib2lod.io.InputService, org.ld4l.bib2lod.io.OutputService)
+     */
+    @Override
+    public void convertAll(InputService inputService, 
+            OutputService outputService) throws ConverterException {
+        
+        Iterator<InputDescriptor> inputs = inputService.getDescriptors()
+                .iterator();
+        while (inputs.hasNext()) {
+            try (
+                InputDescriptor input = inputs.next();
+                OutputDescriptor output = outputService
+                        .openSink(input.getMetadata());
+            ) {
+                convert(input, output);
+            } catch (InputServiceException | OutputServiceException
+                    | IOException e) {
+                throw new ConverterException(e);
+            } catch (ConverterException e) {
+                // Go to next input. 
+                // TODO Log error
+            }
+        }       
+    }
 
     /* (non-Javadoc)
      * @see org.ld4l.bib2lod.conversion.Converter#convert()
@@ -48,13 +79,19 @@ public abstract class BaseConverter implements Converter {
             throw new ConverterException(e);
         }
         
+        if (records == null) {
+            return;
+        }
+        
         Model model = ModelFactory.createDefaultModel();
-        entityBuilders = EntityBuilders.instance();
+        entityBuilderFactory = EntityBuilderFactory.instance();
         
         for (Record record : records) {
             try {
-                model.add(convertRecord(record));
-            } catch (EntityBuilderException e) {
+                Model recordModel = convertRecord(record);
+                model.add(recordModel);
+                //model.add(convertRecord(record));
+            } catch (RecordConversionException e) {
                 // Continue to next record
                 continue;
             }
@@ -74,27 +111,30 @@ public abstract class BaseConverter implements Converter {
      * Converts a Record to an RDF Model. Starting with the primary 
      * bibliographic resource (commonly an Instance)
      * @throws RecordConversionException 
-     * @throws EntityBuilderException 
      */
     protected Model convertRecord(Record record) 
-            throws RecordConversionException, EntityBuilderException  {
+            throws RecordConversionException  {
 
-        // Build the primary Entity (e.g., an Instance) from the Record, 
-        // its dependent Entities, and links to the dependents.
-        Entity entity = buildEntity(record);
- 
-        // Build a Resource from the Entity, including its dependent Entities.
-        // Each Resource is attached to its Entity.
-        entity.buildResource();
-
-        // Build the Model for this Record from the Entity's Resource and the
-        // Resources of its dependent Entities.
-        return entity.getModel();
-
+        try {
+            // Build the primary Entity (e.g., an Instance) from the Record, 
+            // its dependent Entities, and links to the dependents.
+            Entity entity = buildEntity(record);
+     
+            // Build a Resource from the Entity, including its dependent Entities.
+            // Each Resource is attached to its Entity.
+            entity.buildResource();
+    
+            // Build the Model for this Record from the Entity's Resource and the
+            // Resources of its dependent Entities.
+            return entity.getModel();
+            
+        } catch (EntityBuilderException e) {
+            throw new RecordConversionException(e);
+        }
     }
     
     protected EntityBuilder getBuilder(Class<? extends Type> type) {
-        return entityBuilders.getBuilder(type);
+        return entityBuilderFactory.getBuilder(type);
     }
     
     /**

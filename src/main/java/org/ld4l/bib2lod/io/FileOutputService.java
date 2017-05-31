@@ -19,7 +19,8 @@ public class FileOutputService implements OutputService {
      * process it.
      */
     protected enum Format {
-        NTRIPLES("nt", "N-TRIPLE");
+        NTRIPLES("nt", "N-TRIPLES"),
+        TURTLE("ttl", "TURTLE");
 
         private static Format fromString(String string) {
             for (Format f : values()) {

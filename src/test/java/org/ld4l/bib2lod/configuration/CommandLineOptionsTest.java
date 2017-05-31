@@ -28,26 +28,28 @@ public class CommandLineOptionsTest extends AbstractTestClass {
 
     @Test
     public void invalidOption_throwsException() {
-        expectException(ConfigurationException.class, "only valid options");
+        expectException(ConfigurationException.class, "Valid options are");
         parseArgs("Bogus");
     }
 
     @Test
     public void optionAtEndOfArgs_throwsException() {
-        expectException(ConfigurationException.class, "must provide a value");
-        parseArgs("-c", "configFile", "-o");
+        expectException(ConfigurationException.class,
+                "must provide a parameter");
+        parseArgs("-c", "configFile", "--config");
     }
 
     @Test
     public void twoOptionsWithoutAValue_throwsException() {
-        expectException(ConfigurationException.class, "a value between");
-        parseArgs("-o", "-c", "configFile");
+        expectException(ConfigurationException.class,
+                "must provide a parameter");
+        parseArgs("-s", "--config", "configFile");
     }
 
     @Test
     public void optionsWithSpacesBeforeTheEquals_throwsException() {
         expectException(ConfigurationException.class, "spaces to the left");
-        parseArgs("-o", "bad space=ok space");
+        parseArgs("--set", "bad space=ok space");
     }
 
     @Test
@@ -65,28 +67,93 @@ public class CommandLineOptionsTest extends AbstractTestClass {
     }
 
     @Test
-    public void overrideWithEquals_isParsedCorrectly() {
-        parseArgs("-o", "replace=newValue");
-        assertNull(configFile);
-        assertEquals(1, overrides.size());
-        assertExpectedOverride(path("replace"), "newValue", overrides.get(0));
+    public void longConfigFileOption_worksFine() {
+        parseArgs("--config", "myConfigFile");
+        assertEquals("myConfigFile", configFile);
+        assertEquals(0, overrides.size());
     }
 
     @Test
-    public void overrideWithoutEquals_isParsedCorrectly() {
-        parseArgs("-o", "replace");
+    public void addRequiresEquals() {
+        expectException(ConfigurationException.class,
+                "must include a replacement");
+        parseArgs("-a", "addThis");
+    }
+
+    @Test
+    public void add_worksFine() {
+        parseArgs("-a", "addThis=newValue");
         assertNull(configFile);
         assertEquals(1, overrides.size());
-        assertExpectedOverride(path("replace"), null, overrides.get(0));
+        assertExpectedOverride(path("addThis"), "newValue", overrides.get(0));
+    }
+
+    @Test
+    public void longAdd_worksFine() {
+        parseArgs("--add", "addThis=newValue");
+        assertNull(configFile);
+        assertEquals(1, overrides.size());
+        assertExpectedOverride(path("addThis"), "newValue", overrides.get(0));
+    }
+
+    @Test
+    public void dropDoesntPermitEquals() {
+        expectException(ConfigurationException.class,
+                "must not include a replacement");
+        parseArgs("-d", "dropThis=newValue");
+    }
+
+    @Test
+    public void drop_worksFine() {
+        parseArgs("-d", "dropThis");
+        assertNull(configFile);
+        assertEquals(1, overrides.size());
+        assertExpectedOverride(path("dropThis"), null, overrides.get(0));
+    }
+
+    @Test
+    public void longDrop_worksFine() {
+        parseArgs("--drop", "dropThis");
+        assertNull(configFile);
+        assertEquals(1, overrides.size());
+        assertExpectedOverride(path("dropThis"), null, overrides.get(0));
+    }
+
+    @Test
+    public void setWithEquals_worksLikeDropAndAdd() {
+        parseArgs("-s", "setThis=newValue");
+        assertNull(configFile);
+        assertEquals(2, overrides.size());
+        assertExpectedOverride(path("setThis"), null, overrides.get(0));
+        assertExpectedOverride(path("setThis"), "newValue", overrides.get(1));
+    }
+
+    @Test
+    public void setWithoutEquals_worksLikeDrop() {
+        parseArgs("-s", "setThis");
+        assertNull(configFile);
+        assertEquals(1, overrides.size());
+        assertExpectedOverride(path("setThis"), null, overrides.get(0));
+    }
+
+    @Test
+    public void longSet_worksToo() {
+        parseArgs("--set", "setThis=newValue");
+        assertNull(configFile);
+        assertEquals(2, overrides.size());
+        assertExpectedOverride(path("setThis"), null, overrides.get(0));
+        assertExpectedOverride(path("setThis"), "newValue", overrides.get(1));
     }
 
     @Test
     public void colonsInTheNameSpec_areInterpretedCorrectly() {
-        parseArgs("-o", "replace:me:with:this=excellent value");
+        parseArgs("--set", "replace:me:with:this=excellent value");
         assertNull(configFile);
-        assertEquals(1, overrides.size());
+        assertEquals(2, overrides.size());
+        assertExpectedOverride(path("replace", "me", "with", "this"), null,
+                overrides.get(0));
         assertExpectedOverride(path("replace", "me", "with", "this"),
-                "excellent value", overrides.get(0));
+                "excellent value", overrides.get(1));
     }
 
     // ----------------------------------------------------------------------

@@ -8,20 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
-import org.ld4l.bib2lod.configuration.MockBib2LodObjectFactory;
-import org.ld4l.bib2lod.conversion.Converter;
 import org.ld4l.bib2lod.io.InputService.InputDescriptor;
 import org.ld4l.bib2lod.io.InputService.InputMetadata;
 import org.ld4l.bib2lod.io.InputService.InputServiceException;
-import org.ld4l.bib2lod.managers.SimpleManagerTest.MockConverter;
 import org.ld4l.bib2lod.parsing.Parser;
+import org.ld4l.bib2lod.parsing.Parser.ParserException;
 import org.ld4l.bib2lod.records.Record;
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.BaseXmlElement;
 import org.ld4l.bib2lod.records.xml.XmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -33,7 +29,6 @@ import org.w3c.dom.NodeList;
  * Tests class XmlParser.
  */
 public class XmlParserTest extends AbstractTestClass {
-    
     
     // ----------------------------------------------------------------------
     // Mocking infrastructure
@@ -73,16 +68,16 @@ public class XmlParserTest extends AbstractTestClass {
     public static class MockXmlParser extends XmlParser {
 
         private static final String RECORD_TAG_NAME = "record";
-        private static final Class<?> RECORD_CLASS = MockXmlRecord.class;
 
         @Override
         protected String getRecordTagName() {
             return RECORD_TAG_NAME;
         }
 
-        @Override
-        protected Class<?> getRecordClass() {
-            return RECORD_CLASS;
+        protected XmlRecord createRecord(Element recordElement)
+                throws RecordException {
+            return new MockXmlRecord(recordElement);
+
         }
     }
 
@@ -90,8 +85,9 @@ public class XmlParserTest extends AbstractTestClass {
         
         private List<MockXmlRecordElement> children;
 
-        public MockXmlRecord(Element record) {
+        public MockXmlRecord(Element record) throws RecordException {
             children = buildChildren(record);
+            isValid();
         }
         
         private List<MockXmlRecordElement> buildChildren(Element record) {
@@ -105,12 +101,10 @@ public class XmlParserTest extends AbstractTestClass {
             return children;
         }
 
-        @Override
-        public boolean isValid() {      
+        private void isValid() throws RecordException {      
             if (children.isEmpty()) {
-                return false;
+                throw new RecordException("No children");
             }
-            return true;
         }
     }
 
@@ -120,11 +114,6 @@ public class XmlParserTest extends AbstractTestClass {
             super(element);
         }
 
-        @Override
-        public boolean isValid() {
-            // This suffices for current tests
-            return true;
-        }
     }    
     
     
@@ -140,27 +129,13 @@ public class XmlParserTest extends AbstractTestClass {
                  INVALID_RECORD + ROOT_ELEMENT_CLOSE;
     
     private static final String NO_RECORDS = ROOT_ELEMENT_OPEN + ROOT_ELEMENT_CLOSE;
-    
-    // private static final String INVALID_XML = "<record>Test";
  
-    private MockBib2LodObjectFactory factory;
     private Parser parser;
-    
 
     @Before
-    public void setup() {
-        factory = new MockBib2LodObjectFactory();        
-        Bib2LodObjectFactory.setFactoryInstance(factory);
-        factory.addInstance(Converter.class, new MockConverter());
-        factory.addInstance(Parser.class, new MockXmlParser());
-        parser = Parser.instance();
+    public void setUp() {
+        parser = new MockXmlParser(); 
     }  
-    
-    @After
-    public void teardown() {
-        Bib2LodObjectFactory.unsetFactoryInstance();
-    }
-    
     
     // ----------------------------------------------------------------------
     // The tests
@@ -168,17 +143,23 @@ public class XmlParserTest extends AbstractTestClass {
     
     @Test
     public void invalidRecord_Ignored() throws Exception {
-        InputDescriptor descriptor = new MockInputDescriptor(RECORDS);
-        List<Record> records = parser.parse(descriptor);
-        Assert.assertEquals(1,  records.size());       
+        List<Record> records = getRecords(RECORDS);
+        Assert.assertEquals(1, records.size());       
     }
     
     @Test
     public void noRecords_Succeeds() throws Exception {
-        InputDescriptor descriptor = new MockInputDescriptor(NO_RECORDS);
-        List<Record> records = parser.parse(descriptor);
+        List<Record> records = getRecords(NO_RECORDS);
         Assert.assertTrue(records.isEmpty());     
     }
-   
     
+    // ----------------------------------------------------------------------
+    // Helper methods
+    // ----------------------------------------------------------------------
+    
+    private List<Record> getRecords(String input) throws ParserException {
+        InputDescriptor descriptor = new MockInputDescriptor(input);
+        return parser.parse(descriptor);
+    }
+ 
 }

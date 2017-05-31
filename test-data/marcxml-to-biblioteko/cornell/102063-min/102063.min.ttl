@@ -22,7 +22,7 @@ cornell:work1 a bf:Work , bf:Text ;
         dcterms:hasPart [
             a bib:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology." ;
-	        vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
+	        vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#int>
         ] ;
     ] ;
     
@@ -41,10 +41,15 @@ cornell:inst1 a bf:Instance ;
         dcterms:hasPart [
             a bib:MainTitleElement ;
             rdfs:label "Clinical cardiopulmonary physiology." ;
-            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#integer>
+            vivo:rank "10"^^<http://www.w3.org/2001/XMLSchema#int>
         ] ;        
     ] ; 
     
+    bf:identifiedBy [
+        a bf:Identifier, bf:Local ;
+        rdf:value "102063" 
+    ] ;
+          
     bib:hasActivity [
         rdfs:label "Publisher" ;
         a bib:PublisherActivity ;
@@ -52,7 +57,7 @@ cornell:inst1 a bf:Instance ;
         bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 
     
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians. Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
 . 
 
 cornell:item1 a bf:Item .

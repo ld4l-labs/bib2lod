@@ -10,7 +10,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
-import org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser;
 import org.ld4l.bib2lod.records.Record;
 
 /**
@@ -34,8 +33,7 @@ public class MarcxmlConverter extends BaseConverter{
          * adopting the model in which a painting, for example, is an Instance,
          * Work, and Item simultaneously. Consider how to avoid the dependency
          * on this model. We may need to inspect the leader first to determine
-         * what kind of work it is. Interesting dependency of converter on the
-         * application profile.
+         * what kind of work it is. 
          */       
         EntityBuilder instanceBuilder = getBuilder(Ld4lInstanceType.class);
         BuildParams params = new BuildParams()

@@ -10,11 +10,13 @@ import org.ld4l.bib2lod.ontology.DatatypeProp;
  */
 public enum Ld4lDatatypeProp implements DatatypeProp {
     
+    /* List in alpha order */
     DATE(Ld4lNamespace.DCTERMS, "date"),
     /*
      * rdfs:label is an rdf:Property with range rdfs:Literal, so acts like a
      * datatype property for  our purposes.
      */
+    EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     LABEL(Ld4lNamespace.RDFS, "label"),
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
