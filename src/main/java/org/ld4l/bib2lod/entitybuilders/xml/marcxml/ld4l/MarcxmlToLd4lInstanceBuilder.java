@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
@@ -21,6 +23,8 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
  * Builds an Instance from a Record.
  */
 public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
+    
+    private static final Logger LOGGER = LogManager.getLogger();
     
     private MarcxmlRecord record;
     private InstanceEntity instance;
@@ -53,9 +57,13 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
             BuildParams params = new BuildParams()
                     .setRelatedEntity(instance)
                     .setField(controlField001);
-            try {
-                builder.build(params);
-            } catch (EntityBuilderException e) { }
+            buildAndCatchException(builder, params, 
+                    "Error building instance identifier from 001 control field.");
+//            try {
+//                builder.build(params);
+//            } catch (EntityBuilderException e) { 
+//                LOGGER.warn("Error building instance identifier from 001 control field.");
+//            }
         } 
     }
     
@@ -67,9 +75,12 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        try {
-            builder.build(params);
-        } catch (EntityBuilderException e) { }
+        buildAndCatchException(builder, params, "Error building instance title.");
+//        try {
+//            builder.build(params);
+//        } catch (EntityBuilderException e) { 
+//            LOGGER.warn("Error building instance title.");         
+//        }
     }
     
     private void buildWorks() {
@@ -84,9 +95,12 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        try {
-            builder.build(params);
-        } catch (EntityBuilderException e) { }
+        buildAndCatchException(builder, params, "Error building work for instance.");
+//        try {
+//            builder.build(params);
+//        } catch (EntityBuilderException e) { 
+//            LOGGER.warn("Error building work for instance.");         
+//        }
     }
     
     private void buildItem() {
@@ -95,10 +109,13 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setRelatedEntity(instance);        
-        try {
-            builder.build(params);
-        } catch (EntityBuilderException e) { }
+                .setRelatedEntity(instance); 
+        buildAndCatchException(builder, params, "Error building item for instance.");
+//        try {
+//            builder.build(params);
+//        } catch (EntityBuilderException e) { 
+//            LOGGER.warn("Error building item for instance.");         
+//        }
     }   
     
     private void buildPublisherActivity()  {
@@ -113,10 +130,22 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                     .setField(field008)
                     .setRelatedEntity(instance)
                     .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-            try {
-                builder.build(params);
-            } catch (EntityBuilderException e) { }
+            buildAndCatchException(builder, params, "Error building instance publisher activity.");
+//            try {
+//                builder.build(params);
+//            } catch (EntityBuilderException e) { 
+//                LOGGER.warn("Error building instance publisher activity.");         
+//            }
         }
+    }
+    
+    private void buildAndCatchException(
+            EntityBuilder builder, BuildParams params, String warning) {
+        try {
+            builder.build(params);
+        } catch (EntityBuilderException e) { 
+            LOGGER.warn(warning);         
+        }        
     }
         
 }

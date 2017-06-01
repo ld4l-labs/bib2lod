@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
-import org.ld4l.bib2lod.datatypes.Datatype;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
