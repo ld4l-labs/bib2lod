@@ -36,7 +36,8 @@ Functional tests should accept three arguments:
  
 ## bib2lod configuration
 
-* The config file is named config.json and resides in the input directory (for directory input) or in the same directory as the input file (for file input).
+* The config file is named config.json and resides in the top-level directory under test-data beneath which the test files are located.
+  * For example, the config file for all the sample commands above resides in test-data/marcxml-to-biblioteko.
 * The test makes the following commandline substitutions to the config values:
   * InputService:class=org.ld4l.bib2lod.io.FileInputService
   * InputService:source=<test input parameter>
