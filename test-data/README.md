@@ -14,25 +14,25 @@ For example, `102063.min.xml` and `102063.min.ttl` represent a pair of test file
 
 Functional tests should accept three arguments:
 
-`-p` Path relative to the test-data directory of either a directory or a file. A directory name may or may not end in a slash. A filename must have an extension.
+`-s` Input source: a path relative to the test-data directory to either a directory or a file. A directory name may or may not end in a slash. A filename must have an extension.
 
 `-i` Test input file extension. If the path specifies an input file, this should be omitted, and if present will be ignored.
 
-`-o` Test output file extension.
+`-o` Expected output file extension.
 
 
 #### Examples
 
-`$ test -p marcxml-to-biblioteko/cornell/ -i xml -o ttl`
+`$ test -s marcxml-to-biblioteko/cornell/ -i xml -o ttl`
 
-`$ test -p marcxml-to-biblioteko/cornell/102063-min -i xml -o ttl`
+`$ test -s marcxml-to-biblioteko/cornell/102063-min -i xml -o ttl`
 
-`$ test -p marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
+`$ test -s marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
 
 #### Input location
 
 * Directory: Walk the directory tree starting from the specified directory. The test should be executed on any pair of test files (as defined above) encountered. 
-* File: Execute the test using the corresponding test output file in the same directory.
+* File: Execute the test using the corresponding expected output file in the same directory.
  
 ## bib2lod configuration
 
@@ -51,7 +51,7 @@ Functional tests should accept three arguments:
 The program should terminate and log an error to stderr in the following cases:
 
 * Required arguments missing
-* Config file missing or unreadable
+* Config file not found or unreadable
 * Directory input: directory not found or unreadable
 * File input: file not found or unreadable
 * bib2lod terminates with an error
