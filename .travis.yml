@@ -18,12 +18,6 @@ install:
   - mvn install
 script:
   - mvn test
-  - py.test
+  - python testconv.py -s test-data -v
 after_success:
   - mvn clean test jacoco:report coveralls:report
-  
-# safelist
-branches:
-  only:
-  - master
-  - develop
