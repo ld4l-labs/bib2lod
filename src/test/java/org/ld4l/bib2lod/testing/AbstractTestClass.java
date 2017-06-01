@@ -1,7 +1,13 @@
 package org.ld4l.bib2lod.testing;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -9,6 +15,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -61,6 +71,19 @@ public abstract class AbstractTestClass {
             node.put(fieldName, String.valueOf(newValue));
         }
     }  
+    
+    // ----------------------------------------------------------------------
+    // XML utility methods
+    // ----------------------------------------------------------------------
+    
+    protected Element buildXmlElementFromString(String xmlString) 
+            throws ParserConfigurationException, SAXException, IOException {
+        
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(new InputSource(new StringReader(xmlString)));
+        return doc.getDocumentElement();
+    }
     
     // ----------------------------------------------------------------------
     // Control standard output or error output.
