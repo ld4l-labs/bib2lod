@@ -7,7 +7,7 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
- * Tests class MarcxmlToLd4lItemBuilder
+ * Tests class MarcxmlToLd4lItemBuilder.
  */
 public class MarcxmlToLd4lItemBuilderTest extends AbstractTestClass {
     

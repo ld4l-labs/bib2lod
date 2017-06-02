@@ -17,13 +17,6 @@ public enum Ld4lActivityType implements Type {
     private final Resource ontClass;
     private final String label;
     
-    /**
-     * Constructor
-     */
-    Ld4lActivityType(Namespace namespace, String localName) {
-        this(namespace, localName, null);
-    }
-    
     Ld4lActivityType(Namespace namespace, String localName, String label) {
         this.uri = namespace.uri() + localName;
         this.ontClass = ResourceFactory.createResource(uri); 

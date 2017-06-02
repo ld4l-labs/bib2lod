@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
@@ -12,6 +13,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 
 public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
     
@@ -69,10 +71,8 @@ public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
                     ((MarcxmlControlField) field).getControlNumber().equals("008")) {    
-                // We know that field.getTextValue() is not empty due to 
-                // earlier validity checks.
-                String location = field.getTextValue().substring(15,18);
-                if (!location.isEmpty()) {
+                String location = MarcxmlField.getSubstring(field, 15, 18);
+                if (! StringUtils.isBlank(location)) {
                     activity.addExternalRelationship(Ld4lObjectProp.IS_AT_LOCATION, 
                             Ld4lNamespace.LC_COUNTRIES.uri() + location);
                 }
@@ -85,10 +85,8 @@ public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
                     ((MarcxmlControlField) field).getControlNumber().equals("008")) {
-                // We know that field.getTextValue() is not empty due to 
-                // earlier validity checks.
-                String year = field.getTextValue().substring(7,11);
-                if (! year.isEmpty()) {
+                String year = MarcxmlField.getSubstring(field, 7, 11);
+                if (! StringUtils.isBlank(year)) {
                     activity.addAttribute(Ld4lDatatypeProp.DATE, year);
                 }
             }

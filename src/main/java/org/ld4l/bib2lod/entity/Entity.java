@@ -139,6 +139,10 @@ public class Entity {
         return types;
     }
     
+    public boolean hasType(Type type)  {
+        return types.contains(type);
+    }
+    
     public void addAttribute(DatatypeProp prop, String string) {
         addAttribute(prop, new Attribute(string));
     }
