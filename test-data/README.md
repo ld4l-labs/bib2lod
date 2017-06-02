@@ -14,20 +14,24 @@ For example, `102063.min.xml` and `102063.min.ttl` represent a pair of test file
 
 Functional tests should accept three arguments:
 
-`-s` Input source: a path relative to the test-data directory to either a directory or a file. A directory name may or may not end in a slash. A filename must have an extension.
+`-s` Input source: a path to either a directory or a file. A directory name may or may not end in a slash. A filename must have an extension.
 
 `-i` Test input file extension. If the path specifies an input file, this should be omitted, and if present will be ignored.
 
 `-o` Expected output file extension.
 
+`-d` Output directory to use instead of temporary directory (with automatic cleanup). If an output directory is specified then a time-stamped sub-directory will be created and converter output will not be removed after the tests.
+
+`-b` Bnode patterns to ignore (default is any triples starting `http://data.ld4l.org/`, may be repeated for multiple patterns)
+
 
 #### Examples
 
-`$ test -s marcxml-to-biblioteko/cornell/ -i xml -o ttl`
+`$ ./testconv.py -s test-data/marcxml-to-biblioteko/cornell/ -i xml -o ttl`
 
-`$ test -s marcxml-to-biblioteko/cornell/102063-min -i xml -o ttl`
+`$ ./testconv.py -s test-data/marcxml-to-biblioteko/cornell/102063-min -i xml -o ttl`
 
-`$ test -s marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
+`$ ./testconv.py -s test-data/marcxml-to-biblioteko/cornell/102063-min/102063.min.xml -o ttl`
 
 #### Input location
 
@@ -36,25 +40,22 @@ Functional tests should accept three arguments:
  
 ## bib2lod configuration
 
-* The config file is named config.json and resides in the top-level directory under test-data beneath which the test files are located.
-  * For example, the config file for all the sample commands above resides in test-data/marcxml-to-biblioteko.
-* The test makes the following commandline substitutions to the config values:
-  * InputService:class=org.ld4l.bib2lod.io.FileInputService
-  * InputService:source=<test input parameter>
-  * InputService:extension=<test extension parameter>
-  * OutputService:class=org.ld4l.bib2lod.io.FileOutputService
-  * OutputService:destination=./output 
-  * OutputService:format=N-TRIPLES [TBD Is this required?]
+  * For each test the code will look for a config file named `config.json` in the current directory or a parent directory (working up from the current directory). If none is found then `test-data/config.json` will be used.
+  * The test makes the following commandline substitutions to the config values:
+    * `InputService:class=org.ld4l.bib2lod.io.FileInputService`
+    * `InputService:source=<test input parameter>`
+    * `InputService:extension=<test extension parameter>`
+    * `OutputService:class=org.ld4l.bib2lod.io.FileOutputService`
+    * `OutputService:destination=<test output location>`
+    * `OutputService:format=N-TRIPLES`
 
 ### Error conditions
 
 The program should terminate and log an error to stderr in the following cases:
 
-* Required arguments missing
 * Config file not found or unreadable
 * Directory input: directory not found or unreadable
 * File input: file not found or unreadable
-* bib2lod terminates with an error
 
 ### Logging
 
@@ -63,6 +64,7 @@ The program should terminate and log an error to stderr in the following cases:
 A warning should be logged to stdout and execution should continue in the following cases:
 
 * Input file found with no corresponding output file
+* bib2lod terminates with an error
 
 #### Results
 
@@ -70,5 +72,5 @@ The following results should be logged to stdout:
 
 * Total number of files tested
 * Number of passing files 
-* Names of failing files, identifying the cause of error in some way [TBD]
+* Names of failing files (as part of log of tests run)
 
