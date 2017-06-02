@@ -3,7 +3,21 @@
 [![Build Status](https://travis-ci.org/ld4l-labs/bib2lod.svg?branch=develop)](https://travis-ci.org/ld4l-labs/bib2lod)
 [![Coverage Status](https://coveralls.io/repos/github/ld4l-labs/bib2lod/badge.svg?branch=develop)](https://coveralls.io/github/ld4l-labs/bib2lod)
 
-## Converts bibliographic records to RDF.
+## What is bib2lod?
+
+bib2lod is a full record MARC-to-bibliotek-o converter that  
+
+* Accepts any valid MARC record (or set of valid MARC records) as input 
+* Converts each input record to RDF in the [bibliotek-o framework](https://github.com/ld4l-labs/bibliotek-o). The bibliotek-o framework includes:
+  * The bibliotek-o ontology (an extension to [BIBFRAME](https://www.loc.gov/bibframe/))
+  * Defined fragments of BIBFRAME and other external ontologies
+  * An application profile specifying rules for bibliographic metadata modeling using these ontologies
+* Conversion from MARC to bibliotek-o follows the MARC-to-bibliotek-o mappings provided by the LD4L Labs/LD4P ontology mapping group (in development).
+
+In its initial implementation, it
+
+* converts each record as a self-contained unit, with no attempt to reconcile URIs either locally across an entire data set or to external URIs. New URIs are minted using the configured local namespace and a random local name generator.
+* supports only file IO.
 
 ## News
 * **2017-03-31** Release 0.1 pushed to `master`.
