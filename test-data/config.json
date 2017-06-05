@@ -1,0 +1,31 @@
+{
+  "localNamespace": "http://data.ld4l.org/",
+  "InputService": {
+    "class": "org.ld4l.bib2lod.io.FileInputService",
+    "source": "SOURCE",
+    "extension": "xml"
+  },
+  "OutputService": {
+    "class": "org.ld4l.bib2lod.io.FileOutputService",
+    "destination": "output/",
+    "format": "N-TRIPLES"
+  },
+  "UriService": [
+    {
+      "class": "org.ld4l.bib2lod.uris.RandomUriMinter"
+    }
+  ],
+  "Cleaner": {
+    "class": "org.ld4l.bib2lod.cleaning.MarcxmlCleaner"
+  },
+  "Converter": {
+    "class": "org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter"
+  },
+  "Parser": {
+    "class": "org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser"
+  },
+  "EntityBuilderFactory": {
+    "class": "org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory"
+  },
+  "Record": "org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord"
+}
