@@ -9,7 +9,7 @@ bib2lod is a full record MARC-to-bibliotek-o converter that
 
 * Accepts any valid MARC record (or set of valid MARC records) as input 
 * Converts each input record to RDF in the [bibliotek-o framework](https://github.com/ld4l-labs/bibliotek-o). The bibliotek-o framework includes:
-  * The bibliotek-o ontology (an extension to [BIBFRAME](https://www.loc.gov/bibframe/))
+  * The [bibliotek-o ontology](https://github.com/ld4l-labs/bibliotek-o) (an extension to [BIBFRAME](https://www.loc.gov/bibframe/))
   * Defined fragments of BIBFRAME and other external ontologies
   * An application profile specifying rules for bibliographic metadata modeling using these ontologies
 * Conversion from MARC to bibliotek-o follows the MARC-to-bibliotek-o mappings provided by the LD4L Labs/LD4P ontology mapping group (in development).
