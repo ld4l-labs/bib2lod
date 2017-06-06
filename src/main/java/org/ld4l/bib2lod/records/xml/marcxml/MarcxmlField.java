@@ -26,24 +26,21 @@ public abstract class MarcxmlField extends BaseXmlElement {
      * Returns a substring of the field's text value. Returns null if field has 
      * no text value, or the end value is out of range.
      * or the substring is out of range, null 
-     * @param field - the MarcxmlField
      * @param start - start value
      * @param end - end value
      * @return String
      */
-    public final static String getSubstring(
-            MarcxmlField field, int start, int end) {
+    public String getTextSubstring(int start, int end) {
         
-//        String textValue = field.getTextValue().substring(15,18);
-//        if (!textValue.isEmpty()) {
-//        return textValue.substring(start, end);
-//    }
-
-        String textValue = field.getTextValue();
+        String textValue = getTextValue();
         if (! StringUtils.isEmpty(textValue) && textValue.length() >= end) {
             return textValue.substring(start, end);
         }
         return null;       
+    }
+    
+    public char getCharAt(int pos) {
+        return getTextSubstring(pos, pos+1).charAt(0);
     }
 
 }

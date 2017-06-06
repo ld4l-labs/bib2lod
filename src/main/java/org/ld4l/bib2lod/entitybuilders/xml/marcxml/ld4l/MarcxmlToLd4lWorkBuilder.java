@@ -70,16 +70,19 @@ public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
     private void addTitle() {
         
         Entity instanceTitle = 
-                instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE);        
-        Entity workTitle = new Entity(instanceTitle);
-        work.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);            
+                instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE); 
+        if (instanceTitle != null) {
+            Entity workTitle = new Entity(instanceTitle);
+            work.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);      
+        }
     }
     
     private void addWorkTypes() {
 
         // Work type from leader
         MarcxmlLeader leader = record.getLeader();
-        char code = leader.getTextValue().charAt(6);
+        char code = leader.getCharAt(6);
+
         Type type = codes.get(code); 
         if (type != null) {
             work.addType(type);
@@ -91,7 +94,7 @@ public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
         /* TODO Codes not the same between lexvo and lc. Just use lc URIs for now. */
         // Language from 008
         MarcxmlControlField field008 = record.getControlField("008");
-        String code = field008.getTextValue().substring(35,38);
+        String code = field008.getTextSubstring(35,38);
         if (code != null && code.length() > 0) {
             // Lexvo iso639-3 codes are not completely identical with LC 
             work.addExternalRelationship(Ld4lObjectProp.HAS_LANGUAGE, 

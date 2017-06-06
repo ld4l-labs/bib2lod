@@ -11,7 +11,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
@@ -34,7 +33,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         // Use this if it generates better error messages 
         // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
         this.record = (MarcxmlRecord) params.getRecord();  
-        this.instance = new InstanceEntity(Ld4lInstanceType.superClass());
+        this.instance = new InstanceEntity();
         
         buildIdentifiers();
         buildTitles();

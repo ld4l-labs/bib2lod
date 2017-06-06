@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -35,7 +34,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     public void nullField_ThrowsException() throws Exception {
         
         InstanceEntity instance = 
-                new InstanceEntity(Ld4lInstanceType.superClass());
+                new InstanceEntity();
         BuildParams params = new BuildParams()
                 .setRelatedEntity(instance)
                 .setField(null);                

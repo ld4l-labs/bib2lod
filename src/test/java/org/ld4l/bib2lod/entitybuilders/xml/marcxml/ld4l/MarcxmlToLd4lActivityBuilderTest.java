@@ -9,7 +9,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
@@ -25,22 +24,21 @@ import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
  */
 public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
     
-    public static String CONTROL_FIELD_008 = 
-            "<controlfield tag=\"008\">860506s1957    nyua     b    000 0 eng  </controlfield>";
-    public static String INVALID_CONTROL_FIELD = "<controlfield tag=\"008\">860506s</controlfield>";
-    public static String CONTROL_FIELD_WITH_BLANKS = "<controlfield tag=\"008\">860506s                 b    000 0 eng  </controlfield>";
-    public static String CONTROL_FIELD_001 = 
-            "<controlfield tag=\"001\">102063</controlfield>";
-    
-    public static String DATA_FIELD_245 = "<datafield tag=\"245\"><subfield code=\"a|\">text</subfield></datafield>";
-;
+    public static final String CONTROL_FIELD_008 = 
+            "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>";
+    public static final String INVALID_CONTROL_FIELD = "<controlfield tag='008'>860506s</controlfield>";
+    public static final String CONTROL_FIELD_WITH_BLANKS = "<controlfield tag='008'>860506s                 b    000 0 eng  </controlfield>";
+    public static final String CONTROL_FIELD_001 = 
+            "<controlfield tag='001'>102063</controlfield>";  
+    public static final String DATA_FIELD_245 = "<datafield tag='245'><subfield code='a|'>text</subfield></datafield>";
+
     private MarcxmlToLd4lActivityBuilder activityBuilder;   
     private InstanceEntity instance;
     
     @Before
     public void setUp() throws RecordFieldException {       
         this.activityBuilder = new MarcxmlToLd4lActivityBuilder();
-        this.instance = new InstanceEntity(Ld4lInstanceType.superClass());                
+        this.instance = new InstanceEntity();                
     }
     
     // ----------------------------------------------------------------------

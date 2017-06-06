@@ -1,6 +1,7 @@
 package org.ld4l.bib2lod.entity;
 
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.uris.UriService;
 
 public class InstanceEntity extends Entity {
@@ -10,6 +11,13 @@ public class InstanceEntity extends Entity {
     /**
      * Constructor
      */
+    public InstanceEntity() {
+        super(Ld4lInstanceType.superClass());
+    }
+    
+    /**
+     * Constructor
+     */    
     public InstanceEntity(Type type) {
         super(type);
     }
