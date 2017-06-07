@@ -47,7 +47,7 @@ public class Entity {
     /**
      * Constructor
      */
-    protected Entity() {
+    public Entity() {
         this.relationships = new MapOfLists<>();
         this.attributes = new MapOfLists<>();
         this.externalRelationships = new MapOfLists<>();
