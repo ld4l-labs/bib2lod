@@ -23,6 +23,7 @@ public enum Ld4lObjectProp implements ObjectProp {
     HAS_LANGUAGE(Ld4lNamespace.DCTERMS, "language"),
     HAS_PART(Ld4lNamespace.DCTERMS, "hasPart"),
     HAS_PREFERRED_TITLE(Ld4lNamespace.BIBLIOTEKO, "hasPreferredTitle"),
+    HAS_SUBJECT(Ld4lNamespace.DCTERMS, "subject"),
     HAS_TARGET(Ld4lNamespace.OA, "hasTarget"),
     HAS_TITLE(Ld4lNamespace.BIBFRAME, "title"),
     IDENTIFIES(Ld4lNamespace.BIBFRAME, "identifies"),

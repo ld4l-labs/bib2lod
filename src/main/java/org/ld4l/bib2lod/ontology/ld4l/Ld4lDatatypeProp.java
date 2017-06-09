@@ -17,6 +17,7 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
      * datatype property for  our purposes.
      */
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
+    EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
     LABEL(Ld4lNamespace.RDFS, "label"),
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
