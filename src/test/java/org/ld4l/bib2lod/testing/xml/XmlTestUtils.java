@@ -17,7 +17,8 @@ import org.xml.sax.SAXException;
  */
 public final class XmlTestUtils {
 
-    public static Element buildElementFromString(String element)  throws RecordFieldException {
+    public static Element buildElementFromString(String element)  
+            throws RecordFieldException {
         try {
             return DocumentBuilderFactory
                     .newInstance()

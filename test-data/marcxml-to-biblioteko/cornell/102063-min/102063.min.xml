@@ -4,7 +4,7 @@
   a 008 (ditto), and a title (130, 240, or 245).
 -->
 <collection xmlns="http://www.loc.gov/MARC21/slim">
-  <record>
+  <record xmlns="http://www.loc.gov/MARC21/slim">
     <leader>01050cam a22003011  4500</leader>
     <controlfield tag="001">102063</controlfield>
     <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>

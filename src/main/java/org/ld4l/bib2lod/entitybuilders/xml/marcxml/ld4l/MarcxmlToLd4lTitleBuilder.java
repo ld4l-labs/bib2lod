@@ -5,11 +5,13 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
@@ -29,7 +31,8 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
     private MarcxmlRecord record;
     private Entity bibEntity;
     private Entity title;
-    
+    private EntityBuilder titleElementBuilder;
+    private List<Entity> titleElements;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -48,77 +51,102 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
         
         this.title = new Entity(Ld4lTitleType.superClass());
         
-        String titleValue = null;
-      
-        // Could there be a 130 or 240 without 245? Then need to look for
-        // $a in those fields if no 245.
-        
-        MarcxmlDataField field245 = record.getDataField("245");
-        MarcxmlDataField field130 = record.getDataField("130");
-        MarcxmlDataField field240 = record.getDataField("240");
-      
-        if (field245 != null) {
-            for (MarcxmlSubfield subfield : field245.getSubfields()) {
- 
-                // 245$a always stores the full title. If 130 and/or 240 are 
-                // present,the $a fields should be the same.
-                if (subfield.getCode().equals("a")) {
-                    titleValue = subfield.getTextValue();
-                    title.addAttribute(Ld4lDatatypeProp.VALUE, titleValue);
-                }
-                
-                if (subfield.getCode().equals("c")) {
-                    bibEntity.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT,
-                            subfield.getTextValue());
-                }
-                
-                // TODO Convert other subfields
-            }
-        }
-        
-        // TODO convert other subfields from 130/240
-        
-        List<Entity> titleElements = buildTitleElements(titleValue);
-        title.addRelationships(Ld4lObjectProp.HAS_PART, titleElements);
-        
+        addTitleElements();       
+        addTitleValue();
+   
         // TODO Figure out how to recognize the preferred title vs other titles
         bibEntity.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, title);
         
         return title;
     }
     
-    private List<Entity> buildTitleElements(String titleValue) {
-                 
-        // TODO: get title  parts from subfields
-        // Send each substring to the appropriate method.
-        List<Entity> titleElements = new ArrayList<Entity>();
+    private void addTitleElements() throws EntityBuilderException {
+
+        this.titleElementBuilder = getBuilder(Ld4lTitleElementType.class);
         
-        /*
-         * Assign ranks as follows:
-         * NonSortElement - 0
-         * MainTitleElement - 10
-         * SubtitleElement - 20
-         * PartNumberElement - 30
-         * PartNameElement - 40
-         * The gaps allow for multiple elements of one type.
-         */
-        
-        // Create MainTitleElement last, since its value is the Title value
-        // minus the other element labels.
-        Entity mainTitleElement = buildTitleElement(
-                Ld4lTitleElementType.MAIN_TITLE_ELEMENT, titleValue, 10); 
-        titleElements.add(mainTitleElement);
-        
-        return titleElements;               
+        buildTitleElements();
+
+        // Add rank attribute to title elements
+        int rank = 1;
+        for (Entity titleElement : titleElements) {
+            titleElement.addAttribute(Ld4lDatatypeProp.RANK, rank);
+            rank ++;
+        }
     }
+
+    private void buildTitleElements() throws EntityBuilderException {   
         
-    private Entity buildTitleElement(
-            Ld4lTitleElementType elementClass, String value, int rank) {
-        
-         Entity titleElement = new Entity(elementClass);
-         titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);
-         titleElement.addAttribute(Ld4lDatatypeProp.RANK, rank);  
-         return titleElement;
+        titleElements = new ArrayList<>();
+            
+        MarcxmlDataField field245 = record.getDataField("245");   
+        if (field245 != null) {
+            for (MarcxmlSubfield subfield : field245.getSubfields()) {
+ 
+                // 245$a always stores the full title. If 130 and/or 240 are 
+                // present,the $a fields should be the same.
+                if (subfield.getCode().equals("a")) {
+                    addMainTitleElement(subfield);
+                }
+                
+                if (subfield.getCode().equals("b")) {
+                    addSubtitleElements(subfield);
+                }
+            }
+        }        
     }
     
+    private void addMainTitleElement(MarcxmlSubfield subfield) 
+            throws EntityBuilderException { 
+        
+        BuildParams params = new BuildParams() 
+                .setRelatedEntity(title)
+                .setSubfield(subfield)
+                .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT);
+        
+        titleElements.add(titleElementBuilder.build(params));
+        
+    }
+    
+    private void addSubtitleElements(MarcxmlSubfield subfield) throws 
+            EntityBuilderException {
+        
+        String text = subfield.getTextValue();
+        if (text == null) {
+            // Don't throw exception, just don't build a subtitle
+            return;
+        }
+
+        BuildParams params = new BuildParams() 
+                .setRelatedEntity(title)
+                .setType(Ld4lTitleElementType.SUBTITLE_ELEMENT);
+        
+        /* 
+         * E.g., Cornell 3673479
+         * $c = "why children kill : the story of Mary Bell"
+         */
+        String[] values = text.split("\\s*:\\s*");
+        for (String value : values) {
+            params.setValue(value);
+            titleElements.add(titleElementBuilder.build(params));
+        }
+    }
+    
+    /**
+     * Construct title value by concatenating title elements in order.
+     */
+    private void addTitleValue() {
+        
+        List<String> elementValues = new ArrayList<>();
+        for (Entity titleElement : titleElements) {
+            // TODO What about xml:lang value, which could be different for 
+            // different title elements?
+            elementValues.add(titleElement.getAttribute(
+                    Ld4lDatatypeProp.VALUE).getValue());
+        }
+        
+        // Perhaps not so simple: do different element types need a different glue?
+        String titleValue = StringUtils.join(elementValues, " : ");
+        title.addAttribute(Ld4lDatatypeProp.VALUE, titleValue);
+    }
+
 }

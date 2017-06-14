@@ -135,6 +135,17 @@ public class Entity {
         types.add(type);
     }
     
+    /**
+     * Return the first item in the type list, or null if there are none.
+     */
+    public Type getType() {
+        if (types.isEmpty()) {
+            return null;
+        } else {
+            return types.get(0);
+        }     
+    }
+    
     public List<Type> getTypes() {
         return types;
     }
@@ -171,8 +182,27 @@ public class Entity {
         return attributes.getValue(prop);
     }
     
-    public List<Attribute> getValues(DatatypeProp prop) {
+    public List<Attribute> getAttributes(DatatypeProp prop) {
         return attributes.getValues(prop);
+    }
+    
+    // TODO add javadoc - returns null if none
+    public String getValue(DatatypeProp prop) {
+        Attribute attribute = attributes.getValue(prop);
+        if (attribute == null) {
+            return null;
+        }
+        return attributes.getValue(prop).getValue();
+    }
+    
+    // TODO add javadoc - returns empty list but not null
+    public List<String> getValues(DatatypeProp prop) {
+        List<String> values = new ArrayList<>();
+        List<Attribute> attribs = attributes.getValues(prop);
+        for (Attribute attribute : attribs) {
+            values.add(attribute.getValue());
+        }
+        return values;     
     }
     
     /**

@@ -1,15 +1,23 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 
@@ -18,29 +26,73 @@ import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
  */
 public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     
-    public static final String TWO_TITLE_FIELDS = 
+    public static final String TITLE_WITH_WHITESPACE = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" + 
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
                 "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='240' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>another main title</subfield>" +          
+                    "<subfield code='a'> main title </subfield>" +     
                 "</datafield>" + 
             "</record>";
     
-    private MarcxmlToLd4lTitleBuilder titleBuilder;   
-    private InstanceEntity defaultInstance;
-    private Entity defaultWork;
+    public static final String TITLE_WITH_FINAL_SPACE_COLON = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title :</subfield>" +     
+                "</datafield>" + 
+            "</record>";
+    
+    public static final String TITLE_WITH_FINAL_COLON = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title:</subfield>" +     
+                "</datafield>" + 
+            "</record>";
+    
+    public static final String TITLE_WITH_SUBTITLE = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title :</subfield>" +     
+                    "<subfield code='b'>subtitle</subfield>" + 
+                "</datafield>" + 
+            "</record>";
+    
+
+    public static final String TITLE_WITH_TWO_SUBTITLES = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title :</subfield>" +     
+                    "<subfield code='b'>subtitle one : subtitle two</subfield>" + 
+                "</datafield>" + 
+            "</record>"; 
+    
+    private static BaseMockBib2LodObjectFactory factory;
+    private MarcxmlToLd4lTitleBuilder titleBuilder; 
+    
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        factory = new BaseMockBib2LodObjectFactory();  
+        factory.addInstance(EntityBuilderFactory.class, 
+                new MarcxmlToLd4lEntityBuilderFactory());
+    }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() throws Exception {    
         this.titleBuilder = new MarcxmlToLd4lTitleBuilder();
-        this.defaultInstance = new InstanceEntity();  
-        this.defaultWork = new Entity(Ld4lWorkType.superClass());
-    }    
+    }  
     
     
     // ----------------------------------------------------------------------
@@ -49,72 +101,98 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
 
     @Test (expected = EntityBuilderException.class)
     public void nullRecord_ThrowsException() throws Exception {
-        BuildParams params = new BuildParams()
-                .setRelatedEntity(defaultInstance)
-                .setRecord(null);                
-        titleBuilder.build(params); 
+        buildTitle(new Entity(), (Record) null);
     }
     
     @Test (expected = EntityBuilderException.class)
-    public void nullInstance_ThrowsException() throws Exception {
-        buildTitle(MarcxmlTestUtils.MINIMAL_RECORD, (InstanceEntity) null);
-    }
-    
-    @Test (expected = EntityBuilderException.class)
-    public void nullWork_ThrowsException() throws Exception {
-        buildTitle(MarcxmlTestUtils.MINIMAL_RECORD, (Entity) null);
+    public void nullBibEntity_ThrowsException() throws Exception {
+        buildTitle((Entity) null, MarcxmlTestUtils.MINIMAL_RECORD);
     }
     
     @Test 
-    public void buildInstanceTitleFromMinimalRecord_Succeeds() throws Exception {
-        buildTitleFromDefaultInstance(MarcxmlTestUtils.MINIMAL_RECORD);
+    public void testTitleValueFromMainTitleElement() throws Exception {
+        buildTitleAndExpectValue(
+                new Entity(), MarcxmlTestUtils.MINIMAL_RECORD, "main title");
     }
     
     @Test 
-    public void buildWorkTitleFromMinimalRecord_Succeeds() throws Exception {
-        buildTitleFromDefaultWork(MarcxmlTestUtils.MINIMAL_RECORD);
+    public void testTitleValueTrimWhitespace() throws Exception {
+        buildTitleAndExpectValue(
+                new Entity(), TITLE_WITH_WHITESPACE, "main title");
     }
     
     @Test 
-    public void buildInstanceTitleFromTwoTitleFields_Succeeds() throws Exception {
-        buildTitleFromDefaultInstance(TWO_TITLE_FIELDS);
+    public void testTitleValueWithFinalSpaceColon() throws Exception {
+        buildTitleAndExpectValue(
+                new Entity(), TITLE_WITH_FINAL_SPACE_COLON, "main title");   
     }
     
     @Test 
-    public void buildWorkTitleFromTwoTitleFields_Succeeds() throws Exception {
-        buildTitleFromDefaultWork(TWO_TITLE_FIELDS);
+    public void testTitleValueWithFinalColon() throws Exception {
+        buildTitleAndExpectValue(
+                new Entity(), TITLE_WITH_FINAL_COLON, "main title");  
     }
     
+    @Test
+    public void testTitleValueWithSubtitle() throws Exception {
+        buildTitleAndExpectValue(
+                new Entity(), TITLE_WITH_SUBTITLE, "main title : subtitle");  
+    }
+     
+    @Test
+    public void testTitleValueWithTwoSubtitles() throws Exception {
+        buildTitleAndExpectValue(new Entity(), TITLE_WITH_TWO_SUBTITLES, 
+                "main title : subtitle one : subtitle two");     
+    }
+
+    @Test
+    public void testTitleElementCount() throws Exception {
+       Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);
+       List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
+       Assert.assertEquals(3, titleElements.size());
+    }
+    
+    @Test
+    public void testTitleElementRank() throws Exception {
+        Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);  
+        List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
+        
+        List<String> expected = new ArrayList<>(
+                Arrays.asList(new String[]{"1", "2", "3"}));
+        
+        List<String> actual = new ArrayList<>();
+        for (Entity titleElement : titleElements) {
+            String rank = titleElement.getValue(Ld4lDatatypeProp.RANK);   
+            actual.add(rank);
+        }
+        
+        Assert.assertTrue(expected.equals(actual));      
+    }
 
     // ----------------------------------------------------------------------
     // Helper methods
     // ----------------------------------------------------------------------
     
-    private Entity buildTitle(String marcxml, InstanceEntity instance) 
+    private Entity buildTitle(Entity bibEntity, String marcxml) 
             throws Exception {
         MarcxmlRecord record = new MarcxmlRecord(
                 XmlTestUtils.buildElementFromString(marcxml));
-        BuildParams params = new BuildParams()
-                .setRelatedEntity(instance)
-                .setRecord(record);        
-        return titleBuilder.build(params);
+        return buildTitle(bibEntity, record);
     }
     
-    private Entity buildTitleFromDefaultInstance(String marcxml) throws Exception { 
-        return buildTitle(marcxml, defaultInstance);
-    }
-    
-    private Entity buildTitle(String marcxml, Entity work) 
+    private Entity buildTitle(Entity bibEntity, Record record) 
             throws Exception {
-        MarcxmlRecord record = new MarcxmlRecord(
-                XmlTestUtils.buildElementFromString(marcxml));
         BuildParams params = new BuildParams()
-                .setRelatedEntity(work)
+                .setRelatedEntity(bibEntity)
                 .setRecord(record);        
-        return titleBuilder.build(params);
+        return titleBuilder.build(params);        
     }
     
-    private Entity buildTitleFromDefaultWork(String marcxml) throws Exception { 
-        return buildTitle(marcxml, defaultWork);
+    private void buildTitleAndExpectValue(
+            Entity bibEntity, String marcxml, String value) throws Exception {
+        Entity title = buildTitle(bibEntity, marcxml);
+        Assert.assertEquals(value,
+                title.getAttribute(Ld4lDatatypeProp.VALUE).getValue());        
     }
+      
 }

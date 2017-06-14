@@ -12,19 +12,20 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     
     /* List in alpha order */
     DATE(Ld4lNamespace.DCTERMS, "date"),
-    /*
-     * rdfs:label is an rdf:Property with range rdfs:Literal, so acts like a
-     * datatype property for  our purposes.
-     */
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
+    /*
+     * rdfs:label is technically an annotation property, but so far functions 
+     * the same as a datatype property for our purposes.
+     */
     LABEL(Ld4lNamespace.RDFS, "label"),
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
     /*
-     * rdf:value is an RDF property with range rdfs:Resource. However, we 
-     * are only using it with literal objects. If it needs to be used with non-
-     * literal objects, it can also be defined in Ld4lObjectProp.
+     * rdf:value is an RDF property with range rdfs:Resource. It is defined both
+     * as an Ld4lDatatypeProp and an Ld4lObjectProp for use with either a literal
+     * or non-literal object. For now it doesn't appear that the lack of 
+     * technical accuracy will cause any problems.
      */
     VALUE(Ld4lNamespace.RDF, "value");
     

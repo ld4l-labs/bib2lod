@@ -9,18 +9,35 @@ public class BuildParams {
 
     private Record record;
     private RecordField field;
+    private RecordField subfield;
     private Entity relatedEntity;
     private Type type;
+    private String value;
     
     public BuildParams() {
         this.record = null;
         this.field = null;
+        this.subfield = null;
         this.relatedEntity = null;
         this.type = null;
+        this.value = null;
+    }
+
+    /**
+     * Returns null if no record has been set.
+     */
+    public Record getRecord() {
+        return record;
+    }
+
+    public BuildParams setRecord(Record record) {
+        this.record = record;
+        // Return this for method chaining
+        return this;
     }
     
     /**
-     * Returns null if setField() has not been called.
+     * Returns null if no field has been set.
      */
     public RecordField getField() {
         return field;
@@ -31,22 +48,22 @@ public class BuildParams {
         // Return this for method chaining
         return this;
     }
-
-    public Record getRecord() {
-        return record;
+    
+    /**
+     * Returns null if no subfield has been set.
+     */
+    public RecordField getSubfield() {
+        return subfield;
     }
 
-    /**
-     * Returns null if setRecord() hasn't been called.
-     */
-    public BuildParams setRecord(Record record) {
-        this.record = record;
+    public BuildParams setSubfield(RecordField subfield) {
+        this.subfield = subfield;
         // Return this for method chaining
         return this;
     }
 
     /**
-     * Returns null if setRelatedEntity() has not been called.
+     * Returns null if no related entity has been set.
      */
     public Entity getRelatedEntity() {
         return relatedEntity;
@@ -59,8 +76,7 @@ public class BuildParams {
     }
 
     /**
-     * Returns null if setType() has not been called.
-     * @return
+     * Returns null if no type has been set.
      */
     public Type getType() {
         return type;
@@ -68,6 +84,19 @@ public class BuildParams {
 
     public BuildParams setType(Type type) {
         this.type = type;
+        // Return this for method chaining
+        return this;
+    }
+    
+    /**
+     * Returns null if no value has been set.
+     */
+    public String getValue() {
+        return value;
+    }
+
+    public BuildParams setValue(String value) {
+        this.value = value;
         // Return this for method chaining
         return this;
     }

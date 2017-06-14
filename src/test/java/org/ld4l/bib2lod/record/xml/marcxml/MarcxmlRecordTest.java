@@ -150,13 +150,13 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     
     @Test
     public void testRecordNoDataFields_Invalid() throws Exception {
-        expectException(RecordException.class, "245, 240, 130");
+        expectException(RecordException.class, "245");
         buildRecordFromString(RECORD_NO_DATA_FIELDS);
     }
 
     @Test
     public void testRecordNoTitle_Invalid() throws Exception {
-        expectException(RecordException.class, "245, 240, 130");
+        expectException(RecordException.class, "245");
         buildRecordFromString(RECORD_NO_TITLE_FIELD);
     }
     

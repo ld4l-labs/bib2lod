@@ -157,13 +157,11 @@ public class MarcxmlRecord extends BaseXmlRecord {
     private void checkRequiredDataFields() throws RecordException {
         for (MarcxmlDataField dataField : dataFields) {
             String dataFieldName = dataField.getName();
-            if (dataFieldName.equals("245") || dataFieldName.equals("240") || 
-                    dataFieldName.equals("130")) {
+            if (dataFieldName.equals("245")) {
                 return;
             }
         }
-        throw new RecordException("Record does not contain any of these data "
-                + "fields: 245, 240, 130");
+        throw new RecordException("Record does not contain a 245 field");
     }
  
     /**

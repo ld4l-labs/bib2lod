@@ -9,13 +9,17 @@ import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 /**
  * Builds an Instance from a Record.
@@ -28,11 +32,17 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     private InstanceEntity instance;
   
     @Override
-    public Entity build(BuildParams params) {
+    public Entity build(BuildParams params) throws EntityBuilderException {
 
         // Use this if it generates better error messages 
         // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
-        this.record = (MarcxmlRecord) params.getRecord();  
+        this.record = (MarcxmlRecord) params.getRecord(); 
+        
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build an instance.");
+        }
+        
         this.instance = new InstanceEntity();
         
         buildIdentifiers();
@@ -40,6 +50,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         buildWorks();
         buildItem();
         buildPublisherActivity();
+        addResponsibilityStatement();
         
         return instance;
     }
@@ -56,7 +67,8 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                     .setRelatedEntity(instance)
                     .setField(controlField001);
             buildAndCatchException(builder, params, 
-                    "Error building instance identifier from 001 control field.");
+                    "Error building instance identifier from 001 control " +
+                        "field.");
         } 
     }
     
@@ -68,7 +80,8 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        buildAndCatchException(builder, params, "Error building instance title.");
+        buildAndCatchException(builder, params, 
+                "Error building instance title.");
     }
     
     private void buildWorks() {
@@ -83,7 +96,8 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        buildAndCatchException(builder, params, "Error building work for instance.");
+        buildAndCatchException(builder, params, 
+                "Error building work for instance.");
     }
     
     private void buildItem() {
@@ -93,7 +107,8 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance); 
-        buildAndCatchException(builder, params, "Error building item for instance.");
+        buildAndCatchException(builder, params, 
+                "Error building item for instance.");
     }   
     
     private void buildPublisherActivity()  {
@@ -108,9 +123,28 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                     .setField(field008)
                     .setRelatedEntity(instance)
                     .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-            buildAndCatchException(builder, params, "Error building instance publisher activity.");
+            buildAndCatchException(builder, params, 
+                    "Error building instance publisher activity.");
         }
     }
-
+    
+    /**
+     * Add responsibility statement to instance from 245$c.
+     */
+    private void addResponsibilityStatement() {
         
+        MarcxmlDataField field = record.getDataField("245");        
+        if (field == null) {
+            return;
+        }
+        
+        MarcxmlSubfield subfield = field.getSubfield("c");
+        if (subfield == null) {
+            return;
+        } 
+        
+        instance.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT, 
+                subfield.getTextValue());             
+    }
+     
 }
