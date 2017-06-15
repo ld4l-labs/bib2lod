@@ -21,26 +21,38 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  */
 public class Entity {
     
-    // Relationships of this entity to other local entities (objects of object
-    // properties)
+    /*
+     * Relationships of this Entity to other local Entities (objects of object
+     * properties)
+     */
     protected MapOfLists<ObjectProp, Entity> relationships;
     
-    // Attributes of this entity (objects of datatype properties)
+    /*
+     * Attributes of this Entity (objects of datatype properties)
+     */
     protected MapOfLists<DatatypeProp, Attribute> attributes;
     
-    // Relationships of this entity to external resources. Map values are
-    // lists of URIs of these resources. Since we already know the URIs of the 
-    // external resources, and we will not make local assertions about them, 
-    // there is no need to create an Entity.
+    /*
+     * Relationships of this Entity to external resources. Map values are
+     * lists of URIs of these resources. Since we already know the URIs of the
+     * external resources, and we will not make local assertions about them,
+     * there is no need to create an Entity.
+     */
     protected MapOfLists<ObjectProp, String> externalRelationships;
     
-    // The types the entity belongs to
+    /*
+     * The classes the Entity belongs to
+     */
     protected List<Type> types;
     
-    // The resource built from this entity
+    /*
+     * The Resource built from this Entity
+     */
     private Resource resource;
     
-    // The model built from this entity's resource
+    /*
+     * The model built from this Entity's Resource
+     */
     private Model model;
     
 
@@ -82,7 +94,7 @@ public class Entity {
         this.types = original.getTypes();
         this.externalRelationships = original.externalRelationships.duplicate();
         
-        // Create new relationships to "child" entities
+        // Create  relationships to copies of original child Entities
         this.relationships = new MapOfLists<>();      
         for (ObjectProp prop : original.relationships.keys()) {
             List<Entity> originalChildren = original.relationships.getValues(prop);
@@ -103,14 +115,27 @@ public class Entity {
         relationships.addValues(prop, entities);        
     }
     
+    /**
+     * Returns the full map of relationships, or an empty map if there are none.
+     * Never returns null;
+     */
     public MapOfLists<ObjectProp, Entity> getRelationships() {
         return relationships;
     }
     
+    /**
+     * Returns the list of related Entities for the specified object property,
+     * or an empty list if there are none. Never returns null.
+     */
     public List<Entity> getChildren(ObjectProp prop) {
         return relationships.getValues(prop);
     }
     
+    /**
+     * Returns the first Entity in the list of related Entities for the 
+     * specified object property, or null if there are none. Use when only a 
+     * single value of the property is expected. 
+     */
     public Entity getChild(ObjectProp prop) {
         return relationships.getValue(prop);
     }
@@ -119,14 +144,28 @@ public class Entity {
         externalRelationships.addValue(prop, uri);       
     }
     
+    /**
+     * Returns the full map of related external resources (as URIs), or an empty 
+     * map if there are none. Never returns null. 
+     */
     public MapOfLists<ObjectProp, String> getExternalRelationships() {
         return externalRelationships;
     }
     
+    /**
+     * Returns the list of related external resources (as URIs) for the 
+     * specified object property, or an empty list of there are none. Never 
+     * returns null.
+     */
     public List<String> getExternals(ObjectProp prop) {
         return externalRelationships.getValues(prop);
     }
     
+    /**
+     * Returns the first item in the list of related external resources (as a 
+     * URI) for this property, or null if there are none. Use when only a single 
+     * value of the property is expected.
+     */
     public String getExternal(ObjectProp prop) {
         return externalRelationships.getValue(prop);
     }
@@ -136,7 +175,8 @@ public class Entity {
     }
     
     /**
-     * Return the first item in the type list, or null if there are none.
+     * Returns the first item in the list of types, or null if there are none. 
+     * Use when only a single type is expected.
      */
     public Type getType() {
         if (types.isEmpty()) {
@@ -146,10 +186,14 @@ public class Entity {
         }     
     }
     
+    /**
+     * Returns all the types of this Entity, or an empty list if there are none.
+     * Never returns null.
+     */
     public List<Type> getTypes() {
         return types;
     }
-    
+
     public boolean hasType(Type type)  {
         return types.contains(type);
     }
@@ -165,7 +209,7 @@ public class Entity {
     public void addAttribute(DatatypeProp prop, int i) {
         addAttribute(prop, new Attribute(i));                
     }
-    
+
     public void addAttribute(DatatypeProp prop, Attribute value) {
         attributes.addValue(prop, value);
     }
@@ -174,19 +218,36 @@ public class Entity {
         attributes.addValues(prop, values);          
     }
     
+    /** 
+     * Returns the full attributes map, or an empty map if there are none. Never 
+     * returns null.
+     */
     public MapOfLists<DatatypeProp, Attribute> getAttributes() {
         return attributes;
     }
-    
+ 
+    /**
+     * Returns the first item in the list of Attributes for the specified
+     * datatype property, or null if there are none. Use when only a single
+     * value of the property is expected.
+     */
     public Attribute getAttribute(DatatypeProp prop) {
         return attributes.getValue(prop);
     }
     
+    /** 
+     * Returns the list of Attributes for this property, or an empty list if 
+     * there are none. Never returns null.
+     */
     public List<Attribute> getAttributes(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
     
-    // TODO add javadoc - returns null if none
+    /**
+     * Returns the value of the first item in the list of Attributes for this
+     * property, or null if there are no attributes. Use when only a single
+     * value of the property is expected.
+     */
     public String getValue(DatatypeProp prop) {
         Attribute attribute = attributes.getValue(prop);
         if (attribute == null) {
@@ -195,7 +256,10 @@ public class Entity {
         return attributes.getValue(prop).getValue();
     }
     
-    // TODO add javadoc - returns empty list but not null
+    /**
+     * Returns the values of the Attributes for this property, or an empty list
+     * if there are none. Never returns null.
+     */
     public List<String> getValues(DatatypeProp prop) {
         List<String> values = new ArrayList<>();
         List<Attribute> attribs = attributes.getValues(prop);
@@ -206,7 +270,7 @@ public class Entity {
     }
     
     /**
-     * Build the Entity's Resource with a specified URI
+     * Builds the Entity's Resource with a specified URI
      */
     public void buildResource(String uri) {
         
@@ -226,7 +290,7 @@ public class Entity {
         for (ObjectProp prop : relationships.keys()) {
             List<Entity> childEntities = relationships.getValues(prop);
             for (Entity entity : childEntities) {
-                // Build  out child resource
+                // Recursively build out child resource
                 entity.buildResource();
                 resource.addProperty(prop.property(), entity.resource);
             }
@@ -248,6 +312,9 @@ public class Entity {
         }   
     }
 
+    /**
+     * Builds the Entity's Resource, using the configured UriServices.
+     */
     public void buildResource() {
         
         if (resource != null) {
@@ -262,13 +329,19 @@ public class Entity {
         return this.resource;
     }
     
+    /**
+     * Returns the Model built from this Entity's Resource. 
+     * @return
+     */
     public Model getModel() {
         
         if (model == null) {
             this.model = ModelFactory.createDefaultModel();
 
+            // Add models of child Entities 
             for (ObjectProp prop : relationships.keys()) {
                 for (Entity entity : relationships.getValues(prop)) {
+                    // Recursively build out child resource's model
                     model.add(entity.getModel());
                 }
             }    
