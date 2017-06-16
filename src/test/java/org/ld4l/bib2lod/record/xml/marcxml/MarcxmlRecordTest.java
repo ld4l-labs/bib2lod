@@ -5,6 +5,7 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
@@ -23,7 +24,6 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     private static final String MINIMAL_VALID_RECORD = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
@@ -34,19 +34,17 @@ public class MarcxmlRecordTest extends AbstractTestClass {
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<leader>1234567</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
             "</record>";
     
-    private static final String DUPLICATE_CONTROL_NUMBERS = 
+    private static final String DUPLICATE_NON_REPEATING_CONTROL_FIELD = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='001'>duplicate field</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
+                "<controlfield tag='008'>duplicate field</controlfield>" +
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
@@ -54,16 +52,6 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     
     private static final String RECORD_NO_LEADER = 
             "<record>" + 
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
-                "</datafield>" +
-            "</record>";
- 
-    private static final String RECORD_NO_001 = 
-            "<record>" + 
-                "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
@@ -82,15 +70,17 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     private static final String RECORD_NO_DATA_FIELDS = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
             "</record>";
     
-    private static final String RECORD_NO_TITLE_FIELD = 
-            "<record>" + 
+    private static final String RECORD_NO_245_FIELD = 
+            "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag=040'>" +
+                    "<subfield code='c'>NIC</subfield>" +
+                    "<subfield code='d'>NIC</subfield>" + 
+                "</datafield>" +
             "</record>";
 
     // ----------------------------------------------------------------------
@@ -111,9 +101,10 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     }
     
     @Test
-    public void testDuplicateControlNumbers_Ignored() throws Exception {
+    @Ignore
+    public void testDuplicateNonRepeatingControlFields_ThrowsException() throws Exception {
         MarcxmlRecord record = 
-                buildRecordFromString(DUPLICATE_CONTROL_NUMBERS);
+                buildRecordFromString(DUPLICATE_NON_REPEATING_CONTROL_FIELD);
         List<MarcxmlControlField> fields = record.getControlFields();
         int fieldCount = 0;
         for (MarcxmlControlField field : fields) {
@@ -137,12 +128,6 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     }
     
     @Test
-    public void testRecordNo001_Invalid() throws Exception {
-        expectException(RecordException.class, "no 001");
-        MarcxmlRecord record = buildRecordFromString(RECORD_NO_001);
-    }
-    
-    @Test
     public void testRecordNo008_Invalid() throws Exception {
         expectException(RecordException.class, "no 008");
         buildRecordFromString(RECORD_NO_008);
@@ -155,9 +140,10 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     }
 
     @Test
-    public void testRecordNoTitle_Invalid() throws Exception {
+    @Ignore
+    public void testRecordNo245_Invalid() throws Exception {
         expectException(RecordException.class, "245");
-        buildRecordFromString(RECORD_NO_TITLE_FIELD);
+        buildRecordFromString(RECORD_NO_245_FIELD);
     }
     
     // ----------------------------------------------------------------------

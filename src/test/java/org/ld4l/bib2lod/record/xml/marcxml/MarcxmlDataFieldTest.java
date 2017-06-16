@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
@@ -73,6 +74,7 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     }
 
     @Test
+    @Ignore
     public void emptyTag_Invalid() throws Exception {
         expectException(RecordFieldException.class, "tag is blank");
         buildDataFieldFromString(EMPTY_TAG);

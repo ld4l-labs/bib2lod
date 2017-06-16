@@ -51,6 +51,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         buildItem();
         buildPublisherActivity();
         addResponsibilityStatement();
+        //buildAdminMetadata();
         
         return instance;
     }
@@ -146,5 +147,9 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         instance.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT, 
                 subfield.getTextValue());             
     }
+    
+    /**
+     * Build AdminMetadata
+     */
      
 }

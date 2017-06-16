@@ -133,35 +133,24 @@ public class MarcxmlRecord extends BaseXmlRecord {
         if (leader == null) {
             throw new RecordException("Record has no leader");
         }
+        if (leader.getTextValue().length() != 24) {
+            throw new RecordException(
+                    "Leader does not have exactly 24 positions.");
+        }
     }
     
     private void checkRequiredControlFields() throws RecordException {
-        boolean has001 = false;
-        boolean has008 = false;
-        for (MarcxmlControlField controlField : controlFields) {
-            if (controlField.getControlNumber().equals("001")) {
-                has001 = true;
-            }
-            if (controlField.getControlNumber().equals("008")) {
-                has008 = true;
-            }            
-        }
-        if (!has001) {
-            throw new RecordException("Record has no 001 control field");
-        }
-        if (!has008) {
-            throw new RecordException("Record has no 008 control field");
+        
+        if (! hasControlField("008")) {
+            throw new RecordException("Record has no 008 control field");            
         }
     }
     
     private void checkRequiredDataFields() throws RecordException {
-        for (MarcxmlDataField dataField : dataFields) {
-            String dataFieldName = dataField.getName();
-            if (dataFieldName.equals("245")) {
-                return;
-            }
+        
+        if (! hasDataField("245")) {
+            throw new RecordException("Record has no 245 data field");            
         }
-        throw new RecordException("Record does not contain a 245 field");
     }
  
     /**
@@ -193,6 +182,19 @@ public class MarcxmlRecord extends BaseXmlRecord {
             }
         }
         return null;
+    }
+    
+    /**
+     * Returns true iff the Record has the specified control field
+     */
+    public boolean hasControlField(String controlNumber) {
+        
+        for (MarcxmlControlField controlField : controlFields) {
+            if (controlField.getControlNumber().equals(controlNumber)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -233,6 +235,19 @@ public class MarcxmlRecord extends BaseXmlRecord {
             }
         }       
         return null;
+    }
+    
+    /**
+     * Return true iff the Record has the specified datafield
+     */
+    public boolean hasDataField(String tag) {
+        
+        for (MarcxmlDataField field : dataFields) {
+            if (field.getName().equals(tag)) {
+                return true;
+            }
+        }       
+        return false;        
     }
     
     public List<MarcxmlField> getFields() {

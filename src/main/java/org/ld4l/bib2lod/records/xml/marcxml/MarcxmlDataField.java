@@ -5,6 +5,7 @@ package org.ld4l.bib2lod.records.xml.marcxml;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
@@ -46,7 +47,7 @@ public class MarcxmlDataField extends MarcxmlField {
     
     private Integer getIndicatorValue(String ind, Element element) {
         String value = element.getAttribute(ind);
-        if (value.isEmpty()) {
+        if (StringUtils.isBlank(value)) {
             return null;
         }
         return Integer.parseInt(value);
@@ -122,9 +123,6 @@ public class MarcxmlDataField extends MarcxmlField {
         }
         if (tag.equals("")) {
             throw new RecordFieldException("tag is empty");
-        }
-        if (tag.equals(" ")) {
-            throw new RecordFieldException("tag is blank");
         }
         if (Integer.parseInt(tag) > 999) {
             throw new RecordFieldException("tag is greater than 999");

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Minimal MARC record. Cornell ILS requires only that a record have an  
+  identifier (001), a LDR (which can have everything marked ‘no attempt to code’), 
+  a 008 (ditto), and a title (130, 240, or 245).
+-->
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+  <record xmlns="http://www.loc.gov/MARC21/slim">
+    <leader>01050cam a22003011  4500</leader>
+    <controlfield tag="001">102063</controlfield>
+    <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>
+    <datafield tag="245" ind1="0" ind2="0">
+      <subfield code="a">Clinical cardiopulmonary physiology.</subfield>
+    </datafield>
+  </record>  
+</collection>

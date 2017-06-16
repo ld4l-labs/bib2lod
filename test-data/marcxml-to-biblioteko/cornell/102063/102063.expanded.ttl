@@ -6,9 +6,10 @@
 
 
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bib: <http://bibliotek-o.org/ontology/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix bib: <http://bibliotek-o.org/ontology/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix lexvo: <http://purl.org/dc/terms/language> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -57,7 +58,21 @@ cornell:inst1 a bf:Instance ;
         bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
     ] ; 
     
-    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" 
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+    
+    bf:adminMetadata [
+        a bf:AdminMetadata ;
+        bib:hasSource [
+            a foaf:Agent ;
+            # According to LC mappings, should be URI from id.loc.gov/vocabulary/organizations but can't find it; using name for now.
+            foaf:name "NIC"
+        ] ;
+        bf:descriptionModifier [
+            a foaf:Agent ;
+            # According to LC mappings, should be URI from id.loc.gov/vocabulary/organizations but can't find it; using name for now.
+            foaf:name "NIC"
+        ] ;
+    ]         
 . 
 
 cornell:item1 a bf:Item .

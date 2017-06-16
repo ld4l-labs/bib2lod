@@ -2,7 +2,7 @@
   "localNamespace": "http://data.ld4l.org/cornell/",
   "InputService": {
     "class": "org.ld4l.bib2lod.io.FileInputService",
-    "source": "test-data/marcxml-to-biblioteko/cornell/102063-min/102063.min.xml",
+    "source": "test-data/marcxml-to-biblioteko/cornell/102063/102063.min.xml",
     "extension": "xml"
   }, 
   "OutputService": {

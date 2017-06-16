@@ -85,7 +85,6 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
 
         for (MarcxmlSubfield subfield : field245.getSubfields()) {
  
-            // *** TODO - refactor to char and do a switch
             String code = subfield.getCode();
             // 245$a always stores the full title. If 130 and/or 240 are 
             // present,the $a fields should be the same.
