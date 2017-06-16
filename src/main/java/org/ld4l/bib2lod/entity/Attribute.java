@@ -53,18 +53,30 @@ public class Attribute {
         this(Integer.toString(i), null, XsdDatatype.INT);
     }
     
+    /**
+     * Returns the Attribute value, which is always non-null.
+     */
     public String getValue() {
         return value;
     }
-       
+      
+    /**
+     * Returns the Attribute's xml:lang value, or null if none exists.
+     */
     public String getLang() {
         return lang;
     }
     
+    /**
+     * Returns the Attributes datatype, or null if none exists.
+     */
     public Datatype getDatatype() {
         return datatype;
     }
     
+    /**
+     * Returns the literal built from this Attribute.
+     */
     public Literal toLiteral() {
         if (datatype != null) {
             return ResourceFactory.createTypedLiteral(

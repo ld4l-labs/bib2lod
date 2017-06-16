@@ -98,7 +98,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
-
+    
     @Test (expected = EntityBuilderException.class)
     public void nullRecord_ThrowsException() throws Exception {
         buildTitle(new Entity(), (Record) null);
@@ -109,6 +109,30 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
         buildTitle((Entity) null, MarcxmlTestUtils.MINIMAL_RECORD);
     }
     
+    @Test
+    public void testTitleElementCount() throws Exception {
+       Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);
+       List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
+       Assert.assertEquals(3, titleElements.size());
+    }
+    
+    @Test
+    public void testTitleElementRank() throws Exception {
+        Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);  
+        List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
+        
+        List<String> expected = new ArrayList<>(
+                Arrays.asList(new String[]{"1", "2", "3"}));
+        
+        List<String> actual = new ArrayList<>();
+        for (Entity titleElement : titleElements) {
+            String rank = titleElement.getValue(Ld4lDatatypeProp.RANK);   
+            actual.add(rank);
+        }
+        
+        Assert.assertTrue(expected.equals(actual));      
+    }
+
     @Test 
     public void testTitleValueFromMainTitleElement() throws Exception {
         buildTitleAndExpectValue(
@@ -143,30 +167,6 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     public void testTitleValueWithTwoSubtitles() throws Exception {
         buildTitleAndExpectValue(new Entity(), TITLE_WITH_TWO_SUBTITLES, 
                 "main title : subtitle one : subtitle two");     
-    }
-
-    @Test
-    public void testTitleElementCount() throws Exception {
-       Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);
-       List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
-       Assert.assertEquals(3, titleElements.size());
-    }
-    
-    @Test
-    public void testTitleElementRank() throws Exception {
-        Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);  
-        List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
-        
-        List<String> expected = new ArrayList<>(
-                Arrays.asList(new String[]{"1", "2", "3"}));
-        
-        List<String> actual = new ArrayList<>();
-        for (Entity titleElement : titleElements) {
-            String rank = titleElement.getValue(Ld4lDatatypeProp.RANK);   
-            actual.add(rank);
-        }
-        
-        Assert.assertTrue(expected.equals(actual));      
     }
 
     // ----------------------------------------------------------------------

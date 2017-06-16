@@ -8,8 +8,6 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
-import org.ld4l.bib2lod.records.RecordField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class MarcxmlToLd4lTitleElementBuilder extends BaseEntityBuilder {
 
@@ -34,62 +32,35 @@ public class MarcxmlToLd4lTitleElementBuilder extends BaseEntityBuilder {
                     "Cannot build title element: invalid title element type.");            
         }
         
-        Entity titleElement;
-        
-        if (type.equals(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)) {
-            titleElement = buildMainTitleElement(params);
-        } else if (type.equals(Ld4lTitleElementType.SUBTITLE_ELEMENT)) {
-            titleElement = buildSubtitleElement(params);
-        } else {
-            // Unimplemented types
-            throw new EntityBuilderException(
-                    "Don't know how to build title element of type " + type);
-        }  
-
-        title.addRelationship(Ld4lObjectProp.HAS_PART, titleElement);      
-        return titleElement;       
-    }
-    
-    private Entity buildMainTitleElement(BuildParams params) 
-            throws EntityBuilderException {
-        
-        RecordField subfield = params.getSubfield();
-        if (! (subfield instanceof MarcxmlSubfield) ) {
-            throw new EntityBuilderException(
-                    "Specified subfield is not a MarcxmlSubfield");
-        }
-        
-        MarcxmlSubfield marcxmlSubfield = (MarcxmlSubfield) subfield;
-        if (! marcxmlSubfield.getCode().equals("a")) {
-            throw new EntityBuilderException(
-                    "Subfield $a required to build MainTitleElement");
-        }
-        
-        Entity titleElement = new Entity(params.getType());
-        
-        String value = marcxmlSubfield.getTextValue();
-        // TODO Add other final punct as needed
-        value = StringUtils.removePattern(value, "\\s*:\\s*$");     
-        value = value.trim();
-        
-        titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);
-        
-        return titleElement;
-    }
-    
-    private Entity buildSubtitleElement(BuildParams params) 
-            throws EntityBuilderException {
-               
         String value = params.getValue();
         if (value == null || value.isEmpty()) {
             throw new EntityBuilderException(
-                    "Non-empty value required to build subtitle.");        
+                    "Non-empty string value required to build title element.");        
         }
         
-        Entity titleElement = new Entity(params.getType());
-        titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value.trim());
+        Entity titleElement = new Entity(type);
         
-        return titleElement;               
+        if (type.equals(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)) {
+            /*
+             * Colon is used at the end of the main title when a subtitle
+             * follows.
+             * 
+             * TODO Are there other types of punct that could be used?
+             */
+            value = StringUtils.removePattern(value, "\\s*:\\s*$");     
+        } 
+        
+        /*
+         * NB Final space must be retained in non-sort elements, in order to
+         * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
+         */
+        if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
+            value = value.trim();
+        } 
+
+        titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);
+        title.addRelationship(Ld4lObjectProp.HAS_PART, titleElement);      
+        return titleElement;       
     }
     
 }
