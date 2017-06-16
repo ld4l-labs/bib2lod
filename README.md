@@ -5,19 +5,21 @@
 
 ## What is bib2lod?
 
-bib2lod is a full record MARC-to-bibliotek-o converter that  
+bib2lod is a full record MARC-to-bibliotek-o converter that will:  
 
-* Accepts any valid MARC record (or set of valid MARC records) as input 
-* Converts each input record to RDF in the [bibliotek-o framework](https://github.com/ld4l-labs/bibliotek-o). The bibliotek-o framework includes:
-  * The [bibliotek-o ontology](https://github.com/ld4l-labs/bibliotek-o) (an extension to [BIBFRAME](https://www.loc.gov/bibframe/))
-  * Defined fragments of BIBFRAME and other external ontologies
-  * An application profile specifying rules for bibliographic metadata modeling using these ontologies
-* Conversion from MARC to bibliotek-o follows the MARC-to-bibliotek-o mappings provided by the LD4L Labs/LD4P ontology mapping group (in development).
+* Accept any valid MARC record (or set of valid MARC records) as input. 
+* Convert each input record to RDF in the [bibliotek-o framework](https://github.com/ld4l-labs/bibliotek-o). The bibliotek-o framework includes:
+  * The [bibliotek-o ontology](https://github.com/ld4l-labs/bibliotek-o) (an extension to [BIBFRAME](https://www.loc.gov/bibframe/)).
+  * Defined fragments of BIBFRAME and other external ontologies.
+  * An application profile specifying rules for bibliographic metadata modeling using these ontologies.
+  * Mappings from MARC to the bibliotek-o target ontologies against which the converter is being developed are in progress by the LD4L Labs/LD4P ontology mapping group.
+* Convert all fields except local (9xx) fields to RDF.
 
-In its initial implementation, it
+In its initial implementation, it:
 
-* converts each record as a self-contained unit, with no attempt to reconcile URIs either locally across an entire data set or to external URIs. New URIs are minted using the configured local namespace and a random local name generator.
-* supports only file IO.
+* Converts each record as a self-contained unit, with no attempt to reconcile URIs either locally across an entire data set or to external URIs. New URIs are minted using the configured local namespace and a random local name generator.
+* Supports only file IO.
+
 
 ## News
 * **2017-03-31** Release 0.1 pushed to `master`.
