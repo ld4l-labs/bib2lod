@@ -36,19 +36,20 @@ public class MarcxmlControlField extends MarcxmlField {
     private void isValid() throws RecordFieldException {
         
         if (controlNumber == null) {
-            throw new RecordFieldException("control number is null");
+            throw new RecordFieldException("Control number is null.");
         }
         if (controlNumber.equals("")) {
-            throw new RecordFieldException("control number is empty");
+            throw new RecordFieldException("Control number is empty.");
         }
         if (controlNumber.length() != 3) {
-            throw new RecordFieldException("control number is not three characters");
+            throw new RecordFieldException(
+                    "Control number is not three characters");
         }
         if (textValue == null) {
-            throw new RecordFieldException("text value is null");
+            throw new RecordFieldException("Text value is null.");
         }
         if (textValue.isEmpty()) {
-            throw new RecordFieldException("text value is empty");
+            throw new RecordFieldException("Text value is empty.");
         }
     }
 }

@@ -28,10 +28,11 @@ public class MarcxmlLeader extends MarcxmlField {
 
     private void isValid() throws RecordFieldException {
         if (textValue == null) {
-            throw new RecordFieldException("text value is null");
+            throw new RecordFieldException("Leader text value is null.");
         }
-        if (textValue.isEmpty()) {
-            throw new RecordFieldException("text value is empty");
+        if (textValue.length() != 24) {
+            throw new RecordFieldException(
+                    "Leader does not have exactly 24 positions.");
         }
     }
     

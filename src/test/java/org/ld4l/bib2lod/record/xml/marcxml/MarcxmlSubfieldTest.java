@@ -13,16 +13,16 @@ import org.w3c.dom.Element;
 /**
  * Tests class MarcxmlSubfield.
  */
-
-/* test plan:
- * invalid code - more than 1 char
- * missing, empty, null code (see datafield tag)
- * no text value
- */
 public class MarcxmlSubfieldTest extends AbstractTestClass {
    
     private static final String NO_CODE = 
             "<subfield>(CStRLIN)NYCX86B63464</subfield>";
+    
+    private static final String EMPTY_CODE =
+            "<subfield code=''>(CStRLIN)NYCX86B63464</subfield>";   
+    
+    private static final String BLANK_CODE =
+            "<subfield code=' '>(CStRLIN)NYCX86B63464</subfield>";    
     
     private static final String NO_VALUE = 
             "<subfield code='a'></subfield>";
@@ -39,25 +39,37 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     @Test
-    public void noCode_Invalid() throws Exception {
+    public void noCode_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "is empty");
         buildSubfieldFromString(NO_CODE);
     }
+    
+    @Test
+    public void emptyCode_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is empty");
+        buildSubfieldFromString(EMPTY_CODE);
+    }
+    
+    @Test
+    public void blankCode_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is blank");
+        buildSubfieldFromString(BLANK_CODE);
+    }
 
     @Test
-    public void noValue_Invalid() throws Exception {
+    public void noValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "value is null");
         buildSubfieldFromString(NO_VALUE);
     }
 
     @Test
-    public void noTextValue_Invalid() throws Exception {
+    public void noTextValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "value is null");
         buildSubfieldFromString(NO_TEXT_VALUE);
     }
 
     @Test
-    public void validSubfield_Valid() throws Exception {
+    public void validSubfield_Succeeds() throws Exception {
         // No exception
         buildSubfieldFromString(VALID_SUBFIELD);
     }    

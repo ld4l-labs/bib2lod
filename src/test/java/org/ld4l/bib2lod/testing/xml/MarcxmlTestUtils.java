@@ -13,7 +13,6 @@ public class MarcxmlTestUtils {
     public static final String MINIMAL_RECORD = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>main title</subfield>" +          

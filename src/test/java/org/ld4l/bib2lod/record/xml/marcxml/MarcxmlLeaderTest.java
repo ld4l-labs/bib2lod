@@ -20,6 +20,9 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
     private static final String NO_TEXT_VALUE = 
             "<leader><subfield>Text</subfield></leader>";
       
+    private static final String INVALID_LENGTH = 
+            "<leader>01050cam</leader>";
+    
     private static final String VALID_LEADER = 
             "<leader>01050cam a22003011  4500</leader>";
 
@@ -29,15 +32,21 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     
     @Test
-    public void noValue_Invalid() throws Exception {
+    public void noValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "is null");
         buildLeaderFromString(NO_VALUE);
     }
     
     @Test
-    public void noTextValue_Invalid() throws Exception {
+    public void noTextValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "is null");
         buildLeaderFromString(NO_TEXT_VALUE);
+    }
+    
+    @Test
+    public void invalidLength_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "exactly 24 positions");
+        buildLeaderFromString(INVALID_LENGTH);
     }
     
     @Test

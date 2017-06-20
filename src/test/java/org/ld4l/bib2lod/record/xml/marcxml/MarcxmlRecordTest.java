@@ -5,7 +5,6 @@ package org.ld4l.bib2lod.record.xml.marcxml;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
@@ -13,6 +12,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Element;
 
@@ -20,16 +20,16 @@ import org.w3c.dom.Element;
  * Tests class MarcxmlRecord.
  */
 public class MarcxmlRecordTest extends AbstractTestClass {
+
     
-    private static final String MINIMAL_VALID_RECORD = 
+    private static final String NO_LEADER = 
             "<record>" + 
-                "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
             "</record>";
-
+    
     private static final String TWO_LEADERS = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
@@ -39,56 +39,62 @@ public class MarcxmlRecordTest extends AbstractTestClass {
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
             "</record>";
+
     
-    private static final String DUPLICATE_NON_REPEATING_CONTROL_FIELD = 
+     private static final String NO_008 = 
+             "<record>" + 
+                 "<leader>01050cam a22003011  4500</leader>" +
+                 "<controlfield tag='001'>102063</controlfield>" +
+                 "<datafield tag='245' ind1='0' ind2='0'>" +
+                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
+                 "</datafield>" +
+             "</record>";
+ 
+    private static final String DUPLICATE_008 = 
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
-                "<controlfield tag='008'>duplicate field</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
             "</record>";
     
-    private static final String RECORD_NO_LEADER = 
-            "<record>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
-                "</datafield>" +
-            "</record>";
-    
-    private static final String RECORD_NO_008 = 
-            "<record>" + 
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
-                "</datafield>" +
-            "</record>";
-    
-    private static final String RECORD_NO_DATA_FIELDS = 
-            "<record>" + 
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
-            "</record>";
-    
-    private static final String RECORD_NO_245_FIELD = 
+    private static final String NO_245 = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag=040'>" +
+                "<datafield tag='040'>" +
                     "<subfield code='c'>NIC</subfield>" +
                     "<subfield code='d'>NIC</subfield>" + 
                 "</datafield>" +
             "</record>";
+    
+    private static final String DUPLICATE_245 = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
+                "</datafield>" +
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
+                "</datafield>" +
+            "</record>";
 
+    
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
+
+    @Test
+    public void noLeader_ThrowsException() throws Exception {
+        expectException(RecordException.class, "no leader");
+        buildRecordFromString(NO_LEADER);
+    }
     
     @Test
-    public void testMultipleLeaders_Ignored() throws Exception {
+    public void multipleLeaders_Ignored() throws Exception {
         MarcxmlRecord record = buildRecordFromString(TWO_LEADERS);
         List<MarcxmlField> fields = record.getFields();
         int leaderCount = 0;
@@ -99,52 +105,45 @@ public class MarcxmlRecordTest extends AbstractTestClass {
         }
         Assert.assertEquals(1, leaderCount);      
     }
+
+    @Test
+    public void no008_ThrowsException() throws Exception {
+        expectException(RecordException.class, "no 008");
+        buildRecordFromString(NO_008);
+    }
     
     @Test
-    @Ignore
-    public void testDuplicateNonRepeatingControlFields_ThrowsException() throws Exception {
+    public void duplicateNonRepeatingControlFields_Ignored() throws Exception {
         MarcxmlRecord record = 
-                buildRecordFromString(DUPLICATE_NON_REPEATING_CONTROL_FIELD);
+                buildRecordFromString(DUPLICATE_008);
         List<MarcxmlControlField> fields = record.getControlFields();
         int fieldCount = 0;
         for (MarcxmlControlField field : fields) {
-            if (field.getControlNumber().equals("001")) {
+            if (field.getControlNumber().equals("008")) {
                 fieldCount++;
             }
         }
         Assert.assertEquals(1, fieldCount);          
     }
-    
-    @Test
-    public void testValidRecord_Valid() throws Exception {
-        // No exception
-       buildRecordFromString(MINIMAL_VALID_RECORD);
-    }
-    
-    @Test
-    public void testRecordNoLeader_Invalid() throws Exception {
-        expectException(RecordException.class, "no leader");
-        buildRecordFromString(RECORD_NO_LEADER);
-    }
-    
-    @Test
-    public void testRecordNo008_Invalid() throws Exception {
-        expectException(RecordException.class, "no 008");
-        buildRecordFromString(RECORD_NO_008);
-    }
-    
-    @Test
-    public void testRecordNoDataFields_Invalid() throws Exception {
-        expectException(RecordException.class, "245");
-        buildRecordFromString(RECORD_NO_DATA_FIELDS);
-    }
 
     @Test
-    @Ignore
-    public void testRecordNo245_Invalid() throws Exception {
-        expectException(RecordException.class, "245");
-        buildRecordFromString(RECORD_NO_245_FIELD);
+    public void no245_ThrowsException() throws Exception {
+        expectException(RecordException.class, "no 245");
+        buildRecordFromString(NO_245);
     }
+    
+    @Test
+    public void duplicateNonRepeatingDataFields_Ignored() throws Exception {
+        // No exception
+        buildRecordFromString(DUPLICATE_245);
+    }
+    
+    @Test
+    public void validRecord_Succeeds() throws Exception {
+        // No exception
+       buildRecordFromString(MarcxmlTestUtils.MINIMAL_RECORD);
+    }
+    
     
     // ----------------------------------------------------------------------
     // Helper methods

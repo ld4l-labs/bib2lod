@@ -32,20 +32,17 @@ public class MarcxmlSubfield extends MarcxmlField {
 
         // Here we test only the code format, not whether specific codes are
         // valid for specific data fields.
-        if (code == null) {
-            throw new RecordFieldException("code is null");
-        }
         if (code.equals("")) {
-            throw new RecordFieldException("code is empty");
+            throw new RecordFieldException("Code is empty.");
         }
         if (code.equals(" ")) {
-            throw new RecordFieldException("code is blank");
+            throw new RecordFieldException("Code is blank.");
         }
         if (textValue == null) {
-            throw new RecordFieldException("text value is null");
+            throw new RecordFieldException("Text value is null.");
         }
         if (textValue.isEmpty()) {
-            throw new RecordFieldException("texst value is null");
+            throw new RecordFieldException("Text value is empty.");
         }
     }
 

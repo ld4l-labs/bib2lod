@@ -131,25 +131,21 @@ public class MarcxmlRecord extends BaseXmlRecord {
     
     private void checkLeader() throws RecordException {
         if (leader == null) {
-            throw new RecordException("Record has no leader");
-        }
-        if (leader.getTextValue().length() != 24) {
-            throw new RecordException(
-                    "Leader does not have exactly 24 positions.");
+            throw new RecordException("Record has no leader.");
         }
     }
     
     private void checkRequiredControlFields() throws RecordException {
         
         if (! hasControlField("008")) {
-            throw new RecordException("Record has no 008 control field");            
+            throw new RecordException("Record has no 008 control field.");            
         }
     }
     
     private void checkRequiredDataFields() throws RecordException {
         
         if (! hasDataField("245")) {
-            throw new RecordException("Record has no 245 data field");            
+            throw new RecordException("Record has no 245 data field.");            
         }
     }
  
@@ -188,13 +184,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Returns true iff the Record has the specified control field
      */
     public boolean hasControlField(String controlNumber) {
-        
-        for (MarcxmlControlField controlField : controlFields) {
-            if (controlField.getControlNumber().equals(controlNumber)) {
-                return true;
-            }
-        }
-        return false;
+        return getControlField(controlNumber) !=  null;
     }
     
     /**
@@ -241,13 +231,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Return true iff the Record has the specified datafield
      */
     public boolean hasDataField(String tag) {
-        
-        for (MarcxmlDataField field : dataFields) {
-            if (field.getName().equals(tag)) {
-                return true;
-            }
-        }       
-        return false;        
+        return getDataField(tag) != null;        
     }
     
     public List<MarcxmlField> getFields() {

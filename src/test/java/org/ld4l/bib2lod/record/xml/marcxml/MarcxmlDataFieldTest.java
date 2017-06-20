@@ -15,6 +15,26 @@ import org.w3c.dom.Element;
  * Tests class MarcxmlDataField.
  */
 public class MarcxmlDataFieldTest extends AbstractTestClass {
+ 
+    private static final String NO_TAG = 
+            "<datafield ind1='0' ind2='0'>" +
+                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
+    
+    private static final String EMPTY_TAG = 
+            "<datafield tag='' ind1='0' ind2='0'>" +
+                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
+    
+    private static final String BLANK_TAG = 
+            "<datafield tag=' ' ind1='0' ind2='0'>" +
+                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
+    
+    private static final String INVALID_TAG = 
+            "<datafield tag='1234' ind1='0' ind2='0'>" +
+                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
     
     private static final String NO_VALUE = 
             "<datafield tag='245' ind1='0' ind2='0'></datafield>";
@@ -24,25 +44,15 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
                  "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
                  "<child>test</child>" +
              "</datafield>";
-    
-    private static final String NO_TAG = 
-            "<datafield ind1='0' ind2='0'>" +
-                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
-            "</datafield>";
-    
-    private static final String EMPTY_TAG = 
-            "<datafield tag=' ' ind1='0' ind2='0'>" +
-                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
-            "</datafield>";
-    
-    private static final String INVALID_TAG_FORMAT = 
-            "<datafield tag='1234' ind1='0' ind2='0'>" +
-                "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
-            "</datafield>";
 
     private static final String INVALID_SUBFIELD = 
             "<datafield tag='245' ind1='0' ind2='0'>" +
                 "<subfield>Clinical cardiopulmonary physiology.</subfield>" +
+            "</datafield>";
+    
+    private static final String INVALID_FIELD_245 = 
+            "<datafield tag='245' ind1='0' ind2='0'>" +
+                "<subfield code='c'>Clinical cardiopulmonary physiology.</subfield>" +
             "</datafield>";
     
     private static final String VALID_DATAFIELD = 
@@ -54,42 +64,53 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
+
+    @Test
+    public void noTag_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is empty");
+        buildDataFieldFromString(NO_TAG);
+    }
+
+    @Test
+    public void emptyTag_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is empty");
+        buildDataFieldFromString(EMPTY_TAG);
+    }
     
     @Test
-    public void noValue_Invalid() throws Exception {
+    public void blankTag_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is blank");
+        buildDataFieldFromString(BLANK_TAG);
+    }
+    
+    @Test
+    public void invalidTag_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is invalid");
+        buildDataFieldFromString(INVALID_TAG);
+    }
+    
+    @Test
+    public void noValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "no subfields");
         buildDataFieldFromString(NO_VALUE);
     }
 
     @Test
-    public void nonSubfieldChild_Ignored() throws Exception {
+    public void nonSubfieldChild_Succeeds() throws Exception {
         // No exception
         buildDataFieldFromString(NON_SUBFIELD_CHILD);
     }
 
     @Test
-    public void noTag_Invalid() throws Exception {
-        expectException(RecordFieldException.class, "tag is empty");
-        buildDataFieldFromString(NO_TAG);
-    }
-
-    @Test
-    @Ignore
-    public void emptyTag_Invalid() throws Exception {
-        expectException(RecordFieldException.class, "tag is blank");
-        buildDataFieldFromString(EMPTY_TAG);
-    }
-
-    @Test
-    public void invalidTagFormat_Invalid() throws Exception {
-        expectException(RecordFieldException.class, "greater than 999");
-        buildDataFieldFromString(INVALID_TAG_FORMAT);
-    }
-
-    @Test
-    public void invalidSubfield_Invalid() throws Exception {
-        expectException(RecordFieldException.class, "code is empty");
+    public void invalidSubfield_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "is empty");
         buildDataFieldFromString(INVALID_SUBFIELD);
+    }
+    
+    @Test
+    public void invalidField245_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, "required for field 245");
+        buildDataFieldFromString(INVALID_FIELD_245);
     }
     
     @Test

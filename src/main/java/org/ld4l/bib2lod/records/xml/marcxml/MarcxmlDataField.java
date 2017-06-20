@@ -101,7 +101,14 @@ public class MarcxmlDataField extends MarcxmlField {
     }
     
     /**
-     * Return the datafield in the specified list with the specified tag value.
+     * Returns true iff the datafield has the specified subfield.
+     */
+    public boolean hasSubfield(String code) {
+        return getSubfield(code) != null;
+    }
+      
+    /**
+     * Returns the datafield in the specified list with the specified tag value.
      * Returns the first if multiple are found. Returns null if none are found. 
      */
     public static MarcxmlDataField get(
@@ -117,15 +124,15 @@ public class MarcxmlDataField extends MarcxmlField {
     }
 
     private void isValid() throws RecordFieldException {
-        
-        if (tag == null) {
-            throw new RecordFieldException("tag is null");
-        }
+
         if (tag.equals("")) {
-            throw new RecordFieldException("tag is empty");
+            throw new RecordFieldException("Tag is empty.");
+        }
+        if (tag.equals(" ")) {
+            throw new RecordFieldException("Tag is blank.");
         }
         if (Integer.parseInt(tag) > 999) {
-            throw new RecordFieldException("tag is greater than 999");
+            throw new RecordFieldException("Tag is invalid.");
         }
         /*
          * Bad test: when pretty-printed there is whitespace inside the element.
@@ -135,6 +142,12 @@ public class MarcxmlDataField extends MarcxmlField {
         */
         if (subfields.isEmpty()) {
             throw new RecordFieldException("field has no subfields");
+        }
+        if (tag.equals("245")) {
+           if (! (hasSubfield("a") || hasSubfield("k")) ) {
+               throw new RecordFieldException(
+                       "Subfield $a or $k required for field 245.");
+           }
         }
     }
     

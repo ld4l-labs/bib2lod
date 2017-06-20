@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
@@ -26,12 +27,20 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
     
     public static final String CONTROL_FIELD_008 = 
             "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>";
-    public static final String INVALID_CONTROL_FIELD = "<controlfield tag='008'>860506s</controlfield>";
-    public static final String CONTROL_FIELD_WITH_BLANKS = "<controlfield tag='008'>860506s                 b    000 0 eng  </controlfield>";
+    
+    public static final String INVALID_CONTROL_FIELD = 
+            "<controlfield tag='008'>860506s</controlfield>";
+    
+    public static final String CONTROL_FIELD_WITH_BLANKS = 
+            "<controlfield tag='008'>860506s                 b    000 0 eng  </controlfield>";
+    
     public static final String CONTROL_FIELD_001 = 
             "<controlfield tag='001'>102063</controlfield>";  
-    public static final String DATA_FIELD_245 = "<datafield tag='245'><subfield code='a|'>text</subfield></datafield>";
+    
+    public static final String DATA_FIELD_245 = 
+            "<datafield tag='245'><subfield code='a'>text</subfield></datafield>";
 
+    
     private MarcxmlToLd4lActivityBuilder activityBuilder;   
     private InstanceEntity instance;
     
