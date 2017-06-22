@@ -19,6 +19,7 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
      * the same as a datatype property for our purposes.
      */
     LABEL(Ld4lNamespace.RDFS, "label"),
+    NAME(Ld4lNamespace.FOAF, "name"),
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
     /*

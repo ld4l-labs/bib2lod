@@ -89,6 +89,13 @@ public class MapOfLists<K, V> {
         }
         return clone;
     }
+    
+    /**
+     * Returns true iff the map is empty.
+     */
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
 
     @Override
     public int hashCode() {

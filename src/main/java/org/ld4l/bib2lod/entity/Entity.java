@@ -270,6 +270,16 @@ public class Entity {
     }
     
     /**
+     * Return true iff this Entity has no attributes, relationships, or
+     * external relationships. (It may have types.)
+     * @return
+     */
+    public boolean isEmpty() {
+        return (relationships.isEmpty() && attributes.isEmpty() &&
+                externalRelationships.isEmpty());
+    }
+    
+    /**
      * Builds the Entity's Resource with a specified URI
      */
     public void buildResource(String uri) {

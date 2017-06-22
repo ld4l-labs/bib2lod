@@ -6,6 +6,7 @@ import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
@@ -19,6 +20,7 @@ public class MarcxmlToLd4lEntityBuilderFactory extends BaseEntityBuilderFactory 
             new HashMap<>();
     static {
         typeToBuilderClass.put(Ld4lActivityType.class, MarcxmlToLd4lActivityBuilder.class);
+        typeToBuilderClass.put(Ld4lAdminMetadataType.class, MarcxmlToLd4lAdminMetadataBuilder.class);
         typeToBuilderClass.put(Ld4lIdentifierType.class, MarcxmlToLd4lIdentifierBuilder.class);
         typeToBuilderClass.put(Ld4lInstanceType.class, MarcxmlToLd4lInstanceBuilder.class);
         typeToBuilderClass.put(Ld4lItemType.class, MarcxmlToLd4lItemBuilder.class);

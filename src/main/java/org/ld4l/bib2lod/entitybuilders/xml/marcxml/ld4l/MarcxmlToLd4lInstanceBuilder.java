@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
@@ -49,9 +50,9 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         buildTitles();
         buildWorks();
         buildItem();
-        buildPublisherActivity();
+        buildActivities();
         addResponsibilityStatement();
-        //buildAdminMetadata();
+        buildAdminMetadata();
         
         return instance;
     }
@@ -68,8 +69,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                     .setRelatedEntity(instance)
                     .setField(controlField001);
             buildAndCatchException(builder, params, 
-                    "Error building instance identifier from 001 control " +
-                        "field.");
+                    "Error building instance identifier from control field 001.");
         } 
     }
     
@@ -112,12 +112,13 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 "Error building item for instance.");
     }   
     
-    private void buildPublisherActivity()  {
+    private void buildActivities()  {
         
         EntityBuilder builder = getBuilder(Ld4lActivityType.class);
-        
+ 
         MarcxmlControlField field008 = record.getControlField(8);
-
+        
+        // Publication 
         if (field008 != null) {        
             BuildParams params = new BuildParams()
                     .setRecord(record)     
@@ -148,8 +149,15 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 subfield.getTextValue());             
     }
     
-    /**
-     * Build AdminMetadata
-     */
+    private void buildAdminMetadata() {
+ 
+        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.class);
+        BuildParams params = new BuildParams()
+                .setRelatedEntity(instance)
+                .setRecord(record);
+        buildAndCatchException(builder, params, 
+                "Error building admin metadata.");        
+    
+    }
      
 }

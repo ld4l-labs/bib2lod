@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Minimal MARC record. -->
+
 <collection xmlns="http://www.loc.gov/MARC21/slim">
   <record xmlns="http://www.loc.gov/MARC21/slim">
     <leader>01050cam a22003011  4500</leader>
