@@ -14,18 +14,23 @@ public class MarcxmlControlField extends MarcxmlField {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
-    private String controlNumber;
+    private Integer controlNumber;
     
     /**
      * Constructor
      */
     public MarcxmlControlField(Element element) throws RecordFieldException {
         super(element);
-        controlNumber = element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
-        isValid();
+        try {
+            controlNumber = Integer.parseInt(
+                    element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME));
+            isValid();
+        } catch (NumberFormatException e) {
+            throw new RecordFieldException("Invalid control number.");
+        }
     }
     
-    public String getControlNumber() {
+    public int getControlNumber() {
         return controlNumber;
     }
     
@@ -38,12 +43,9 @@ public class MarcxmlControlField extends MarcxmlField {
         if (controlNumber == null) {
             throw new RecordFieldException("Control number is null.");
         }
-        if (controlNumber.equals("")) {
-            throw new RecordFieldException("Control number is empty.");
-        }
-        if (controlNumber.length() != 3) {
+        if (! (controlNumber > 0 && controlNumber < 10)) {
             throw new RecordFieldException(
-                    "Control number is not three characters");
+                    "Control number is not between 1 and 9.");
         }
         if (textValue == null) {
             throw new RecordFieldException("Text value is null.");

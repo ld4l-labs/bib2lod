@@ -69,7 +69,7 @@ public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
 
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
-                    ((MarcxmlControlField) field).getControlNumber().equals("008")) {    
+                    ((MarcxmlControlField) field).getControlNumber() == 8) {    
                 String location = field.getTextSubstring(15, 18);
                 if (! StringUtils.isBlank(location)) {
                     activity.addExternalRelationship(Ld4lObjectProp.IS_AT_LOCATION, 
@@ -83,7 +83,7 @@ public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
 
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
             if (field instanceof MarcxmlControlField && 
-                    ((MarcxmlControlField) field).getControlNumber().equals("008")) {
+                    ((MarcxmlControlField) field).getControlNumber() == 8) {
                 String year = field.getTextSubstring(7, 11);
                 if (! StringUtils.isBlank(year)) {
                     activity.addAttribute(Ld4lDatatypeProp.DATE, year);

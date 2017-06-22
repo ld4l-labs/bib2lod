@@ -119,7 +119,7 @@ public class MarcxmlRecordTest extends AbstractTestClass {
         List<MarcxmlControlField> fields = record.getControlFields();
         int fieldCount = 0;
         for (MarcxmlControlField field : fields) {
-            if (field.getControlNumber().equals("008")) {
+            if (field.getControlNumber() == 8) {
                 fieldCount++;
             }
         }

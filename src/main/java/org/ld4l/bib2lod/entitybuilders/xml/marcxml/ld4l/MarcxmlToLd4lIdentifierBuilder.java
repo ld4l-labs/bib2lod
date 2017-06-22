@@ -58,7 +58,7 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
      */   
     private void buildFromControlField() {
         
-        if (((MarcxmlControlField) field).getControlNumber().equals("001")) {
+        if (((MarcxmlControlField) field).getControlNumber() == 1) {
             identifier.addType(Ld4lIdentifierType.LOCAL);
             String label = field.getTextValue();
             identifier.addAttribute(Ld4lDatatypeProp.VALUE, label);    

@@ -40,13 +40,13 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
     
     @Test
     public void noCode_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is empty");
+        expectException(RecordFieldException.class, "code cannot be empty");
         buildSubfieldFromString(NO_CODE);
     }
     
     @Test
     public void emptyCode_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is empty");
+        expectException(RecordFieldException.class, "code cannot be empty");
         buildSubfieldFromString(EMPTY_CODE);
     }
     

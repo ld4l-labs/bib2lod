@@ -67,25 +67,26 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
 
     @Test
     public void noTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is empty");
+        expectException(RecordFieldException.class, "Invalid tag");
         buildDataFieldFromString(NO_TAG);
     }
 
     @Test
     public void emptyTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is empty");
+        expectException(RecordFieldException.class, "Invalid tag");
         buildDataFieldFromString(EMPTY_TAG);
     }
     
     @Test
     public void blankTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is blank");
+        expectException(RecordFieldException.class, "Invalid tag");
         buildDataFieldFromString(BLANK_TAG);
     }
     
     @Test
     public void invalidTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is invalid");
+        expectException(RecordFieldException.class, 
+                "value is not between 1 and 999");
         buildDataFieldFromString(INVALID_TAG);
     }
     
@@ -103,7 +104,7 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
 
     @Test
     public void invalidSubfield_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "is empty");
+        expectException(RecordFieldException.class, "code cannot be empty");
         buildDataFieldFromString(INVALID_SUBFIELD);
     }
     

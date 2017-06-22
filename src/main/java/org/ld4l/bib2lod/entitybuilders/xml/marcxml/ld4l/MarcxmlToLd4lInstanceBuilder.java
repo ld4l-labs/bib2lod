@@ -61,7 +61,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
         
         MarcxmlControlField controlField001 = 
-                record.getControlField("001");
+                record.getControlField(1);
 
         if (controlField001 != null) {
             BuildParams params = new BuildParams()
@@ -116,7 +116,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         
         EntityBuilder builder = getBuilder(Ld4lActivityType.class);
         
-        MarcxmlControlField field008 = record.getControlField("008");
+        MarcxmlControlField field008 = record.getControlField(8);
 
         if (field008 != null) {        
             BuildParams params = new BuildParams()
@@ -134,12 +134,12 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
      */
     private void addResponsibilityStatement() {
         
-        MarcxmlDataField field = record.getDataField("245");        
+        MarcxmlDataField field = record.getDataField(245);        
         if (field == null) {
             return;
         }
         
-        MarcxmlSubfield subfield = field.getSubfield("c");
+        MarcxmlSubfield subfield = field.getSubfield('c');
         if (subfield == null) {
             return;
         } 

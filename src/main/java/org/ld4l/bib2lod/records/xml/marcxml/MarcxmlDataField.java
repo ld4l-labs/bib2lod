@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -18,7 +19,7 @@ public class MarcxmlDataField extends MarcxmlField {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
 
-    private String tag;
+    private Integer tag;
     private Integer ind1;
     private Integer ind2;
     private List<MarcxmlSubfield> subfields;
@@ -29,9 +30,13 @@ public class MarcxmlDataField extends MarcxmlField {
      */
     public MarcxmlDataField(Element element) throws RecordFieldException {
         super(element);
-            
-        tag = element.getAttribute("tag");
         
+        try {
+            tag = Integer.parseInt(element.getAttribute("tag"));
+        } catch (NumberFormatException e) {
+            throw new RecordFieldException("Invalid tag.");
+        }
+
         ind1 = getIndicatorValue("ind1", element);
         ind2 = getIndicatorValue("ind2", element);
 
@@ -53,7 +58,7 @@ public class MarcxmlDataField extends MarcxmlField {
         return Integer.parseInt(value);
     }
                                                                                                                                                             
-    public String getName() {
+    public int getName() {
         return tag;
     }
     
@@ -75,9 +80,9 @@ public class MarcxmlDataField extends MarcxmlField {
      * found.
      * @param String code - the value of the code attribute
      */
-    public List<MarcxmlSubfield> getSubfields(String code) {
+    public List<MarcxmlSubfield> getSubfields(char code) {
         for (MarcxmlSubfield subfield : subfields) {
-            if (subfield.getCode().equals(code)) {
+            if (subfield.getCode() == code) {
                 subfields.add(subfield);
             }
         }
@@ -90,10 +95,10 @@ public class MarcxmlDataField extends MarcxmlField {
      * encountered. Returns null if no subfield found. 
      * @param String code - the value of the code attribute
      */
-    public MarcxmlSubfield getSubfield(String code) {
+    public MarcxmlSubfield getSubfield(char code) {
         
         for (MarcxmlSubfield field : subfields) {
-            if (field.getCode().equals(code)) {
+            if (field.getCode() == code) {
                 return field;
             }
         }     
@@ -103,7 +108,7 @@ public class MarcxmlDataField extends MarcxmlField {
     /**
      * Returns true iff the datafield has the specified subfield.
      */
-    public boolean hasSubfield(String code) {
+    public boolean hasSubfield(char code) {
         return getSubfield(code) != null;
     }
       
@@ -112,10 +117,10 @@ public class MarcxmlDataField extends MarcxmlField {
      * Returns the first if multiple are found. Returns null if none are found. 
      */
     public static MarcxmlDataField get(
-            List<MarcxmlDataField> fields, String tag) {
+            List<MarcxmlDataField> fields, int tag) {
         
         for (MarcxmlDataField field: fields) {
-            if (field.getName().equals(tag)) {
+            if (field.getName() == tag) {
                 return field;
             }
         }
@@ -125,14 +130,12 @@ public class MarcxmlDataField extends MarcxmlField {
 
     private void isValid() throws RecordFieldException {
 
-        if (tag.equals("")) {
-            throw new RecordFieldException("Tag is empty.");
+        if (tag == null) {
+            throw new RecordFieldException("Tag is null.");
         }
-        if (tag.equals(" ")) {
-            throw new RecordFieldException("Tag is blank.");
-        }
-        if (Integer.parseInt(tag) > 999) {
-            throw new RecordFieldException("Tag is invalid.");
+        if (! (tag  > 0 && tag < 1000) ) {
+            throw new RecordFieldException(
+                    "Tag value is not between 1 and 999.");
         }
         /*
          * Bad test: when pretty-printed there is whitespace inside the element.
@@ -143,8 +146,8 @@ public class MarcxmlDataField extends MarcxmlField {
         if (subfields.isEmpty()) {
             throw new RecordFieldException("field has no subfields");
         }
-        if (tag.equals("245")) {
-           if (! (hasSubfield("a") || hasSubfield("k")) ) {
+        if (tag == 245) {
+           if (! ( hasSubfield('a') || hasSubfield('k') ) ) {
                throw new RecordFieldException(
                        "Subfield $a or $k required for field 245.");
            }

@@ -12,19 +12,24 @@ import org.w3c.dom.Element;
 public class MarcxmlSubfield extends MarcxmlField {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
+    private static final String CODE_ATTRIBUTE_NAME = "code";
     
-    private String code;
+    private char code;
 
     /**
      * Constructor
      */
     public MarcxmlSubfield(Element element) throws RecordFieldException {
-        super(element);       
-        code = element.getAttribute("code");
-        isValid();
+        super(element);   
+        try {
+            code = element.getAttribute(CODE_ATTRIBUTE_NAME).charAt(0);         
+            isValid();
+        } catch (IndexOutOfBoundsException e) {
+            throw new RecordFieldException("Subfield code cannot be empty.");
+        }
     }
 
-    public String getCode() {
+    public char getCode() {
         return code;
     }
 
@@ -32,10 +37,7 @@ public class MarcxmlSubfield extends MarcxmlField {
 
         // Here we test only the code format, not whether specific codes are
         // valid for specific data fields.
-        if (code.equals("")) {
-            throw new RecordFieldException("Code is empty.");
-        }
-        if (code.equals(" ")) {
+        if (code == ' ') {
             throw new RecordFieldException("Code is blank.");
         }
         if (textValue == null) {

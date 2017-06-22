@@ -81,20 +81,32 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
         titleElements = new ArrayList<>();
             
         // Note that every record must have a 245
-        MarcxmlDataField field245 = record.getDataField("245");   
+        MarcxmlDataField field245 = record.getDataField(245);   
 
         for (MarcxmlSubfield subfield : field245.getSubfields()) {
  
-            String code = subfield.getCode();
-            // 245$a always stores the full title. If 130 and/or 240 are 
+            char code = subfield.getCode();
+            
+            switch (code) {
+            // 245$a always stores the full title. If 130 and/or 240 are
             // present,the $a fields should be the same.
-            if (code.equals("a")) {
+            case 'a':
                 addNonSortAndMainTitleElements(field245, subfield);
-            } else if (code.equals("b")) {
+                break;
+            case 'b':
                 addSubtitleElements(subfield);
-            } else {
-                addPartNumberAndNameElement(subfield);
-            } 
+                break;
+            case 'n':
+                addPartNumberAndNameElement(subfield,
+                        Ld4lTitleElementType.PART_NUMBER_ELEMENT);
+                break;
+            case 'p':
+                addPartNumberAndNameElement(subfield,
+                        Ld4lTitleElementType.PART_NAME_ELEMENT);
+                break;
+            default:
+                // not a title element - do nothing
+            }
         }
                
     }
@@ -153,19 +165,8 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
         }
     }
     
-    private void addPartNumberAndNameElement(MarcxmlSubfield subfield) 
+    private void addPartNumberAndNameElement(MarcxmlSubfield subfield, Type type) 
             throws EntityBuilderException {
-        
-        String code = subfield.getCode();
-        Type type;
-        if (code.equals("n")) {
-            type = Ld4lTitleElementType.PART_NUMBER_ELEMENT;
-        } else if (code.equals("p")) {
-            type = Ld4lTitleElementType.PART_NAME_ELEMENT;            
-        } else {
-            // Not a title element
-            return; 
-        }
         
         BuildParams params = new BuildParams() 
                 .setRelatedEntity(title)
