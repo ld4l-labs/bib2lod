@@ -80,7 +80,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
             "</record>"; 
     
     private static BaseMockBib2LodObjectFactory factory;
-    private MarcxmlToLd4lTitleBuilder titleBuilder; 
+    private MarcxmlToLd4lTitleBuilder builder; 
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -91,7 +91,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() throws Exception {    
-        this.titleBuilder = new MarcxmlToLd4lTitleBuilder();
+        this.builder = new MarcxmlToLd4lTitleBuilder();
     }  
     
     
@@ -185,7 +185,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(bibEntity)
                 .setRecord(record);        
-        return titleBuilder.build(params);        
+        return builder.build(params);        
     }
     
     private void buildTitleAndExpectValue(

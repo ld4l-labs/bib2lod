@@ -54,12 +54,12 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
                 "</datafield>" + 
              "</record>";   
 
-    private MarcxmlToLd4lWorkBuilder workBuilder;   
+    private MarcxmlToLd4lWorkBuilder builder;   
     private InstanceEntity defaultInstance;
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.workBuilder = new MarcxmlToLd4lWorkBuilder();
+        this.builder = new MarcxmlToLd4lWorkBuilder();
         this.defaultInstance = new InstanceEntity();  
     }
     
@@ -77,7 +77,7 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(defaultInstance)
                 .setRecord(null);                
-        workBuilder.build(params);
+        builder.build(params);
     } 
     
     @Test
@@ -111,7 +111,7 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(instance)
                 .setRecord(record);        
-        return workBuilder.build(params);
+        return builder.build(params);
     }
     
     private Entity buildWorkFromDefaultInstance(String marcxml) throws Exception { 

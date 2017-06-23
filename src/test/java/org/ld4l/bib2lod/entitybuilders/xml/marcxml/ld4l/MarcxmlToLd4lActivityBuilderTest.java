@@ -41,12 +41,12 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
             "<datafield tag='245'><subfield code='a'>text</subfield></datafield>";
 
     
-    private MarcxmlToLd4lActivityBuilder activityBuilder;   
+    private MarcxmlToLd4lActivityBuilder builder;   
     private InstanceEntity instance;
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.activityBuilder = new MarcxmlToLd4lActivityBuilder();
+        this.builder = new MarcxmlToLd4lActivityBuilder();
         this.instance = new InstanceEntity();                
     }
     
@@ -58,7 +58,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
     public void nullRelatedEntity_ThrowsException() throws Exception {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(null);        
-        activityBuilder.build(params);        
+        builder.build(params);        
     }
     
     @Test (expected = EntityBuilderException.class)
@@ -66,7 +66,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(instance)
                 .setField(null);                
-        activityBuilder.build(params);        
+        builder.build(params);        
     }
     
     @Test
@@ -76,7 +76,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(instance)
                 .setField(field);        
-        activityBuilder.build(params);
+        builder.build(params);
     }
     
     @Test
@@ -88,7 +88,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)     
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
            
-        Entity activity = activityBuilder.build(params);
+        Entity activity = builder.build(params);
         Assert.assertTrue(activity.hasType(Ld4lActivityType.PUBLISHER_ACTIVITY));        
     }
     
@@ -100,7 +100,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setRelatedEntity(instance)
                 .setField(field);
         
-        Entity activity = activityBuilder.build(params); 
+        Entity activity = builder.build(params); 
         Assert.assertTrue(activity.hasType(Ld4lActivityType.ACTIVITY));
     }
     
@@ -113,7 +113,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        Entity activity = activityBuilder.build(params); 
+        Entity activity = builder.build(params); 
         String locationUri = activity.getExternal(Ld4lObjectProp.IS_AT_LOCATION);
         Assert.assertEquals(Ld4lNamespace.LC_COUNTRIES.uri() + "nyu", locationUri);
     }
@@ -127,7 +127,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        activityBuilder.build(params); 
+        builder.build(params); 
     }
     
     @Test
@@ -139,7 +139,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        activityBuilder.build(params);
+        builder.build(params);
     }
     
     @Test
@@ -151,7 +151,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        Entity activity = activityBuilder.build(params); 
+        Entity activity = builder.build(params); 
         String year = activity.getAttribute(Ld4lDatatypeProp.DATE).getValue();
         Assert.assertEquals("1957", year);
     }
@@ -165,7 +165,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        activityBuilder.build(params);
+        builder.build(params);
     }
     
     @Test
@@ -177,7 +177,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setField(field)
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
         
-        activityBuilder.build(params);
+        builder.build(params);
     }
     
     @Test
@@ -188,7 +188,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setRelatedEntity(instance)
                 .setField(field);
         
-        activityBuilder.build(params);       
+        builder.build(params);       
     }
     
     @Test
@@ -199,7 +199,7 @@ public class MarcxmlToLd4lActivityBuilderTest extends AbstractTestClass {
                 .setRelatedEntity(instance)
                 .setField(field);
         
-        activityBuilder.build(params);       
+        builder.build(params);       
     }
 
 }

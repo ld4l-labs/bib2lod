@@ -33,83 +33,89 @@ public class MarcxmlToLd4lTitleElementBuilderTest extends AbstractTestClass {
     public static final String SUBTITLE_WITH_WHITESPACE = " subtitle ";
     
     
-    private MarcxmlToLd4lTitleElementBuilder titleElementBuilder;
+    private MarcxmlToLd4lTitleElementBuilder builder;
       
     @Before
     public void setUp() throws Exception {    
-        this.titleElementBuilder = new MarcxmlToLd4lTitleElementBuilder();
+        this.builder = new MarcxmlToLd4lTitleElementBuilder();
     }  
     
     // ----------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullTitle_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, "title is required");
         BuildParams params = new BuildParams()
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)
                 .setValue("title element");
-        titleElementBuilder.build(params);
+        builder.build(params);
     }    
 
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullTitleElementType_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, "type is required");
         BuildParams params = new BuildParams()
                 .setRelatedEntity(new Entity())
                 .setValue("title element");
-        titleElementBuilder.build(params);
+        builder.build(params);
     }
        
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void invalidTitleElementType_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "invalid title element type");
         BuildParams params = new BuildParams()
                 .setRelatedEntity(new Entity())
                 .setType(Ld4lTitleType.TITLE);
-        titleElementBuilder.build(params);
+        builder.build(params);
     } 
     
-    @Test (expected = EntityBuilderException.class)
-    public void nullValue_ThrowsException() 
-            throws Exception {
+    @Test 
+    public void nullValue_ThrowsException() throws Exception {         
+        expectException(EntityBuilderException.class, 
+                "Non-empty string value required");
         BuildParams params = new BuildParams()
                 .setRelatedEntity(new Entity())
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT);
-        titleElementBuilder.build(params);
+        builder.build(params);
     }
     
-    @Test (expected = EntityBuilderException.class)
-    public void emptyValue_ThrowsException() 
-            throws Exception {
+    @Test
+    public void emptyValue_ThrowsException() throws Exception {       
+        expectException(EntityBuilderException.class, 
+                "Non-empty string value required");
         BuildParams params = new BuildParams()
                 .setRelatedEntity(new Entity())
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)
                 .setValue("");
-        titleElementBuilder.build(params);
+        builder.build(params);
     }
 
     @Test
     public void testTrimMainTitleElement() throws Exception {        
-        buildTitleElementAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
+        buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
                 MAIN_TITLE_ELEMENT_WITH_WHITESPACE, "main title");             
     }
     
     @Test
     public void testRemoveFinalSpaceColonFromMainTitleElement() 
             throws Exception {
-        buildTitleElementAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
+        buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
                 MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON, "main title");                 
     }
     
     @Test
     public void testRemoveFinalColonFromMainTitleElement() throws Exception {
-        buildTitleElementAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
+        buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
                 MAIN_TITLE_ELEMENT_WITH_FINAL_COLON, "main title");       
     }
     
     @Test 
     public void testTrimSubtitleValue() throws Exception {
-        buildTitleElementAndExpectValue(Ld4lTitleElementType.SUBTITLE_ELEMENT, SUBTITLE_WITH_WHITESPACE, 
-                "subtitle");
+        buildAndExpectValue(Ld4lTitleElementType.SUBTITLE_ELEMENT, 
+                SUBTITLE_WITH_WHITESPACE, "subtitle");             
     }
 
     
@@ -118,14 +124,14 @@ public class MarcxmlToLd4lTitleElementBuilderTest extends AbstractTestClass {
     // ----------------------------------------------------------------------
        
     
-    private void buildTitleElementAndExpectValue(Ld4lTitleElementType type, 
+    private void buildAndExpectValue(Ld4lTitleElementType type, 
             String inputValue, String expectedValue) 
                     throws EntityBuilderException {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(new Entity()) 
                 .setValue(inputValue)
                 .setType(type); 
-        Entity titleElement = titleElementBuilder.build(params);
+        Entity titleElement = builder.build(params);
         Assert.assertEquals(expectedValue,
                 titleElement.getAttribute(Ld4lDatatypeProp.VALUE).getValue());  
     }

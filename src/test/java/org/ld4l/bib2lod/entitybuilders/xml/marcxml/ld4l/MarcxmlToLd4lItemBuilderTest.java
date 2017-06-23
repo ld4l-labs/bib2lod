@@ -11,11 +11,11 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class MarcxmlToLd4lItemBuilderTest extends AbstractTestClass {
     
-    private MarcxmlToLd4lItemBuilder itemBuilder;   
+    private MarcxmlToLd4lItemBuilder builder;   
     
     @Before
     public void setUp() {       
-        this.itemBuilder = new MarcxmlToLd4lItemBuilder();
+        this.builder = new MarcxmlToLd4lItemBuilder();
     }
     
     // ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ public class MarcxmlToLd4lItemBuilderTest extends AbstractTestClass {
     public void nullRelatedInstance_ThrowsException() throws Exception {
         BuildParams params = new BuildParams()
                 .setRelatedEntity(null);        
-        itemBuilder.build(params);        
+        builder.build(params);        
     }
     
 }

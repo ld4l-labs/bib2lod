@@ -34,7 +34,7 @@ public class MarcxmlToLd4lInstanceBuilderTest extends AbstractTestClass {
             "</record>";
 
     private static BaseMockBib2LodObjectFactory factory;
-    private MarcxmlToLd4lInstanceBuilder instanceBuilder;   
+    private MarcxmlToLd4lInstanceBuilder builder;   
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -45,7 +45,7 @@ public class MarcxmlToLd4lInstanceBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.instanceBuilder = new MarcxmlToLd4lInstanceBuilder();
+        this.builder = new MarcxmlToLd4lInstanceBuilder();
     }
     
     // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ public class MarcxmlToLd4lInstanceBuilderTest extends AbstractTestClass {
     public void nullRecord_ThrowsException() throws Exception {
         BuildParams params = new BuildParams()
                 .setRecord(null);                
-        instanceBuilder.build(params);
+        builder.build(params);
     } 
     
     @Test
@@ -82,6 +82,6 @@ public class MarcxmlToLd4lInstanceBuilderTest extends AbstractTestClass {
                 XmlTestUtils.buildElementFromString(marcxml));
         BuildParams params = new BuildParams()
                 .setRecord(record);        
-        return instanceBuilder.build(params);
+        return builder.build(params);
     }
 }

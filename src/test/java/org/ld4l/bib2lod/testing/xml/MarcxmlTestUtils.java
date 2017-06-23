@@ -1,9 +1,12 @@
 package org.ld4l.bib2lod.testing.xml;
 
+import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+import org.w3c.dom.Element;
 
 /**
  * Helper methods for testing MARCXML conversion.
@@ -35,6 +38,12 @@ public class MarcxmlTestUtils {
             String element) throws RecordFieldException {                   
         return new MarcxmlSubfield(
                 XmlTestUtils.buildElementFromString(element));
-} 
+    } 
+    
+    public final static MarcxmlRecord buildRecordFromString(String s)
+            throws RecordException {
+        Element element = XmlTestUtils.buildElementFromString(s);
+        return new MarcxmlRecord(element);
+    }
 
 }

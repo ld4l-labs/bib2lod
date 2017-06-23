@@ -13,8 +13,6 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
-import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
-import org.w3c.dom.Element;
 
 /**
  * Tests class MarcxmlRecord.
@@ -90,12 +88,12 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void noLeader_ThrowsException() throws Exception {
         expectException(RecordException.class, "no leader");
-        buildRecordFromString(NO_LEADER);
+        MarcxmlTestUtils.buildRecordFromString(NO_LEADER);
     }
     
     @Test
     public void multipleLeaders_Ignored() throws Exception {
-        MarcxmlRecord record = buildRecordFromString(TWO_LEADERS);
+        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(TWO_LEADERS);
         List<MarcxmlField> fields = record.getFields();
         int leaderCount = 0;
         for (MarcxmlField field : fields) {
@@ -109,13 +107,13 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void no008_ThrowsException() throws Exception {
         expectException(RecordException.class, "no 008");
-        buildRecordFromString(NO_008);
+        MarcxmlTestUtils.buildRecordFromString(NO_008);
     }
     
     @Test
     public void duplicateNonRepeatingControlFields_Ignored() throws Exception {
         MarcxmlRecord record = 
-                buildRecordFromString(DUPLICATE_008);
+                MarcxmlTestUtils.buildRecordFromString(DUPLICATE_008);
         List<MarcxmlControlField> fields = record.getControlFields();
         int fieldCount = 0;
         for (MarcxmlControlField field : fields) {
@@ -129,30 +127,21 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void no245_ThrowsException() throws Exception {
         expectException(RecordException.class, "no 245");
-        buildRecordFromString(NO_245);
+        MarcxmlTestUtils.buildRecordFromString(NO_245);
     }
     
     @Test
     public void duplicateNonRepeatingDataFields_Ignored() throws Exception {
         // No exception
-        buildRecordFromString(DUPLICATE_245);
+        MarcxmlTestUtils.buildRecordFromString(DUPLICATE_245);
     }
     
     @Test
     public void validRecord_Succeeds() throws Exception {
         // No exception
-       buildRecordFromString(MarcxmlTestUtils.MINIMAL_RECORD);
+       MarcxmlTestUtils.buildRecordFromString(MarcxmlTestUtils.MINIMAL_RECORD);
     }
     
     
-    // ----------------------------------------------------------------------
-    // Helper methods
-    // ----------------------------------------------------------------------
-    
-    private MarcxmlRecord buildRecordFromString(String s)
-            throws RecordException {
-        Element element = XmlTestUtils.buildElementFromString(s);
-        return new MarcxmlRecord(element);
-    }
   
 }
