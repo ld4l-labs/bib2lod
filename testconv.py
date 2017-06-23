@@ -25,14 +25,15 @@ def main():
                  help="test input file extension. If the --source specifies "
                       "an input file, this should be omitted, and if present "
                       "will be ignored (default %default).")
-    p.add_option('--output-extension', '-o', default='ttl',
-                 help="expected output file extension (default %default).")
     p.add_option('--output-directory', '-d',
                  help="output directory to use instead of temporary directory "
                       "(with automatic cleanup). If an output directory is "
                       "specified then a time-stamped sub-directory will be "
                       "created and converter output will not be removed after "
                       "the tests.")
+    p.add_option('--output-format', '-f', default='TURTLE',
+                 help="output serialization (default %default). " 
+                 "Valid values: 'N-TRIPLES', 'TURTLE'.")
     p.add_option('--bnode', '-b', action='append', default=[],
                  help="add a regex for URIs that should be treated like "
                       "bnodes in diffs (will default to http://data.ld4l.org/ "
@@ -45,6 +46,8 @@ def main():
     (opt, args) = p.parse_args()
     if (len(opt.bnode) == 0):
         opt.bnode.append('http://data.ld4l.org/')
+    if (len(opt.output_format) == 0):
+        opt.output_format = 'TURTLE'
 
     # use --verbose & --debug to set up logging level
     level = (logging.ERROR if opt.quiet
@@ -52,16 +55,15 @@ def main():
              else logging.WARN)
     logging.basicConfig(level=level, format='%(message)s')
 
-    tester = ConversionTester(bnodes=opt.bnode, outdir=opt.output_directory)
+    tester = ConversionTester(bnodes=opt.bnode, outdir=opt.output_directory, 
+            out_format=opt.output_format)
     if (os.path.isfile(opt.source)):
         # Special case of single input file specified
-        tester.run_conversion(opt.source,
-                              '.' + opt.output_extension)
+        tester.run_conversion(opt.source)
     else:
         # Treat source as if directory...
         tester.run_conversions(opt.source,
-                               '.' + opt.input_extension,
-                               '.' + opt.output_extension)
+                               '.' + opt.input_extension)
     logging.warn("%d CONVERSIONS TESTED: %d PASSED, %d FAILED" %
                  (tester.num_tests, tester.num_pass, tester.num_fail))
 

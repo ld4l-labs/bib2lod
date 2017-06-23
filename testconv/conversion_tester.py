@@ -27,10 +27,13 @@ def run_bib2lod(args):
 
 class ConversionTester(object):
 
-    def __init__(self, bnodes=[], outdir=None):
+    def __init__(self, bnodes=[], outdir=None, out_format='TURTLE'):
         """Initialize tester and create tempdir."""
         self.bnodes = bnodes
         self.outdir = outdir
+        self.out_format = out_format
+        self.out_ext = ('.nt' if self.out_format == 'N-TRIPLES' else '.ttl')
+        self.ref_ext = '.ttl'
         self.num_pass = 0
         self.num_fail = 0
         self.tmpdir = None
@@ -71,12 +74,8 @@ class ConversionTester(object):
         (root2, reffile) = os.path.split(ref)
         if (os.path.exists(ref)):
             context = "Test %s: %s -> %s" % (root, infile, reffile)
-            # Can't control output file name in bib2lod config,
-            # it will be the input file name with extension changed
-            # to that defined by the output format, in our case we
-            # assume '.nt'
             (src_base, src_ext) = os.path.splitext(infile)
-            outfile = src_base + '.nt'
+            outfile = src_base + self.out_ext
             dst = os.path.join(outdir, outfile)
             out = run_bib2lod(
                 [config_filepath,
@@ -87,7 +86,7 @@ class ConversionTester(object):
                  '--set', 'OutputService:class='
                           'org.ld4l.bib2lod.io.FileOutputService',
                  '--set', 'OutputService:destination=' + outdir,
-                 '--set', 'OutputService:format=N-TRIPLES'])
+                 '--set', 'OutputService:format=' + self.out_format])
             if (not os.path.exists(dst)):
                 logging.error("%s - FAIL\n"
                               "Output file %s does not exist" %
@@ -123,13 +122,13 @@ class ConversionTester(object):
                              (self.default_config))
                 return(self.default_config)
 
-    def run_conversion(self, src, ref_ext):
+    def run_conversion(self, src):
         """Run a single bib2lod conversions."""
         (base, ext) = os.path.splitext(src)
-        ref = base + ref_ext
+        ref = base + self.ref_ext
         self.check_conversion(src, ref)
 
-    def run_conversions(self, start_dir, input_ext, ref_ext):
+    def run_conversions(self, start_dir, input_ext):
         """Run a set of bib2lod conversions under start_dir.
 
         Looks for tests that are pairs of files with input_ext and output_ext.
@@ -140,7 +139,7 @@ class ConversionTester(object):
             for infile in files:
                 (base, ext) = os.path.splitext(infile)
                 if (ext == input_ext):
-                    reffile = base + ref_ext
+                    reffile = base + self.ref_ext
                     ref = os.path.join(root, reffile)
                     src = os.path.join(root, infile)
                     self.check_conversion(src, ref)
