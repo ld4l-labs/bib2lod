@@ -156,8 +156,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 .setRelatedEntity(instance)
                 .setRecord(record);
         buildAndCatchException(builder, params, 
-                "Error building admin metadata.");        
-    
+                "Error building admin metadata.");           
     }
      
 }
