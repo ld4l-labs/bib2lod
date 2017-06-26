@@ -1,10 +1,3 @@
-###########################################################
-#####
-##### CURRENT VERSION 
-#####
-###########################################################
-
-
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -14,50 +7,51 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vivo: <http://vivoweb.org/ontology/core#> .
     
-cornell:work1 a bf:Work , bf:Text ;    
+cornell:work1 
+    a bf:Work , bf:Text ;    
+    bib:hasPreferredTitle cornell:wtitle1 ;
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> .
 
-    bib:hasPreferredTitle [
-        a bf:Title ;
-        rdf:value "Clinical cardiopulmonary physiology." ;
-        dcterms:hasPart [
-            a bib:MainTitleElement ;
-            rdf:value "Clinical cardiopulmonary physiology." ;
-	        vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] ;
-    ] ;
+cornell:wtitle1 
+    a bf:Title ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    dcterms:hasPart cornell:wmt1 .
     
-    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> 
-. 
+cornell:wmt1 
+    a bib:MainTitleElement ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+    
 
-cornell:inst1 a bf:Instance ; 
-
+cornell:inst1 
+    a bf:Instance ; 
     bf:instanceOf cornell:work1 ;
-
     bf:hasItem cornell:item1 ; 
-
-    bib:hasPreferredTitle [
-        a bf:Title ;
-        rdf:value "Clinical cardiopulmonary physiology." ;
-        dcterms:hasPart [
-            a bib:MainTitleElement ;
-            rdf:value "Clinical cardiopulmonary physiology." ;
-            vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] ;        
-    ] ; 
+    bib:hasPreferredTitle cornell:ititle1 ;
+    bf:identifiedBy cornell:id1 ;
+    bib:hasActivity cornell:pa1 .
     
-    bf:identifiedBy [
-        a bf:Identifier, bf:Local ;
-        rdf:value "102063" 
-    ] ;
-          
-    bib:hasActivity [
-        rdfs:label "Publisher" ;
-        a bib:PublisherActivity ;
-        dcterms:date "1957" ;
-        bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
-    ] ;   
+cornell:ititle1 
+    a bf:Title ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    dcterms:hasPart cornell:imt1 .
+    
+cornell:imt1 
+    a bib:MainTitleElement ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+       
+cornell:id1 
+    a bf:Identifier , bf:Local ;
+    rdf:value "102063" .
 
-. 
+cornell:pa1 
+    a bib:PublisherActivity ;
+    rdfs:label "Publisher" ;
+    dcterms:date "1957" ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
 
-cornell:item1 a bf:Item .
+
+cornell:item1 
+    a bf:Item .
 

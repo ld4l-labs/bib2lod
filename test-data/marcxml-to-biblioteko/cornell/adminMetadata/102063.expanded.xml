@@ -4,6 +4,7 @@
   <record xmlns="http://www.loc.gov/MARC21/slim">
     <leader>01050cam a22003011  4500</leader>
     <controlfield tag="001">102063</controlfield>
+    <controlfield tag="005">20130330145647.0</controlfield>
     <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>
     <datafield tag="040" ind1=" " ind2=" ">
       <subfield code="c">NIC</subfield>

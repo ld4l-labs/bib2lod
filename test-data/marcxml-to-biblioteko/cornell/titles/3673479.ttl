@@ -7,66 +7,70 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vivo: <http://vivoweb.org/ontology/core#> .
     
-cornell:work1 a bf:Work , bf:Text ;    
-
-    bib:hasPreferredTitle [
-        a bf:Title ;
-        rdf:value "Cries unheard : why children kill : the story of Mary Bell /" ;
-        dcterms:hasPart [
-            a bib:MainTitleElement ;
-            rdf:value "Cries unheard" ;
-            vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] , [
-            a bib:SubtitleElement ;
-            rdf:value "why children kill" ;
-            vivo:rank "2"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] , [
-            a bib:SubtitleElement ;
-            rdf:value "the story of Mary Bell /" ;
-            vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int>       
-        ] ;
-    ] ;
+cornell:work1 
+    a bf:Work , bf:Text ;    
+    bib:hasPreferredTitle cornell:wtitle1 ;
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> .
     
-    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> 
-. 
+cornell:wtitle1  
+    a bf:Title ;
+    rdf:value "Cries unheard : why children kill : the story of Mary Bell /" ;
+    dcterms:hasPart cornell:wmt1 , cornell:wst1 , cornell:wst2 .
 
-cornell:inst1 a bf:Instance ; 
+cornell:wmt1 
+    a bib:MainTitleElement ;
+    rdf:value "Cries unheard" ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
 
+cornell:wst1 
+    a bib:SubtitleElement ;
+    rdf:value "why children kill" ;
+    vivo:rank "2"^^<http://www.w3.org/2001/XMLSchema#int> .
+    
+cornell:wst2
+    a bib:SubtitleElement ;
+    rdf:value "the story of Mary Bell /" ;
+    vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int> .
+    
+
+cornell:inst1 
+    a bf:Instance ; 
     bf:instanceOf cornell:work1 ;
-
     bf:hasItem cornell:item1 ; 
+    bib:hasPreferredTitle cornell:ititle1 ;
+    bf:identifiedBy cornell:id1 ;
+    bib:hasActivity cornell:pa1 ;
+    bf:responsibilityStatement "Gitta Sereny." .
 
-    bib:hasPreferredTitle [
-        a bf:Title ;
-        rdf:value "Cries unheard : why children kill : the story of Mary Bell /" ;
-        dcterms:hasPart [
-            a bib:MainTitleElement ;
-            rdf:value "Cries unheard" ;
-            vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] , [
-            a bib:SubtitleElement ;
-            rdf:value "why children kill" ;
-            vivo:rank "2"^^<http://www.w3.org/2001/XMLSchema#int>
-        ] , [
-            a bib:SubtitleElement ;
-            rdf:value "the story of Mary Bell /" ;
-            vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int>       
-        ] ;
-    ] ;
+cornell:ititle1  
+    a bf:Title ;
+    rdf:value "Cries unheard : why children kill : the story of Mary Bell /" ;
+    dcterms:hasPart cornell:imt2 , cornell:ist3 , cornell:ist4 .
+
+cornell:imt2 
+    a bib:MainTitleElement ;
+    rdf:value "Cries unheard" ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+
+cornell:ist3 
+    a bib:SubtitleElement ;
+    rdf:value "why children kill" ;
+    vivo:rank "2"^^<http://www.w3.org/2001/XMLSchema#int> .
     
-    bf:identifiedBy [
-        a bf:Identifier, bf:Local ;
-        rdf:value "3673479" 
-    ] ;
-          
-    bib:hasActivity [
-        rdfs:label "Publisher" ;
-        a bib:PublisherActivity ;
-        dcterms:date "1999" ;
-        bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu>
-    ] ; 
+cornell:ist4
+    a bib:SubtitleElement ;
+    rdf:value "the story of Mary Bell /" ;
+    vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int> .
     
-    bf:responsibilityStatement "Gitta Sereny." 
-. 
+cornell:id1 
+    a bf:Identifier , bf:Local ;
+    rdf:value "3673479" .
+    
+cornell:pa1 
+    rdfs:label "Publisher" ;
+    a bib:PublisherActivity ;
+    dcterms:date "1999" ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+
 
 cornell:item1 a bf:Item .
