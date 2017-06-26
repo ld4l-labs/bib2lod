@@ -3,6 +3,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -19,26 +20,16 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
  */
 public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
-    public static final String FIELD_040_$C = 
+    public static final String TEST_RECORD = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='005'>20130330145647.0</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
                 "<datafield tag='040' ind1=' ' ind2=' '>" +
                     "<subfield code='c'>NIC</subfield>" +
-                 "</datafield>" +
-            "</record>";
-    
-    public static final String FIELD_040_$D = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='040' ind1=' ' ind2=' '>" +
                     "<subfield code='d'>NIC</subfield>" +
                  "</datafield>" +
             "</record>";
@@ -75,7 +66,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void emptyMetadataReturnsNull() throws Exception {
+    public void noAdminMetadataReturnsNull() throws Exception {
         BuildParams params = new BuildParams() 
                 .setRecord(MarcxmlTestUtils.buildRecordFromString(
                         MarcxmlTestUtils.MINIMAL_RECORD))
@@ -86,7 +77,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testInstanceHasAdminMetadata() throws Exception {
         Entity instance = new InstanceEntity();
-        Entity adminMetadata = buildAdminMetadata(instance, FIELD_040_$C);
+        Entity adminMetadata = buildAdminMetadata(instance, TEST_RECORD);
         Assert.assertSame(instance.getChild(Ld4lObjectProp.HAS_ADMIN_METADATA), 
                 adminMetadata);
     }
@@ -94,14 +85,14 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testHasSource() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$C);
+                new InstanceEntity(), TEST_RECORD);
         Assert.assertNotNull(adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
     }
     
     @Test
     public void testSourceIsAgent() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$C);
+                new InstanceEntity(), TEST_RECORD);
         Entity agent = adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE);
         Assert.assertTrue(agent.hasType(Ld4lAgentType.superClass()));
     }
@@ -109,7 +100,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testSourceHasName() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$C);
+                new InstanceEntity(), TEST_RECORD);
         Entity agent = adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE);
         Assert.assertEquals("NIC", agent.getValue(Ld4lDatatypeProp.NAME));
     }
@@ -117,7 +108,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test 
     public void testHasDescriptionModifier() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$D);
+                new InstanceEntity(), TEST_RECORD);
         Assert.assertNotNull(adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER));        
     }
@@ -125,7 +116,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testDescriptionModifierIsAgent() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$D);
+                new InstanceEntity(), TEST_RECORD);
         Entity agent = adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
         Assert.assertTrue(agent.hasType(Ld4lAgentType.superClass()));
@@ -134,10 +125,26 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testDescriptionModifierHasName() throws Exception {
         Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), FIELD_040_$D);
+                new InstanceEntity(), TEST_RECORD);
         Entity agent = adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
         Assert.assertEquals("NIC", agent.getValue(Ld4lDatatypeProp.NAME));
+    }
+    
+    @Test
+    public void test005DateTimeValue() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(
+                new InstanceEntity(), TEST_RECORD);
+        Assert.assertEquals("2013-03-30T14:56:47", adminMetadata.getValue(
+                Ld4lDatatypeProp.CHANGE_DATE));
+    }
+    
+    @Test
+    public void test005DateTimeDatatype() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(
+                new InstanceEntity(), TEST_RECORD);
+        Assert.assertSame(XsdDatatype.DATETIME, adminMetadata.getAttribute(
+                Ld4lDatatypeProp.CHANGE_DATE).getDatatype());
     }
     
     // ----------------------------------------------------------------------

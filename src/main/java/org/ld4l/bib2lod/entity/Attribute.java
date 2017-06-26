@@ -68,7 +68,7 @@ public class Attribute {
     }
     
     /**
-     * Returns the Attributes datatype, or null if none exists.
+     * Returns the Attribute's datatype, or null if none exists.
      */
     public Datatype getDatatype() {
         return datatype;

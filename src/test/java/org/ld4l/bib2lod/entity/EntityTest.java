@@ -15,7 +15,8 @@ public class EntityTest extends AbstractTestClass {
     
     // ----------------------------------------------------------------------
     // Mocking infrastructure
-    // ----------------------------------------------------------------------    
+    // ---------------------------------------------------------------------- 
+    
     private enum MockDatatypeProp implements DatatypeProp {
         TEST_PROP("http://my.namespace.org/", "test");
 

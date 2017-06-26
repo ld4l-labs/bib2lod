@@ -34,8 +34,6 @@ cornell:inst1
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     bf:adminMetadata cornell:am1 .
     
-
- 
 cornell:ititle1 
     a bf:Title ;
     rdf:value "Clinical cardiopulmonary physiology." ;
@@ -56,10 +54,14 @@ cornell:pa1
     dcterms:date "1957" ;
     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
 
+# Not clear whether there should be a single AdminMetadata object to express all the data, 
+# or one AdminMetadata object for each piece of metadata. Implementing first for
+# now, change later if needed.
 cornell:am1 
     a bf:AdminMetadata ;
     bib:hasSource cornell:ams1 ;
-    bf:descriptionModifier cornell:dm1 .
+    bf:descriptionModifier cornell:dm1 ;
+    bf:changeDate "2013-03-30T14:56:47"^^xsd:dateTime .
     
 cornell:ams1
     a foaf:Agent ;

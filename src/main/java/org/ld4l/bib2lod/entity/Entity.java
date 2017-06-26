@@ -270,6 +270,32 @@ public class Entity {
     }
     
     /**
+     * Returns the datatype of the first item in the list of Attributes for this
+     * property, or null if there are no attributes. Use when only a single
+     * value of the property is expected.
+     */
+    public Datatype getDatatype(DatatypeProp prop) {
+        Attribute attribute = attributes.getValue(prop);
+        if (attribute == null) {
+            return null;
+        }
+        return attributes.getValue(prop).getDatatype();
+    }
+    
+    /**
+     * Returns the xml:lang value of the first item in the list of Attributes 
+     * for this property, or null if there are no attributes. Use when only a 
+     * single value of the property is expected.
+     */
+    public String getLang(DatatypeProp prop) {
+        Attribute attribute = attributes.getValue(prop);
+        if (attribute == null) {
+            return null;
+        }
+        return attributes.getValue(prop).getLang();
+    }
+    
+    /**
      * Return true iff this Entity has no attributes, relationships, or
      * external relationships. (It may have types.)
      * @return

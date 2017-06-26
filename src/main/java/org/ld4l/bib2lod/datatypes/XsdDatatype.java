@@ -9,6 +9,7 @@ import org.apache.jena.datatypes.xsd.XSDDatatype;
 public enum XsdDatatype implements Datatype {
 
     DATE(XSDDatatype.XSDdate),
+    DATETIME(XSDDatatype.XSDdateTime),
     INT(XSDDatatype.XSDint),
     STRING(XSDDatatype.XSDstring);
     
