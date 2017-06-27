@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.regex.Pattern;
+
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
@@ -18,6 +20,9 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
     private MarcxmlRecord record;
     private Entity relatedEntity;
     private Entity adminMetadata;
+    
+    private static Pattern PATTERN_005 = Pattern.compile("^[\\d]{14}\\.\\d$");
+    
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -81,24 +86,26 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
         }       
     }
     
-    private void convert005() {
+    private void convert005() throws EntityBuilderException {
         MarcxmlControlField field005 = record.getControlField(5);
         
         if (field005 == null) {
             return;
         }    
-        // Convert format 20130330145647.0 to 2013-03-30T14:56:47
+        
         String value = field005.getTextValue();
-        if (value != null) {
-            String datetime = value.substring(0, 4) + "-" + 
-                    value.substring(4, 6) + "-" + value.substring(6, 8) + "T" + 
-                    value.substring(8, 10) + ":" + value.substring(10,12) + 
-                    ":" + value.substring(12, 14);
-            adminMetadata.addAttribute(Ld4lDatatypeProp.CHANGE_DATE, 
-                    datetime, XsdDatatype.DATETIME);
+        // Convert format 20130330145647.0 to 2013-03-30T14:56:47
+        if (! PATTERN_005.matcher(value).matches()) {
+            throw new EntityBuilderException(
+                    "Invalid value for control field 005.");
         }
 
-        
+        String datetime = value.substring(0, 4) + "-" + 
+                value.substring(4, 6) + "-" + value.substring(6, 8) + "T" + 
+                value.substring(8, 10) + ":" + value.substring(10,12) + 
+                ":" + value.substring(12, 14);
+        adminMetadata.addAttribute(Ld4lDatatypeProp.CHANGE_DATE, 
+                datetime, XsdDatatype.DATETIME);       
     }
 
 }

@@ -33,7 +33,17 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
                     "<subfield code='d'>NIC</subfield>" +
                  "</datafield>" +
             "</record>";
-
+    
+    public static final String INVALID_005_VALUE = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='005'>20130330</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
+    
     private MarcxmlToLd4lAdminMetadataBuilder builder;   
     
     @Before
@@ -145,6 +155,13 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
                 new InstanceEntity(), TEST_RECORD);
         Assert.assertSame(XsdDatatype.DATETIME, adminMetadata.getAttribute(
                 Ld4lDatatypeProp.CHANGE_DATE).getDatatype());
+    }
+    
+    @Test
+    public void invalid005DateTimeValue_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "Invalid value for control field 005");
+        buildAdminMetadata(new InstanceEntity(), INVALID_005_VALUE);   
     }
     
     // ----------------------------------------------------------------------
