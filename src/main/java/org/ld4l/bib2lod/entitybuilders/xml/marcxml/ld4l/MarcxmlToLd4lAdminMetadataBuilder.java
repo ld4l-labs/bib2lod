@@ -6,9 +6,11 @@ import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
@@ -21,7 +23,8 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
     private Entity relatedEntity;
     private Entity adminMetadata;
     
-    private static Pattern PATTERN_005 = Pattern.compile("^[\\d]{14}\\.\\d$");
+    private static final Pattern PATTERN_005 = 
+            Pattern.compile("^[\\d]{14}\\.\\d$");
     
 
     @Override
@@ -41,6 +44,7 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
         
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
         
+        convert001();
         convert040();
         convert005();
         
@@ -53,6 +57,22 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
         
         return adminMetadata;
     }
+    
+    private void convert001() throws EntityBuilderException {
+        
+        MarcxmlControlField controlField001 = record.getControlField(1);
+
+        if (controlField001 == null) {
+            return;
+        }
+        
+        EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
+                
+        BuildParams params = new BuildParams()
+                .setRelatedEntity(adminMetadata)
+                .setField(controlField001);
+        builder.build(params);
+    }     
     
     private void convert040() {
         

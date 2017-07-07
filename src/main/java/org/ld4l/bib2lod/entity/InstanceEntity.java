@@ -34,8 +34,8 @@ public class InstanceEntity extends Entity {
         return bibId;
     }
     
-    @Override
-    protected String getUri() {
-        return UriService.getUri(this, "_instance" + bibId);
-    }
+//    @Override
+//    protected String getUri() {
+//        return UriService.getUri(this, "_instance" + bibId);
+//    }
 }

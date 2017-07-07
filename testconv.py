@@ -55,6 +55,7 @@ def main():
              else logging.WARN)
     logging.basicConfig(level=level, format='%(message)s')
 
+    logging.info('Output format: ' + opt.output_format)
     tester = ConversionTester(bnodes=opt.bnode, outdir=opt.output_directory, 
             out_format=opt.output_format)
     if (os.path.isfile(opt.source)):

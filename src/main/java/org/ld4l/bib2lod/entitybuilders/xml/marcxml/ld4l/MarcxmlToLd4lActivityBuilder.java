@@ -10,6 +10,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
@@ -65,29 +66,35 @@ public class MarcxmlToLd4lActivityBuilder extends BaseEntityBuilder {
         // Method not yet implemented
     }
     
-    private void addLocation() {
+    private void addLocation() throws EntityBuilderException {
 
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
-            if (field instanceof MarcxmlControlField && 
-                    ((MarcxmlControlField) field).getControlNumber() == 8) {    
-                String location = field.getTextSubstring(15, 18);
-                if (! StringUtils.isBlank(location)) {
-                    activity.addExternalRelationship(Ld4lObjectProp.IS_AT_LOCATION, 
-                            Ld4lNamespace.LC_COUNTRIES.uri() + location);
+            try {
+                if (field.getTag() == 8) {    
+                    String location = field.getTextSubstring(15, 18);
+                    if (! StringUtils.isBlank(location)) {
+                        activity.addExternalRelationship(Ld4lObjectProp.IS_AT_LOCATION, 
+                                Ld4lNamespace.LC_COUNTRIES.uri() + location);
+                    }
                 }
+            } catch (RecordFieldException e) {
+                throw new EntityBuilderException(e);
             }
         }       
     }
     
-    private void addDate() {
+    private void addDate() throws EntityBuilderException {
 
         if (type.equals(Ld4lActivityType.PUBLISHER_ACTIVITY)) {
-            if (field instanceof MarcxmlControlField && 
-                    ((MarcxmlControlField) field).getControlNumber() == 8) {
-                String year = field.getTextSubstring(7, 11);
-                if (! StringUtils.isBlank(year)) {
-                    activity.addAttribute(Ld4lDatatypeProp.DATE, year);
+            try {
+                if (field.getTag() == 8) {
+                    String year = field.getTextSubstring(7, 11);
+                    if (! StringUtils.isBlank(year)) {
+                        activity.addAttribute(Ld4lDatatypeProp.DATE, year);
+                    }
                 }
+            } catch (RecordFieldException e) {
+                throw new EntityBuilderException(e);
             }
         }        
     }

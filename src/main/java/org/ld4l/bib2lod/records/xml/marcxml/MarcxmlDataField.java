@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -57,8 +56,9 @@ public class MarcxmlDataField extends MarcxmlField {
         }
         return Integer.parseInt(value);
     }
-                                                                                                                                                            
-    public int getName() {
+      
+    @Override
+    public int getTag() {
         return tag;
     }
     
@@ -120,7 +120,7 @@ public class MarcxmlDataField extends MarcxmlField {
             List<MarcxmlDataField> fields, int tag) {
         
         for (MarcxmlDataField field: fields) {
-            if (field.getName() == tag) {
+            if (field.getTag() == tag) {
                 return field;
             }
         }

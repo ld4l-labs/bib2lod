@@ -8,8 +8,11 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Datatype;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.NamedIndividual;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.uris.UriService;
@@ -20,6 +23,8 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  * output model. 
  */
 public class Entity {
+    
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     /*
      * Relationships of this Entity to other local Entities (objects of object
@@ -142,6 +147,11 @@ public class Entity {
     
     public void addExternalRelationship(ObjectProp prop, String uri) {
         externalRelationships.addValue(prop, uri);       
+    }
+    
+    public void addExternalRelationship(
+            ObjectProp prop, NamedIndividual individual) {
+        externalRelationships.addValue(prop, individual.uri());       
     }
     
     /**

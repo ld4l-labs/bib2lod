@@ -2,6 +2,8 @@ package org.ld4l.bib2lod.entity;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Datatype;
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 
@@ -9,6 +11,8 @@ import org.ld4l.bib2lod.datatypes.XsdDatatype;
  * Represents a literal value (object of a datatype property).
  */
 public class Attribute {
+    
+    private static final Logger LOGGER = LogManager.getLogger(); 
     
     private final String value;
     private final String lang;

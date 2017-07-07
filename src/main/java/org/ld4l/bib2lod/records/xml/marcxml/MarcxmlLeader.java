@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.w3c.dom.Element;
 
 /**
@@ -24,6 +25,11 @@ public class MarcxmlLeader extends MarcxmlField {
     public MarcxmlLeader(Element leader) throws RecordException{
         super(leader);
         isValid();
+    }
+    
+    @Override
+    public int getTag() throws RecordFieldException {
+        throw new RecordFieldException("Leader fields do not have tags.");
     }
 
     private void isValid() throws RecordFieldException {

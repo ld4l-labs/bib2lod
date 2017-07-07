@@ -30,7 +30,15 @@ public class MarcxmlControlField extends MarcxmlField {
         }
     }
     
+    /**
+     * Alias of getTag().
+     */
     public int getControlNumber() {
+        return controlNumber;
+    }
+    
+    @Override
+    public int getTag() {
         return controlNumber;
     }
     

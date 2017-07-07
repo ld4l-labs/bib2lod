@@ -10,7 +10,7 @@ public enum Ld4lActivityType implements Type {
     /* List in alpha order */
     ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
     ORIGINATOR_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "OriginatorActivity", "Originator"),
-    PUBLISHER_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publisher");
+    PUBLISHER_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publishing");
 
     
     private final String uri;

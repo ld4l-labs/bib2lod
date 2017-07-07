@@ -11,12 +11,23 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public enum Ld4lNamedIndividual implements NamedIndividual {
     
-    /* List in alpha order */
     _134059638(Ld4lNamespace.VIAF, "134059638"),
+    
+    /* Web Annotation Motivation 
+     * Do we need to define the type?
+     */
 	DESCRIBING(Ld4lNamespace.OA, "describing", Ld4lMotivationType.MOTIVATION),
 	PROVIDING_PURPOSE(Ld4lNamespace.BIBLIOTEKO, "providingPurpose", Ld4lMotivationType.MOTIVATION),
-	SUMMARIZING(Ld4lNamespace.BIBLIOTEKO, "summarizing", Ld4lMotivationType.MOTIVATION);
-
+	SUMMARIZING(Ld4lNamespace.BIBLIOTEKO, "summarizing", Ld4lMotivationType.MOTIVATION),
+    
+    /* BIBFRAME Status 
+     * Add bf:Status type if needed
+     */
+    CANCELLED(Ld4lNamespace.BIBLIOTEKO, "cancelled"), 
+    CURRENT(Ld4lNamespace.BIBLIOTEKO, "current"), 
+    DEPRECATED(Ld4lNamespace.BIBLIOTEKO, "deprecated"), 
+    INVALID(Ld4lNamespace.BIBLIOTEKO, "invalid");
+    
     private String uri;
     private Resource resource;
     private Type type;

@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
@@ -9,7 +11,6 @@ import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -45,35 +46,44 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         }
         
         this.instance = new InstanceEntity();
-        
+ 
+        buildAdminMetadata();
         buildIdentifiers();
         buildTitles();
         buildWorks();
         buildItem();
         buildActivities();
         addResponsibilityStatement();
-        buildAdminMetadata();
-        
+       
         return instance;
     }
     
-    private void buildIdentifiers() {
-        
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
-        
-        MarcxmlControlField controlField001 = 
-                record.getControlField(1);
+    private void buildIdentifiers() throws EntityBuilderException {
+        convert035();
+    }
 
-        if (controlField001 != null) {
-            BuildParams params = new BuildParams()
-                    .setRelatedEntity(instance)
-                    .setField(controlField001);
-            buildAndCatchException(builder, params, 
-                    "Error building instance identifier from control field 001.");
-        } 
+    private void convert035() throws EntityBuilderException {
+
+        // 035 is a repeating field
+        List<MarcxmlDataField> fields = record.getDataFields(35);
+        if (fields.isEmpty()) {
+            return;
+        }
+
+        EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
+        BuildParams params = new BuildParams()
+                .setRelatedEntity(instance);
+        for (MarcxmlDataField field : fields) {
+            List<MarcxmlSubfield> subfields = field.getSubfields();
+            params.setField(field);
+            for (MarcxmlSubfield subfield : subfields) {
+                params.setSubfield(subfield);
+                builder.build(params);                
+            }
+        }   
     }
     
-    private void buildTitles() { 
+    private void buildTitles() throws EntityBuilderException { 
         
         // NB There may be multiple, so this isn't sufficient.
         
@@ -81,11 +91,10 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        buildAndCatchException(builder, params, 
-                "Error building instance title.");
+        builder.build(params);
     }
     
-    private void buildWorks() {
+    private void buildWorks() throws EntityBuilderException {
         // NB There are special cases where one Instance has multiple Works.
         
         // For now, the work will take its title from the instance title
@@ -97,22 +106,20 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance);
-        buildAndCatchException(builder, params, 
-                "Error building work for instance.");
+        builder.build(params);
     }
     
-    private void buildItem() {
+    private void buildItem() throws EntityBuilderException {
         
         EntityBuilder builder = getBuilder(Ld4lItemType.class);
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setRelatedEntity(instance); 
-        buildAndCatchException(builder, params, 
-                "Error building item for instance.");
+        builder.build(params);
     }   
     
-    private void buildActivities()  {
+    private void buildActivities() throws EntityBuilderException  {
         
         EntityBuilder builder = getBuilder(Ld4lActivityType.class);
  
@@ -125,8 +132,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                     .setField(field008)
                     .setRelatedEntity(instance)
                     .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-            buildAndCatchException(builder, params, 
-                    "Error building instance publisher activity.");
+            builder.build(params);
         }
     }
     
@@ -149,14 +155,15 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 subfield.getTextValue());             
     }
     
-    private void buildAdminMetadata() {
+    private void buildAdminMetadata() throws EntityBuilderException {
  
         EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.class);
+ 
         BuildParams params = new BuildParams()
                 .setRelatedEntity(instance)
                 .setRecord(record);
-        buildAndCatchException(builder, params, 
-                "Error building admin metadata.");           
+        builder.build(params);          
     }
+
      
 }

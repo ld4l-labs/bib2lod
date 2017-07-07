@@ -23,6 +23,12 @@ public abstract class MarcxmlField extends BaseXmlElement {
     }
     
     /**
+     * Returns the data field or control field tag number as an int.
+     * @throws RecordFieldException 
+     */
+    public abstract int getTag() throws RecordFieldException;
+    
+    /**
      * Returns a substring of the field's text value. Returns null if field has 
      * no text value, or the end value is out of range.
      * or the substring is out of range, null 

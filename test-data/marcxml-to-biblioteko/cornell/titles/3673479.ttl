@@ -38,8 +38,8 @@ cornell:inst1
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    bf:identifiedBy cornell:id1 ;
     bib:hasActivity cornell:pa1 ;
+    bf:adminMetadata cornell:am1 ;
     bf:responsibilityStatement "Gitta Sereny." .
 
 cornell:ititle1  
@@ -62,12 +62,16 @@ cornell:ist4
     rdf:value "the story of Mary Bell /" ;
     vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int> .
     
+cornell:am1
+    a bf:AdminMetadata ;
+    bf:identifiedBy cornell:id1 .
+  
 cornell:id1 
-    a bf:Identifier , bf:Local ;
+    a bf:Local ;
     rdf:value "3673479" .
     
 cornell:pa1 
-    rdfs:label "Publisher" ;
+    rdfs:label "Publishing" ;
     a bib:PublisherActivity ;
     dcterms:date "1999" ;
     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .

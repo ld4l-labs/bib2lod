@@ -57,13 +57,9 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
     
     @Test
-    public void nullRelatedInstance_ThrowsException() throws Exception {
-        expectException(
-                EntityBuilderException.class, "without a related entity");
-        BuildParams params = new BuildParams()
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(
-                        MarcxmlTestUtils.MINIMAL_RECORD));             
-        builder.build(params);        
+    public void nullRelatedInstance_ThrowsException() throws Exception {      
+        buildAndExpectException(null, MarcxmlTestUtils.MINIMAL_RECORD, 
+                "without a related entity");
     }
     
     @Test 
@@ -77,11 +73,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void noAdminMetadataReturnsNull() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(
-                        MarcxmlTestUtils.MINIMAL_RECORD))
-                .setRelatedEntity(new Entity());
-        Assert.assertNull(builder.build(params));
+        Assert.assertNull(buildAdminMetadata(MarcxmlTestUtils.MINIMAL_RECORD));
     }
     
     @Test
@@ -94,39 +86,34 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void testHasSource() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Assert.assertNotNull(adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
     }
     
     @Test
     public void testSourceIsAgent() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Entity agent = adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE);
         Assert.assertTrue(agent.hasType(Ld4lAgentType.superClass()));
     }
     
     @Test
     public void testSourceHasName() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Entity agent = adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE);
         Assert.assertEquals("NIC", agent.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test 
     public void testHasDescriptionModifier() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Assert.assertNotNull(adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER));        
     }
     
     @Test
     public void testDescriptionModifierIsAgent() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);  
         Entity agent = adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
         Assert.assertTrue(agent.hasType(Ld4lAgentType.superClass()));
@@ -134,8 +121,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void testDescriptionModifierHasName() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Entity agent = adminMetadata.getChild(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
         Assert.assertEquals("NIC", agent.getValue(Ld4lDatatypeProp.NAME));
@@ -143,31 +129,28 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void test005DateTimeValue() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Assert.assertEquals("2013-03-30T14:56:47", adminMetadata.getValue(
                 Ld4lDatatypeProp.CHANGE_DATE));
     }
     
     @Test
     public void test005DateTimeDatatype() throws Exception {
-        Entity adminMetadata = buildAdminMetadata(
-                new InstanceEntity(), TEST_RECORD);
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Assert.assertSame(XsdDatatype.DATETIME, adminMetadata.getAttribute(
                 Ld4lDatatypeProp.CHANGE_DATE).getDatatype());
     }
     
     @Test
     public void invalid005DateTimeValue_ThrowsException() throws Exception {
-        expectException(EntityBuilderException.class, 
+        buildAndExpectException(INVALID_005_VALUE, 
                 "Invalid value for control field 005");
-        buildAdminMetadata(new InstanceEntity(), INVALID_005_VALUE);   
     }
     
     // ----------------------------------------------------------------------
     // Helper methods
     // ----------------------------------------------------------------------
-    
+
     private Entity buildAdminMetadata(Entity entity, String input) 
             throws Exception {
         BuildParams params = new BuildParams() 
@@ -175,5 +158,22 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
                 .setRelatedEntity(entity);
         return builder.build(params);        
     }
- 
+    
+    private Entity buildAdminMetadata(String input) 
+            throws Exception {
+        return buildAdminMetadata(new Entity(), input);      
+    }
+    
+    private void buildAndExpectException(
+            Entity entity, String input, String error) 
+            throws Exception { 
+        expectException(EntityBuilderException.class, error);
+        buildAdminMetadata(entity, input);
+    }
+    
+    private void buildAndExpectException(String input, String error) 
+            throws Exception {
+        buildAndExpectException(new Entity(), input, error);
+    }
+
 }

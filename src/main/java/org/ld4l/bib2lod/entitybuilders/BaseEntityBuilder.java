@@ -21,13 +21,4 @@ public abstract class BaseEntityBuilder implements EntityBuilder {
         return factory.getBuilder(type);
     }
     
-    protected void buildAndCatchException(
-            EntityBuilder builder, BuildParams params, String warning) {
-        try {
-            builder.build(params);
-        } catch (EntityBuilderException e) { 
-            LOGGER.warn(warning);         
-        }        
-    }
-    
 }

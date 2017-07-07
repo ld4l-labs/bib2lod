@@ -30,7 +30,6 @@ cornell:inst1
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    bf:identifiedBy cornell:id1 ;
     bib:hasActivity cornell:pa1 ;
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     bf:adminMetadata cornell:am1 .
@@ -45,24 +44,22 @@ cornell:imt1
     rdf:value "Clinical cardiopulmonary physiology." ;
     vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
        
-cornell:id1 
-    a bf:Identifier , bf:Local ;
-    rdf:value "102063" .
-
 cornell:pa1 
     a bib:PublisherActivity ;
-    rdfs:label "Publisher" ;
+    rdfs:label "Publishing" ;
     dcterms:date "1957" ;
     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
 
-# Not clear whether there should be a single AdminMetadata object to express all the data, 
-# or one AdminMetadata object for each piece of metadata. Implementing first for
-# now, change later if needed.
 cornell:am1 
     a bf:AdminMetadata ;
     bib:hasSource cornell:ams1 ;
     bf:descriptionModifier cornell:dm1 ;
-    bf:changeDate "2013-03-30T14:56:47"^^xsd:dateTime .
+    bf:identifiedBy cornell:id1 ;
+    bf:changeDate "2013-03-30T14:56:47"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+    
+cornell:id1 
+    a bf:Local ;
+    rdf:value "102063" .
     
 cornell:ams1
     a foaf:Agent ;

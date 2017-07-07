@@ -11,8 +11,6 @@ import org.ld4l.bib2lod.records.Record.RecordException;
  */
 public interface RecordField {
  
-    // TODO Should this be RecordFieldInstantiationException? See if it's used 
-    // for anything other than instantiation.
     public static class RecordFieldException extends RecordException {
         private static final long serialVersionUID = 1L;
 

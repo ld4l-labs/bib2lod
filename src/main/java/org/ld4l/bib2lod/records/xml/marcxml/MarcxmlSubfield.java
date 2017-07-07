@@ -32,6 +32,12 @@ public class MarcxmlSubfield extends MarcxmlField {
     public char getCode() {
         return code;
     }
+    
+    @Override
+    public int getTag() throws RecordFieldException {
+        //return Character.getNumericValue(code);
+        throw new RecordFieldException("Method not implemented.");
+    }
 
     private void isValid() throws RecordFieldException {
 
