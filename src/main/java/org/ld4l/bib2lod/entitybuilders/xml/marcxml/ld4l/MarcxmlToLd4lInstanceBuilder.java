@@ -47,8 +47,11 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         
         this.instance = new InstanceEntity();
  
+        // Critical ordering: build admin metadata before identifiers. Remove
+        // an identifier with value matching the admin metadata identifier.
         buildAdminMetadata();
         buildIdentifiers();
+        
         buildTitles();
         buildWorks();
         buildItem();

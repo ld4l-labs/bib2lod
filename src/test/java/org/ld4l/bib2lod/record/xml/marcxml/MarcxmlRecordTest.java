@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
+import org.ld4l.bib2lod.records.xml.marcxml.BaseMarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -94,9 +94,9 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void multipleLeaders_Ignored() throws Exception {
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(TWO_LEADERS);
-        List<MarcxmlField> fields = record.getFields();
+        List<BaseMarcxmlField> fields = record.getFields();
         int leaderCount = 0;
-        for (MarcxmlField field : fields) {
+        for (BaseMarcxmlField field : fields) {
             if (field instanceof MarcxmlLeader) {
                 leaderCount++;
             }

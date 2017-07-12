@@ -6,7 +6,6 @@
     <controlfield tag="001">102063</controlfield>
     <controlfield tag="005">20130330145647.0</controlfield>
     <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>
-    <!--
     <datafield tag="035" ind1=" " ind2=" ">
       <subfield code="a">(CStRLIN)NYCX86B63464</subfield>
     </datafield>
@@ -19,7 +18,6 @@
     <datafield tag="035" ind1=" " ind2=" ">
       <subfield code="a">102063</subfield>
     </datafield>
-    -->
     <datafield tag="040" ind1=" " ind2=" ">
       <subfield code="c">NIC</subfield>
       <subfield code="d">NIC</subfield>

@@ -165,8 +165,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     private void buildAndExpectException(
-            Entity entity, String input, String error) 
-            throws Exception { 
+            Entity entity, String input, String error) throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildAdminMetadata(entity, input);
     }

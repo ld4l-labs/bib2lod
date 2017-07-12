@@ -43,19 +43,19 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
 
     @Test
     public void noControlNumber_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid control number");
+        expectException(RecordFieldException.class, "not an integer");
         buildControlFieldFromString(NO_CONTROL_NUMBER);
     }
     
     @Test
     public void emptyControlNumber_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid control number");
+        expectException(RecordFieldException.class, "not an integer");
         buildControlFieldFromString(EMPTY_CONTROL_NUMBER);
     }
     
     @Test
     public void blankControlNumber_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid control number");
+        expectException(RecordFieldException.class, "not an integer");
         buildControlFieldFromString(BLANK_CONTROL_NUMBER);
     }
     

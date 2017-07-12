@@ -1,24 +1,25 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.marcxml.BaseMarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 /**
@@ -27,6 +28,11 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder { 
 
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    private static Map<String, Entity> sources;
+    static {
+        buildSources();
+    }
     
     private static final Pattern PATTERN_035_IDENTIFIER = 
             /* 
@@ -39,10 +45,27 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
              * TODO Not sure which chars are allowed in identifier; using \w for
              * now
              */
-            Pattern.compile("^(\\(([a-zA-Z-]+)\\))?(\\w+)$");
+            Pattern.compile("^(?:\\(([a-zA-Z-]+)\\))?(\\w+)$");
     
-    private MarcxmlField field;
+    private BaseMarcxmlField field;
     private Entity relatedEntity;
+    
+    private static void buildSources() {
+        
+        sources = new HashMap<>();
+        
+        List<String> sourceStrings =  Arrays.asList(
+                "CStRLIN", "NIC", "OCoLC"   
+                );
+        
+        for (String label : sourceStrings) {
+            buildSource(label);
+        }        
+    }
+    
+    public static Map<String, Entity> getSources() {
+        return sources;
+    }
     
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -53,7 +76,7 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
                     "Cannot build identifier without a related entity.");
         }
         
-        this.field = (MarcxmlField) params.getField();
+        this.field = (BaseMarcxmlField) params.getField();
         if (field == null) {
             throw new EntityBuilderException(
                     "Cannot build identifier without an input field.");
@@ -68,12 +91,32 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
             throw new EntityBuilderException("Invalid field type.");
         }
 
-        relatedEntity.addRelationship(
-                Ld4lObjectProp.IDENTIFIED_BY, identifier);
- 
+        if (identifier != null) {
+            relatedEntity.addRelationship(
+                    Ld4lObjectProp.IDENTIFIED_BY, identifier);
+        }
+        
         return identifier;
     }
     
+    /**
+     * Returns a source Entity built from a label. No type is specified, and the 
+     * label is the organization code in the identifier.
+     */
+    private static final Entity buildSource(String label) {
+        EntityBuilder builder = new MarcxmlToLd4lLegacyDataEntityBuilder();
+        BuildParams params = new BuildParams()
+                .setValue(label);
+        try {
+            Entity source = builder.build(params);
+            sources.put(label, source);
+            return source;
+        } catch (EntityBuilderException e) {
+            // Throw an exception so we don't have to keep testing for 
+            // whether the key exists or whether the value is null.
+            throw new RuntimeException(e);
+        }
+    }              
     
     /**
      * Builds an Identifier from a control field. Returns null if the control
@@ -110,9 +153,9 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
     }
 
     /**
-     * Builds an identifier from field 035. Never returns null.
+     * Builds an identifier from field 035. Returns null if the identifier value
+     * is already attached to the resource's AdminMetadata object.
      */
-    // TODO Parts of this method will probably be shared by other conversions.
     private Entity convert035(MarcxmlSubfield subfield) 
             throws EntityBuilderException {
         
@@ -122,32 +165,58 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
         
         // Ignoring $6 and $8 (not mapped by LC)
         if (code != 'a' && code != 'z') {
-            throw new EntityBuilderException("Invalid subfield for 035.");                
+            throw new EntityBuilderException("Invalid subfield for field 035.");                
         }
 
         Matcher matcher = 
                 PATTERN_035_IDENTIFIER.matcher(subfield.getTextValue());
         if (! matcher.matches()) {
-            throw new EntityBuilderException("Invalid 035 value.");
+            throw new EntityBuilderException("Invalid value for field 035.");
         }
         
-        LOGGER.debug(matcher.group(2) + " " + matcher.group(3));
+        identifier = new Entity(Ld4lIdentifierType.LOCAL);
         
-        /* Identifier type / source. Null if the group didn't match. */
+        // Identifier source
         String orgCode = matcher.group(1);
-        Type type = orgCode != null && orgCode.equals("OCoLC") ? 
-                Ld4lIdentifierType.OCLC : Ld4lIdentifierType.LOCAL;
-        identifier = new Entity(type);
-        
-        /* Identifier value */
-        String id = matcher.group(3);
-        identifier.addAttribute(Ld4lDatatypeProp.VALUE, id);
 
-        /* Identifier status */
-        Ld4lNamedIndividual status = (code == 'a' ?  
-                Ld4lNamedIndividual.CURRENT : Ld4lNamedIndividual.CANCELLED );
-        identifier.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, status);
+        // Identifier value
+        String value = matcher.group(2);
         
+        // Don't build an identifier when the 035 value is the same as the
+        // AdminMetadata identifier.
+        if (orgCode == null) {           
+            Entity adminMetadata = 
+                    relatedEntity.getChild(Ld4lObjectProp.HAS_ADMIN_METADATA);
+            if (adminMetadata != null) {
+                Entity id = adminMetadata.getChild(Ld4lObjectProp.IDENTIFIED_BY);
+                String idValue = id.getValue(Ld4lDatatypeProp.VALUE);
+                if (value.equals(idValue)) {
+                    return null;
+                }
+            } 
+        } else {
+            // Add source entity
+            Entity source = sources.get(orgCode);
+            /*
+             * If source does not already exist in the sources map, build a new
+             * source Entity and add it to the map so it doesn't have to be 
+             * rebuilt next time through.
+             */
+            if (source == null) {                
+                source = buildSource(orgCode);
+            }
+            identifier.addRelationship(Ld4lObjectProp.HAS_SOURCE, source);            
+        }
+
+        // Add identifier value
+        identifier.addAttribute(Ld4lDatatypeProp.VALUE, value);
+
+        // Identifier status
+        if (code == 'z') {
+            identifier.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, 
+                    Ld4lNamedIndividual.CANCELLED);
+        }
+
         return identifier;
     }
     

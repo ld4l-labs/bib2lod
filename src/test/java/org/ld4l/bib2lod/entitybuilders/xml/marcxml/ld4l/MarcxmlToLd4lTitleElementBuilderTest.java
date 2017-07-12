@@ -2,19 +2,14 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
-import org.ld4l.bib2lod.records.RecordField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 
 /**
  * Tests class MarcxmlToLd4lTitleElementBuilder

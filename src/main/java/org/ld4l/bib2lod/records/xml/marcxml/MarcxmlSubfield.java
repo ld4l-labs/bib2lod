@@ -4,15 +4,15 @@ package org.ld4l.bib2lod.records.xml.marcxml;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.w3c.dom.Element;
 
 /**
  * Represents a subfield in a MARCXML record.
  */
-public class MarcxmlSubfield extends MarcxmlField {
+public class MarcxmlSubfield extends BaseMarcxmlField implements XmlTextElement {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
-    private static final String CODE_ATTRIBUTE_NAME = "code";
     
     private char code;
 
@@ -22,7 +22,7 @@ public class MarcxmlSubfield extends MarcxmlField {
     public MarcxmlSubfield(Element element) throws RecordFieldException {
         super(element);   
         try {
-            code = element.getAttribute(CODE_ATTRIBUTE_NAME).charAt(0);         
+            code = element.getAttribute("code").charAt(0);         
             isValid();
         } catch (IndexOutOfBoundsException e) {
             throw new RecordFieldException("Subfield code cannot be empty.");
@@ -34,11 +34,10 @@ public class MarcxmlSubfield extends MarcxmlField {
     }
     
     @Override
-    public int getTag() throws RecordFieldException {
-        //return Character.getNumericValue(code);
-        throw new RecordFieldException("Method not implemented.");
+    public String getTextValue() {        
+        return textValue;
     }
-
+    
     private void isValid() throws RecordFieldException {
 
         // Here we test only the code format, not whether specific codes are

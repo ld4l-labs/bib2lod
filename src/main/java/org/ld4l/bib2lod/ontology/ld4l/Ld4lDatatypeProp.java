@@ -12,6 +12,7 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     
     /* List in alpha order */
     CHANGE_DATE(Ld4lNamespace.BIBFRAME, "changeDate"),
+    CODE(Ld4lNamespace.BIBFRAME, "code"),
     DATE(Ld4lNamespace.DCTERMS, "date"),
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),

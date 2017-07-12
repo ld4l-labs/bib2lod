@@ -14,7 +14,8 @@ import org.w3c.dom.NodeList;
 /**
  * Represents a data field in a MARCXML record.
  */
-public class MarcxmlDataField extends MarcxmlField {
+public class MarcxmlDataField extends BaseMarcxmlField 
+        implements MarcxmlTaggedField {
 
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -28,12 +29,13 @@ public class MarcxmlDataField extends MarcxmlField {
      * Constructor
      */
     public MarcxmlDataField(Element element) throws RecordFieldException {
+
         super(element);
         
         try {
             tag = Integer.parseInt(element.getAttribute("tag"));
         } catch (NumberFormatException e) {
-            throw new RecordFieldException("Invalid tag.");
+            throw new RecordFieldException("Tag value is not an integer.");
         }
 
         ind1 = getIndicatorValue("ind1", element);

@@ -30,10 +30,34 @@ cornell:inst1
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    # bf:identifiedBy cornell:id1 ;
+    bf:identifiedBy cornell:id2 , cornell:id3 , cornell:id4 ;
     bib:hasActivity cornell:pa1 ;
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     bf:adminMetadata cornell:am1 .
+    
+cornell:id2 
+    a bf:Local ;
+    bib:hasSource cornell:id2source ;
+    rdf:value "NYCX86B63464" .
+    
+cornell:id2source 
+    rdfs:label "CStRLIN"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
+    
+cornell:id3
+    a bf:Local ;
+    bib:hasSource cornell:id3source ;
+    rdf:value "notisAAL3258" .
+    
+cornell:id3source 
+    rdfs:label "NIC"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
+    
+cornell:id4 
+    a bf:Local ;
+    bib:hasSource cornell:id4source ;
+    rdf:value "1345399" .
+    
+cornell:id4source 
+    rdfs:label "OCoLC"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
     
 cornell:ititle1 
     a bf:Title ;

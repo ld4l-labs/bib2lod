@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
@@ -67,19 +66,19 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
 
     @Test
     public void noTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid tag");
+        expectException(RecordFieldException.class, "not an integer");
         buildDataFieldFromString(NO_TAG);
     }
 
     @Test
     public void emptyTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid tag");
+        expectException(RecordFieldException.class, "not an integer");
         buildDataFieldFromString(EMPTY_TAG);
     }
     
     @Test
     public void blankTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "Invalid tag");
+        expectException(RecordFieldException.class, "not an integer");
         buildDataFieldFromString(BLANK_TAG);
     }
     

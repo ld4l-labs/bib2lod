@@ -1,19 +1,34 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import static org.junit.Assert.fail;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
+import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.BaseMarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+
+
 
 /**
  * Tests class MarcxmlToLd4lIdentifierBuilder
@@ -29,8 +44,21 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
             "</record>";
+
+    public static final String _035_INVALID_VALUE = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='035' ind1=' ' ind2=' '>" + 
+                    "<subfield code='a'>(test)test(test)</subfield>" + 
+                "</datafield>" +
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
     
-    public static final String _035_SAME_AS_001 = 
+    public static final String _035_DUPLICATES_001 = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" +
@@ -43,13 +71,39 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
                 "</datafield>" + 
             "</record>";
     
-    public static final String INVALID_SUBFIELD_CODE = 
+    public static final String _035_NEW_ORG_CODE = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='035' ind1=' ' ind2=' '>" + 
+                    "<subfield code='a'>(ABC)12345</subfield>" + 
+                "</datafield>" +
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
+    
+    public static final String _035_INVALID_SUBFIELD_CODE = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
                 "<datafield tag='035' ind1=' ' ind2=' '>" + 
                     "<subfield code='b'>102063</subfield>" + 
+                "</datafield>" +
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
+    
+    public static final String _035_CANCELLED = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='035' ind1=' ' ind2=' '>" + 
+                    "<subfield code='z'>xyz</subfield>" + 
                 "</datafield>" +
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>main title</subfield>" +          
@@ -68,11 +122,12 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
                 "</datafield>" + 
             "</record>";
     
+    // Not used. Keep if we want to make this an OclcIdentifier instead of just
+    // a Local identifier.
     public static final String _035_OCLC = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" +
                 "<datafield tag='035' ind1=' ' ind2=' '>" +
                     "<subfield code='a'>(OCoLC)1345399</subfield>" +
                 "</datafield>" +
@@ -80,14 +135,35 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
             "</record>";
+    
+    public static final String _035_NO_ORG_CODE = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='035' ind1=' ' ind2=' '>" +
+                    "<subfield code='a'>1345399</subfield>" +
+                "</datafield>" +
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
 
     
-    private MarcxmlToLd4lIdentifierBuilder builder;   
+    private static BaseMockBib2LodObjectFactory factory;
+    private MarcxmlToLd4lIdentifierBuilder builder;  
+    
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        factory = new BaseMockBib2LodObjectFactory();  
+        factory.addInstance(EntityBuilderFactory.class, 
+                new MarcxmlToLd4lEntityBuilderFactory());
+    }
     
     @Before
-    public void setUp() {       
+    public void setUp() throws RecordFieldException {       
         this.builder = new MarcxmlToLd4lIdentifierBuilder();
-    }
+    }    
+
     
     // ----------------------------------------------------------------------
     // The tests
@@ -114,49 +190,97 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     @Test
     public void invalidSubfieldCode_ThrowsException() throws Exception {
         buildAndExpectException(
-                INVALID_SUBFIELD_CODE, 35, 'b', "Invalid subfield");
+                _035_INVALID_SUBFIELD_CODE, 35, 'b', "Invalid subfield");
     }
     
     @Test
-    @Ignore
     public void invalid035Value_ThrowsException() throws Exception {
-        fail("Method invalid035Value_ThrowsException not implemented.");
+        buildAndExpectException(
+                _035_INVALID_VALUE, 35, 'a', "Invalid value for field");
     }
     
     @Test
-    @Ignore
-    public void testStatusCurrent() throws Exception {
-        fail("Method testStatusCurrent not implemented.");
-    }
-    
-    @Test
-    @Ignore
     public void testStatusCancelled() throws Exception {
-        fail("Method testStatusCancelled not implemented.");
+        Entity identifier = buildIdentifier(_035_CANCELLED, 35, 'z');
+        Assert.assertEquals(Ld4lNamedIndividual.CANCELLED.uri(), 
+                identifier.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
     @Test
-    @Ignore
-    public void test001() throws Exception {       
-        fail("Method test001 not implemented.");
-    }
-    
-    @Test 
-    @Ignore
-    public void test035SameAs001() throws Exception {       
-        fail("Method test035SameAs001 not implemented.");
+    public void test001() throws Exception {   
+        Entity identifier = buildIdentifier(_001, 1);
+        Assert.assertEquals("102063", 
+                identifier.getValue(Ld4lDatatypeProp.VALUE));
     }
     
     @Test
-    @Ignore
-    public void test035WithSource() throws Exception {       
-        fail("Method test035Nic not implemented.");
+    public void test035OrgCode() throws Exception {       
+        Entity identifier = buildIdentifier(_035_NIC, 35, 'a');
+        Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
+        Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
+        Literal literal = ResourceFactory.createTypedLiteral(
+                "NIC", BibDatatype.LEGACY_SOURCE_DATA.rdfType());
+        Assert.assertEquals(literal, attribute.toLiteral());        
     }
     
     @Test 
-    @Ignore
-    public void test035Oclc() throws Exception {       
-        fail("Method test035Oclc not implemented.");
+    public void test035Duplicates001() throws Exception {    
+        BuildParams params = new BuildParams()
+                .setRecord(MarcxmlTestUtils.buildRecordFromString(_035_DUPLICATES_001));
+        MarcxmlToLd4lInstanceBuilder builder = new MarcxmlToLd4lInstanceBuilder();
+        Entity instance = builder.build(params);
+        List<Entity> identifiers = instance.getChildren(Ld4lObjectProp.IDENTIFIED_BY);
+        boolean found = false;
+        for (Entity identifier : identifiers) {
+            String value = identifier.getValue(Ld4lDatatypeProp.VALUE);
+            if (value.equals("102063")) {
+                found = true;
+                break;
+            }
+        }
+        Assert.assertFalse(found);
+    }
+    
+    @Test
+    public void test035NewOrgCode() throws Exception {
+        Entity identifier = buildIdentifier(_035_NEW_ORG_CODE, 35, 'a'); 
+        Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
+        Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
+        Literal literal = ResourceFactory.createTypedLiteral(
+                "ABC", BibDatatype.LEGACY_SOURCE_DATA.rdfType());
+        Assert.assertEquals(literal, attribute.toLiteral());  
+    }
+    
+    @Test
+    public void tes035NewKeyAddedToSources() throws Exception {
+        buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
+        Map<String, Entity> sources = 
+                MarcxmlToLd4lIdentifierBuilder.getSources();
+        Assert.assertTrue(sources.containsKey("ABC"));       
+    }
+    
+    @Test
+    public void test035NewSourceAddedToSources() throws Exception {
+        buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
+        Map<String, Entity> sources = 
+                MarcxmlToLd4lIdentifierBuilder.getSources();
+        Entity source = sources.get("ABC");
+        Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
+        Literal literal = ResourceFactory.createTypedLiteral(
+                "ABC", BibDatatype.LEGACY_SOURCE_DATA.rdfType());
+        Assert.assertEquals(literal, attribute.toLiteral()); 
+    }
+    
+    @Test
+    public void test035NoSource() throws Exception {
+        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
+        Assert.assertNull(identifier.getChild(Ld4lObjectProp.HAS_SOURCE));        
+    }
+    
+    @Test
+    public void test035ValueWithNoSource() throws Exception {
+        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
+        Assert.assertEquals("1345399", identifier.getValue(Ld4lDatatypeProp.VALUE));      
     }
 
     
@@ -168,11 +292,11 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
             Entity entity, String input, int tag) throws Exception {
 
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(input);
-        MarcxmlField field = record.getField(tag);
+        MarcxmlTaggedField field = record.getTaggedField(tag);
         BuildParams params = new BuildParams() 
                 .setRelatedEntity(entity)
                 .setRecord(record)
-                .setField(field);
+                .setField((BaseMarcxmlField) field);
         return builder.build(params);   
     }
 

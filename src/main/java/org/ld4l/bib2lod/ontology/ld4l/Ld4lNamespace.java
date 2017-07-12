@@ -33,6 +33,9 @@ public enum Ld4lNamespace implements Namespace {
     SKOS("http://www.w3.org/2004/02/skos/core#", "skos"),
     VIVO("http://vivoweb.org/ontology/core#", "vivo"),
     
+    // Datatypes
+    BIB_DATATYPE("http://bibliotek-o.org/datatypes/", "bibdt"),
+    
     /* Datasets/controlled vocabularies */
     /* List in alpha order */
     LC_COUNTRIES("http://id.loc.gov/vocabulary/countries/"),   

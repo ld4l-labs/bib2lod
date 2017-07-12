@@ -239,8 +239,9 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Returns null if no field is found.
      * @throws RecordFieldException 
      */
-    public MarcxmlField getField(int tag) throws RecordFieldException {
-        for (MarcxmlField field : getFields()) {
+    public MarcxmlTaggedField getTaggedField(int tag) throws RecordFieldException {
+        List<MarcxmlTaggedField> fields = getTaggedFields();
+        for (MarcxmlTaggedField field : fields) {
             if (field.getTag() == tag) {
                 return field;
             }
@@ -248,12 +249,20 @@ public class MarcxmlRecord extends BaseXmlRecord {
         return null;
     }
     
-    public List<MarcxmlField> getFields() {
-        List<MarcxmlField> fields = new ArrayList<MarcxmlField>();
+    private List<MarcxmlTaggedField> getTaggedFields() {
+        List<MarcxmlTaggedField> fields = new ArrayList<MarcxmlTaggedField>();
+        fields.addAll(controlFields);
+        fields.addAll(dataFields);   
+        return fields;
+    }
+    
+    public List<BaseMarcxmlField> getFields() {
+        List<BaseMarcxmlField> fields = new ArrayList<BaseMarcxmlField>();
         fields.add(leader);
         fields.addAll(controlFields);
         fields.addAll(dataFields);
         return fields;
     }
+    
 
 }
