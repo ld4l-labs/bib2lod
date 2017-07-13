@@ -30,7 +30,7 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
         
-        this.relatedEntity = params.getRelatedEntity();
+        this.relatedEntity = params.getParentEntity();
         if (relatedEntity == null) {
             throw new EntityBuilderException(
                     "Cannot build admin metadata without a related entity.");
@@ -69,7 +69,7 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
                 
         BuildParams params = new BuildParams()
-                .setRelatedEntity(adminMetadata)
+                .setParentEntity(adminMetadata)
                 .setField(controlField001);
         builder.build(params);
     }     

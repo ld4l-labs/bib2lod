@@ -25,7 +25,7 @@ public class MarcxmlToLd4lItemBuilderTest extends AbstractTestClass {
     @Test (expected = EntityBuilderException.class)
     public void nullRelatedInstance_ThrowsException() throws Exception {
         BuildParams params = new BuildParams()
-                .setRelatedEntity(null);        
+                .setParentEntity(null);        
         builder.build(params);        
     }
     

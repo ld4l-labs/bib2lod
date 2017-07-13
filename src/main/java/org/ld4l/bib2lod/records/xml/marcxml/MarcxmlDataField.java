@@ -38,8 +38,8 @@ public class MarcxmlDataField extends BaseMarcxmlField
             throw new RecordFieldException("Tag value is not an integer.");
         }
 
-        ind1 = getIndicatorValue("ind1", element);
-        ind2 = getIndicatorValue("ind2", element);
+        this.ind1 = getIndicatorValue("ind1", element);
+        this.ind2 = getIndicatorValue("ind2", element);
 
         NodeList subfieldNodes = 
                 element.getElementsByTagName("subfield");
@@ -64,11 +64,11 @@ public class MarcxmlDataField extends BaseMarcxmlField
         return tag;
     }
     
-    public int getFirstIndicator() {
+    public Integer getFirstIndicator() {
         return ind1;
     }
     
-    public int getSecondIndicator() {
+    public Integer getSecondIndicator() {
         return ind2;
     }
   

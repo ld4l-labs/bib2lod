@@ -17,6 +17,7 @@ public class MarcxmlControlField extends BaseMarcxmlField
     private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
     private Integer tag;
+    private String textValue;
 
     
     /**
@@ -27,6 +28,7 @@ public class MarcxmlControlField extends BaseMarcxmlField
         try {
             tag = Integer.parseInt(
                     element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME));
+            textValue = setTextValue(this.element);
             isValid();
         } catch (NumberFormatException e) {
             throw new RecordFieldException("Control number is not an integer.");
@@ -69,7 +71,10 @@ public class MarcxmlControlField extends BaseMarcxmlField
         if (textValue.isEmpty()) {
             throw new RecordFieldException("Text value is empty.");
         }
+        if (tag == 8 && textValue.length() != 40) {
+            throw new RecordFieldException(
+                    "Control field 008 does not contain exactly 40 characters.");
+        }
     }
-
 
 }

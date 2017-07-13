@@ -13,13 +13,16 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlLeader extends BaseMarcxmlField implements XmlTextElement {
     
-    private static final Logger LOGGER = LogManager.getLogger();  
+    private static final Logger LOGGER = LogManager.getLogger(); 
+    
+    private String textValue;
 
     /**
      * Constructor
      */
     public MarcxmlLeader(Element leader) throws RecordException {
         super(leader);
+        textValue = setTextValue(this.element);
         isValid();
     }
     

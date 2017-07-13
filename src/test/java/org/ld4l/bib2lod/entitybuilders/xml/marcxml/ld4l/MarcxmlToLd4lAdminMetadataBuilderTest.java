@@ -67,7 +67,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
         expectException(
                 EntityBuilderException.class, "without an input record");        
         BuildParams params = new BuildParams()
-                .setRelatedEntity(new Entity());              
+                .setParentEntity(new Entity());              
         builder.build(params);        
     }
     
@@ -155,7 +155,7 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
             throws Exception {
         BuildParams params = new BuildParams() 
                 .setRecord(MarcxmlTestUtils.buildRecordFromString(input))                    
-                .setRelatedEntity(entity);
+                .setParentEntity(entity);
         return builder.build(params);        
     }
     

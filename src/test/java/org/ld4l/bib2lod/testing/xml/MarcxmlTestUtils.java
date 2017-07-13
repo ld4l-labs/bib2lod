@@ -21,6 +21,11 @@ public class MarcxmlTestUtils {
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
             "</record>";
+    
+    public final static MarcxmlRecord getMinimalRecord() throws RecordException {
+        return new MarcxmlRecord(
+                XmlTestUtils.buildElementFromString(MINIMAL_RECORD));
+    }
 
     public final static MarcxmlControlField buildControlFieldFromString(
             String element) throws RecordFieldException {                           

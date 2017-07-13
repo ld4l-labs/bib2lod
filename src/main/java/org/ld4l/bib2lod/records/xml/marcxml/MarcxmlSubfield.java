@@ -15,6 +15,7 @@ public class MarcxmlSubfield extends BaseMarcxmlField implements XmlTextElement 
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     private char code;
+    private String textValue;
 
     /**
      * Constructor
@@ -22,7 +23,8 @@ public class MarcxmlSubfield extends BaseMarcxmlField implements XmlTextElement 
     public MarcxmlSubfield(Element element) throws RecordFieldException {
         super(element);   
         try {
-            code = element.getAttribute("code").charAt(0);         
+            code = element.getAttribute("code").charAt(0);  
+            textValue = setTextValue(this.element);
             isValid();
         } catch (IndexOutOfBoundsException e) {
             throw new RecordFieldException("Subfield code cannot be empty.");

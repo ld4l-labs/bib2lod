@@ -48,7 +48,7 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
             "<record>" +
                 "<leader>01050cxm a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0</controlfield>" +  
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0      </controlfield>" +  
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
@@ -75,7 +75,7 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
     @Test (expected = EntityBuilderException.class)
     public void nullRecord_ThrowsException() throws Exception {
         BuildParams params = new BuildParams()
-                .setRelatedEntity(defaultInstance)
+                .setParentEntity(defaultInstance)
                 .setRecord(null);                
         builder.build(params);
     } 
@@ -109,7 +109,7 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
         MarcxmlRecord record = new MarcxmlRecord(
                 XmlTestUtils.buildElementFromString(marcxml));
         BuildParams params = new BuildParams()
-                .setRelatedEntity(instance)
+                .setParentEntity(instance)
                 .setRecord(record);        
         return builder.build(params);
     }

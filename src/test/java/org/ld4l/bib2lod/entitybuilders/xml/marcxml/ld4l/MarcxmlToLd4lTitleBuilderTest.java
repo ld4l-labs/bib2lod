@@ -183,7 +183,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     private Entity buildTitle(Entity bibEntity, Record record) 
             throws Exception {
         BuildParams params = new BuildParams()
-                .setRelatedEntity(bibEntity)
+                .setParentEntity(bibEntity)
                 .setRecord(record);        
         return builder.build(params);        
     }

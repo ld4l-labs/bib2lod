@@ -7,10 +7,13 @@ import org.ld4l.bib2lod.records.RecordField;
 
 public class BuildParams {
 
-    private Record record;
+    private Record record;   
     private RecordField field;
     private RecordField subfield;
-    private Entity relatedEntity;
+    
+    // The "parent" Entity of this Entity: e.g., the Instance of a Title or
+    // PublicationActivity
+    private Entity parentEntity;
     private Type type;
     private String value;
     
@@ -18,7 +21,7 @@ public class BuildParams {
         this.record = null;
         this.field = null;
         this.subfield = null;
-        this.relatedEntity = null;
+        this.parentEntity = null;
         this.type = null;
         this.value = null;
     }
@@ -63,18 +66,18 @@ public class BuildParams {
     }
 
     /**
-     * Returns null if no related entity has been set.
+     * Returns null if no parent entity has been set.
      */
-    public Entity getRelatedEntity() {
-        return relatedEntity;
+    public Entity getParentEntity() {
+        return parentEntity;
     }
 
-    public BuildParams setRelatedEntity(Entity relatedEntity) {
-        this.relatedEntity = relatedEntity;
+    public BuildParams setParentEntity(Entity parentEntity) {
+        this.parentEntity = parentEntity;
         // Return this for method chaining
         return this;
     }
-
+    
     /**
      * Returns null if no type has been set.
      */

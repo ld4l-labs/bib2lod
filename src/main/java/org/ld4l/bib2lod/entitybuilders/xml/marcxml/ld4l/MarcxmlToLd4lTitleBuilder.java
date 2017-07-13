@@ -45,7 +45,7 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
                     "A record is required to build a title.");
         }
  
-        this.bibEntity = params.getRelatedEntity();
+        this.bibEntity = params.getParentEntity();
         if (bibEntity == null) {
             throw new EntityBuilderException(
                     "A related entity is required to build a title.");
@@ -128,14 +128,14 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
 
         if (nonSort != null) {
             BuildParams params = new BuildParams() 
-                    .setRelatedEntity(title)
+                    .setParentEntity(title)
                     .setValue(nonSort)
                     .setType(Ld4lTitleElementType.NON_SORT_ELEMENT);
             titleElements.add(titleElementBuilder.build(params));
         }
       
         BuildParams params = new BuildParams() 
-                .setRelatedEntity(title)
+                .setParentEntity(title)
                 .setValue(main)
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT);      
         titleElements.add(titleElementBuilder.build(params));       
@@ -151,7 +151,7 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
         }
 
         BuildParams params = new BuildParams() 
-                .setRelatedEntity(title)
+                .setParentEntity(title)
                 .setType(Ld4lTitleElementType.SUBTITLE_ELEMENT);
         
         /* 
@@ -169,7 +169,7 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
             throws EntityBuilderException {
         
         BuildParams params = new BuildParams() 
-                .setRelatedEntity(title)
+                .setParentEntity(title)
                 .setType(type)
                 .setValue(subfield.getTextValue());
     

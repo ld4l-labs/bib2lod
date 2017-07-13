@@ -24,8 +24,11 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
     private static final String BLANK_CONTROL_NUMBER = 
             "<controlfield tag=' '>102063</controlfield>";
     
-    private static final String INVALID_CONTROL_NUMBER= 
+    private static final String INVALID_CONTROL_NUMBER = 
             "<controlfield tag='1234'>102063</controlfield>";   
+    
+    private static final String _008_INVALID_LENGTH = 
+            "<controlfield tag='008'>102063</controlfield>";  
     
     private static final String NO_VALUE = 
             "<controlfield tag='001'></controlfield>";
@@ -44,50 +47,57 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
     @Test
     public void noControlNumber_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "not an integer");
-        buildControlFieldFromString(NO_CONTROL_NUMBER);
+        buildFromString(NO_CONTROL_NUMBER);
     }
     
     @Test
     public void emptyControlNumber_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "not an integer");
-        buildControlFieldFromString(EMPTY_CONTROL_NUMBER);
+        buildFromString(EMPTY_CONTROL_NUMBER);
     }
     
     @Test
     public void blankControlNumber_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "not an integer");
-        buildControlFieldFromString(BLANK_CONTROL_NUMBER);
+        buildFromString(BLANK_CONTROL_NUMBER);
     }
     
     @Test
     public void invalidControlNumber_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "Control number is not between 1 and 9");
-        buildControlFieldFromString(INVALID_CONTROL_NUMBER);
+        buildFromString(INVALID_CONTROL_NUMBER);
     }
     
     @Test
     public void noValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "is null");
-        buildControlFieldFromString(NO_VALUE);
+        buildFromString(NO_VALUE);
     }
 
     @Test
     public void noTextValue_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, "is null");
-        buildControlFieldFromString(NO_TEXT_VALUE);
+        buildFromString(NO_TEXT_VALUE);
+    }
+    
+    @Test
+    public void _008InvalidLength_ThrowsException() throws Exception {
+        expectException(RecordFieldException.class, 
+                "does not contain exactly 40 characters.");
+        buildFromString(_008_INVALID_LENGTH);
     }
 
     @Test
     public void validControlField_Valid() throws Exception {
         // No exception
-        buildControlFieldFromString(VALID_CONTROL_FIELD);
+        buildFromString(VALID_CONTROL_FIELD);
     }
         
     // ----------------------------------------------------------------------
     // Helper methods
     // ----------------------------------------------------------------------
     
-    private MarcxmlControlField buildControlFieldFromString(String s) 
+    private MarcxmlControlField buildFromString(String s) 
             throws RecordException {
         Element element = XmlTestUtils.buildElementFromString(s);
         return new MarcxmlControlField(element); 

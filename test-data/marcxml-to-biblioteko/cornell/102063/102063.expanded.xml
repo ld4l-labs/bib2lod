@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+  <record xmlns="http://www.loc.gov/MARC21/slim">
+    <leader>01050cam a22003011  4500</leader>
+    <controlfield tag="001">102063</controlfield>
+    <controlfield tag="005">20130330145647.0</controlfield>
+    <controlfield tag="008">860506s1957    nyua     b    000 0 eng  </controlfield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(CStRLIN)NYCX86B63464</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(NIC)notisAAL3258</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">(OCoLC)1345399</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">102063</subfield>
+    </datafield>
+    <datafield tag="040" ind1=" " ind2=" ">
+      <subfield code="c">NIC</subfield>
+      <subfield code="d">NIC</subfield>
+    </datafield>
+    <datafield tag="245" ind1="0" ind2="0">
+      <subfield code="a">Clinical cardiopulmonary physiology.</subfield>
+      <subfield code="c">Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]</subfield>
+    </datafield>
+    <datafield tag="260" ind1=" " ind2=" ">
+      <subfield code="a">New York,</subfield>
+      <subfield code="b">Grune &amp; Stratton,</subfield>
+      <subfield code="c">1957.</subfield>
+    </datafield>
+  </record>  
+</collection>

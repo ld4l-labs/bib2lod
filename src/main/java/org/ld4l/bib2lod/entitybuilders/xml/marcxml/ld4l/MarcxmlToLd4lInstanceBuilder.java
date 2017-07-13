@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +19,6 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -50,15 +50,25 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         // Critical ordering: build admin metadata before identifiers. Remove
         // an identifier with value matching the admin metadata identifier.
         buildAdminMetadata();
-        buildIdentifiers();
-        
+        buildIdentifiers();       
         buildTitles();
-        buildWorks();
-        buildItem();
         buildActivities();
         addResponsibilityStatement();
+        addProvisionActivityStatement();
+        buildWorks();
+        buildItem();
        
         return instance;
+    }
+    
+    private void buildAdminMetadata() throws EntityBuilderException {
+        
+        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.class);
+ 
+        BuildParams params = new BuildParams()
+                .setParentEntity(instance)
+                .setRecord(record);
+        builder.build(params);          
     }
     
     private void buildIdentifiers() throws EntityBuilderException {
@@ -75,7 +85,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
 
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
         BuildParams params = new BuildParams()
-                .setRelatedEntity(instance);
+                .setParentEntity(instance);
         for (MarcxmlDataField field : fields) {
             List<MarcxmlSubfield> subfields = field.getSubfields();
             params.setField(field);
@@ -93,7 +103,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lTitleType.class);
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setRelatedEntity(instance);
+                .setParentEntity(instance);
         builder.build(params);
     }
     
@@ -108,7 +118,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lWorkType.class);
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setRelatedEntity(instance);
+                .setParentEntity(instance);
         builder.build(params);
     }
     
@@ -118,25 +128,21 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setRelatedEntity(instance); 
+                .setParentEntity(instance); 
         builder.build(params);
     }   
     
     private void buildActivities() throws EntityBuilderException  {
         
         EntityBuilder builder = getBuilder(Ld4lActivityType.class);
- 
-        MarcxmlControlField field008 = record.getControlField(8);
         
-        // Publication 
-        if (field008 != null) {        
-            BuildParams params = new BuildParams()
-                    .setRecord(record)     
-                    .setField(field008)
-                    .setRelatedEntity(instance)
-                    .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-            builder.build(params);
-        }
+        // Publication   
+        BuildParams params = new BuildParams()
+                .setRecord(record)     
+                .setParentEntity(instance)
+                .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
+        builder.build(params);
+     
     }
     
     /**
@@ -158,15 +164,49 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 subfield.getTextValue());             
     }
     
-    private void buildAdminMetadata() throws EntityBuilderException {
- 
-        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.class);
- 
-        BuildParams params = new BuildParams()
-                .setRelatedEntity(instance)
-                .setRecord(record);
-        builder.build(params);          
+    private void addProvisionActivityStatement() {
+
+        MarcxmlDataField field = record.getDataField(260);        
+        if (field == null) {
+            return;
+        }
+        
+        MarcxmlSubfield a = field.getSubfield('a');
+        MarcxmlSubfield b = field.getSubfield('b');
+        MarcxmlSubfield c = field.getSubfield('c');
+        
+        /*
+         * Provision activity statement uses any existing punctuation in the
+         * subfield elements. If there is no existing punctuation, use ISBD
+         * standard: ":" precedes $b value and "," precedes $c value.
+         */
+        String pas = "";
+        if (a != null) {
+            pas += a.getTextValue();
+        }
+        if (b != null) {
+            if (pas.length() > 0) {
+                if (! pas.matches(".*\\p{Punct}$")) {
+                    pas += ":";
+                    
+                }
+                pas += " " + b.getTextValue();
+            }
+        }
+        if (c != null) {
+            if (pas.length() > 0) {
+                if (! pas.matches(".*\\p{Punct}$")) {
+                    pas += ",";
+                    
+                }
+                pas += " " + c.getTextValue();
+            }
+        }
+        
+        if (pas.length() > 0) {
+            instance.addAttribute(Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT, 
+                    pas);   
+        }
     }
 
-     
 }

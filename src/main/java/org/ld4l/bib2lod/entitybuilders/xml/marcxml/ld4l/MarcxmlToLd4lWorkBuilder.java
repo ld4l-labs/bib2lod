@@ -49,7 +49,7 @@ public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
                     "A record is required to build a work.");
         }
 
-        this.instance = params.getRelatedEntity();
+        this.instance = params.getParentEntity();
         if (instance == null) {
             throw new EntityBuilderException(
                     "An instance is required to build a work.");

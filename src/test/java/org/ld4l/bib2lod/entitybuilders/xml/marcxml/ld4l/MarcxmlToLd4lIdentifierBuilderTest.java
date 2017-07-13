@@ -183,7 +183,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "without an input field");        
         BuildParams params = new BuildParams()
-                .setRelatedEntity(new Entity());             
+                .setParentEntity(new Entity());             
         builder.build(params);        
     }
     
@@ -294,7 +294,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(input);
         MarcxmlTaggedField field = record.getTaggedField(tag);
         BuildParams params = new BuildParams() 
-                .setRelatedEntity(entity)
+                .setParentEntity(entity)
                 .setRecord(record)
                 .setField((BaseMarcxmlField) field);
         return builder.build(params);   
@@ -311,7 +311,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
         MarcxmlDataField field = record.getDataField(tag);
         MarcxmlSubfield subfield = field.getSubfield(code);
         BuildParams params = new BuildParams() 
-                .setRelatedEntity(entity)
+                .setParentEntity(entity)
                 .setRecord(record)
                 .setField(field)
                 .setSubfield(subfield);

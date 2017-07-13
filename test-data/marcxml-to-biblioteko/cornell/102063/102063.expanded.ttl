@@ -1,0 +1,103 @@
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bib: <http://bibliotek-o.org/ontology/> .
+@prefix cornell: <http://data.ld4l.org/cornell/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lexvo: <http://purl.org/dc/terms/language> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vivo: <http://vivoweb.org/ontology/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+cornell:work1 
+    a bf:Work , bf:Text ;    
+    bib:hasPreferredTitle cornell:wtitle1 ;
+    dcterms:language <http://id.loc.gov/vocabulary/languages/eng> .
+
+cornell:wtitle1 
+    a bf:Title ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    dcterms:hasPart cornell:wmt1 .
+    
+cornell:wmt1 
+    a bib:MainTitleElement ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+    
+
+cornell:inst1 
+    a bf:Instance ; 
+    bf:instanceOf cornell:work1 ;
+    bf:hasItem cornell:item1 ; 
+    bib:hasPreferredTitle cornell:ititle1 ;
+    bf:identifiedBy cornell:id2 , cornell:id3 , cornell:id4 ;
+    bib:hasActivity cornell:pa1 ;
+    bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
+    bf:adminMetadata cornell:am1 ;
+    bf:provisionActivityStatement "New York, Grune & Stratton, 1957." .
+    
+cornell:id2 
+    a bf:Local ;
+    bib:hasSource cornell:id2source ;
+    rdf:value "NYCX86B63464" .
+    
+cornell:id2source 
+    rdfs:label "CStRLIN"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
+    
+cornell:id3
+    a bf:Local ;
+    bib:hasSource cornell:id3source ;
+    rdf:value "notisAAL3258" .
+    
+cornell:id3source 
+    rdfs:label "NIC"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
+    
+cornell:id4 
+    a bf:Local ;
+    bib:hasSource cornell:id4source ;
+    rdf:value "1345399" .
+    
+cornell:id4source 
+    rdfs:label "OCoLC"^^<http://bibliotek-o.org/datatypes/legacySourceData> .
+    
+cornell:ititle1 
+    a bf:Title ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    dcterms:hasPart cornell:imt1 .
+    
+cornell:imt1 
+    a bib:MainTitleElement ;
+    rdf:value "Clinical cardiopulmonary physiology." ;
+    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+       
+cornell:pa1 
+    a bib:PublisherActivity ;
+    rdfs:label "Publishing" ;
+    dcterms:date "1957" ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+
+cornell:am1 
+    a bf:AdminMetadata ;
+    bib:hasSource cornell:ams1 ;
+    bf:descriptionModifier cornell:dm1 ;
+    bf:identifiedBy cornell:id1 ;
+    bf:changeDate "2013-03-30T14:56:47"^^xsd:dateTime .
+
+cornell:id1 
+    a bf:Local ;
+    rdf:value "102063" .
+        
+cornell:ams1
+    a foaf:Agent ;
+    # According to LC mappings, should be URI from id.loc.gov/vocabulary/organizations but can't find it; using name for now.
+    foaf:name "NIC" .
+    
+cornell:dm1
+    a foaf:Agent ;
+    # According to LC mappings, should be URI from id.loc.gov/vocabulary/organizations but can't find it; using name for now.
+    foaf:name "NIC" .
+    
+
+cornell:item1 
+    a bf:Item .
+ 

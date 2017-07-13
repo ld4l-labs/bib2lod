@@ -19,7 +19,7 @@ public class MarcxmlToLd4lItemBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        this.instance = params.getRelatedEntity();        
+        this.instance = params.getParentEntity();        
         if (instance == null) {
             throw new EntityBuilderException(
                     "A related instance is required to build an item.");

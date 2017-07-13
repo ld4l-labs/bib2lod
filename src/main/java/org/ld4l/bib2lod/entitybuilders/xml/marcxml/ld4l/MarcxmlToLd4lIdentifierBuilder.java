@@ -70,7 +70,7 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        this.relatedEntity = params.getRelatedEntity();
+        this.relatedEntity = params.getParentEntity();
         if (relatedEntity == null) {
             throw new EntityBuilderException(
                     "Cannot build identifier without a related entity.");
