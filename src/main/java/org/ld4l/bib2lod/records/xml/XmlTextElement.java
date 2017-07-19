@@ -3,6 +3,7 @@
 package org.ld4l.bib2lod.records.xml;
 
 import org.ld4l.bib2lod.records.RecordField;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -30,6 +31,9 @@ public interface XmlTextElement extends RecordField {
         }
         if (firstChild.getNodeType() == Node.TEXT_NODE) {
             return firstChild.getNodeValue();
+        }
+        if (firstChild.getNodeType() == Node.CDATA_SECTION_NODE) {
+            return ((CDATASection)firstChild).getData();
         }
         return null;
     }
