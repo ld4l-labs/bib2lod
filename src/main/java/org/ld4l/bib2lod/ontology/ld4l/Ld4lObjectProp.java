@@ -12,6 +12,7 @@ public enum Ld4lObjectProp implements ObjectProp {
 
     /* List in alpha order, use initial verb form (HAS_ or IS_ if not already verbal in any form, including past and passive participles. */
     CREATED(Ld4lNamespace.DCTERMS, "created"),
+    GENRE_FORM(Ld4lNamespace.BIBFRAME, "genreForm"),
     HAS_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "hasActivity"),
     HAS_ADMIN_METADATA(Ld4lNamespace.BIBFRAME, "adminMetadata"),
     HAS_AGENT(Ld4lNamespace.BIBLIOTEKO, "hasAgent"),
