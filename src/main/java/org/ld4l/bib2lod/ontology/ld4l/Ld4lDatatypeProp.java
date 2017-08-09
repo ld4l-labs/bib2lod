@@ -16,7 +16,6 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     DATE(Ld4lNamespace.DCTERMS, "date"),
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
-    KEYWORDS(Ld4lNamespace.SCHEMA, "keywords"),
     /*
      * rdfs:label is technically an annotation property, but so far functions 
      * the same as a datatype property for our purposes.
