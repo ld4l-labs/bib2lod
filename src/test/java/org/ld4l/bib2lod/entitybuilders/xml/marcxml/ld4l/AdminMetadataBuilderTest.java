@@ -16,9 +16,9 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 
 
 /**
- * Tests class MarcxmlToLd4lAdminMetadataBuilder
+ * Tests class AdminMetadataBuilder
  */
-public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
+public class AdminMetadataBuilderTest extends AbstractTestClass {
     
     public static final String TEST_RECORD = 
             "<record>" +
@@ -44,16 +44,16 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
                 "</datafield>" + 
             "</record>";
     
-    private MarcxmlToLd4lAdminMetadataBuilder builder;   
+    private AdminMetadataBuilder builder;   
     
     @Before
     public void setUp() {       
-        this.builder = new MarcxmlToLd4lAdminMetadataBuilder();
+        this.builder = new AdminMetadataBuilder();
     }
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     
     @Test
@@ -147,9 +147,9 @@ public class MarcxmlToLd4lAdminMetadataBuilderTest extends AbstractTestClass {
                 "Invalid value for control field 005");
     }
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private Entity buildAdminMetadata(Entity entity, String input) 
             throws Exception {

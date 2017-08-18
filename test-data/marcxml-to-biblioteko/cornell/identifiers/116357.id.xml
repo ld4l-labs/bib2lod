@@ -1,0 +1,31 @@
+<record>
+  <leader>02730cas a2200613 a 4500</leader>
+  <controlfield tag="001">116357</controlfield>
+  <controlfield tag="005">20141102135233.0</controlfield>
+  <controlfield tag="008">750226c18529999ne bx p       0   b0eng  </controlfield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">116357</subfield>
+  </datafield>
+  <datafield tag="035" ind1=" " ind2=" ">
+    <subfield code="a">(OCoLC)1189611</subfield>
+    <subfield code="z">(OCoLC)1758430</subfield>
+    <subfield code="z">(OCoLC)185062255</subfield>
+  </datafield>
+  <datafield tag="040" ind1=" " ind2=" ">
+    <subfield code="c">DRB</subfield>
+    <subfield code="d">SUL</subfield>
+    <subfield code="d">YUS</subfield>
+ </datafield>
+  <datafield tag="245" ind1="0" ind2="0">
+    <subfield code="a">Mnemosyne.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">Lugduni Batavorum :</subfield>
+    <subfield code="b">E.J. Brill</subfield>
+  </datafield>
+  <datafield tag="260" ind1="3" ind2=" ">
+    <subfield code="a">Leiden :</subfield>
+    <subfield code="b">E.J. Brill</subfield>
+  </datafield>
+</record>
+  

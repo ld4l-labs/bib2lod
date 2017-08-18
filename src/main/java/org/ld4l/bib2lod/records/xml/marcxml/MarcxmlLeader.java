@@ -22,7 +22,7 @@ public class MarcxmlLeader extends BaseMarcxmlField implements XmlTextElement {
      */
     public MarcxmlLeader(Element leader) throws RecordException {
         super(leader);
-        textValue = setTextValue(this.element);
+        textValue = retrieveTextValue(this.element);
         isValid();
     }
     

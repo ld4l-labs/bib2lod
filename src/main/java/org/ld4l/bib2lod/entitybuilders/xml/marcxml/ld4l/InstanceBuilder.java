@@ -2,7 +2,6 @@
 
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,11 +21,12 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+import org.ld4l.bib2lod.util.Bib2LodStringUtils;
 
 /**
  * Builds an Instance from a Record.
  */
-public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
+public class InstanceBuilder extends BaseEntityBuilder {
     
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -53,8 +53,8 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         buildIdentifiers();       
         buildTitles();
         buildActivities();
-        addResponsibilityStatement();
-        addProvisionActivityStatement();
+        buildResponsiblityStatement();
+        buildProvisionActivityStatement();
         buildWorks();
         buildItem();
        
@@ -63,7 +63,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     
     private void buildAdminMetadata() throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.class);
+        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.superClass());
  
         BuildParams params = new BuildParams()
                 .setParentEntity(instance)
@@ -72,10 +72,10 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     }
     
     private void buildIdentifiers() throws EntityBuilderException {
-        convert035();
+        convert_035();
     }
 
-    private void convert035() throws EntityBuilderException {
+    private void convert_035() throws EntityBuilderException {
 
         // 035 is a repeating field
         List<MarcxmlDataField> fields = record.getDataFields(35);
@@ -83,7 +83,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
             return;
         }
 
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
+        EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
         BuildParams params = new BuildParams()
                 .setParentEntity(instance);
         for (MarcxmlDataField field : fields) {
@@ -100,7 +100,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         
         // NB There may be multiple, so this isn't sufficient.
         
-        EntityBuilder builder = getBuilder(Ld4lTitleType.class);
+        EntityBuilder builder = getBuilder(Ld4lTitleType.superClass());
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setParentEntity(instance);
@@ -115,7 +115,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
         // but new resources.
         // Need method of EntityBuilder.clone() or copy?
         
-        EntityBuilder builder = getBuilder(Ld4lWorkType.class);
+        EntityBuilder builder = getBuilder(Ld4lWorkType.superClass());
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setParentEntity(instance);
@@ -124,7 +124,7 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     
     private void buildItem() throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lItemType.class);
+        EntityBuilder builder = getBuilder(Ld4lItemType.superClass());
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
@@ -133,22 +133,42 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
     }   
     
     private void buildActivities() throws EntityBuilderException  {
+        buildPublisherActivities();
+        buildManufacturerActivities();
+        buildProviderActivities();
+    } 
+ 
+    private void buildPublisherActivities() throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lActivityType.class);
-        
-        // Publication   
+        EntityBuilder builder = 
+                getBuilder(Ld4lActivityType.PUBLISHER_ACTIVITY);
+
         BuildParams params = new BuildParams()
-                .setRecord(record)     
                 .setParentEntity(instance)
-                .setType(Ld4lActivityType.PUBLISHER_ACTIVITY);
-        builder.build(params);
-     
+                .setRecord(record);
+        
+        // First build current publisher activity from mandatory 008.        
+        builder.build(params.setField(record.getControlField(8)));
+
+        // 260 fields: build additional publisher activities and add data to 
+        // current publisher activity.
+        for (MarcxmlDataField field : record.getDataFields(260)) {
+            builder.build(params.setField(field));
+        }          
+    }
+
+    private void buildManufacturerActivities() throws EntityBuilderException {
+        
+    }
+    
+    private void buildProviderActivities() throws EntityBuilderException {
+        
     }
     
     /**
      * Add responsibility statement to instance from 245$c.
      */
-    private void addResponsibilityStatement() {
+    private void buildResponsiblityStatement() {
         
         MarcxmlDataField field = record.getDataField(245);        
         if (field == null) {
@@ -164,49 +184,62 @@ public class MarcxmlToLd4lInstanceBuilder extends BaseEntityBuilder {
                 subfield.getTextValue());             
     }
     
-    private void addProvisionActivityStatement() {
+    /**
+     * Add provision activity statements from 260$a$b$c.
+     */
+    private void buildProvisionActivityStatement() {
 
-        MarcxmlDataField field = record.getDataField(260);        
-        if (field == null) {
+        List<MarcxmlDataField> fields = record.getDataFields(260);    
+        fields.addAll(record.getDataFields(264));
+        
+        if (fields.isEmpty()) {
             return;
         }
         
-        MarcxmlSubfield a = field.getSubfield('a');
-        MarcxmlSubfield b = field.getSubfield('b');
-        MarcxmlSubfield c = field.getSubfield('c');
+        // Each 260$a$b$c yields one provision activity statement.
+        for (MarcxmlDataField field : fields) {
+        
+            String stmt = "";
+            char[] codes = {'a', 'b', 'c'};
+            for (char code : codes) {
+                // Add the subfield text to the statement
+                stmt += getProvActivityStmtPart(stmt, field, code);
+            }
+    
+            // Remove final punctuation and whitespace
+            if (stmt.length() > 0) {
+                stmt = Bib2LodStringUtils.trim(stmt);
+            }
+    
+            if (stmt.length() > 0) {           
+                instance.addAttribute(Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT, 
+                        stmt);   
+            }
+        }
+    }
+    
+    private String getProvActivityStmtPart(String stmt, MarcxmlDataField field, 
+            char code) {
+        
+        MarcxmlSubfield subfield = field.getSubfield(code);
+        if (subfield == null) {
+            return "";
+        }
+        String val = subfield.getTextValue().trim();
         
         /*
-         * Provision activity statement uses any existing punctuation in the
-         * subfield elements. If there is no existing punctuation, use ISBD
+         * Provision activity statement uses any existing final punctuation in 
+         * the subfield elements. If there is no existing punctuation, use ISBD
          * standard: ":" precedes $b value and "," precedes $c value.
          */
-        String pas = "";
-        if (a != null) {
-            pas += a.getTextValue();
-        }
-        if (b != null) {
-            if (pas.length() > 0) {
-                if (! pas.matches(".*\\p{Punct}$")) {
-                    pas += ":";
-                    
-                }
-                pas += " " + b.getTextValue();
+        String delim = "";
+        if (stmt.length() > 0) {
+            if ( ! Bib2LodStringUtils.endsWithPunct(stmt)) {
+                delim = code == 'b' ? ":" : ","; 
             }
-        }
-        if (c != null) {
-            if (pas.length() > 0) {
-                if (! pas.matches(".*\\p{Punct}$")) {
-                    pas += ",";
-                    
-                }
-                pas += " " + c.getTextValue();
-            }
-        }
-        
-        if (pas.length() > 0) {
-            instance.addAttribute(Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT, 
-                    pas);   
-        }
+            delim += " ";
+        }            
+        return delim + val;
     }
 
 }

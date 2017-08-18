@@ -1,0 +1,17 @@
+<record>
+  <leader>02730cas a2200613 a 4500</leader>
+  <controlfield tag="001">116357</controlfield>
+  <controlfield tag="008">750226c18529999ne bx p       0   b0eng  </controlfield>
+  <datafield tag="245" ind1="0" ind2="0">
+    <subfield code="a">Mnemosyne.</subfield>
+  </datafield>
+  <datafield tag="260" ind1=" " ind2=" ">
+    <subfield code="a">Lugduni Batavorum :</subfield>
+    <subfield code="b">E.J. Brill</subfield>
+  </datafield>
+  <datafield tag="260" ind1="3" ind2=" ">
+    <subfield code="a">Leiden :</subfield>
+    <subfield code="b">E.J. Brills</subfield>
+  </datafield>
+</record>
+  

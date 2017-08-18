@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.node.TextNode;
 public abstract class AbstractTestClass {
 
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // JSON utility methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     protected TextNode jsonText(String text) {
         return JsonNodeFactory.instance.textNode(text);
@@ -62,9 +62,9 @@ public abstract class AbstractTestClass {
         }
     }  
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Control standard output or error output.
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private static final PrintStream originalSysout = System.out;
     private static final PrintStream originalSyserr = System.err;
@@ -96,11 +96,11 @@ public abstract class AbstractTestClass {
         return capturedSyserr.toString();
     }
 
-    // ----------------------------------------------------------------------
-    // More precise methods for dealing with expected exceptions. Test not only
-    // the class of the exception, but the contents of the message, and the same
-    // for the first-level cause.
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // More precise methods for dealing with expected exceptions. Test not 
+    // only the class of the exception, but the contents of the message, and 
+    // the same for the first-level cause.
+    // ---------------------------------------------------------------------
 
     @Rule
     public ExpectedException exception = ExpectedException.none();

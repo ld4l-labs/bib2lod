@@ -9,8 +9,18 @@ public enum Ld4lActivityType implements Type {
     
     /* List in alpha order */
     ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
-    ORIGINATOR_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "OriginatorActivity", "Originator"),
-    PUBLISHER_ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publishing");
+    DISTRIBUTOR_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "DistributorActivity", "Distributor"),
+    MANUFACTURER_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "ManufacturerActivity", "Manufacturer"),
+    ORIGINATOR_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "OriginatorActivity", "Originator"),
+    PRODUCER_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "ProducerActivity", "Producer"),
+    PROVIDER_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "ProviderActivity", "Producer"),
+    PUBLISHER_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publishing");
 
     
     private final String uri;
@@ -43,7 +53,7 @@ public enum Ld4lActivityType implements Type {
         return label;
     }
 
-    public static Type superClass() {
+    public static Ld4lActivityType superClass() {
         return ACTIVITY;
     }
 }

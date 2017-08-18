@@ -38,9 +38,9 @@ import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
  */
 public class BaseConverterTest extends AbstractTestClass {
  
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Mocking infrastructure
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     /**
      * A concrete implementation to test abstract class BaseConverter.

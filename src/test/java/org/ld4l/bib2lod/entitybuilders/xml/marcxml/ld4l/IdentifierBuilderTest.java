@@ -31,9 +31,9 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 
 
 /**
- * Tests class MarcxmlToLd4lIdentifierBuilder
+ * Tests class IdentifierBuilder
  */
-public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
+public class IdentifierBuilderTest extends AbstractTestClass {
 
     public static final String _001 = 
             "<record>" +
@@ -150,7 +150,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
 
     
     private static BaseMockBib2LodObjectFactory factory;
-    private MarcxmlToLd4lIdentifierBuilder builder;  
+    private IdentifierBuilder builder;  
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -161,13 +161,13 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.builder = new MarcxmlToLd4lIdentifierBuilder();
+        this.builder = new IdentifierBuilder();
     }    
 
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test 
     public void nullRelatedInstance_ThrowsException() throws Exception {
@@ -194,27 +194,27 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void invalid035Value_ThrowsException() throws Exception {
+    public void invalidValue_035_ThrowsException() throws Exception {
         buildAndExpectException(
                 _035_INVALID_VALUE, 35, 'a', "Invalid value for field");
     }
     
     @Test
-    public void testStatusCancelled() throws Exception {
+    public void testStatusCancelled_035() throws Exception {
         Entity identifier = buildIdentifier(_035_CANCELLED, 35, 'z');
         Assert.assertEquals(Ld4lNamedIndividual.CANCELLED.uri(), 
                 identifier.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
     @Test
-    public void test001() throws Exception {   
+    public void test_001() throws Exception {   
         Entity identifier = buildIdentifier(_001, 1);
         Assert.assertEquals("102063", 
                 identifier.getValue(Ld4lDatatypeProp.VALUE));
     }
     
     @Test
-    public void test035OrgCode() throws Exception {       
+    public void testOrgCode_035() throws Exception {       
         Entity identifier = buildIdentifier(_035_NIC, 35, 'a');
         Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
         Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
@@ -224,10 +224,10 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Test 
-    public void test035Duplicates001() throws Exception {    
+    public void testDuplicateIdentifiers_001_035() throws Exception {    
         BuildParams params = new BuildParams()
                 .setRecord(MarcxmlTestUtils.buildRecordFromString(_035_DUPLICATES_001));
-        MarcxmlToLd4lInstanceBuilder builder = new MarcxmlToLd4lInstanceBuilder();
+        InstanceBuilder builder = new InstanceBuilder();
         Entity instance = builder.build(params);
         List<Entity> identifiers = instance.getChildren(Ld4lObjectProp.IDENTIFIED_BY);
         boolean found = false;
@@ -242,7 +242,7 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void test035NewOrgCode() throws Exception {
+    public void testNewOrgCode_035() throws Exception {
         Entity identifier = buildIdentifier(_035_NEW_ORG_CODE, 35, 'a'); 
         Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
         Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
@@ -252,18 +252,18 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void tes035NewKeyAddedToSources() throws Exception {
+    public void testNewKeyAddedToSources_035() throws Exception {
         buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
         Map<String, Entity> sources = 
-                MarcxmlToLd4lIdentifierBuilder.getSources();
+                IdentifierBuilder.getSources();
         Assert.assertTrue(sources.containsKey("ABC"));       
     }
     
     @Test
-    public void test035NewSourceAddedToSources() throws Exception {
+    public void testNewSourceAddedToSources_035() throws Exception {
         buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
         Map<String, Entity> sources = 
-                MarcxmlToLd4lIdentifierBuilder.getSources();
+                IdentifierBuilder.getSources();
         Entity source = sources.get("ABC");
         Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
         Literal literal = ResourceFactory.createTypedLiteral(
@@ -272,21 +272,21 @@ public class MarcxmlToLd4lIdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void test035NoSource() throws Exception {
+    public void testNoSource_035() throws Exception {
         Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
         Assert.assertNull(identifier.getChild(Ld4lObjectProp.HAS_SOURCE));        
     }
     
     @Test
-    public void test035ValueWithNoSource() throws Exception {
+    public void testValueWithNoSource_035() throws Exception {
         Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
         Assert.assertEquals("1345399", identifier.getValue(Ld4lDatatypeProp.VALUE));      
     }
 
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private Entity buildIdentifier( 
             Entity entity, String input, int tag) throws Exception {

@@ -23,9 +23,9 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
     private Object instance;
     private List<? extends Object> instances;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // the tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void nullConfiguration_throwsException() {
@@ -174,9 +174,9 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
         assertEquals(1, factory.instancesForInterface(Omnibus2B.class).size());
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private void assertExpectedInstances(Class<?> interfaze,
             Configuration... nodes) {
@@ -193,9 +193,9 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
                 ((OmnibusConfigurable) configurable).getConfiguration());
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper Classes
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     interface MultipleInterface {
         // Nothing
@@ -216,7 +216,7 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
         // Nothing
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     interface AnInterface {
         // Nothing
@@ -230,7 +230,7 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
         // Nothing
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     interface AConfigurableInterface extends Configurable {
         // Nothing
@@ -249,7 +249,7 @@ public class DefaultBib2LodObjectFactoryTest extends AbstractTestClass {
         }
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     interface Omnibus1A extends Configurable {
         // Nothing

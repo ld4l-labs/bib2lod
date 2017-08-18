@@ -25,7 +25,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds an Identifier for a bib resource from a field in the record.
  */
-public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder { 
+public class IdentifierBuilder extends BaseEntityBuilder { 
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -59,7 +59,11 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
                 );
         
         for (String label : sourceStrings) {
-            buildSource(label);
+            try {
+                buildSource(label);
+            } catch (EntityBuilderException e) {
+                throw new RuntimeException(e);
+            }
         }        
     }
     
@@ -102,20 +106,16 @@ public class MarcxmlToLd4lIdentifierBuilder extends BaseEntityBuilder {
     /**
      * Returns a source Entity built from a label. No type is specified, and the 
      * label is the organization code in the identifier.
+     * @throws EntityBuilderException 
      */
-    private static final Entity buildSource(String label) {
-        EntityBuilder builder = new MarcxmlToLd4lLegacyDataEntityBuilder();
+    private static final Entity buildSource(String label) 
+            throws EntityBuilderException {
+        EntityBuilder builder = new LegacySourceDataEntityBuilder();
         BuildParams params = new BuildParams()
                 .setValue(label);
-        try {
-            Entity source = builder.build(params);
-            sources.put(label, source);
-            return source;
-        } catch (EntityBuilderException e) {
-            // Throw an exception so we don't have to keep testing for 
-            // whether the key exists or whether the value is null.
-            throw new RuntimeException(e);
-        }
+        Entity source = builder.build(params);
+        sources.put(label, source);
+        return source;
     }              
     
     /**

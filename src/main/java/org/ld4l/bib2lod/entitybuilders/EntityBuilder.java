@@ -54,9 +54,9 @@ public interface EntityBuilder {
     /**
      * Retrieves the EntityBuilder for the specified type from the 
      * EntityBuilderFactory instance.
-     * @param type
-     * @return
      */
-    public EntityBuilder getBuilder(Class<? extends Type> type);
+    public EntityBuilder getBuilder(Type type);
+    
+//    public Type getDefaultEntityType();
 
 }

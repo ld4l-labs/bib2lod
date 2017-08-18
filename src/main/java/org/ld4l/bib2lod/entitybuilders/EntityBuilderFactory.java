@@ -1,6 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.ld4l.bib2lod.configuration.Bib2LodObjectFactory;
 import org.ld4l.bib2lod.ontology.Type;
@@ -40,28 +40,14 @@ public interface EntityBuilderFactory {
                 .instanceForInterface(EntityBuilderFactory.class);
         return builders;
     }
-    
-    /**
-     * Returns a map of Types to EntityBuilderFactory used to instantiate Entities of
-     * that Type.
-     */
-    public HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> 
-            getTypeToBuilderClassMap();
-    
-    /**
-     * Instantiates EntityBuilderFactory for each Type.
-     * @throws EntityBuilderFactoryException
-     */
+
     public void instantiateBuilders() throws EntityBuilderFactoryException;
     
-    /**
-     * Returns the EntityBuilder instance for the specified Type.
-     */
-    public EntityBuilder getBuilder(Class<? extends Type> type); 
+    public Map<Type, Class<? extends EntityBuilder>> 
+        getTypeToBuilderClassMap();
     
-    /**
-     * Returns the map of Types to EntityBuilderFactory.
-     */
-    public HashMap<Class<? extends Type>, EntityBuilder> getBuilders();
+    public Map<Type, EntityBuilder> getBuilders();
+
+    public EntityBuilder getBuilder(Type type);
     
 }

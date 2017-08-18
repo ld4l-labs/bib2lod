@@ -13,9 +13,9 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 
 /**
- * Tests class MarcxmlToLd4lWorkBuilder.
+ * Tests class WorkBuilder.
  */
-public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
+public class WorkBuilderTest extends AbstractTestClass {
     
     public static final String NO_TITLE_FIELD = 
             "<record>" +
@@ -54,18 +54,18 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
                 "</datafield>" + 
              "</record>";   
 
-    private MarcxmlToLd4lWorkBuilder builder;   
+    private WorkBuilder builder;   
     private InstanceEntity defaultInstance;
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.builder = new MarcxmlToLd4lWorkBuilder();
+        this.builder = new WorkBuilder();
         this.defaultInstance = new InstanceEntity();  
     }
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test (expected = EntityBuilderException.class)
     public void nullInstance_ThrowsException() throws Exception {
@@ -100,9 +100,9 @@ public class MarcxmlToLd4lWorkBuilderTest extends AbstractTestClass {
         buildWorkFromDefaultInstance(NO_LANGUAGE);
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private Entity buildWork(String marcxml, InstanceEntity instance) 
             throws Exception {

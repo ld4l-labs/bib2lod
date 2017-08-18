@@ -21,16 +21,11 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
 /**
  * Tests class LegacySourceDataType
  */
-/*
- * test plan:
- * test that the resource assertion has value with datatype
- * 
- */
 public class LegacySourceDataTypeTest extends AbstractTestClass {
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Mocking infrastructure
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     public static enum MockNamespace implements Namespace {
         TEST_NAMESPACE("http://test.com/");
@@ -94,7 +89,7 @@ public class LegacySourceDataTypeTest extends AbstractTestClass {
         
         @Override
         public String uri() {
-            throw new RuntimeException("Method not implemented.");
+            return uri;
         }
         
         @Override
@@ -110,9 +105,9 @@ public class LegacySourceDataTypeTest extends AbstractTestClass {
         entity = new Entity(MockType.TEST_TYPE);
     }
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test
     public void valueHasDatatype() {
@@ -134,9 +129,5 @@ public class LegacySourceDataTypeTest extends AbstractTestClass {
         
         Assert.assertTrue(expected.isIsomorphicWith(actual));
     }
-    
-    // ----------------------------------------------------------------------
-    // Helper methods
-    // ----------------------------------------------------------------------    
 
 }

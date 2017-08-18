@@ -81,9 +81,9 @@ public class MarcxmlRecordTest extends AbstractTestClass {
             "</record>";
 
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void noLeader_ThrowsException() throws Exception {
@@ -141,7 +141,5 @@ public class MarcxmlRecordTest extends AbstractTestClass {
         // No exception
        MarcxmlTestUtils.buildRecordFromString(MarcxmlTestUtils.MINIMAL_RECORD);
     }
-    
-    
-  
+ 
 }

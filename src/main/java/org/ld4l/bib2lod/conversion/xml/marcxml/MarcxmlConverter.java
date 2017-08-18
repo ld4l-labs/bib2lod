@@ -35,7 +35,7 @@ public class MarcxmlConverter extends BaseConverter {
          * on this model. We may need to inspect the leader first to determine
          * what kind of work it is. 
          */       
-        EntityBuilder instanceBuilder = getBuilder(Ld4lInstanceType.class);
+        EntityBuilder instanceBuilder = getBuilder(Ld4lInstanceType.INSTANCE);
         BuildParams params = new BuildParams()
                 .setRecord(record);
         return instanceBuilder.build(params);

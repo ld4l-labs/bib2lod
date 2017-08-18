@@ -51,9 +51,9 @@ public class FileInputServiceTest extends AbstractTestClass {
         }
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test(expected = ConfigurationException.class)
     public void inputSourceDoesntExist_ThrowsException() throws Exception {
@@ -155,9 +155,9 @@ public class FileInputServiceTest extends AbstractTestClass {
         assertEquals("foo.bar", inputs.get(0).getMetadata().getName());
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private void createServiceAndGetDescriptors(String path, String extension) {
         config = new ConfigurationNode.Builder().addAttribute("source", path)

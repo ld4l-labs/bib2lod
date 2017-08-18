@@ -40,9 +40,9 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
             "<controlfield tag='001'>102063</controlfield>";
     
  
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void noControlNumber_ThrowsException() throws Exception {
@@ -93,9 +93,9 @@ public class MarcxmlControlFieldTest extends AbstractTestClass {
         buildFromString(VALID_CONTROL_FIELD);
     }
         
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private MarcxmlControlField buildFromString(String s) 
             throws RecordException {

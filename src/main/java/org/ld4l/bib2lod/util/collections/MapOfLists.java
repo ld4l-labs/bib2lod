@@ -3,10 +3,12 @@
 package org.ld4l.bib2lod.util.collections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -19,7 +21,11 @@ import java.util.Set;
  */
 public class MapOfLists<K, V> {
 
-    private final Map<K, List<V>> map = new HashMap<>();
+    protected final Map<K, List<V>> map = new HashMap<>();
+    
+    protected List<V> createList() {
+        return new ArrayList<V>();
+    }
 
     public Set<K> keys() {
         return new HashSet<>(map.keySet());
@@ -65,9 +71,41 @@ public class MapOfLists<K, V> {
      */
     public List<V> getValues(K key) {
         if (!map.containsKey(key)) {
-            map.put(key, new ArrayList<>());
+            map.put(key, createList());
         }
         return map.get(key);
+    }
+    
+    /**
+     * Returns true iff the specified value is contained in the list associated 
+     * with this key.
+     */
+    public boolean hasValue(K key, V value) {
+        List<V> values = getValues(key);
+        return (values.contains(value));
+    }
+    
+    /**
+     * Returns the submap of this.map in which the keys are contained in the
+     * specified list of keys.
+     */
+    @SuppressWarnings("unchecked")
+    public MapOfLists<K, V> getSubmap(List<K> keys) {
+        
+        MapOfLists<K, V> submap = new MapOfLists<>();
+        for (Entry<K, List<V>> entry : map.entrySet()) {
+            if (keys.contains(entry.getKey())) {
+                submap.addValues(entry.getKey(), (List<V>) entry.getValue());
+            }
+        }
+        return submap;
+    }
+    
+    /**
+     * Convenience method to pass array rather than List to getSlice().
+     */
+    public MapOfLists<K, V> getSubmap(K[] keys) {
+        return getSubmap(Arrays.asList(keys));
     }
 
     /**

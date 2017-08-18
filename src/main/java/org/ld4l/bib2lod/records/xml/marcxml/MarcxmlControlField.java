@@ -28,7 +28,7 @@ public class MarcxmlControlField extends BaseMarcxmlField
         try {
             tag = Integer.parseInt(
                     element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME));
-            textValue = setTextValue(this.element);
+            textValue = retrieveTextValue(this.element);
             isValid();
         } catch (NumberFormatException e) {
             throw new RecordFieldException("Control number is not an integer.");

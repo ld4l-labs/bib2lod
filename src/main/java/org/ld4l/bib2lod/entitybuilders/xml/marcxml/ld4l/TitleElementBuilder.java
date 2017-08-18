@@ -1,6 +1,5 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -8,8 +7,9 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
+import org.ld4l.bib2lod.util.Bib2LodStringUtils;
 
-public class MarcxmlToLd4lTitleElementBuilder extends BaseEntityBuilder {
+public class TitleElementBuilder extends BaseEntityBuilder {
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -40,15 +40,12 @@ public class MarcxmlToLd4lTitleElementBuilder extends BaseEntityBuilder {
         
         Entity titleElement = new Entity(type);
         
-        if (type.equals(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)) {
-            /*
-             * Colon is used at the end of the main title when a subtitle
-             * follows.
-             * 
-             * TODO Are there other types of punct that could be used?
-             */
-            value = StringUtils.removePattern(value, "\\s*:\\s*$");     
-        } 
+        /*
+         * Remove final punctuation. Colon is used at the end of the main title 
+         * when a subtitle follows, and should be removed. Final periods also
+         * occur.
+         */
+        value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(value);    
         
         /*
          * NB Final space must be retained in non-sort elements, in order to

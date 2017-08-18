@@ -7,7 +7,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class MarcxmlToLd4lItemBuilder extends BaseEntityBuilder {
+public class ItemBuilder extends BaseEntityBuilder {
     
     private Entity instance;
     // Record will be needed to get other Item properties - e.g., shelf marks

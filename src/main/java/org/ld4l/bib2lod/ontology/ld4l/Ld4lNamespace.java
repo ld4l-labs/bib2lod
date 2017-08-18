@@ -35,6 +35,7 @@ public enum Ld4lNamespace implements Namespace {
     
     // Datatypes
     BIB_DATATYPE("http://bibliotek-o.org/datatypes/", "bibdt"),
+    EDTF("http://id.loc.gov/datatypes/edtf/", "edtf"),
     
     /* Datasets/controlled vocabularies */
     /* List in alpha order */

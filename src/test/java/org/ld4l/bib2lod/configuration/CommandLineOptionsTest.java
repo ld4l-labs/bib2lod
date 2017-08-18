@@ -22,9 +22,9 @@ public class CommandLineOptionsTest extends AbstractTestClass {
     private String configFile;
     private List<AttributeOverride> overrides;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void invalidOption_throwsException() {
@@ -172,9 +172,9 @@ public class CommandLineOptionsTest extends AbstractTestClass {
         assertEquals("[one, two, three]", path.toString());
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private void parseArgs(String... args) {
         commandLine = new CommandLineOptions(args);

@@ -211,6 +211,17 @@ public class MarcxmlRecord extends BaseXmlRecord {
         return fields;
     }
     
+    public List<MarcxmlDataField> getDataFields(int[] tags) {
+        
+        List<MarcxmlDataField> fields = new ArrayList<MarcxmlDataField>();
+        
+        for (int tag : tags) {
+            fields.addAll(getDataFields(tag));
+        }
+        
+        return fields;
+    }
+    
     /**
      * Returns the data field for the specified value of the tag attribute. Use
      * for non-repeating data fields. If multiple are found, returns the first. 

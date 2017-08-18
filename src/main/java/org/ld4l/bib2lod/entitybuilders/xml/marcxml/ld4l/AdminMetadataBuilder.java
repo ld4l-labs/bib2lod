@@ -17,7 +17,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
+public class AdminMetadataBuilder extends BaseEntityBuilder {
     
     private MarcxmlRecord record;
     private Entity relatedEntity;
@@ -66,7 +66,7 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
             return;
         }
         
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.class);
+        EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
                 
         BuildParams params = new BuildParams()
                 .setParentEntity(adminMetadata)
@@ -97,8 +97,7 @@ public class MarcxmlToLd4lAdminMetadataBuilder extends BaseEntityBuilder {
     
     private void addDescriptionModifier(MarcxmlDataField field) {
 
-        MarcxmlSubfield subfield = field.getSubfield('d');
-        if (subfield != null) {
+        for (MarcxmlSubfield subfield : field.getSubfields('d')) {
             Entity agent = new Entity(Ld4lAgentType.superClass());
             agent.addAttribute(Ld4lDatatypeProp.NAME, subfield.getTextValue());
             adminMetadata.addRelationship(

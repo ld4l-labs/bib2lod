@@ -12,9 +12,9 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class BaseEntityBuilderFactoryTest extends AbstractTestClass {
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Mocking infrastructure
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     /**
      * Concrete implementation used to test BaseEntityBuilderFactory
@@ -26,11 +26,16 @@ public class BaseEntityBuilderFactoryTest extends AbstractTestClass {
         static {
             typeToBuilderClass.put(MockType.class, null);
         }
+        
+        private static HashMap<Type, Class<? extends EntityBuilder>> typeToBuilderClassNew = 
+                new HashMap<>();
+        static {
+            typeToBuilderClassNew.put(MockType.TEST_TYPE, null);
+        }
 
         @Override
-        public HashMap<Class<? extends Type>, Class<? extends EntityBuilder>> 
-                getTypeToBuilderClassMap() {
-            return typeToBuilderClass;
+        public HashMap<Type, Class<? extends EntityBuilder>> getTypeToBuilderClassMap() {
+            return typeToBuilderClassNew;
         }
         
     }
@@ -51,9 +56,9 @@ public class BaseEntityBuilderFactoryTest extends AbstractTestClass {
     }
     
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test (expected = RuntimeException.class)
     public void nullEntityBuilderClassForType_ThrowsRuntimeException() {

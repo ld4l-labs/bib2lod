@@ -1,12 +1,19 @@
 @prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix bib: <http://bibliotek-o.org/ontology/> .
+@prefix bibdt: <http://bibliotek-o.org/datatypes/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix bib: <http://bibliotek-o.org/ontology/> .
+@prefix edtf: <http://id.loc.gov/datatypes/edtf/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix lexvo: <http://purl.org/dc/terms/language> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vivo: <http://vivoweb.org/ontology/core#> .
-    
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+## WORK ## 
+   
 cornell:work1 
     a bf:Work , bf:Text ;    
     bib:hasPreferredTitle cornell:wtitle1 ;
@@ -33,12 +40,14 @@ cornell:wst2
     vivo:rank "3"^^<http://www.w3.org/2001/XMLSchema#int> .
     
 
+## INSTANCE ## 
+
 cornell:inst1 
     a bf:Instance ; 
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    bib:hasActivity cornell:pa1 ;
+    # bib:hasActivity cornell:pa1 ;
     bf:adminMetadata cornell:am1 ;
     bf:responsibilityStatement "Gitta Sereny." .
 
@@ -70,11 +79,13 @@ cornell:id1
     a bf:Local ;
     rdf:value "3673479" .
     
-cornell:pa1 
-    rdfs:label "Publishing" ;
-    a bib:PublisherActivity ;
-    dcterms:date "1999" ;
-    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+# cornell:pa1 
+#     rdfs:label "Publishing" ;
+#     a bib:PublisherActivity ;
+#     dcterms:date "1999"^^edtf:EDTF ;
+#     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
 
+
+## ITEM ##
 
 cornell:item1 a bf:Item .

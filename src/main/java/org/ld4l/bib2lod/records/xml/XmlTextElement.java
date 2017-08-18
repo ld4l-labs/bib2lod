@@ -3,6 +3,7 @@
 package org.ld4l.bib2lod.records.xml;
 
 import org.ld4l.bib2lod.records.RecordField;
+import org.ld4l.bib2lod.util.Bib2LodStringUtils;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,13 +20,20 @@ public interface XmlTextElement extends RecordField {
     public String getTextValue();
     
     /**
-     * Returns the text value of this XmlRecordElement. Returns null if the 
-     * element is not an XmlTextElement, has no first child, or the first child 
-     * is not a text node. 
+     * Returns the clean text value of this element: trimmed, and with final
+     * whitespace and punctuation removed. (See
      */
-    default String setTextValue(Element element) {
+    public default String getTrimmedTextValue() {
+        return Bib2LodStringUtils.trim(getTextValue());             
+    }
+    
+    /**
+     * Returns the text value of this XmlTextElement. Returns null if the 
+     * DOM element has no first child, or the first child is not a text node. 
+     */
+    default String retrieveTextValue(Element domElement) {
         
-        Node firstChild = element.getFirstChild();
+        Node firstChild = domElement.getFirstChild();
         if (firstChild == null) {
             return null;
         }

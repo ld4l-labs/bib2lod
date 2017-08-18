@@ -23,7 +23,7 @@ public class ConfigurationOverriderTest extends AbstractTestClass {
     private Configuration original;
     private Configuration expected;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
     // ----------------------------------------------------------------------
 
@@ -103,9 +103,9 @@ public class ConfigurationOverriderTest extends AbstractTestClass {
         runIt();
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private ConfigurationOptions options(AttributeOverride... overrides) {
         return new ConfigurationOptions() {

@@ -2,8 +2,10 @@
 @prefix bib: <http://bibliotek-o.org/ontology/> .
 @prefix cornell: <http://data.ld4l.org/cornell/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix edtf: <http://id.loc.gov/datatypes/edtf/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix lexvo: <http://purl.org/dc/terms/language> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix vivo: <http://vivoweb.org/ontology/core#> .
@@ -16,12 +18,12 @@ cornell:work1
 
 cornell:wtitle1 
     a bf:Title ;
-    rdf:value "Clinical cardiopulmonary physiology." ;
+    rdf:value "Clinical cardiopulmonary physiology" ;
     dcterms:hasPart cornell:wmt1 .
     
 cornell:wmt1 
     a bib:MainTitleElement ;
-    rdf:value "Clinical cardiopulmonary physiology." ;
+    rdf:value "Clinical cardiopulmonary physiology" ;
     vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
     
 
@@ -34,7 +36,7 @@ cornell:inst1
     bib:hasActivity cornell:pa1 ;
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     bf:adminMetadata cornell:am1 ;
-    bf:provisionActivityStatement "New York, Grune & Stratton, 1957." .
+    bf:provisionActivityStatement "New York, Grune & Stratton, 1957" .
     
 cornell:id2 
     a bf:Local ;
@@ -62,19 +64,29 @@ cornell:id4source
     
 cornell:ititle1 
     a bf:Title ;
-    rdf:value "Clinical cardiopulmonary physiology." ;
+    rdf:value "Clinical cardiopulmonary physiology" ;
     dcterms:hasPart cornell:imt1 .
     
 cornell:imt1 
     a bib:MainTitleElement ;
-    rdf:value "Clinical cardiopulmonary physiology." ;
+    rdf:value "Clinical cardiopulmonary physiology" ;
     vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
        
 cornell:pa1 
     a bib:PublisherActivity ;
     rdfs:label "Publishing" ;
-    dcterms:date "1957" ;
-    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+    dcterms:date "1957"^^edtf:EDTF , "1957" ;
+    bib:hasAgent cornell:agent1 ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> , cornell:loc1 ;
+    bf:status bib:current .
+    
+cornell:agent1 
+    a foaf:Agent ;
+    foaf:name "Grune & Stratton" .
+
+cornell:loc1 
+    a prov:Location ;
+    foaf:name "New York" .
 
 cornell:am1 
     a bf:AdminMetadata ;

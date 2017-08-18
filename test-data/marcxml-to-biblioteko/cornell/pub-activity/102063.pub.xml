@@ -26,5 +26,10 @@
       <subfield code="a">Clinical cardiopulmonary physiology.</subfield>
       <subfield code="c">Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]</subfield>
     </datafield>
+    <datafield tag="260" ind1=" " ind2=" ">
+      <subfield code="a">New York,</subfield>
+      <subfield code="b">Grune &amp; Stratton,</subfield>
+      <subfield code="c">1957.</subfield>
+    </datafield>
   </record>  
 </collection>

@@ -133,7 +133,7 @@ public abstract class BaseConverter implements Converter {
         }
     }
     
-    protected EntityBuilder getBuilder(Class<? extends Type> type) {
+    protected EntityBuilder getBuilder(Type type) {
         return entityBuilderFactory.getBuilder(type);
     }
     

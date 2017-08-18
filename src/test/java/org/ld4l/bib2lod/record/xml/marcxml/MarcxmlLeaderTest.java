@@ -27,9 +27,9 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
             "<leader>01050cam a22003011  4500</leader>";
 
  
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test
     public void noValue_ThrowsException() throws Exception {
@@ -55,9 +55,9 @@ public class MarcxmlLeaderTest extends AbstractTestClass {
        buildLeaderFromString(VALID_LEADER);
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private MarcxmlLeader buildLeaderFromString(String s) 
             throws RecordException {

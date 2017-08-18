@@ -3,6 +3,7 @@ package org.ld4l.bib2lod.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -17,6 +18,7 @@ import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.uris.UriService;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
+import org.ld4l.bib2lod.util.collections.MapOfUniqueLists;
 
 /**
  * An object built from the input record representing a single resource in the
@@ -27,23 +29,33 @@ public class Entity {
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     /*
-     * Relationships of this Entity to other local Entities (objects of object
-     * properties)
+     * Note on use of unique lists: possibly sets would have been sufficient,
+     * but there may be cases where ordering is significant, so they have 
+     * been implemented as unique lists using SetUniqueList for now. 
+     * Re-implement as MapOfSets if it becomes clear that the ordering is
+     * unnecessary.
      */
-    protected MapOfLists<ObjectProp, Entity> relationships;
     
     /*
-     * Attributes of this Entity (objects of datatype properties)
+     * Relationships of this Entity to other local Entities (objects of 
+     * object properties). Contains no duplicate property + value entries.
      */
-    protected MapOfLists<DatatypeProp, Attribute> attributes;
+    protected MapOfUniqueLists<ObjectProp, Entity> relationships;
+    
+    /*
+     * Attributes of this Entity (objects of datatype properties). Contains 
+     * no duplicate property + value entries.
+     */
+    protected MapOfUniqueLists<DatatypeProp, Attribute> attributes;
     
     /*
      * Relationships of this Entity to external resources. Map values are
      * lists of URIs of these resources. Since we already know the URIs of the
      * external resources, and we will not make local assertions about them,
-     * there is no need to create an Entity.
+     * there is no need to create an Entity. Contains no duplicate 
+     * property + value entries.
      */
-    protected MapOfLists<ObjectProp, String> externalRelationships;
+    protected MapOfUniqueLists<ObjectProp, String> externalRelationships;
     
     /*
      * The classes the Entity belongs to
@@ -65,10 +77,10 @@ public class Entity {
      * Constructor
      */
     public Entity() {
-        this.relationships = new MapOfLists<>();
-        this.attributes = new MapOfLists<>();
-        this.externalRelationships = new MapOfLists<>();
-        this.types = new ArrayList<>();
+        this.relationships = new MapOfUniqueLists<>();
+        this.attributes = new MapOfUniqueLists<>();
+        this.externalRelationships = new MapOfUniqueLists<>();
+        this.types = SetUniqueList.setUniqueList(new ArrayList<>());
         this.resource = null;
         this.model = null;
     }
@@ -100,7 +112,7 @@ public class Entity {
         this.externalRelationships = original.externalRelationships.duplicate();
         
         // Create  relationships to copies of original child Entities
-        this.relationships = new MapOfLists<>();      
+        this.relationships = new MapOfUniqueLists<>();      
         for (ObjectProp prop : original.relationships.keys()) {
             List<Entity> originalChildren = original.relationships.getValues(prop);
             List<Entity> newChildren = new ArrayList<Entity>();
@@ -113,7 +125,7 @@ public class Entity {
     }
 
     public void addRelationship(ObjectProp prop, Entity entity) {
-        relationships.addValue(prop, entity);
+        relationships.addValue(prop, entity);  
     }
     
     public void addRelationships(ObjectProp prop, List<Entity> entities) {
@@ -135,6 +147,31 @@ public class Entity {
     public List<Entity> getChildren(ObjectProp prop) {
         return relationships.getValues(prop);
     }
+    
+    /**
+     * Returns the list of related Entities for the specified object property
+     * and of the specified type. Returns an empty list if there are none. 
+     * Never returns null.
+     */
+    public List<Entity> getChildren(ObjectProp prop, Type type) {
+        List<Entity> children = getChildren(prop);
+        List<Entity> childrenOfType = new ArrayList<>();
+        for (Entity child : children) {
+            if (child.hasType(type)) {
+                childrenOfType.add(child);
+            }
+        }
+        return childrenOfType;  
+    }
+    
+    /**
+     * Returns true iff the specified entity is contained in the list  
+     * associated with this object property.
+     */
+    public boolean hasChild(ObjectProp prop, Entity child) {
+        List<Entity> children = getChildren(prop);
+        return (children.contains(child));
+    }  
     
     /**
      * Returns the first Entity in the list of related Entities for the 
@@ -170,6 +207,15 @@ public class Entity {
     public List<String> getExternals(ObjectProp prop) {
         return externalRelationships.getValues(prop);
     }
+    
+    /**
+     * Returns true iff the specified external entity (represented as a URI 
+     * string) is contained in the list associated with this object property.
+     */
+    public boolean hasExternal(ObjectProp prop, String external) {
+        List<String> externals = getExternals(prop);
+        return (externals.contains(external));
+    }  
     
     /**
      * Returns the first item in the list of related external resources (as a 
@@ -252,6 +298,31 @@ public class Entity {
     public List<Attribute> getAttributes(DatatypeProp prop) {
         return attributes.getValues(prop);
     }
+    
+    /**
+     * Returns true iff there is at least one value for the specified
+     * property.
+     */
+    public boolean hasAttribute(DatatypeProp prop) {
+        return ! getAttributes(prop).isEmpty();
+    }
+    
+    /**
+     * Returns true iff the Entity has the specified Attribute value for
+     * the specified property.
+     */
+    public boolean hasAttribute(DatatypeProp prop, Attribute attribute) {
+        return getAttributes(prop).contains(attribute);
+    }
+    
+    /**
+     * Returns true iff the specified value is contained in the list associated 
+     * with this datatype property.
+     */
+    public boolean hasValue(DatatypeProp prop, String value) {
+        List<String> values = getValues(prop);
+        return (values.contains(value));
+    }    
     
     /**
      * Returns the value of the first item in the list of Attributes for this

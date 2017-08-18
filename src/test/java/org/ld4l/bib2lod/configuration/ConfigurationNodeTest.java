@@ -28,9 +28,9 @@ public class ConfigurationNodeTest {
     private ConfigurationNode config;
     private ConfigurationNode child1;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void getValueFromNone_returnsNull() {

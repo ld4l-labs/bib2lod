@@ -26,7 +26,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
  */
-public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
+public class TitleBuilder extends BaseEntityBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -64,7 +64,7 @@ public class MarcxmlToLd4lTitleBuilder extends BaseEntityBuilder {
     
     private void addTitleElements() throws EntityBuilderException {
 
-        this.titleElementBuilder = getBuilder(Ld4lTitleElementType.class);
+        this.titleElementBuilder = getBuilder(Ld4lTitleElementType.superClass());
         
         buildTitleElements();
 

@@ -14,7 +14,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
+public class WorkBuilder extends BaseEntityBuilder {
     
     private MarcxmlRecord record;
     private Entity instance;
@@ -86,7 +86,9 @@ public class MarcxmlToLd4lWorkBuilder extends BaseEntityBuilder {
         Type type = codes.get(code); 
         if (type != null) {
             work.addType(type);
-        }           
+        }    
+        
+        // TODO - s for Serial - use BF model
     }
     
     private void addLanguages() {

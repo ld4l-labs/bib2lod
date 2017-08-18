@@ -17,6 +17,9 @@ public class BuildParams {
     private Type type;
     private String value;
     
+    // Currently not using
+    //private MapOfLists<Character, String> subfieldMap;
+    
     public BuildParams() {
         this.record = null;
         this.field = null;
@@ -24,6 +27,7 @@ public class BuildParams {
         this.parentEntity = null;
         this.type = null;
         this.value = null;
+        // this.subfieldMap = new MapOfLists<>();
     }
 
     /**
@@ -102,5 +106,14 @@ public class BuildParams {
         this.value = value;
         // Return this for method chaining
         return this;
-    }
+    } 
+
+//    public BuildParams setSubfieldMap(MapOfLists<Character, String> map) {
+//        this.subfieldMap = map;
+//        return this;
+//    }
+// Note: returns empty map, never null    
+//    public MapOfLists<Character, String> getSubfieldMap() {
+//        return subfieldMap;
+//    }
 }

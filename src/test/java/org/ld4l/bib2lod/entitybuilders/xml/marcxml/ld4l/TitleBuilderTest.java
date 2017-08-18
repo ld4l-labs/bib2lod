@@ -22,9 +22,9 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 
 /**
- * Tests class MarcxmlToLd4lTitleBuilder.
+ * Tests class TitleBuilder.
  */
-public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
+public class TitleBuilderTest extends AbstractTestClass {
     
     public static final String TITLE_WITH_WHITESPACE = 
             "<record>" +
@@ -80,7 +80,7 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
             "</record>"; 
     
     private static BaseMockBib2LodObjectFactory factory;
-    private MarcxmlToLd4lTitleBuilder builder; 
+    private TitleBuilder builder; 
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -91,13 +91,13 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() throws Exception {    
-        this.builder = new MarcxmlToLd4lTitleBuilder();
+        this.builder = new TitleBuilder();
     }  
     
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test (expected = EntityBuilderException.class)
     public void nullRecord_ThrowsException() throws Exception {
@@ -169,9 +169,9 @@ public class MarcxmlToLd4lTitleBuilderTest extends AbstractTestClass {
                 "main title : subtitle one : subtitle two");     
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private Entity buildTitle(Entity bibEntity, String marcxml) 
             throws Exception {

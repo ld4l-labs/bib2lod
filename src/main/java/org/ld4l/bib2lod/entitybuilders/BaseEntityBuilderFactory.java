@@ -1,29 +1,28 @@
 package org.ld4l.bib2lod.entitybuilders;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.Type;
 
 public abstract class BaseEntityBuilderFactory implements EntityBuilderFactory {
-
-    // Maps an ontology Type to an EntityBuilder class used to build Entities
-    // of that type.
-    private HashMap<Class<? extends Type>, EntityBuilder> typeToBuilderInstance;
+    
+    private HashMap<Type, EntityBuilder> typeToBuilderInstance;
     
     /**
      * Constructor
      */
-    public BaseEntityBuilderFactory() {
+    public BaseEntityBuilderFactory() {      
         typeToBuilderInstance = new HashMap<>();
         instantiateBuilders();
     }
-              
+    
     @Override 
     public void instantiateBuilders() throws EntityBuilderFactoryException {
         
-        for (Entry<Class<? extends Type>, Class<? extends EntityBuilder>> entry : 
+        for (Entry<Type, Class<? extends EntityBuilder>> entry : 
                     getTypeToBuilderClassMap().entrySet()) {
             EntityBuilder builder;
             try {
@@ -34,15 +33,15 @@ public abstract class BaseEntityBuilderFactory implements EntityBuilderFactory {
             typeToBuilderInstance.put(entry.getKey(), builder);
         }
     }
-    
+
     @Override
-    public HashMap<Class<? extends Type>, EntityBuilder> getBuilders() {
+    public Map<Type, EntityBuilder> getBuilders() {
         return typeToBuilderInstance;
     }
     
     @Override
-    public EntityBuilder getBuilder(Class<? extends Type> type) {
+    public EntityBuilder getBuilder(Type type) {
         return typeToBuilderInstance.get(type);        
     }
-   
+    
 }

@@ -19,9 +19,9 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
     private Configuration expected;
     private Configuration configuration;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Parsing tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void invalidJsonSyntax_throwsException() {
@@ -41,9 +41,9 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
         runParser("true");
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Tests on Conversion
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void childNodeIsNotObjectArrayOrString_throwsException() {
@@ -199,9 +199,9 @@ public class JsonConfigurationFileParserTest extends AbstractTestClass {
 
         assertParsedAsExpected(jsonString);
     }
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private void runParser(String input) {
         configuration = new JsonConfigurationFileParser(stream(input))

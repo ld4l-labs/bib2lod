@@ -13,9 +13,9 @@ import org.ld4l.bib2lod.ontology.Type;
 public abstract class BaseEntityBuilder implements EntityBuilder { 
     
     private static final Logger LOGGER = LogManager.getLogger();
- 
+    
     @Override
-    public EntityBuilder getBuilder(Class<? extends Type> type) {
+    public EntityBuilder getBuilder(Type type) {
         EntityBuilderFactory factory = Bib2LodObjectFactory.getFactory()
                 .instanceForInterface(EntityBuilderFactory.class);
         return factory.getBuilder(type);

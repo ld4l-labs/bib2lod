@@ -70,11 +70,11 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
     private Format format;
     private OutputDescriptor sink;
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
     //
     // Repeat with all acceptable formats.
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void writeNothing() throws IOException, OutputServiceException {
@@ -117,9 +117,9 @@ public class FileOutputDescriptorTest extends AbstractTestClass {
         sink.writeModel(model(dataProperty(SUBJECT_1, PREDICATE_1, LITERAL_1)));
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private void createServiceAndSink(Format f) throws IOException {
         format = f;

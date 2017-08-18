@@ -38,9 +38,9 @@ public class FileOutputServiceTest extends AbstractTestClass {
         }
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test(expected = NullPointerException.class)
     public void destinationNotSupplied_throwsExeption() throws IOException {
@@ -105,9 +105,9 @@ public class FileOutputServiceTest extends AbstractTestClass {
         assertTrue(new File(dest, "test.nt").exists());
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     private InputMetadata metadata(String name) {
         return new InputMetadata() {

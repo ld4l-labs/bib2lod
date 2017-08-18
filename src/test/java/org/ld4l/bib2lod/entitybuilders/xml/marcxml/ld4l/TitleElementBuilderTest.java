@@ -2,6 +2,7 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -12,32 +13,42 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
- * Tests class MarcxmlToLd4lTitleElementBuilder
+ * Tests class TitleElementBuilder
  */
-public class MarcxmlToLd4lTitleElementBuilderTest extends AbstractTestClass {
+public class TitleElementBuilderTest extends AbstractTestClass {
     
-       
-    public static final String MAIN_TITLE_ELEMENT_WITH_WHITESPACE = " main title ";
+    public static final String NON_SORT_ELEMENT_WITH_FINAL_SPACE = "L' ";
+          
+    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE = 
+            " main title ";
+ 
+    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_COLON = 
+            "main title:";
     
-    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON = "main title :";
+    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_PERIOD = 
+            "main title.";
     
-    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_COLON = "main title:";
-
+    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON = 
+            "main title :";
+    
+    public static final String MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON_SPACE = 
+            "main title : ";
+    
     public static final String SUBTITLE = "subtitle";
     
     public static final String SUBTITLE_WITH_WHITESPACE = " subtitle ";
     
     
-    private MarcxmlToLd4lTitleElementBuilder builder;
+    private TitleElementBuilder builder;
       
     @Before
     public void setUp() throws Exception {    
-        this.builder = new MarcxmlToLd4lTitleElementBuilder();
+        this.builder = new TitleElementBuilder();
     }  
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test 
     public void nullTitle_ThrowsException() throws Exception {
@@ -91,20 +102,32 @@ public class MarcxmlToLd4lTitleElementBuilderTest extends AbstractTestClass {
     @Test
     public void testTrimMainTitleElement() throws Exception {        
         buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
-                MAIN_TITLE_ELEMENT_WITH_WHITESPACE, "main title");             
+                MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE, "main title");             
     }
     
     @Test
-    public void testRemoveFinalSpaceColonFromMainTitleElement() 
+    public void testRemoveFinalSpaceColon() 
             throws Exception {
         buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
                 MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON, "main title");                 
     }
     
     @Test
-    public void testRemoveFinalColonFromMainTitleElement() throws Exception {
+    public void testRemoveFinalColon() throws Exception {
         buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
                 MAIN_TITLE_ELEMENT_WITH_FINAL_COLON, "main title");       
+    }
+    
+    @Test
+    public void testRemoveFinalPeriod() throws Exception {
+        buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
+                MAIN_TITLE_ELEMENT_WITH_FINAL_PERIOD, "main title");       
+    }
+    
+    @Test
+    public void testRemoveFinalSpacePunctSpace() throws Exception {
+        buildAndExpectValue(Ld4lTitleElementType.MAIN_TITLE_ELEMENT, 
+                MAIN_TITLE_ELEMENT_WITH_FINAL_SPACE_COLON_SPACE, "main title");       
     }
     
     @Test 
@@ -112,11 +135,18 @@ public class MarcxmlToLd4lTitleElementBuilderTest extends AbstractTestClass {
         buildAndExpectValue(Ld4lTitleElementType.SUBTITLE_ELEMENT, 
                 SUBTITLE_WITH_WHITESPACE, "subtitle");             
     }
+    
+    @Test
+    @Ignore
+    public void testPreserveFinalSpaceInNonSortElement() throws Exception {
+        buildAndExpectValue(Ld4lTitleElementType.NON_SORT_ELEMENT, 
+                NON_SORT_ELEMENT_WITH_FINAL_SPACE, "L' ");             
+    }
 
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
        
     
     private void buildAndExpectValue(Ld4lTitleElementType type, 

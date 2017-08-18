@@ -37,9 +37,9 @@ public class FileInputDescriptorTest extends AbstractTestClass {
         inputFile = new File(folder.getRoot(), SOME_FILE);
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // the tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     @Test
     public void metadataShouldContainFilename() {

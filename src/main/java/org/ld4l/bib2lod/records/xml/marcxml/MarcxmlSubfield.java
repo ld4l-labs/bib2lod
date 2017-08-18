@@ -24,7 +24,7 @@ public class MarcxmlSubfield extends BaseMarcxmlField implements XmlTextElement 
         super(element);   
         try {
             code = element.getAttribute("code").charAt(0);  
-            textValue = setTextValue(this.element);
+            textValue = retrieveTextValue(this.element);
             isValid();
         } catch (IndexOutOfBoundsException e) {
             throw new RecordFieldException("Subfield code cannot be empty.");

@@ -34,9 +34,9 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
             "<subfield code='a'>(CStRLIN)NYCX86B63464</subfield>";  
     
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test
     public void noCode_ThrowsException() throws Exception {
@@ -74,9 +74,9 @@ public class MarcxmlSubfieldTest extends AbstractTestClass {
         buildSubfieldFromString(VALID_SUBFIELD);
     }    
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private MarcxmlSubfield buildSubfieldFromString(String s) 
             throws RecordException {

@@ -30,9 +30,9 @@ import org.w3c.dom.NodeList;
  */
 public class XmlParserTest extends AbstractTestClass {
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Mocking infrastructure
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     public static class MockInputDescriptor implements InputDescriptor {
         
@@ -137,9 +137,9 @@ public class XmlParserTest extends AbstractTestClass {
         parser = new MockXmlParser(); 
     }  
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test
     public void invalidRecord_Ignored() throws Exception {
@@ -153,9 +153,9 @@ public class XmlParserTest extends AbstractTestClass {
         Assert.assertTrue(records.isEmpty());     
     }
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Helper methods
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     private List<Record> getRecords(String input) throws ParserException {
         InputDescriptor descriptor = new MockInputDescriptor(input);

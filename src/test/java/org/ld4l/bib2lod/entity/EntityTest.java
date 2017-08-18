@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
 /**
@@ -13,9 +14,9 @@ import org.ld4l.bib2lod.testing.AbstractTestClass;
  */
 public class EntityTest extends AbstractTestClass {
     
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // Mocking infrastructure
-    // ---------------------------------------------------------------------- 
+    // --------------------------------------------------------------------- 
     
     private enum MockDatatypeProp implements DatatypeProp {
         TEST_PROP("http://my.namespace.org/", "test");
@@ -47,9 +48,9 @@ public class EntityTest extends AbstractTestClass {
         entity = new Entity();
     }
 
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     // The tests
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------
     
     @Test
     public void testEntityIsEmpty()  {
@@ -60,6 +61,14 @@ public class EntityTest extends AbstractTestClass {
     public void testEntityIsNotEmpty()  {
         entity.addAttribute(MockDatatypeProp.TEST_PROP, "value");
         Assert.assertFalse(entity.isEmpty());
+    }
+    
+    @Test
+    public void testNoDuplicateTypes() {
+        entity.addType(Ld4lInstanceType.INSTANCE);
+        entity.addType(Ld4lInstanceType.ARCHIVAL);
+        entity.addType(Ld4lInstanceType.INSTANCE);
+        Assert.assertEquals(2,  entity.getTypes().size());
     }
 
 }
