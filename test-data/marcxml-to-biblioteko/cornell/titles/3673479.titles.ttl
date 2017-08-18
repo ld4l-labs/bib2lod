@@ -47,7 +47,7 @@ cornell:inst1
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    # bib:hasActivity cornell:pa1 ;
+    bib:hasActivity cornell:pa1 ;
     bf:adminMetadata cornell:am1 ;
     bf:responsibilityStatement "Gitta Sereny." .
 
@@ -79,12 +79,12 @@ cornell:id1
     a bf:Local ;
     rdf:value "3673479" .
     
-# cornell:pa1 
-#     rdfs:label "Publishing" ;
-#     a bib:PublisherActivity ;
-#     dcterms:date "1999"^^edtf:EDTF ;
-#     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
-
+cornell:pa1 
+    rdfs:label "Publishing" ;
+    a bib:PublisherActivity ;
+    dcterms:date "1999"^^edtf:EDTF ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> ;
+    bf:status bib:current .
 
 ## ITEM ##
 

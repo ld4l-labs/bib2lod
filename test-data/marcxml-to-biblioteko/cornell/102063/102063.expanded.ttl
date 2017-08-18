@@ -28,7 +28,7 @@ cornell:wtitle1
 cornell:wmt1 
     a bib:MainTitleElement ;
     rdf:value "Clinical cardiopulmonary physiology" ;
-    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+    vivo:rank "1"^^xsd:int .
  
     
 ## INSTANCE ##
@@ -76,7 +76,7 @@ cornell:ititle1
 cornell:imt1 
     a bib:MainTitleElement ;
     rdf:value "Clinical cardiopulmonary physiology" ;
-    vivo:rank "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+    vivo:rank "1"^^xsd:int .
        
 cornell:pa1 
     a bib:PublisherActivity ;

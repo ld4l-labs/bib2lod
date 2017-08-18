@@ -37,7 +37,7 @@ cornell:inst1
     bf:instanceOf cornell:work1 ;
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
-    # bib:hasActivity cornell:pa1 ;
+    bib:hasActivity cornell:pa1 ;
     bf:adminMetadata cornell:am1 .
     
 cornell:ititle1 
@@ -50,11 +50,12 @@ cornell:imt1
     rdf:value "Clinical cardiopulmonary physiology" ;
     vivo:rank "1"^^xsd:int .
 
-#cornell:pa1 
-#    a bib:PublisherActivity ;
-#    rdfs:label "Publishing" ;
-#    dcterms:date "1957"^^edtf:EDTF ;
-#    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+cornell:pa1 
+    a bib:PublisherActivity ;
+    rdfs:label "Publishing" ;
+    dcterms:date "1957"^^edtf:EDTF ;
+    bf:status bib:current ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
 
 cornell:am1
     a bf:AdminMetadata ;

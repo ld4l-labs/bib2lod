@@ -38,7 +38,7 @@ cornell:inst1
     bf:hasItem cornell:item1 ; 
     bib:hasPreferredTitle cornell:ititle1 ;
     bf:identifiedBy cornell:id2 , cornell:id3 , cornell:id4 ;
-    # bib:hasActivity cornell:pa1 ;
+    bib:hasActivity cornell:pa1 ;
     bf:responsibilityStatement "Sponsored by the American College of Chest Physicians.  Editorial board: Burgess L. Gordon, chairman, editor-in-chief, Albert H. Andrews [and others]" ;
     bf:adminMetadata cornell:am1 .
     
@@ -76,11 +76,12 @@ cornell:imt1
     rdf:value "Clinical cardiopulmonary physiology" ;
     vivo:rank "1"^^xsd:int .
        
-# cornell:pa1 
-#     a bib:PublisherActivity ;
-#     rdfs:label "Publishing" ;
-#     dcterms:date "1957"^^edtf:EDTF ;
-#     bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> .
+cornell:pa1 
+    a bib:PublisherActivity ;
+    rdfs:label "Publishing" ;
+    dcterms:date "1957"^^edtf:EDTF ;
+    bib:atLocation <http://id.loc.gov/vocabulary/countries/nyu> ;
+    bf:status bib:current .
 
 cornell:am1 
     a bf:AdminMetadata ;
