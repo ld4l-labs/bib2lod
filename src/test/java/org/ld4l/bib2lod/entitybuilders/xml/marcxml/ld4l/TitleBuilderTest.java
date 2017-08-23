@@ -99,13 +99,17 @@ public class TitleBuilderTest extends AbstractTestClass {
     // The tests
     // ---------------------------------------------------------------------
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullRecord_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "A record is required");
         buildTitle(new Entity(), (Record) null);
     }
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullBibEntity_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "A parent entity is required");
         buildTitle((Entity) null, MarcxmlTestUtils.MINIMAL_RECORD);
     }
     
@@ -183,7 +187,7 @@ public class TitleBuilderTest extends AbstractTestClass {
     private Entity buildTitle(Entity bibEntity, Record record) 
             throws Exception {
         BuildParams params = new BuildParams()
-                .setParentEntity(bibEntity)
+                .setParent(bibEntity)
                 .setRecord(record);        
         return builder.build(params);        
     }

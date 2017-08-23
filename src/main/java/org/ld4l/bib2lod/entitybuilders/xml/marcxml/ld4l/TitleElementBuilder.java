@@ -14,7 +14,7 @@ public class TitleElementBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
  
-        Entity title = params.getParentEntity();
+        Entity title = params.getParent();
         if (title == null) {
             throw new EntityBuilderException(
                     "A title is required to build a title element.");

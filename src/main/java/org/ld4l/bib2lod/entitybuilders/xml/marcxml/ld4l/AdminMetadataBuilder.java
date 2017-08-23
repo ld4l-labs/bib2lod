@@ -18,20 +18,21 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AdminMetadataBuilder extends BaseEntityBuilder {
-    
-    private MarcxmlRecord record;
-    private Entity relatedEntity;
-    private Entity adminMetadata;
-    
+ 
     private static final Pattern PATTERN_005 = 
             Pattern.compile("^[\\d]{14}\\.\\d$");
     
-
+    private Entity adminMetadata;
+    private MarcxmlRecord record;
+    private Entity parent;
+    
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
         
-        this.relatedEntity = params.getParentEntity();
-        if (relatedEntity == null) {
+        reset();
+        
+        this.parent = params.getParent();
+        if (parent == null) {
             throw new EntityBuilderException(
                     "Cannot build admin metadata without a related entity.");
         }
@@ -52,10 +53,16 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
             return null;
         }
       
-        relatedEntity.addRelationship(
+        parent.addRelationship(
                 Ld4lObjectProp.HAS_ADMIN_METADATA, adminMetadata);
         
         return adminMetadata;
+    }
+    
+    private void reset() {
+        this.adminMetadata = null;
+        this.record = null;
+        this.parent = null;
     }
     
     private void convert001() throws EntityBuilderException {
@@ -69,7 +76,7 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
                 
         BuildParams params = new BuildParams()
-                .setParentEntity(adminMetadata)
+                .setParent(adminMetadata)
                 .setField(controlField001);
         builder.build(params);
     }     

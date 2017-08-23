@@ -19,17 +19,18 @@ public class ActivityBuilder extends BaseEntityBuilder {
     
     private static final Ld4lActivityType TYPE = 
             Ld4lActivityType.superClass();
-    
-    protected Entity bibEntity;
-    protected MarcxmlRecord record;
-    protected MarcxmlTaggedField field;
+
     protected Entity activity;
+    protected Entity parent;
+    protected MarcxmlTaggedField field;
+    protected MarcxmlRecord record;
     protected Ld4lActivityType type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
                
-        this.activity = null;
+        reset();
+        
         this.type = getType();
         
         processBuildParams(params);
@@ -39,18 +40,26 @@ public class ActivityBuilder extends BaseEntityBuilder {
         activity.addAttribute(Ld4lDatatypeProp.LABEL, 
                 new Attribute(type.label()));        
         
-        bibEntity.addRelationship(Ld4lObjectProp.HAS_ACTIVITY, activity);
+        parent.addRelationship(Ld4lObjectProp.HAS_ACTIVITY, activity);
         
         return activity;
+    }
+    
+    private void reset() {
+        this.activity = null;
+        this.parent = null;
+        this.field = null;
+        this.record = null;
+        this.type = null;
     }
     
     private void processBuildParams(BuildParams params) 
             throws EntityBuilderException {
         
-        this.bibEntity = params.getParentEntity();
-        if (bibEntity == null) {
+        this.parent = params.getParent();
+        if (parent == null) {
             throw new EntityBuilderException(
-                    "A related entity is required to build an activity.");
+                    "A parent entity is required to build an activity.");
         }
 
         // May not ever need record - in any case, not required.
@@ -63,8 +72,8 @@ public class ActivityBuilder extends BaseEntityBuilder {
         }
         
         if (! (field instanceof MarcxmlTaggedField)) {
-            throw new EntityBuilderException("A data field or control field " +
-                    "is required to build an activity");
+            throw new EntityBuilderException("A data field or control " + 
+                    "field is required to build an activity");
         }
         
         this.field = (MarcxmlTaggedField) field;

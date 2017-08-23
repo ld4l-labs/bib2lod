@@ -182,6 +182,14 @@ public class Entity {
         return relationships.getValue(prop);
     }
     
+    /**
+     * Removes child from the relationships associated with prop. Does
+     * nothing if child is not found. Child may be null.
+     */
+    public void removeChild(ObjectProp prop, Entity child) {
+        relationships.removeValue(prop,  child);
+    }
+    
     public void addExternalRelationship(ObjectProp prop, String uri) {
         externalRelationships.addValue(prop, uri);       
     }

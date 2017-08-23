@@ -216,8 +216,10 @@ public class InstanceBuilderTest extends AbstractTestClass {
     // The tests
     // ---------------------------------------------------------------------
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullRecord_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "A record is required");
         BuildParams params = new BuildParams()
                 .setRecord(null);                
         builder.build(params);

@@ -10,16 +10,17 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 public class ItemBuilder extends BaseEntityBuilder {
     
     private Entity instance;
-    // Record will be needed to get other Item properties - e.g., shelf marks
-    // and bar codes
-    private MarcxmlRecord record;
     private Entity item;
-    
+    // Record needed to get other Item properties - e.g., shelf marks and
+    // barcodes
+    private MarcxmlRecord record;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        this.instance = params.getParentEntity();        
+        reset();
+        
+        this.instance = params.getParent();        
         if (instance == null) {
             throw new EntityBuilderException(
                     "A related instance is required to build an item.");
@@ -38,6 +39,12 @@ public class ItemBuilder extends BaseEntityBuilder {
         instance.addRelationship(Ld4lObjectProp.HAS_ITEM, item);
                 
         return item; 
+    }
+    
+    private void reset() {
+        this.instance = null;
+        this.item = null;
+        this.record = null;
     }
 
 }

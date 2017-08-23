@@ -63,7 +63,7 @@ public class TitleElementBuilderTest extends AbstractTestClass {
     public void nullTitleElementType_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, "type is required");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setValue("title element");
         builder.build(params);
     }
@@ -73,7 +73,7 @@ public class TitleElementBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "invalid title element type");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setType(Ld4lTitleType.TITLE);
         builder.build(params);
     } 
@@ -83,7 +83,7 @@ public class TitleElementBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "Non-empty string value required");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT);
         builder.build(params);
     }
@@ -93,7 +93,7 @@ public class TitleElementBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "Non-empty string value required");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT)
                 .setValue("");
         builder.build(params);
@@ -153,7 +153,7 @@ public class TitleElementBuilderTest extends AbstractTestClass {
             String inputValue, String expectedValue) 
                     throws EntityBuilderException {
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity()) 
+                .setParent(new Entity()) 
                 .setValue(inputValue)
                 .setType(type); 
         Entity titleElement = builder.build(params);

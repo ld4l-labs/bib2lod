@@ -45,10 +45,10 @@ public class TitleBuilder extends BaseEntityBuilder {
                     "A record is required to build a title.");
         }
  
-        this.bibEntity = params.getParentEntity();
+        this.bibEntity = params.getParent();
         if (bibEntity == null) {
             throw new EntityBuilderException(
-                    "A related entity is required to build a title.");
+                    "A parent entity is required to build a title.");
         }
         
         this.title = new Entity(Ld4lTitleType.superClass());
@@ -128,14 +128,14 @@ public class TitleBuilder extends BaseEntityBuilder {
 
         if (nonSort != null) {
             BuildParams params = new BuildParams() 
-                    .setParentEntity(title)
+                    .setParent(title)
                     .setValue(nonSort)
                     .setType(Ld4lTitleElementType.NON_SORT_ELEMENT);
             titleElements.add(titleElementBuilder.build(params));
         }
       
         BuildParams params = new BuildParams() 
-                .setParentEntity(title)
+                .setParent(title)
                 .setValue(main)
                 .setType(Ld4lTitleElementType.MAIN_TITLE_ELEMENT);      
         titleElements.add(titleElementBuilder.build(params));       
@@ -151,7 +151,7 @@ public class TitleBuilder extends BaseEntityBuilder {
         }
 
         BuildParams params = new BuildParams() 
-                .setParentEntity(title)
+                .setParent(title)
                 .setType(Ld4lTitleElementType.SUBTITLE_ELEMENT);
         
         /* 
@@ -169,7 +169,7 @@ public class TitleBuilder extends BaseEntityBuilder {
             throws EntityBuilderException {
         
         BuildParams params = new BuildParams() 
-                .setParentEntity(title)
+                .setParent(title)
                 .setType(type)
                 .setValue(subfield.getTextValue());
     

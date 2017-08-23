@@ -183,7 +183,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "without an input field");        
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity());             
+                .setParent(new Entity());             
         builder.build(params);        
     }
     
@@ -294,7 +294,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(input);
         MarcxmlTaggedField field = record.getTaggedField(tag);
         BuildParams params = new BuildParams() 
-                .setParentEntity(entity)
+                .setParent(entity)
                 .setRecord(record)
                 .setField((BaseMarcxmlField) field);
         return builder.build(params);   
@@ -311,7 +311,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         MarcxmlDataField field = record.getDataField(tag);
         MarcxmlSubfield subfield = field.getSubfield(code);
         BuildParams params = new BuildParams() 
-                .setParentEntity(entity)
+                .setParent(entity)
                 .setRecord(record)
                 .setField(field)
                 .setSubfield(subfield);

@@ -49,7 +49,7 @@ public class WorkBuilder extends BaseEntityBuilder {
                     "A record is required to build a work.");
         }
 
-        this.instance = params.getParentEntity();
+        this.instance = params.getParent();
         if (instance == null) {
             throw new EntityBuilderException(
                     "An instance is required to build a work.");

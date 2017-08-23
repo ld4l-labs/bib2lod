@@ -67,7 +67,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
         expectException(
                 EntityBuilderException.class, "without an input record");        
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity());              
+                .setParent(new Entity());              
         builder.build(params);        
     }
     
@@ -155,7 +155,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
             throws Exception {
         BuildParams params = new BuildParams() 
                 .setRecord(MarcxmlTestUtils.buildRecordFromString(input))                    
-                .setParentEntity(entity);
+                .setParent(entity);
         return builder.build(params);        
     }
     

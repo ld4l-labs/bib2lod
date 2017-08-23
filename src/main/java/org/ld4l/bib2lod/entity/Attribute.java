@@ -91,4 +91,16 @@ public class Attribute {
         }
         return ResourceFactory.createStringLiteral(value);
     }
+    
+    /**
+     * Returns true iff this Attribute has the same value, datatype, and
+     * language as the other Attribute. Returns false if the other Attribute
+     * is null.
+     */
+    public boolean isDuplicate(Attribute other) {
+        if (other == null) {
+            return false;
+        }
+        return toLiteral().equals(other.toLiteral());
+    }
 }

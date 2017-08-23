@@ -18,8 +18,8 @@ public class LegacySourceDataEntityBuilder extends BaseEntityBuilder {
 
         String label = params.getValue();
         if (label == null) {
-            throw new EntityBuilderException(
-                    "Cannot build legacy source data entity without a value.");
+            throw new EntityBuilderException("Cannot build legacy source " +
+                    "data entity without a value.");
         }
 
         Entity entity = new Entity();

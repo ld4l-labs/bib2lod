@@ -4,6 +4,8 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.LegacySourceDataEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 
 /**
@@ -34,9 +36,17 @@ public class Ld4lCustomDatatypes {
      */
     public static class LegacySourceDataType extends BaseDatatype {
         
-        public static final String TYPE_URI = 
+        private static final String TYPE_URI = 
                 Ld4lNamespace.BIB_DATATYPE.uri() + "legacySourceData";               
-        public static final RDFDatatype TYPE = new LegacySourceDataType();
+        private static final RDFDatatype TYPE = new LegacySourceDataType();
+        
+        /*
+         * A kluge to instantiate this builder only once per program 
+         * execution rather than every time it's needed, since it doesn't
+         * fit into the overall Type-to-Builder architecture.
+         */
+        private static final EntityBuilder ENTITY_BUILDER = 
+                new LegacySourceDataEntityBuilder();
         
         static {
             TypeMapper.getInstance().registerDatatype(TYPE);
@@ -67,7 +77,11 @@ public class Ld4lCustomDatatypes {
         
         public static RDFDatatype getRdfDatatype() {
             return TYPE;
-        }    
+        }   
+        
+        public static EntityBuilder getBuilder() {
+            return ENTITY_BUILDER;
+        }
     }
     
     /**
@@ -75,8 +89,8 @@ public class Ld4lCustomDatatypes {
      */
     public static class EdtfType extends BaseDatatype {
         
-        public static final String TYPE_URI = Ld4lNamespace.EDTF.uri() + "EDTF";               
-        public static final RDFDatatype TYPE = new EdtfType();
+        private static final String TYPE_URI = Ld4lNamespace.EDTF.uri() + "EDTF";               
+        private static final RDFDatatype TYPE = new EdtfType();
         
         static {
             TypeMapper.getInstance().registerDatatype(TYPE);

@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.List;
+
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -11,51 +13,98 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AgentBuilder extends BaseEntityBuilder {
 
-    private Entity parentEntity;
-    private MarcxmlSubfield subfield;
-    private String name;
     private Entity agent;
+    private Entity grandparent;
+    private String name;
+    private Entity parent;
+    private MarcxmlSubfield subfield;
+    private Type type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        this.parentEntity = params.getParentEntity();
-        if (parentEntity == null) {
-            throw new EntityBuilderException(
-                    "A parent entity is required to build an activity.");
-        }
-
-        this.subfield = (MarcxmlSubfield) params.getSubfield();
-        this.name = params.getValue();
-
-        if (subfield == null && name == null) {
-            throw new EntityBuilderException(
-                    "A subfield or name value is required to build an activity.");
-        }
-
-        this.agent = new Entity(getType(params));
+        reset();
         
+        processBuildParams(params);
+        
+        if (type == null) {
+            type = Ld4lAgentType.superClass();
+        }
+
         if (name == null) {
             name = subfield.getTrimmedTextValue();                  
         }
-        agent.addAttribute(Ld4lDatatypeProp.NAME, name);
         
-        parentEntity.addRelationship(Ld4lObjectProp.HAS_AGENT, agent);
+        Entity existingAgent = findDuplicateAgent();
+        if (existingAgent != null) {
+            this.agent = existingAgent;
+        } else {
+            this.agent = new Entity(type);      
+            agent.addAttribute(Ld4lDatatypeProp.NAME, name);
+        }
+        
+        parent.addRelationship(Ld4lObjectProp.HAS_AGENT, agent);
         
         return agent;
     }
     
-    private Type getType(BuildParams params) throws EntityBuilderException {
+    private void reset() {
+        this.agent = null;
+        this.name = null;
+        this.parent = null;  
+        this.subfield = null;     
+    }
+    
+    private void processBuildParams(BuildParams params) 
+            throws EntityBuilderException {
         
-        Type type = params.getType();
-        
-        if (type == null) {
-            return Ld4lAgentType.superClass();
+        this.parent = params.getParent();
+        if (parent == null) {
+            throw new EntityBuilderException(
+                    "A parent entity is required to build an agent.");
         }
-        if (! (type instanceof Ld4lAgentType)) {
+
+        this.subfield = (MarcxmlSubfield) params.getSubfield();
+        this.name = params.getValue(); 
+        
+        if (subfield == null && name == null) {
+            throw new EntityBuilderException("A subfield or name value " + 
+                    "is required to build an agent.");
+        }
+        
+        this.type = params.getType();
+        if (type != null && ! (type instanceof Ld4lAgentType)) {
             throw new EntityBuilderException("Invalid agent type");
         } 
-        return type;
+
+        this.grandparent = params.getGrandparent();
+    }
+    
+    /**
+     * If this agent duplicates an agent of another activity of the same
+     * type for the same bib resource, use that agent rather than creating a 
+     * new one. Current deduping is based only on the agent name strings, 
+     * since that is what is available in, e.g., MARC 260$b.
+     */
+    private Entity findDuplicateAgent() {
+
+        if (grandparent == null) {
+            return null;
+        }
+        
+        List<Entity> activities = grandparent.getChildren(
+                Ld4lObjectProp.HAS_ACTIVITY, parent.getType());
+        for (Entity activity : activities) {
+            Entity agent = activity.getChild(Ld4lObjectProp.HAS_AGENT);
+            if (agent != null) {
+                String agentName = agent.getValue(Ld4lDatatypeProp.NAME);
+                if (name.equals(agentName)) {
+                    return agent;
+                }                
+            }
+        }
+        
+        return null;        
     }
 
 }

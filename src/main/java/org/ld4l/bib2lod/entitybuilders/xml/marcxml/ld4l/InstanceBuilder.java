@@ -29,13 +29,15 @@ import org.ld4l.bib2lod.util.Bib2LodStringUtils;
 public class InstanceBuilder extends BaseEntityBuilder {
     
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    private MarcxmlRecord record;
+
     private InstanceEntity instance;
-  
+    private MarcxmlRecord record;
+
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
+        reset();
+        
         // Use this if it generates better error messages 
         // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
         this.record = (MarcxmlRecord) params.getRecord(); 
@@ -61,12 +63,17 @@ public class InstanceBuilder extends BaseEntityBuilder {
         return instance;
     }
     
+    private void reset() {
+        this.instance = null;
+        this.record = null;
+    }
+    
     private void buildAdminMetadata() throws EntityBuilderException {
         
         EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.superClass());
  
         BuildParams params = new BuildParams()
-                .setParentEntity(instance)
+                .setParent(instance)
                 .setRecord(record);
         builder.build(params);          
     }
@@ -85,7 +92,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
 
         EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
         BuildParams params = new BuildParams()
-                .setParentEntity(instance);
+                .setParent(instance);
         for (MarcxmlDataField field : fields) {
             List<MarcxmlSubfield> subfields = field.getSubfields();
             params.setField(field);
@@ -103,7 +110,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lTitleType.superClass());
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setParentEntity(instance);
+                .setParent(instance);
         builder.build(params);
     }
     
@@ -118,7 +125,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
         EntityBuilder builder = getBuilder(Ld4lWorkType.superClass());
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setParentEntity(instance);
+                .setParent(instance);
         builder.build(params);
     }
     
@@ -128,7 +135,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
 
         BuildParams params = new BuildParams()
                 .setRecord(record)
-                .setParentEntity(instance); 
+                .setParent(instance); 
         builder.build(params);
     }   
     
@@ -144,7 +151,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
                 getBuilder(Ld4lActivityType.PUBLISHER_ACTIVITY);
 
         BuildParams params = new BuildParams()
-                .setParentEntity(instance)
+                .setParent(instance)
                 .setRecord(record);
         
         // First build current publisher activity from mandatory 008.        

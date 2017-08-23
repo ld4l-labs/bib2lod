@@ -7,40 +7,33 @@ import org.ld4l.bib2lod.records.RecordField;
 
 public class BuildParams {
 
-    private Record record;   
+  
     private RecordField field;
-    private RecordField subfield;
-    
+    // Parent of the parent; e.g., the bib resource of an Activity of an 
+    // Agent
+    private Entity grandparent; 
     // The "parent" Entity of this Entity: e.g., the Instance of a Title or
     // PublicationActivity
-    private Entity parentEntity;
+    private Entity parent;
+    private Record record; 
+    private RecordField subfield;
     private Type type;
     private String value;
     
-    // Currently not using
-    //private MapOfLists<Character, String> subfieldMap;
+    // Use to send multiple subfields, with codes. Currently not using.
+    // private MapOfLists<Character, String> subfieldMap;
     
-    public BuildParams() {
-        this.record = null;
-        this.field = null;
-        this.subfield = null;
-        this.parentEntity = null;
-        this.type = null;
-        this.value = null;
-        // this.subfieldMap = new MapOfLists<>();
-    }
-
     /**
-     * Returns null if no record has been set.
+     * Constructor
      */
-    public Record getRecord() {
-        return record;
-    }
-
-    public BuildParams setRecord(Record record) {
-        this.record = record;
-        // Return this for method chaining
-        return this;
+    public BuildParams() {
+        this.field = null;
+        this.grandparent = null;
+        this.parent = null;
+        this.record = null;
+        this.subfield = null;
+        this.type = null;
+        this.value = null;      
     }
     
     /**
@@ -55,7 +48,47 @@ public class BuildParams {
         // Return this for method chaining
         return this;
     }
+
     
+    /**
+     * Returns null if no grandparent entity has been set.
+     */
+    public Entity getGrandparent() {
+        return grandparent;
+    }
+
+    public BuildParams setGrandparent(Entity grandparent) {
+        this.grandparent = grandparent;
+        // Return this for method chaining
+        return this;
+    }
+
+    /**
+     * Returns null if no parent entity has been set.
+     */
+    public Entity getParent() {
+        return parent;
+    }
+
+    public BuildParams setParent(Entity parent) {
+        this.parent = parent;
+        // Return this for method chaining
+        return this;
+    }
+    
+    /**
+     * Returns null if no record has been set.
+     */
+    public Record getRecord() {
+        return record;
+    }
+
+    public BuildParams setRecord(Record record) {
+        this.record = record;
+        // Return this for method chaining
+        return this;
+    }
+  
     /**
      * Returns null if no subfield has been set.
      */
@@ -69,19 +102,6 @@ public class BuildParams {
         return this;
     }
 
-    /**
-     * Returns null if no parent entity has been set.
-     */
-    public Entity getParentEntity() {
-        return parentEntity;
-    }
-
-    public BuildParams setParentEntity(Entity parentEntity) {
-        this.parentEntity = parentEntity;
-        // Return this for method chaining
-        return this;
-    }
-    
     /**
      * Returns null if no type has been set.
      */
@@ -108,12 +128,4 @@ public class BuildParams {
         return this;
     } 
 
-//    public BuildParams setSubfieldMap(MapOfLists<Character, String> map) {
-//        this.subfieldMap = map;
-//        return this;
-//    }
-// Note: returns empty map, never null    
-//    public MapOfLists<Character, String> getSubfieldMap() {
-//        return subfieldMap;
-//    }
 }

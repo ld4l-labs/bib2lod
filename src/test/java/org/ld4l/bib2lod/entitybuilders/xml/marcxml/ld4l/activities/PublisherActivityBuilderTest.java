@@ -33,8 +33,6 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
  * Tests class PublisherActivityBuilder.
  */
 public class PublisherActivityBuilderTest extends AbstractTestClass {
-    
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final String _008_NO_LOCATION = 
             "<record>" +
@@ -184,12 +182,12 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     
     @Test
-    public void nullRelatedEntity_ThrowsException() throws Exception {
+    public void nullParent() throws Exception {
         expectException(EntityBuilderException.class, 
-                "A related entity is required");
+                "A parent entity is required");
         BuildParams params = new BuildParams()
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
-                .setParentEntity(null);        
+                .setParent(null);        
         activityBuilder.build(params);        
     }
     
@@ -198,7 +196,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "A field is required");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
                 .setRecord(null)
                 .setField(null);
@@ -210,7 +208,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "A data field or control field is required");
         BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
+                .setParent(new Entity())
                 .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
                 .setRecord(null)
                 .setField(MarcxmlTestUtils.buildSubfieldFromString(
@@ -366,22 +364,6 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         Entity activity = buildActivity(_008_260$c_DATES); 
         Assert.assertEquals(2, 
                 activity.getValues(Ld4lDatatypeProp.DATE).size());
-    }
-    
-    @Test
-    public void testLocation_260() throws Exception {
-        Entity activity = buildActivity(_260_PUBLISHER);  
-        Entity location = activity.getChild(Ld4lObjectProp.HAS_LOCATION);
-        Assert.assertEquals("New York", 
-                location.getValue(Ld4lDatatypeProp.NAME));
-    }
-    
-    @Test
-    public void testAgent_260() throws Exception {
-        Entity activity = buildActivity(_260_PUBLISHER);  
-        Entity agent = activity.getChild(Ld4lObjectProp.HAS_AGENT);
-        Assert.assertEquals("Grune & Stratton", 
-                agent.getValue(Ld4lDatatypeProp.NAME));        
     }
     
     

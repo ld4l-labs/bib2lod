@@ -8,7 +8,11 @@ import org.ld4l.bib2lod.ontology.Type;
 public enum Ld4lAgentType implements Type {
     
     /* List in alpha order */
-    AGENT(Ld4lNamespace.FOAF, "Agent");
+    AGENT(Ld4lNamespace.FOAF, "Agent"),
+    FAMILY(Ld4lNamespace.BIBFRAME, "Family"),
+    PERSON(Ld4lNamespace.FOAF, "Person"),
+    ORGANIZATION(Ld4lNamespace.FOAF, "Organization");
+
     
     private final String uri;
     private final Resource ontClass;

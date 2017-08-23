@@ -67,15 +67,19 @@ public class WorkBuilderTest extends AbstractTestClass {
     // The tests
     // ---------------------------------------------------------------------
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullInstance_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "An instance is required");
         buildWork(MarcxmlTestUtils.MINIMAL_RECORD, null);
     }
     
-    @Test (expected = EntityBuilderException.class)
+    @Test 
     public void nullRecord_ThrowsException() throws Exception {
+        expectException(EntityBuilderException.class, 
+                "A record is required");
         BuildParams params = new BuildParams()
-                .setParentEntity(defaultInstance)
+                .setParent(defaultInstance)
                 .setRecord(null);                
         builder.build(params);
     } 
@@ -109,7 +113,7 @@ public class WorkBuilderTest extends AbstractTestClass {
         MarcxmlRecord record = new MarcxmlRecord(
                 XmlTestUtils.buildElementFromString(marcxml));
         BuildParams params = new BuildParams()
-                .setParentEntity(instance)
+                .setParent(instance)
                 .setRecord(record);        
         return builder.build(params);
     }

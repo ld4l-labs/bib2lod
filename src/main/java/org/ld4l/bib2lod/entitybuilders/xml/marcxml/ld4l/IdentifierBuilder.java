@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.LegacySourceDataType;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -48,7 +49,7 @@ public class IdentifierBuilder extends BaseEntityBuilder {
             Pattern.compile("^(?:\\(([a-zA-Z-]+)\\))?(\\w+)$");
     
     private BaseMarcxmlField field;
-    private Entity relatedEntity;
+    private Entity parent;
     
     private static void buildSources() {
         
@@ -74,8 +75,10 @@ public class IdentifierBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        this.relatedEntity = params.getParentEntity();
-        if (relatedEntity == null) {
+        reset();
+        
+        this.parent = params.getParent();
+        if (parent == null) {
             throw new EntityBuilderException(
                     "Cannot build identifier without a related entity.");
         }
@@ -96,11 +99,16 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         }
 
         if (identifier != null) {
-            relatedEntity.addRelationship(
+            parent.addRelationship(
                     Ld4lObjectProp.IDENTIFIED_BY, identifier);
         }
         
         return identifier;
+    }
+    
+    private void reset() {
+        this.field = null;
+        this.parent = null;
     }
     
     /**
@@ -110,7 +118,7 @@ public class IdentifierBuilder extends BaseEntityBuilder {
      */
     private static final Entity buildSource(String label) 
             throws EntityBuilderException {
-        EntityBuilder builder = new LegacySourceDataEntityBuilder();
+        EntityBuilder builder = LegacySourceDataType.getBuilder();
         BuildParams params = new BuildParams()
                 .setValue(label);
         Entity source = builder.build(params);
@@ -186,7 +194,7 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         // AdminMetadata identifier.
         if (orgCode == null) {           
             Entity adminMetadata = 
-                    relatedEntity.getChild(Ld4lObjectProp.HAS_ADMIN_METADATA);
+                    parent.getChild(Ld4lObjectProp.HAS_ADMIN_METADATA);
             if (adminMetadata != null) {
                 Entity id = adminMetadata.getChild(Ld4lObjectProp.IDENTIFIED_BY);
                 String idValue = id.getValue(Ld4lDatatypeProp.VALUE);

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A type of map whose values are lists.
@@ -114,7 +115,17 @@ public class MapOfLists<K, V> {
     public void removeValues(K key) {
         map.remove(key);
     }
-
+    
+    /**
+     * Remove all instances of the specified value from the list associated 
+     * with this key. Does nothing if the value is not found. Value may be
+     * null.
+     */
+    public void removeValue(K key, V value) {
+        List<V> values = map.get(key);
+        values.removeIf(v -> v.equals(value));
+    }
+    
     /**
      * Return a map that duplicates the structure of this one.
      */
