@@ -126,7 +126,7 @@ public class TitleBuilderTest extends AbstractTestClass {
         List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
         
         List<String> expected = new ArrayList<>(
-                Arrays.asList(new String[]{"1", "2", "3"}));
+                Arrays.asList("1", "2", "3"));
         
         List<String> actual = new ArrayList<>();
         for (Entity titleElement : titleElements) {

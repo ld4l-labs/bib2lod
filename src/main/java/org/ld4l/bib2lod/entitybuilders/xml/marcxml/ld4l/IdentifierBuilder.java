@@ -151,7 +151,8 @@ public class IdentifierBuilder extends BaseEntityBuilder {
 
         Entity identifier = null;
         
-        MarcxmlSubfield subfield = (MarcxmlSubfield) params.getSubfield();
+        MarcxmlSubfield subfield = 
+                (MarcxmlSubfield) params.getSubfields().get(0);
  
         if (field.getTag() == 35) {
             identifier = convert035(subfield);

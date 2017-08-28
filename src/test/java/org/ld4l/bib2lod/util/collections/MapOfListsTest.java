@@ -15,8 +15,7 @@ public class MapOfListsTest extends AbstractTestClass {
     @Test
     public void testRemoveValue() {
         MapOfUniqueLists<Integer, String> map = new MapOfUniqueLists<>(); 
-        List<String> list = Arrays.asList(
-                new String[] {"one", "eins", "un", "eins"});
+        List<String> list = Arrays.asList("one", "eins", "un", "eins");              
         map.addValues(1,  list);
         map.removeValue(1, "eins");
         Assert.assertEquals(2,  map.getValues(1).size());        
@@ -25,7 +24,7 @@ public class MapOfListsTest extends AbstractTestClass {
     @Test
     public void testRemoveAbsentValue() {
         MapOfUniqueLists<Integer, String> map = new MapOfUniqueLists<>(); 
-        List<String> list = Arrays.asList(new String[] {"one", "eins"});
+        List<String> list = Arrays.asList("one", "eins");
         map.addValues(1,  list);
         map.removeValue(1, "un");
         Assert.assertEquals(2,  map.getValues(1).size());        

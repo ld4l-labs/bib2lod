@@ -2,8 +2,6 @@ package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.activities;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,7 +11,6 @@ import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.EdtfType;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
@@ -161,7 +158,6 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
 
 
     private static BaseMockBib2LodObjectFactory factory;
-    private ActivityBuilder activityBuilder;   
     private InstanceBuilder instanceBuilder;
     
     @BeforeClass
@@ -173,105 +169,12 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() throws RecordFieldException {       
-        this.activityBuilder = new ActivityBuilder();
         this.instanceBuilder = new InstanceBuilder();              
     }
     
     // ---------------------------------------------------------------------
     // The tests
     // ---------------------------------------------------------------------
-    
-    @Test
-    public void nullParent() throws Exception {
-        expectException(EntityBuilderException.class, 
-                "A parent entity is required");
-        BuildParams params = new BuildParams()
-                .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
-                .setParent(null);        
-        activityBuilder.build(params);        
-    }
-    
-    @Test
-    public void nullField_ThrowsException() throws Exception {     
-        expectException(EntityBuilderException.class, 
-                "A field is required");
-        BuildParams params = new BuildParams()
-                .setParent(new Entity())
-                .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
-                .setRecord(null)
-                .setField(null);
-        activityBuilder.build(params);        
-    }
-    
-    @Test
-    public void invalidFieldType_ThrowsException() throws Exception {     
-        expectException(EntityBuilderException.class, 
-                "A data field or control field is required");
-        BuildParams params = new BuildParams()
-                .setParent(new Entity())
-                .setType(Ld4lActivityType.PUBLISHER_ACTIVITY)
-                .setRecord(null)
-                .setField(MarcxmlTestUtils.buildSubfieldFromString(
-                        "<subfield code='a'>test</subfield>"));
-        activityBuilder.build(params);        
-    }
-  
-
-    @Test
-    public void testAddSpecifiedType() throws Exception {   
-        Entity activity = buildActivity(_260_PUBLISHER);              
-        Assert.assertTrue(activity.hasType(
-                Ld4lActivityType.PUBLISHER_ACTIVITY));                    
-    }
-    
-    /* Tests we would use if we decide to throw an exception for absence
-     * of a specific Activity subclass.
-    @Test
-    public void typeNotSpecified_ThrowsException() throws Exception {
-        expectException(EntityBuilderException.class, 
-                "A type is required");
-        BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
-                .setRecord(null)
-                .setField(MarcxmlTestUtils.buildSubfieldFromString(
-                        "<subfield code='a'>test</subfield>"));
-        activityBuilder.build(params);                     
-    }
-    
-    @Test
-    public void invalidType_ThrowsException() throws Exception {
-        expectException(EntityBuilderException.class, 
-                "An activity type is required");
-        BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
-                .setRecord(null)
-                .setType(Ld4lInstanceType.INSTANCE)
-                .setField(MarcxmlTestUtils.buildSubfieldFromString(
-                        "<subfield code='a'>test</subfield>"));
-        activityBuilder.build(params);                      
-    }   
-    
-    @Test
-    public void specificTypeNotSpecified_ThrowsException() 
-            throws Exception {
-        expectException(EntityBuilderException.class, 
-                "A specific activity type is required");
-        BuildParams params = new BuildParams()
-                .setParentEntity(new Entity())
-                .setRecord(null)
-                .setType(Ld4lActivityType.ACTIVITY)
-                .setField(MarcxmlTestUtils.buildSubfieldFromString(
-                        "<subfield code='a'>test</subfield>"));
-        activityBuilder.build(params);                 
-    } 
-    */ 
-    
-    @Test 
-    public void testAddLabel() throws Exception {
-        Entity activity = buildActivity(_260_PUBLISHER);
-        Assert.assertEquals(Ld4lActivityType.PUBLISHER_ACTIVITY.label(), 
-                activity.getValue(Ld4lDatatypeProp.LABEL));
-    }
     
     @Test
     public void testPublisherStatus_008() throws Exception {
@@ -346,8 +249,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
                 activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
-
-    
+   
     @Test
     public void testOneCurrentPublisher_008_260() throws Exception {
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
@@ -356,7 +258,8 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
                 .setRecord(record);
         Entity instance = instanceBuilder.build(params);       
         Assert.assertEquals(1, 
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY).size());      
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
     }
     
     @Test
@@ -365,12 +268,11 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         Assert.assertEquals(2, 
                 activity.getValues(Ld4lDatatypeProp.DATE).size());
     }
-    
+
     
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
 
     private Entity buildActivity() throws Exception {
         BuildParams params = new BuildParams() 

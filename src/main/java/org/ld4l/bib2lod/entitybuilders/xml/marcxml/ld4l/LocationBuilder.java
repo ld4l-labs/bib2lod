@@ -5,9 +5,7 @@ import java.util.List;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -68,7 +66,7 @@ public class LocationBuilder extends BaseEntityBuilder {
                     "A parent entity is required to build a location.");
         }
 
-        this.subfield = (MarcxmlSubfield) params.getSubfield();
+        this.subfield = (MarcxmlSubfield) params.getSubfield(0);
         this.name = params.getValue();
 
         if (subfield == null && name == null) {

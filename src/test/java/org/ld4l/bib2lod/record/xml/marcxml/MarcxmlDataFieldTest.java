@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.record.xml.marcxml;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.ld4l.bib2lod.util.collections.MapOfLists;
 import org.w3c.dom.Element;
@@ -199,6 +202,40 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
         map.addValue('c', "C1");
         Character[] codes = {'a', 'c'};
         Assert.assertEquals(map, datafield.getSubfieldSubmap(codes));        
+    }
+    
+    @Test
+    public void testGetSubfieldCodes() throws RecordFieldException {
+        MarcxmlDataField field = 
+                MarcxmlTestUtils.buildDataFieldFromString(MULTIPLE_SUBFIELDS);
+        List<Character> expected = Arrays.asList(
+                'a', 'a', 'a', 'b', 'b', 'c');
+        Assert.assertEquals(expected, field.getSubfieldCodes());
+        
+    }
+    
+    @Test
+    public void testGetUniqueSubfieldCodes() throws RecordFieldException {
+        MarcxmlDataField field = 
+                MarcxmlTestUtils.buildDataFieldFromString(MULTIPLE_SUBFIELDS);
+        Set<Character> expected = new HashSet<>(Arrays.asList('a', 'b', 'c'));
+        Assert.assertEquals(expected, field.getUniqueSubfieldCodes());        
+    }
+    
+    @Test
+    public void testContainsSomeSubfield() throws RecordFieldException {
+        MarcxmlDataField field = 
+                MarcxmlTestUtils.buildDataFieldFromString(VALID_DATAFIELD);
+        Character[] codes = {'a', 'e', 'g'};
+        Assert.assertTrue(field.containsAnySubfield(codes));
+    }
+    
+    @Test
+    public void testDoesNotContainSomeSubfield() throws Exception {
+        MarcxmlDataField field = 
+                MarcxmlTestUtils.buildDataFieldFromString(VALID_DATAFIELD);
+        Character[] codes = {'e', 'f', 'g'};
+        Assert.assertFalse(field.containsAnySubfield(codes));
     }
     
     

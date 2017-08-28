@@ -14,6 +14,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class PublisherActivityBuilder extends ProviderActivityBuilder {
 
@@ -25,12 +26,14 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
   
     @Override
     public void build() throws EntityBuilderException {
+   
+        this.type = TYPE;
         
         if (field.getTag() == 8) {
             convert_008();
         } else if (field.getTag() == 260) {
             convert_260();
-        }       
+        }           
     }
 
     private void convert_008() {
@@ -67,8 +70,7 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         
         // Get all publisher activities built so far
         List<Entity> publisherActivities = parent.getChildren(
-                Ld4lObjectProp.HAS_ACTIVITY, 
-                    Ld4lActivityType.PUBLISHER_ACTIVITY);
+                Ld4lObjectProp.HAS_ACTIVITY, TYPE);
 
         int field_260_Count = record.getDataFields(260).size();
         Integer ind1 = datafield.getFirstIndicator();
@@ -94,18 +96,13 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
             this.activity = new Entity(TYPE);
         }
 
-        buildLocation(datafield, 'a'); 
-        buildAgent(datafield, 'b');
-        buildDate(datafield, 'c');
+        buildLocation(MarcxmlSubfield.getSubfield(subfields, 'a')); 
+        buildAgent(MarcxmlSubfield.getSubfield(subfields, 'b'));
+        buildDate(MarcxmlSubfield.getSubfield(subfields, 'c'));
   
         // TODO 264 with indicator for publisher - otherwise a different type,
         // but otherwise the same (mostly?)
     }
 
-
-    @Override
-    protected Ld4lActivityType getType() {
-        return TYPE;
-    }
 
 }

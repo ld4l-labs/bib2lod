@@ -8,12 +8,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -107,7 +107,7 @@ public class LocationBuilderTest extends AbstractTestClass {
                 "Invalid location type");  
         BuildParams params = new BuildParams()
                 .setType(Ld4lInstanceType.INSTANCE)
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
                         NAME_SUBFIELD))
                 .setParent(new Entity());
         locationBuilder.build(params);
@@ -118,7 +118,7 @@ public class LocationBuilderTest extends AbstractTestClass {
         Type type = Ld4lLocationType.LOCATION;
         BuildParams params = new BuildParams()
                 .setType(type)
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
                         NAME_SUBFIELD))
                 .setParent(new Entity());
         Entity location = locationBuilder.build(params);
@@ -138,7 +138,7 @@ public class LocationBuilderTest extends AbstractTestClass {
     @Test
     public void testNameFromSubfield() throws Exception {
         BuildParams params = new BuildParams()
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
                         NAME_SUBFIELD))
                 .setParent(new Entity());
         Entity location = locationBuilder.build(params);

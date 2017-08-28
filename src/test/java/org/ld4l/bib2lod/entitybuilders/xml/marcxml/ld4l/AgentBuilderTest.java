@@ -109,7 +109,7 @@ public class AgentBuilderTest extends AbstractTestClass {
                 "Invalid agent type");  
         BuildParams params = new BuildParams()
                 .setType(Ld4lInstanceType.INSTANCE)
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(NAME_SUBFIELD))
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(NAME_SUBFIELD))
                 .setParent(new Entity());
         agentBuilder.build(params);
     }
@@ -119,7 +119,7 @@ public class AgentBuilderTest extends AbstractTestClass {
         Type type = Ld4lAgentType.PERSON;
         BuildParams params = new BuildParams()
                 .setType(type)
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
                         NAME_SUBFIELD))
                 .setParent(new Entity());
         Entity agent = agentBuilder.build(params);
@@ -139,7 +139,7 @@ public class AgentBuilderTest extends AbstractTestClass {
     @Test
     public void testNameFromSubfield() throws Exception {
         BuildParams params = new BuildParams()
-                .setSubfield(MarcxmlTestUtils.buildSubfieldFromString(
+                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
                         NAME_SUBFIELD))
                 .setParent(new Entity());
         Entity agent = agentBuilder.build(params);

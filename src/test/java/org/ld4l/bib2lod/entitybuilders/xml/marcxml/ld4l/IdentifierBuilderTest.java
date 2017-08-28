@@ -314,7 +314,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
                 .setParent(entity)
                 .setRecord(record)
                 .setField(field)
-                .setSubfield(subfield);
+                .addSubfield(subfield);
         return builder.build(params);
     }
     

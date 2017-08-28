@@ -3,10 +3,12 @@
 package org.ld4l.bib2lod.records.xml.marcxml;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -160,18 +162,32 @@ public class MarcxmlDataField extends BaseMarcxmlField
 
     /**
      * Returns a list of subfields of this datafield with the specified code.
-     * Use with repeating subfields. Returns an empty List if no subfields 
+     * Use with repeating subfields. Returns an empty list if no subfields 
      * found.
      * @param String code - the value of the code attribute
      */
     public List<MarcxmlSubfield> getSubfields(char code) {
-        List<MarcxmlSubfield> sf = new ArrayList<>();
+        List<MarcxmlSubfield> list = new ArrayList<>();
         for (MarcxmlSubfield subfield : subfields) {
             if (subfield.getCode() == code) {
-                sf.add(subfield);
+                list.add(subfield);
             }
         }
-        return sf;
+        return list;
+    }
+    
+    /**
+     * Returns a list of subfields of this datafield with one of the 
+     * specified codes. Returns an empty list if no subfields found.
+     */
+    public List<MarcxmlSubfield> getSubfields(List<Character> codes) {
+        List<MarcxmlSubfield> list = new ArrayList<>();
+        for (MarcxmlSubfield subfield : subfields) {
+            if (codes.contains(subfield.getCode())) {
+                list.add(subfield);
+            }
+        }
+        return list;
     }
     
     /**
@@ -196,6 +212,46 @@ public class MarcxmlDataField extends BaseMarcxmlField
     public boolean hasSubfield(char code) {
         return getSubfield(code) != null;
     }
+    
+    /**
+     * Returns a list of subfield codes in the datafield. Note that a valid
+     * datafield must have at least one subfield, so this method never
+     * returns an empty list.
+     */
+    public List<Character> getSubfieldCodes() {        
+    
+        List<Character> codes = new ArrayList<>();
+        for (MarcxmlSubfield subfield : subfields) {
+            codes.add(subfield.getCode());
+        }
+        return codes;
+    }
+    
+    public Set<Character> getUniqueSubfieldCodes() {
+        
+        Set<Character> codes = new HashSet<>();
+        for (MarcxmlSubfield subfield : subfields) {
+            codes.add(subfield.getCode());
+        }
+        return codes;        
+    }
+    
+    /**
+     * Returns true iff this datafield contains at least one subfield
+     * in the specified list of character codes.
+     */
+    public boolean containsAnySubfield(List<Character> codes) {
+        return CollectionUtils.containsAny(getSubfieldCodes(), codes);
+    }
+    
+    /**
+     * Returns true iff this datafield contains at least one subfield
+     * in the specified array of character codes.
+     */
+    public boolean containsAnySubfield(Character[] codes) {
+        return containsAnySubfield(Arrays.asList(codes));
+    }
+    
       
     /**
      * Returns the datafield in the specified list with the specified tag value.

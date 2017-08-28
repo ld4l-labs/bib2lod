@@ -13,10 +13,31 @@ order to pass in the parent's parent to the builder.
 ### Changed
 
 * Instantiate LegacySourceDataEntityBuilder on program startup rather than
-every time it's used.
+every time it is used.
 
 * Changed BuildParams.setParentEntity() to BuildParams.setParent(), 
-BuildParams.getParentEntity() to BuildParams.getParent().
+BuildParams.getParentEntity() to BuildParams.getParent(). 
+
+* Changed BuildParams.subfield to BuildParams.subfields (a list of subfields
+rather than a single subfield). Builders previously expecting a single
+subfield will use only the first subfield in the list. Previous calls to 
+BuildParams.setSubfield() and BuildParams.getSubfield() will behave as 
+previously. Defined methods:
+  * BuildParams.setSubfield(RecordField subfield) - resets the list and adds
+subfield - thus replaces previous BuildParams.setSubfield().
+  * BuildParams.setSubfields(List<RecordField> subfields) - resets the list
+and adds all subfields.
+  * BuildParams.addSubfield(RecordField subfield) - adds subfield to the
+list without resetting it.
+  * BuildParams.addSubfields(List<RecordField> subfields - adds all 
+subfields to the list without resetting it.
+  * BuildParams.getSubfield(int index) - returns the subfield at the index. 
+Returns null if there is no subfield at the index.
+  * BuildParams.getSubfield() - returns the subfield at index 0 - thus 
+behaves like the previous BuildParams.getSubfield(). Returns null if the 
+list is empty.
+  * BuildParams.getSubfields() - returns all subfields.
+
 
 
 

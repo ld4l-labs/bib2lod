@@ -1,5 +1,8 @@
 package org.ld4l.bib2lod.entitybuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.records.Record;
@@ -16,11 +19,11 @@ public class BuildParams {
     // PublicationActivity
     private Entity parent;
     private Record record; 
-    private RecordField subfield;
+    private List<RecordField> subfields;
     private Type type;
     private String value;
     
-    // Use to send multiple subfields, with codes. Currently not using.
+    // Use to send multiple subfields, with codes. Currently not used.
     // private MapOfLists<Character, String> subfieldMap;
     
     /**
@@ -31,7 +34,7 @@ public class BuildParams {
         this.grandparent = null;
         this.parent = null;
         this.record = null;
-        this.subfield = null;
+        this.subfields = new ArrayList<>();
         this.type = null;
         this.value = null;      
     }
@@ -48,7 +51,6 @@ public class BuildParams {
         // Return this for method chaining
         return this;
     }
-
     
     /**
      * Returns null if no grandparent entity has been set.
@@ -88,16 +90,63 @@ public class BuildParams {
         // Return this for method chaining
         return this;
     }
-  
+    
     /**
-     * Returns null if no subfield has been set.
+     * Returns an empty List if there are no subfields; never returns null.
+     * @return
+     */
+    public List<RecordField> getSubfields() {
+        return subfields;
+    }
+    
+    /**
+     * Returns the first subfield in subfields. Returns null if the list is
+     * empty.
      */
     public RecordField getSubfield() {
-        return subfield;
+        return getSubfield(0);
+    }
+  
+    /**
+     * Returns the subfield at the specified index in the subfields list.
+     * Returns null if index is out of bounds.
+     */
+    public RecordField getSubfield(int index) {
+        try {
+            return subfields.get(index);
+        // TODO - is this what we want, or just throw the exception?
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
+    /**
+     * Add the subfield to the list of subfields.
+     */
+    public BuildParams addSubfield(RecordField subfield) {
+        this.subfields.add(subfield);
+        // Return this for method chaining
+        return this;
+    }
+    
+    /**
+     * Add the list of subfields to this list of subfields.
+     */
+    public BuildParams addSubfields(List<RecordField> subfields) {
+        this.subfields.addAll(subfields);
+        // Return this for method chaining
+        return this;
+    }
+    
     public BuildParams setSubfield(RecordField subfield) {
-        this.subfield = subfield;
+        this.subfields.clear();
+        subfields.add(subfield);
+        // Return this for method chaining
+        return this;
+    }
+    
+    public BuildParams setSubfields(List<RecordField> subfields) {
+        this.subfields = subfields;
         // Return this for method chaining
         return this;
     }

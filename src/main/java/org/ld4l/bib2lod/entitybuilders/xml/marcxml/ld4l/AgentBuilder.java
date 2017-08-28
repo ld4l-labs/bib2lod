@@ -64,7 +64,7 @@ public class AgentBuilder extends BaseEntityBuilder {
                     "A parent entity is required to build an agent.");
         }
 
-        this.subfield = (MarcxmlSubfield) params.getSubfield();
+        this.subfield = (MarcxmlSubfield) params.getSubfield(0);
         this.name = params.getValue(); 
         
         if (subfield == null && name == null) {

@@ -1,14 +1,19 @@
 package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -190,10 +195,41 @@ public class InstanceBuilderTest extends AbstractTestClass {
                 "<datafield tag='260' ind1='3' ind2=' '>" +
                     "<subfield code='a'>Leiden :</subfield>" +
                     "<subfield code='b'>E.J. Brill</subfield>" +
-                  "</datafield>" +
-                  "<datafield tag='264' ind1='3' ind2=' '>" +
-                  "<subfield code='a'>New York :</subfield>" +
-                  "<subfield code='b'>Random House</subfield>" +
+                "</datafield>" +
+                // 264 not yet converted
+                //"<datafield tag='264' ind1='3' ind2=' '>" +
+                  //"<subfield code='a'>New York :</subfield>" +
+                  //"<subfield code='b'>Random House</subfield>" +
+                //"</datafield>" +
+            "</record>"; 
+    
+    public static final String _260_PUBLISHER_AND_MANUFACTURER = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>full title</subfield>" +  
+                "</datafield>" +   
+                "<datafield tag='260' ind1=' ' ind2=' '>" +
+                    "<subfield code='b'>National Technical Information Service,</subfield>" +
+                    "<subfield code='f'>Oak Ridge National Laboratory </subfield>" +
+                "</datafield>" +
+            "</record>"; 
+    
+    public static final String _260_ONE_FIELD_TWO_PUBLISHERS = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>full title</subfield>" +  
+                "</datafield>" +   
+                "<datafield tag='260' ind1='2' ind2=' '>" +
+                    "<subfield code='a'>place1</subfield>" +
+                    "<subfield code='c'>date1</subfield>" +
+                    "<subfield code='b'>name2</subfield>" +
+                    "<subfield code='c'>date2</subfield>" +
                 "</datafield>" +
             "</record>"; 
     
@@ -330,13 +366,44 @@ public class InstanceBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testMultiple260s() throws Exception {
+    public void testMultiplePas() throws Exception {
         Entity instance = 
                 buildInstance(MULTIPLE_PAS);
-        Assert.assertEquals(3, instance.getAttributes(
+        Assert.assertEquals(2, instance.getAttributes(
                 Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());        
     }
 
+    @Test
+    public void testPublisherAndManufacturer() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
+        Assert.assertEquals(2,
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY).size());     
+    }   
+    
+    @Test
+    public void testManufacturerWithPublisher() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
+        List<Entity> activities = 
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
+        Assert.assertEquals(Ld4lActivityType.MANUFACTURER_ACTIVITY,
+                activities.get(1).getType());     
+    }    
+    
+    @Test
+    public void testPublisherWithManufacturer() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
+        List<Entity> activities = 
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
+        Assert.assertEquals(Ld4lActivityType.PUBLISHER_ACTIVITY,
+                activities.get(0).getType());     
+    }   
+    
+    @Test
+    public void testTwoPublishers_260() throws Exception {
+        Entity instance = buildInstance(_260_ONE_FIELD_TWO_PUBLISHERS); 
+        Assert.assertEquals(3,
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY).size());    
+    }     
     
     // ---------------------------------------------------------------------
     // Helper methods
