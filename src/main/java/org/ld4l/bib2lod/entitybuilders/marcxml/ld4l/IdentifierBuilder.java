@@ -22,6 +22,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.BaseMarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
 /**
  * Builds an Identifier for a bib resource from a field in the record.
@@ -76,27 +77,14 @@ public class IdentifierBuilder extends BaseEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
 
         reset();
+        parseBuildParams(params);
         
-        this.parent = params.getParent();
-        if (parent == null) {
-            throw new EntityBuilderException(
-                    "Cannot build identifier without a related entity.");
-        }
-        
-        this.field = (BaseMarcxmlField) params.getField();
-        if (field == null) {
-            throw new EntityBuilderException(
-                    "Cannot build identifier without an input field.");
-        }
-        
-        Entity identifier;
+        Entity identifier = null;
         if (field instanceof MarcxmlControlField) {
             identifier = build((MarcxmlControlField) field);
         } else if (field instanceof MarcxmlDataField) {
             identifier = build((MarcxmlDataField) field, params);
-        } else {
-            throw new EntityBuilderException("Invalid field type.");
-        }
+        } 
 
         if (identifier != null) {
             parent.addRelationship(
@@ -110,6 +98,26 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         this.field = null;
         this.parent = null;
     }
+    
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
+
+        this.parent = params.getParent();
+        if (parent == null) {
+            throw new EntityBuilderException(
+                    "Cannot build identifier without a related entity.");
+        }
+        
+        this.field = (BaseMarcxmlField) params.getField();
+        if (field == null) {
+            throw new EntityBuilderException(
+                    "Cannot build identifier without an input field.");
+        } if (! (field instanceof MarcxmlTaggedField)) {
+            throw new EntityBuilderException("Invalid field type.");
+        }
+    }
+    
+
     
     /**
      * Returns a source Entity built from a label. No type is specified, and the 

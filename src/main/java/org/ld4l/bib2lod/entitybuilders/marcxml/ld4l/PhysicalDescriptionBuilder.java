@@ -21,7 +21,7 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
         
         reset();
-        processBuildParams(params);
+        parseBuildParams(params);
         return convertByField();
     }
     
@@ -30,7 +30,7 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
         this.parent = null;
     }
     
-    private void processBuildParams(BuildParams params) 
+    private void parseBuildParams(BuildParams params) 
             throws EntityBuilderException {
 
         this.parent = params.getParent();

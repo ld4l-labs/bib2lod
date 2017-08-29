@@ -86,9 +86,4 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         // but otherwise the same (mostly?)
     }
     
-    private void setCurrent() {
-
-    }
-
-
 }

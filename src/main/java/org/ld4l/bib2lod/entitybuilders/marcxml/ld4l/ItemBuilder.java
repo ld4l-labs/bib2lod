@@ -19,18 +19,7 @@ public class ItemBuilder extends BaseEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
 
         reset();
-        
-        this.instance = params.getParent();        
-        if (instance == null) {
-            throw new EntityBuilderException(
-                    "A related instance is required to build an item.");
-        }
-        
-        this.record = (MarcxmlRecord) params.getRecord();
-        if (record == null) {
-            throw new EntityBuilderException(
-                    "A record is required to build an item.");
-        }
+        parseBuildParams(params);
         
         this.item = new Entity(Ld4lItemType.superClass());
         
@@ -45,6 +34,22 @@ public class ItemBuilder extends BaseEntityBuilder {
         this.instance = null;
         this.item = null;
         this.record = null;
+    }
+    
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
+        
+        this.instance = params.getParent();        
+        if (instance == null) {
+            throw new EntityBuilderException(
+                    "A related instance is required to build an item.");
+        }
+        
+        this.record = (MarcxmlRecord) params.getRecord();
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build an item.");
+        }        
     }
 
 }

@@ -25,7 +25,7 @@ public class AgentBuilder extends BaseEntityBuilder {
 
         reset();
         
-        processBuildParams(params);
+        parseBuildParams(params);
         
         if (type == null) {
             type = Ld4lAgentType.superClass();
@@ -55,7 +55,7 @@ public class AgentBuilder extends BaseEntityBuilder {
         this.subfield = null;     
     }
     
-    private void processBuildParams(BuildParams params) 
+    private void parseBuildParams(BuildParams params) 
             throws EntityBuilderException {
         
         this.parent = params.getParent();
