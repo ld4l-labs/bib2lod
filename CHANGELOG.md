@@ -1,14 +1,30 @@
 # Bib2Lod Change Log
 
-* This change log records API changes that may affect implementing projects.
+This change log records API changes that may affect implementing projects.
 
-## Commit # -
+## Commit #9d16ad80
+
+### Changed
+
+* Removed 'xml' from package names:
+  * org.ld4l.bib2lod.conversion.xml.marcxml
+  * org.ld4l.bib2lod.entitybuilders.xml.marcxml 
+  * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities
+
+New package names:
+
+  * org.ld4l.bib2lod.conversion.marcxml
+  * org.ld4l.bib2lod.entitybuilders.marcxml
+  * org.ld4l.bib2lod.entitybuilders.marcxml.activities
+  
+Implementers can do the same with their packages.
+
+
+## Commit #26cef60d (and preceding)
 
 ### Added
-
 * Added BuildParams.setGrandparent() and BuildParams.getGrandparent(), in 
 order to pass in the parent's parent to the builder.
-
 
 ### Changed
 
@@ -39,9 +55,7 @@ list is empty.
   * BuildParams.getSubfields() - returns all subfields.
 
 
-
-
-## Commit #27b5857f
+## Commit #27b5857f (and preceding)
 
 ### Changed
 
