@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
+package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,34 +17,25 @@ import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 
 /**
- * Tests class PhysicalDescriptionBuilder
+ * Tests class ProviderActivityBuilder.
  */
-public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
-    
-    private static final String _300_NO_$A = 
+public class ProviderActivityBuilderTest extends AbstractTestClass {
+
+    public static final String _260_PUBLISHER = 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='001'>102063</controlfield>" + 
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
                 "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='300' ind1='' ind2=''>" +
-                    "<subfield code='c'>23 cm</subfield>" +          
-                "</datafield>" + 
-            "</record>";  
-    
-    private static final String _300_EXTENT = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='300' ind1='' ind2=''>" +
-                    "<subfield code='a'>123 p.</subfield>" +          
-                "</datafield>" + 
-            "</record>";   
-    
+                    "<subfield code='a'>full title</subfield>" +  
+                "</datafield>" +   
+                "<datafield tag='260' ind1=' ' ind2=' '>" +
+                    "<subfield code='a'>New York,</subfield>" +
+                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
+                    "<subfield code='c'>1957.</subfield>" +
+                "</datafield>" +
+            "</record>"; 
+
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder instanceBuilder;
     
@@ -59,44 +50,44 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     public void setUp() throws RecordFieldException {       
         this.instanceBuilder = new InstanceBuilder();              
     }
-        
+    
+    
     // ---------------------------------------------------------------------
     // The tests
     // ---------------------------------------------------------------------
-      
+    
     @Test
-    public void no300_Succeeds() throws Exception {
-        buildInstance();
+    public void testLocation_260() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER);
+        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY)
+                .get(1));
+        Entity location = activity.getChild(Ld4lObjectProp.HAS_LOCATION);
+        Assert.assertEquals("New York", 
+                location.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test
-    public void no300$a_Succeeds() throws Exception {
-        buildInstance(_300_NO_$A);
+    public void testAgent_260() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER);
+        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY)
+                .get(1));
+        Entity agent = activity.getChild(Ld4lObjectProp.HAS_AGENT);
+        Assert.assertEquals("Grune & Stratton", 
+                agent.getValue(Ld4lDatatypeProp.NAME));        
     }
     
     @Test
-    public void testExtent() throws Exception {
-        Entity instance = buildInstance(_300_EXTENT);
-        Assert.assertNotNull(instance.getChild(Ld4lObjectProp.HAS_EXTENT));
-    }
-    
-    @Test
-    public void testExtentLabel() throws Exception {
-        Entity extent = buildInstance(_300_EXTENT).getChild(
-                Ld4lObjectProp.HAS_EXTENT);
-        Assert.assertEquals("123 p.", 
-                extent.getValue(Ld4lDatatypeProp.LABEL));
+    public void testDate_260() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER);
+        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY)
+                .get(1));
+        Assert.assertEquals("1957", 
+                activity.getValue(Ld4lDatatypeProp.DATE));        
     }
     
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
-    private Entity buildInstance() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord());  
-        return instanceBuilder.build(params);
-    }
     
     private Entity buildInstance(String input) throws Exception {
         BuildParams params = new BuildParams() 
