@@ -15,7 +15,6 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
-import org.ld4l.bib2lod.util.collections.MapOfLists;
 import org.w3c.dom.Element;
 
 

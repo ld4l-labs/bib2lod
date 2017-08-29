@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
+package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import java.util.regex.Pattern;
 
@@ -7,7 +7,6 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
