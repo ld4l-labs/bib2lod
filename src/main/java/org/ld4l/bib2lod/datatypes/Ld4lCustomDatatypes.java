@@ -5,7 +5,7 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.LegacySourceDataEntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.LegacySourceDataEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 
 /**

@@ -1,13 +1,13 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
+package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.activities.ActivityBuilder;
-import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.activities.ManufacturerActivityBuilder;
-import org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.activities.PublisherActivityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ActivityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ManufacturerActivityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.PublisherActivityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
