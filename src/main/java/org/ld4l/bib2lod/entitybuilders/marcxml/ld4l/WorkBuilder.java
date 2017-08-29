@@ -15,9 +15,9 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
 public class WorkBuilder extends BaseEntityBuilder {
-    
-    private MarcxmlRecord record;
+  
     private Entity instance;
+    private MarcxmlRecord record;
     private Entity work;
     
     private static Map<Character, Type> codes = 
@@ -43,17 +43,8 @@ public class WorkBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
         
-        this.record = (MarcxmlRecord) params.getRecord();
-        if (record == null) {
-            throw new EntityBuilderException(
-                    "A record is required to build a work.");
-        }
-
-        this.instance = params.getParent();
-        if (instance == null) {
-            throw new EntityBuilderException(
-                    "An instance is required to build a work.");
-        }
+        reset();
+        parseBuildParams(params);
         
         this.work = new Entity(Ld4lWorkType.superClass());
         
@@ -67,13 +58,36 @@ public class WorkBuilder extends BaseEntityBuilder {
         return work;
     }
     
+    private void reset() {
+        this.instance = null;
+        this.record = null;
+        this.work = null;
+    }
+    
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
+        
+        this.record = (MarcxmlRecord) params.getRecord();
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build a work.");
+        }
+
+        this.instance = params.getParent();
+        if (instance == null) {
+            throw new EntityBuilderException(
+                    "An instance is required to build a work.");
+        }        
+    }
+    
     private void addTitle() {
         
         Entity instanceTitle = 
                 instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE); 
         if (instanceTitle != null) {
             Entity workTitle = new Entity(instanceTitle);
-            work.addRelationship(Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);      
+            work.addRelationship(
+                    Ld4lObjectProp.HAS_PREFERRED_TITLE, workTitle);      
         }
     }
     

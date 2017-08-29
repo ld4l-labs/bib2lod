@@ -23,9 +23,8 @@ public class LocationBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
 
-        reset();
-        
-        processBuildParams(params);
+        reset();       
+        parseBuildParams(params);
         
         if (type == null) {
             type = Ld4lLocationType.superClass();
@@ -57,7 +56,7 @@ public class LocationBuilder extends BaseEntityBuilder {
         this.type = null;
     }
     
-    private void processBuildParams(BuildParams params) 
+    private void parseBuildParams(BuildParams params) 
             throws EntityBuilderException {
         
         this.parent = params.getParent();

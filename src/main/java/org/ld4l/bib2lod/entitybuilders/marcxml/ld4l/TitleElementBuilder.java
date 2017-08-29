@@ -10,33 +10,18 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
 import org.ld4l.bib2lod.util.Bib2LodStringUtils;
 
 public class TitleElementBuilder extends BaseEntityBuilder {
+    
+    private Entity title;
+    private Type type;
+    private String value;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
+        
+        reset();
+        parseBuildParams(params);
  
-        Entity title = params.getParent();
-        if (title == null) {
-            throw new EntityBuilderException(
-                    "A title is required to build a title element.");
-        }
-
-        Type type = params.getType();
-        
-        if (type == null) {
-            throw new EntityBuilderException(
-                    "A title element type is required to build a title element.");            
-        }
-        
-        if (! (type instanceof Ld4lTitleElementType) ) {
-            throw new EntityBuilderException(
-                    "Cannot build title element: invalid title element type.");            
-        }
-        
-        String value = params.getValue();
-        if (value == null || value.isEmpty()) {
-            throw new EntityBuilderException(
-                    "Non-empty string value required to build title element.");        
-        }
+ 
         
         Entity titleElement = new Entity(type);
         
@@ -58,6 +43,41 @@ public class TitleElementBuilder extends BaseEntityBuilder {
         titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);
         title.addRelationship(Ld4lObjectProp.HAS_PART, titleElement);      
         return titleElement;       
+    }
+    
+    private void reset() {
+        this.title = null;
+        this.type = null;
+        this.value = null;
+    }
+    
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
+        
+        this.title = params.getParent();
+        if (title == null) {
+            throw new EntityBuilderException(
+                    "A title is required to build a title element.");
+        }
+
+        this.type = params.getType();
+        
+        if (type == null) {
+            throw new EntityBuilderException("A title element type is " +
+                    "required to build a title element.");            
+        }
+        
+        if (! (type instanceof Ld4lTitleElementType) ) {
+            throw new EntityBuilderException("Cannot build title " +
+                    "element: invalid title element type.");            
+        }
+        
+        this.value = params.getValue();
+        if (value == null || value.isEmpty()) {
+            throw new EntityBuilderException(
+                    "Non-empty string value required to build title " + 
+                            "element.");        
+        }        
     }
     
 }

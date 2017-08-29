@@ -32,7 +32,7 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
         
         reset();
-        processBuildParams(params);
+        parseBuildParams(params);
 
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
         
@@ -56,7 +56,7 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         this.parent = null;
     }
     
-    private void processBuildParams(BuildParams params) 
+    private void parseBuildParams(BuildParams params) 
             throws EntityBuilderException {
 
         this.parent = params.getParent();

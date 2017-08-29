@@ -54,8 +54,6 @@ public class InstanceBuilder extends BaseEntityBuilder {
         
         this.instance = new InstanceEntity();
  
-        // Critical ordering: build admin metadata before identifiers. Remove
-        // an identifier with value matching the admin metadata identifier.
         buildAdminMetadata();
         buildIdentifiers();       
         buildTitles();
@@ -76,7 +74,8 @@ public class InstanceBuilder extends BaseEntityBuilder {
     
     private void buildAdminMetadata() throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lAdminMetadataType.superClass());
+        EntityBuilder builder = getBuilder(
+                Ld4lAdminMetadataType.superClass());
  
         BuildParams params = new BuildParams()
                 .setParent(instance)
@@ -100,8 +99,8 @@ public class InstanceBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setParent(instance);
         for (MarcxmlDataField field : fields) {
-            List<MarcxmlSubfield> subfields = field.getSubfields();
             params.setField(field);
+            List<MarcxmlSubfield> subfields = field.getSubfields();
             for (MarcxmlSubfield subfield : subfields) {
                 params.setSubfield(subfield);
                 builder.build(params);                
@@ -111,7 +110,7 @@ public class InstanceBuilder extends BaseEntityBuilder {
     
     private void buildTitles() throws EntityBuilderException { 
         
-        // NB There may be multiple, so this isn't sufficient.
+        // TODO Not yet handling titles from other fields
         
         EntityBuilder builder = getBuilder(Ld4lTitleType.superClass());
         BuildParams params = new BuildParams()

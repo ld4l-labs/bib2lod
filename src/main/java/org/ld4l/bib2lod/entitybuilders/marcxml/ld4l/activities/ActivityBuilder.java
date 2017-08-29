@@ -34,9 +34,8 @@ public class ActivityBuilder extends BaseEntityBuilder {
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
                
-        reset();
-        
-        processBuildParams(params);
+        reset();      
+        parseBuildParams(params);
         
         build();
         
@@ -60,7 +59,7 @@ public class ActivityBuilder extends BaseEntityBuilder {
         this.type = null;
     }
     
-    private void processBuildParams(BuildParams params) 
+    private void parseBuildParams(BuildParams params) 
             throws EntityBuilderException {
 
         this.parent = params.getParent();

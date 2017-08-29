@@ -38,18 +38,9 @@ public class TitleBuilder extends BaseEntityBuilder {
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
-
-        this.record = (MarcxmlRecord) params.getRecord();
-        if (record == null) {
-            throw new EntityBuilderException(
-                    "A record is required to build a title.");
-        }
- 
-        this.bibEntity = params.getParent();
-        if (bibEntity == null) {
-            throw new EntityBuilderException(
-                    "A parent entity is required to build a title.");
-        }
+        
+        reset();
+        parseBuildParams(params);
         
         this.title = new Entity(Ld4lTitleType.superClass());
         
@@ -62,9 +53,34 @@ public class TitleBuilder extends BaseEntityBuilder {
         return title;
     }
     
+    private void reset() {
+        this.record = null;
+        this.bibEntity = null;;
+        this.title = null;;
+        this.titleElementBuilder = null;
+        this.titleElements = new ArrayList<>();        
+    }
+    
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
+
+        this.record = (MarcxmlRecord) params.getRecord();
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build a title.");
+        }
+ 
+        this.bibEntity = params.getParent();
+        if (bibEntity == null) {
+            throw new EntityBuilderException(
+                    "A parent entity is required to build a title.");
+        }
+    }
+    
     private void addTitleElements() throws EntityBuilderException {
 
-        this.titleElementBuilder = getBuilder(Ld4lTitleElementType.superClass());
+        this.titleElementBuilder = getBuilder(
+                Ld4lTitleElementType.superClass());
         
         buildTitleElements();
 

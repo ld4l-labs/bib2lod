@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l.activities;
+package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;

@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.entitybuilders.xml.marcxml.ld4l;
+package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.junit.Before;
 import org.junit.Test;
