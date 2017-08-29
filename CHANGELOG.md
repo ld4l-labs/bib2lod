@@ -2,20 +2,27 @@
 
 This change log records API changes that may affect implementing projects.
 
+
+## Commit #c1d15695
+
+* Removed empty packages and changed package names in src/test as well as
+src/main (see commit #9d16ad80).
+
+
 ## Commit #9d16ad80
 
-### Changed
+### Removed
 
-* Removed 'xml' from package names:
-  * org.ld4l.bib2lod.conversion.xml.marcxml
-  * org.ld4l.bib2lod.entitybuilders.xml.marcxml 
-  * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities
+* Removed empty 'xml' packages:
+  * org.ld4l.bib2lod.conversion.xml
+  * org.ld4l.bib2lod.entitybuilders.xml
 
-New package names:
+### Changed 
 
-  * org.ld4l.bib2lod.conversion.marcxml
-  * org.ld4l.bib2lod.entitybuilders.marcxml
-  * org.ld4l.bib2lod.entitybuilders.marcxml.activities
+* Package names:
+  * org.ld4l.bib2lod.conversion.xml.marcxml => org.ld4l.bib2lod.conversion.marcxml
+  * org.ld4l.bib2lod.entitybuilders.xml.marcxml => org.ld4l.bib2lod.entitybuilders.marcxml
+  * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities => org.ld4l.bib2lod.entitybuilders.marcxml.activities
   
 Implementers can do the same with their packages.
 
