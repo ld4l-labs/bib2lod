@@ -131,9 +131,9 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
                     "<subfield code='a'>Lugduni Batavorum :</subfield>" +
                     "<subfield code='b'>E.J. Brill</subfield>" +               
                 "</datafield>" +
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                "<subfield code='a'>Leiden :</subfield>" +
-                "<subfield code='b'>E.J. Brill</subfield>" +                 
+                "<datafield tag='260' ind1=' ' ind2=' '>" +
+                    "<subfield code='a'>Leiden :</subfield>" +
+                    "<subfield code='b'>E.J. Brill</subfield>" +                 
             "</datafield>" +
             "</record>"; 
     
@@ -235,41 +235,56 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testCurrentPublisherStatus_260_ind1Empty() 
-            throws Exception {
-        Entity activity = buildActivity(_260_PUBLISHER);             
-        Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
-                activity.getExternal(Ld4lObjectProp.HAS_STATUS));
+    public void testCurrentPublisher_008() throws Exception {
+       Entity activity = buildActivity();
+       Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
+               activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
     @Test
-    public void testCurrentPublisherStatus_260_ind1Value3() 
-            throws Exception {
-        Entity activity = buildActivity(_260_CURRENT_PUBLISHER);         
-        Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
-                activity.getExternal(Ld4lObjectProp.HAS_STATUS));
-    }
-   
-    @Test
-    public void testOneCurrentPublisher_008_260() throws Exception {
+    public void testThreePublishers() throws Exception {
         MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
-                _260_CURRENT_PUBLISHER);
+                TWO_260);
         BuildParams params = new BuildParams() 
                 .setRecord(record);
-        Entity instance = instanceBuilder.build(params);       
-        Assert.assertEquals(1, 
+        Entity instance = instanceBuilder.build(params);   
+        Assert.assertEquals(3, 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
                         Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
     }
     
     @Test
-    public void testDates_008_260$c() throws Exception {
-        Entity activity = buildActivity(_008_260$c_DATES); 
+    public void testCurrentPublishers_008_260() throws Exception {
+        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
+                _260_CURRENT_PUBLISHER);
+        BuildParams params = new BuildParams() 
+                .setRecord(record);
+        Entity instance = instanceBuilder.build(params);   
         Assert.assertEquals(2, 
-                activity.getValues(Ld4lDatatypeProp.DATE).size());
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
     }
-
     
+    public void testCurrentPublisher_260_ind1Value3() 
+            throws Exception {
+        Entity instance = buildInstance(_260_CURRENT_PUBLISHER); 
+        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY))
+                .get(1);
+        Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
+                activity.getExternal(Ld4lObjectProp.HAS_STATUS));
+    }
+    
+    @Test
+    public void testCurrentPublisherStatus_ind1ValueEmpty() 
+            throws Exception {
+        Entity instance = buildInstance(_260_CURRENT_PUBLISHER); 
+        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY))
+                .get(1);        
+        Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
+                activity.getExternal(Ld4lObjectProp.HAS_STATUS));
+    }
+    
+
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
@@ -290,6 +305,12 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
             throws Exception { 
         Entity instance = instanceBuilder.build(params);
         return instance.getChild(Ld4lObjectProp.HAS_ACTIVITY); 
+    }
+    
+    private Entity buildInstance(String input) throws Exception {
+        BuildParams params = new BuildParams() 
+                .setRecord(MarcxmlTestUtils.buildRecordFromString(input));  
+        return instanceBuilder.build(params);
     }
     
 }

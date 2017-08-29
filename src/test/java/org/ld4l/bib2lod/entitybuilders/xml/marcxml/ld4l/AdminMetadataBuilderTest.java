@@ -29,8 +29,12 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
                     "<subfield code='a'>main title</subfield>" +          
                 "</datafield>" + 
                 "<datafield tag='040' ind1=' ' ind2=' '>" +
+                    "<subfield code='b'>fre</subfield>" +
                     "<subfield code='c'>NIC</subfield>" +
                     "<subfield code='d'>NIC</subfield>" +
+                    "<subfield code='d'>CtY</subfield>" +
+                    "<subfield code='e'>rda</subfield>" +
+                    "<subfield code='e'>appm</subfield>" +
                  "</datafield>" +
             "</record>";
     
@@ -85,6 +89,13 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test
+    public void testLanguage() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
+        Assert.assertEquals("http://id.loc.gov/vocabulary/languages/fre",
+                adminMetadata.getExternal(Ld4lObjectProp.HAS_LANGUAGE));
+    }
+    
+    @Test
     public void testHasSource() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Assert.assertNotNull(adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
@@ -105,26 +116,43 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test 
-    public void testHasDescriptionModifier() throws Exception {
+    public void testDescriptionModifiers() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
-        Assert.assertNotNull(adminMetadata.getChild(
-                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER));        
+        Assert.assertEquals(2, (adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER)).size());        
     }
     
     @Test
     public void testDescriptionModifierIsAgent() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);  
-        Entity agent = adminMetadata.getChild(
-                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
+        Entity agent = (adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER)).get(0);
         Assert.assertTrue(agent.hasType(Ld4lAgentType.superClass()));
     }
     
     @Test
     public void testDescriptionModifierHasName() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
-        Entity agent = adminMetadata.getChild(
-                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
+        Entity agent = (adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER)).get(0);
         Assert.assertEquals("NIC", agent.getValue(Ld4lDatatypeProp.NAME));
+    }
+    
+    @Test
+    public void testDescriptionConventions() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
+        Entity conventions = adminMetadata.getChild(
+                Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS);
+        Assert.assertEquals(2, (adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS)).size());   
+    }
+    
+    @Test
+    public void testDescriptionConventionsValue() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
+        Entity conventions = (adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS)).get(0);
+        Assert.assertEquals("rda", conventions.getValue(Ld4lDatatypeProp.LABEL));
     }
     
     @Test

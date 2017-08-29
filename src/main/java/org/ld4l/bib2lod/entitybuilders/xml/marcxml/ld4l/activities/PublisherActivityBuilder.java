@@ -68,32 +68,16 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         
         MarcxmlDataField datafield = (MarcxmlDataField) field;
         
-        // Get all publisher activities built so far
-        List<Entity> publisherActivities = parent.getChildren(
-                Ld4lObjectProp.HAS_ACTIVITY, TYPE);
+        this.activity = new Entity(TYPE);
 
-        int field_260_Count = record.getDataFields(260).size();
+        // Set current publisher activity status
         Integer ind1 = datafield.getFirstIndicator();
-        // This is the current publisher activity
-        if ( (ind1 != null && ind1 == 3) || 
-                (ind1 == null && field_260_Count == 1) ) {
-            /*
-             * Get the previously created current activity (from 008) and
-             * assign the subfield data to it rather than creating a new
-             * activity. A current activity should always exist, but in 
-             * case it doesn't, we'll create a new activity below.
-             */
-            for (Entity entity : publisherActivities) {
-               if (entity.hasExternal(Ld4lObjectProp.HAS_STATUS, 
-                       Ld4lNamedIndividual.CURRENT.uri())) {
-                   this.activity = entity;
-                   break;                  
-               }
-            }
-        } 
-        
-        if (this.activity == null) {
-            this.activity = new Entity(TYPE);
+        // First indicator == 3
+        if ( (ind1 != null && ind1 == 3) ||
+                // This is the only 260
+                record.getDataFields(260).size() == 1) {  
+            activity.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, 
+                    Ld4lNamedIndividual.CURRENT);
         }
 
         buildLocation(MarcxmlSubfield.getSubfield(subfields, 'a')); 
@@ -102,6 +86,10 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
   
         // TODO 264 with indicator for publisher - otherwise a different type,
         // but otherwise the same (mostly?)
+    }
+    
+    private void setCurrent() {
+
     }
 
 

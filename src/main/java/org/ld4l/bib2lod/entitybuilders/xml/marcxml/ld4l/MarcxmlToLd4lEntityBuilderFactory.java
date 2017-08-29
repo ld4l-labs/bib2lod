@@ -12,6 +12,7 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
@@ -29,6 +30,7 @@ public class MarcxmlToLd4lEntityBuilderFactory extends BaseEntityBuilderFactory 
         typeToBuilderClass.put(Ld4lActivityType.ACTIVITY, ActivityBuilder.class);
         typeToBuilderClass.put(Ld4lAdminMetadataType.ADMIN_METADATA, AdminMetadataBuilder.class);
         typeToBuilderClass.put(Ld4lAgentType.AGENT, AgentBuilder.class);
+        typeToBuilderClass.put(Ld4lExtentType.EXTENT, PhysicalDescriptionBuilder.class);
         typeToBuilderClass.put(Ld4lIdentifierType.IDENTIFIER, IdentifierBuilder.class);
         typeToBuilderClass.put(Ld4lInstanceType.INSTANCE, InstanceBuilder.class);
         typeToBuilderClass.put(Ld4lItemType.ITEM, ItemBuilder.class);

@@ -154,10 +154,10 @@ public class LocationBuilderTest extends AbstractTestClass {
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
-        Entity activity1 = activities.get(0);
-        Entity activity2 = activities.get(1);
-        Assert.assertEquals(activity1.getChild(Ld4lObjectProp.HAS_AGENT), 
-                activity2.getChild(Ld4lObjectProp.HAS_AGENT));
+        Entity activity1 = activities.get(1);
+        Entity activity2 = activities.get(2);
+        Assert.assertEquals(activity1.getChild(Ld4lObjectProp.HAS_LOCATION), 
+                activity2.getChild(Ld4lObjectProp.HAS_LOCATION));
     }
     
     @Test
@@ -168,10 +168,11 @@ public class LocationBuilderTest extends AbstractTestClass {
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
-        Entity activity1 = activities.get(0);
-        Entity activity2 = activities.get(1);
-        Assert.assertNotEquals(activity1.getChild(Ld4lObjectProp.HAS_AGENT), 
-                activity2.getChild(Ld4lObjectProp.HAS_AGENT));
+        Entity activity1 = activities.get(1);
+        Entity activity2 = activities.get(2);
+        Assert.assertNotEquals(activity1.getChild(
+                Ld4lObjectProp.HAS_LOCATION), 
+                    activity2.getChild(Ld4lObjectProp.HAS_LOCATION));
     }
     
     

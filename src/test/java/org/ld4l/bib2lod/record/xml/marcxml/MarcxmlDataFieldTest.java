@@ -179,31 +179,6 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
         Assert.assertEquals(3, values.size());         
     }
     
-    @Test 
-    public void testSubfieldMap() throws Exception {
-        datafield = buildFromString(MULTIPLE_SUBFIELDS);
-        MapOfLists<Character, String> map = new MapOfLists<>();
-        map.addValue('a', "A1");
-        map.addValue('a', "A2");
-        map.addValue('a', "A3");
-        map.addValue('b', "B1");
-        map.addValue('b', "B2");
-        map.addValue('c', "C1");
-        Assert.assertEquals(map, datafield.getSubfieldMap());
-    }
-    
-    @Test
-    public void testSubfieldSubmap() throws Exception {
-        datafield = buildFromString(MULTIPLE_SUBFIELDS);
-        MapOfLists<Character, String> map = new MapOfLists<>();
-        map.addValue('a', "A1");
-        map.addValue('a', "A2");
-        map.addValue('a', "A3");
-        map.addValue('c', "C1");
-        Character[] codes = {'a', 'c'};
-        Assert.assertEquals(map, datafield.getSubfieldSubmap(codes));        
-    }
-    
     @Test
     public void testGetSubfieldCodes() throws RecordFieldException {
         MarcxmlDataField field = 

@@ -96,7 +96,7 @@ public class LocationBuilder extends BaseEntityBuilder {
         }
         
         List<Entity> activities = grandparent.getChildren(
-                Ld4lObjectProp.HAS_LOCATION, parent.getType());
+                Ld4lObjectProp.HAS_ACTIVITY, parent.getType());
         for (Entity activity : activities) {
             Entity location = activity.getChild(Ld4lObjectProp.HAS_LOCATION);
             if (location != null) {

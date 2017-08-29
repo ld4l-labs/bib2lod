@@ -29,7 +29,6 @@ public class MarcxmlDataField extends BaseMarcxmlField
     private Integer ind1;
     private Integer ind2;
     private List<MarcxmlSubfield> subfields;
-    private MapOfLists<Character, String> subfieldMap;
     
 
     /**
@@ -57,16 +56,8 @@ public class MarcxmlDataField extends BaseMarcxmlField
         }
         isValid();
         
-        /* Create map of subfield codes to values - convenient for handling
-        /* repeated subfields.
-         * 
-         * Consider eliminating List<Subfield> and storing only this map.
-         */
-        subfieldMap = new MapOfLists<>();
-        for (MarcxmlSubfield subfield : subfields) {
-            subfieldMap.addValue(subfield.getCode(), subfield.getTextValue());
-        }
     }
+
     
     /**
      * Returns a list of values of subfields of this data field with the
@@ -77,7 +68,11 @@ public class MarcxmlDataField extends BaseMarcxmlField
      */
     public List<String> getSubfieldValues(char code, boolean trim) {
         List<String> values = new ArrayList<>();
-        for (String value : getSubfieldValues(code)) {
+        for (MarcxmlSubfield subfield : subfields) {
+            if (!subfield.hasCode(code)) {
+                continue;
+            }
+            String value = subfield.getTextValue();            
             values.add(trim ? Bib2LodStringUtils.trim(value) : value);
         }
         return values;        
@@ -143,22 +138,6 @@ public class MarcxmlDataField extends BaseMarcxmlField
     public List<MarcxmlSubfield> getSubfields() {
         return subfields;
     }
-    
-    public MapOfLists<Character, String> getSubfieldMap() {
-        return subfieldMap;
-    }
-
-    /**
-     * Returns the submap with keys in the specified character array.
-     */
-    @SuppressWarnings("unchecked")
-    public MapOfLists<Character, String> getSubfieldSubmap(Character[] codes) {
-        return (MapOfLists<Character, String>) subfieldMap.getSubmap(codes);
-    }
-    
-    public List<String> getSubfieldValues(char code) {
-        return subfieldMap.getValues(code);
-    }
 
     /**
      * Returns a list of subfields of this datafield with the specified code.
@@ -178,7 +157,8 @@ public class MarcxmlDataField extends BaseMarcxmlField
     
     /**
      * Returns a list of subfields of this datafield with one of the 
-     * specified codes. Returns an empty list if no subfields found.
+     * specified codes, in the order in which they occur in the datafield. 
+     * Returns an empty list if no subfields found.
      */
     public List<MarcxmlSubfield> getSubfields(List<Character> codes) {
         List<MarcxmlSubfield> list = new ArrayList<>();

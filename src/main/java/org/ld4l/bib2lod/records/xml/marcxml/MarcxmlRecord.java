@@ -211,7 +211,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
         return fields;
     }
     
-    public List<MarcxmlDataField> getDataFields(int[] tags) {
+    public List<MarcxmlDataField> getDataFields(List<Integer> tags) {
         
         List<MarcxmlDataField> fields = new ArrayList<MarcxmlDataField>();
         

@@ -22,10 +22,7 @@ public class BuildParams {
     private List<RecordField> subfields;
     private Type type;
     private String value;
-    
-    // Use to send multiple subfields, with codes. Currently not used.
-    // private MapOfLists<Character, String> subfieldMap;
-    
+
     /**
      * Constructor
      */
