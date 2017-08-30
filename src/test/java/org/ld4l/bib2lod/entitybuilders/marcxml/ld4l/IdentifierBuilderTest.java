@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +17,6 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.IdentifierBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -29,7 +28,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 
 
@@ -38,120 +37,44 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
  */
 public class IdentifierBuilderTest extends AbstractTestClass {
 
-    public static final String _001 = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _001 = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063").lock();
 
-    public static final String _035_INVALID_VALUE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" + 
-                    "<subfield code='a'>(test)test(test)</subfield>" + 
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_INVALID_VALUE = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "(test)test(test)")
+            .lock();
     
-    public static final String _035_DUPLICATES_001 = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" + 
-                    "<subfield code='a'>102063</subfield>" + 
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_DUPLICATES_001 = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "102063")
+            .lock();
     
-    public static final String _035_NEW_ORG_CODE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" + 
-                    "<subfield code='a'>(ABC)12345</subfield>" + 
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_NEW_ORG_CODE = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "(ABC)12345")
+            .lock();
     
-    public static final String _035_INVALID_SUBFIELD_CODE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" + 
-                    "<subfield code='b'>102063</subfield>" + 
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_INVALID_SUBFIELD_CODE = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("b", "102063")
+            .lock();
     
-    public static final String _035_CANCELLED = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" + 
-                    "<subfield code='z'>xyz</subfield>" + 
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_CANCELLED = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("z", "xyz")
+            .lock();
     
-    public static final String _035_NIC = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>(NIC)notisAAL3258</subfield>" +
-                    "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_NIC = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "(NIC)notisAAL3258")
+            .lock();
     
     // Not used. Keep if we want to make this an OclcIdentifier instead of just
     // a Local identifier.
-    public static final String _035_OCLC = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>(OCoLC)1345399</subfield>" +
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_OCLC = _001.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "(OCoLC)1345399")
+            .lock();
     
-    public static final String _035_NO_ORG_CODE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='035' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>1345399</subfield>" +
-                "</datafield>" +
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml _035_NO_ORG_CODE = _001.openCopy()
+            .deleteControlfield("001")
+            .addDatafield("035", " ", " ").addSubfield("a", "1345399")
+            .lock();
 
-    
     private static BaseMockBib2LodObjectFactory factory;
     private IdentifierBuilder builder;  
     
@@ -229,7 +152,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     @Test 
     public void testDuplicateIdentifiers_001_035() throws Exception {    
         BuildParams params = new BuildParams()
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(_035_DUPLICATES_001));
+                .setRecord(_035_DUPLICATES_001.toRecord());
         InstanceBuilder builder = new InstanceBuilder();
         Entity instance = builder.build(params);
         List<Entity> identifiers = instance.getChildren(Ld4lObjectProp.IDENTIFIED_BY);
@@ -292,9 +215,9 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     
     private Entity buildIdentifier( 
-            Entity entity, String input, int tag) throws Exception {
+            Entity entity, MockMarcxml input, int tag) throws Exception {
 
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(input);
+        MarcxmlRecord record = input.toRecord(); 
         MarcxmlTaggedField field = record.getTaggedField(tag);
         BuildParams params = new BuildParams() 
                 .setParent(entity)
@@ -303,14 +226,14 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         return builder.build(params);   
     }
 
-    private Entity buildIdentifier(String input, int tag) 
+    private Entity buildIdentifier(MockMarcxml input, int tag) 
             throws Exception {
         return buildIdentifier(new Entity(), input, tag);     
     }
     
-    private Entity buildIdentifier(Entity entity, String input,  
+    private Entity buildIdentifier(Entity entity, MockMarcxml input,  
             int tag, char code) throws Exception {
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(input);  
+        MarcxmlRecord record = input.toRecord();  
         MarcxmlDataField field = record.getDataField(tag);
         MarcxmlSubfield subfield = field.getSubfield(code);
         BuildParams params = new BuildParams() 
@@ -321,32 +244,32 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         return builder.build(params);
     }
     
-    private Entity buildIdentifier(String input,  
+    private Entity buildIdentifier(MockMarcxml input,  
             int tag, char code) throws Exception {
         return buildIdentifier(new Entity(), input, tag, code);
     }
     
     private void buildAndExpectException(
-            Entity entity, String input, int tag, String error) 
+            Entity entity, MockMarcxml input, int tag, String error) 
                     throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildIdentifier(entity, input, tag);
     }
     
-    private void buildAndExpectException(String input, int tag, String error) 
+    private void buildAndExpectException(MockMarcxml input, int tag, String error) 
             throws Exception {
         buildAndExpectException(new Entity(), input, tag, error);
     }
     
     private void buildAndExpectException(
-            Entity entity, String input, int tag, char code, String error) 
+            Entity entity, MockMarcxml input, int tag, char code, String error) 
                     throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildIdentifier(entity, input, tag, code);
     }
     
     private void buildAndExpectException(
-            String input, int tag, char code, String error) throws Exception {        
+            MockMarcxml input, int tag, char code, String error) throws Exception {        
         buildAndExpectException(new Entity(), input, tag, code, error);
     }
     
