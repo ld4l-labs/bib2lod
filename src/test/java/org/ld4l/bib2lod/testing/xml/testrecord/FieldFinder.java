@@ -28,6 +28,8 @@ interface FieldFinder {
 
     Datafield.Builder findDatafield(String tag);
 
+    Datafield.Builder findDatafield(String tag, int skip);
+
     Datafield.Builder addDatafield(String tag, String ind1, String ind2);
 
     Datafield.Builder replaceDatafield(String tag, String ind1, String ind2);
@@ -110,13 +112,23 @@ interface FieldFinder {
 
         @Override
         public Datafield.Builder findDatafield(String tag) {
+            return findDatafield(tag, 0);
+        }
+
+        @Override
+        public Datafield.Builder findDatafield(String tag, int skip) {
+            int skipped = 0;
             for (Field.Builder fb : mmb.getFieldBuilders()) {
                 if (fb.isDatafield() && fb.asDatafield().getTag().equals(tag)) {
-                    return fb.asDatafield();
+                    if (skipped >= skip) {
+                        return fb.asDatafield();
+                    } else {
+                        skipped++;
+                    }
                 }
             }
-            throw new IllegalStateException(
-                    "No Controlfield with tag '" + tag + "'");
+            throw new IllegalStateException("No Datafield with tag '" + tag
+                    + "' (skipped " + skipped + " of " + skip + ")");
         }
 
         @Override
@@ -233,6 +245,11 @@ interface FieldFinder {
         @Override
         public Datafield.Builder findDatafield(String tag) {
             return parent.findDatafield(tag);
+        }
+
+        @Override
+        public Datafield.Builder findDatafield(String tag, int skip) {
+            return parent.findDatafield(tag, skip);
         }
 
         @Override

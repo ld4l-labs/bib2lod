@@ -21,8 +21,6 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
@@ -50,7 +48,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", " ", " ").addSubfield("a", "New York")
-            .addSubfield("b", "Grune &amp; Stratton").addSubfield("c", "1957.")
+            .addSubfield("b", "Grune & Stratton").addSubfield("c", "1957.")
             .lock();
 
     public static final MockMarcxml _260_PUBLISHER_NO_DATE = _260_PUBLISHER.openCopy()
@@ -104,7 +102,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.instanceBuilder = new InstanceBuilder();              
     }
     

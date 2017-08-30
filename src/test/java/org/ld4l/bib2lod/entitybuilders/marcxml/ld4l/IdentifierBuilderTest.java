@@ -20,7 +20,6 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.BaseMarcxmlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
@@ -86,7 +85,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.builder = new IdentifierBuilder();
     }    
 

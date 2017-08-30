@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -7,43 +9,27 @@ import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
  * Tests class PhysicalDescriptionBuilder
  */
 public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     
-    private static final String _300_NO_$A = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='300' ind1='' ind2=''>" +
-                    "<subfield code='c'>23 cm</subfield>" +          
-                "</datafield>" + 
-            "</record>";  
+    private static final MockMarcxml _300_NO_$A = MINIMAL_RECORD.openCopy()
+            .addDatafield("300", "", "").addSubfield("c", "23 cm")
+            .lock();
     
-    private static final String _300_EXTENT = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='300' ind1='' ind2=''>" +
-                    "<subfield code='a'>123 p.</subfield>" +          
-                "</datafield>" + 
-            "</record>";   
+    private static final MockMarcxml _300_EXTENT = _300_NO_$A.openCopy()
+            .findDatafield("300")
+            .deleteSubfield("c")
+            .addSubfield("a", "123 p.")
+            .lock();
     
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder instanceBuilder;
@@ -56,7 +42,7 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.instanceBuilder = new InstanceBuilder();              
     }
         
@@ -98,9 +84,9 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
         return instanceBuilder.build(params);
     }
     
-    private Entity buildInstance(String input) throws Exception {
+    private Entity buildInstance(MockMarcxml input) throws Exception {
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(input));  
+                .setRecord(input.toRecord());  
         return instanceBuilder.build(params);
     }
 }
