@@ -24,8 +24,6 @@ src/main (see commit #9d16ad80).
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml => org.ld4l.bib2lod.entitybuilders.marcxml
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities => org.ld4l.bib2lod.entitybuilders.marcxml.activities
   
-Implementers can do the same with their packages.
-
 
 ## Commit #26cef60d (and preceding)
 

@@ -11,10 +11,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ProviderActivityBuilder;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -31,7 +32,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds an Instance from a Record.
  */
-public class InstanceBuilder extends BaseEntityBuilder {
+public class InstanceBuilder extends MarcxmlEntityBuilder {
     
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -42,19 +43,14 @@ public class InstanceBuilder extends BaseEntityBuilder {
     public Entity build(BuildParams params) throws EntityBuilderException {
 
         reset();
-        
-        // Use this if it generates better error messages 
-        // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
-        this.record = (MarcxmlRecord) params.getRecord(); 
-        
-        if (record == null) {
-            throw new EntityBuilderException(
-                    "A record is required to build an instance.");
-        }
+        parseBuildParams(params);
         
         this.instance = new InstanceEntity();
  
-        buildAdminMetadata();
+        // Admin metadata
+        buildEntityFromRecord(
+                Ld4lAdminMetadataType.superClass(), instance, record);  
+        
         buildIdentifiers();       
         buildTitles();
         buildActivities();
@@ -72,15 +68,17 @@ public class InstanceBuilder extends BaseEntityBuilder {
         this.record = null;
     }
     
-    private void buildAdminMetadata() throws EntityBuilderException {
+    private void parseBuildParams(BuildParams params) 
+            throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(
-                Ld4lAdminMetadataType.superClass());
- 
-        BuildParams params = new BuildParams()
-                .setParent(instance)
-                .setRecord(record);
-        builder.build(params);          
+        // Use this if it generates better error messages 
+        // this.record = (MarcxmlRecord.class.cast(params.getRecord()));
+        this.record = (MarcxmlRecord) params.getRecord(); 
+        
+        if (record == null) {
+            throw new EntityBuilderException(
+                    "A record is required to build an instance.");
+        }        
     }
     
     private void buildIdentifiers() throws EntityBuilderException {

@@ -56,7 +56,5 @@ public interface EntityBuilder {
      * EntityBuilderFactory instance.
      */
     public EntityBuilder getBuilder(Type type);
-    
-//    public Type getDefaultEntityType();
 
 }

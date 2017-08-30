@@ -21,6 +21,10 @@ import org.w3c.dom.NodeList;
  */
 public class MarcxmlDataField extends BaseMarcxmlField 
         implements MarcxmlTaggedField {
+    
+    private static List<Integer> NON_REPEATING_FIELDS = Arrays.asList(
+            
+            );
 
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -271,6 +275,14 @@ public class MarcxmlDataField extends BaseMarcxmlField
                        "Subfield $a or $k required for field 245.");
            }
         }
+    }
+    
+    public static boolean isNonRepeating(int tag) {
+        return NON_REPEATING_FIELDS.contains(tag);
+    }
+    
+    public static boolean isRepeating(int tag) {
+        return ! NON_REPEATING_FIELDS.contains(tag);
     }
     
 }
