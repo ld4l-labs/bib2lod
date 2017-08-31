@@ -61,6 +61,7 @@ public class AgentBuilder extends BaseEntityBuilder {
         this.agent = null;
         this.name = null;
         this.parent = null;  
+        this.relationship = null;
         this.subfield = null;     
     }
     

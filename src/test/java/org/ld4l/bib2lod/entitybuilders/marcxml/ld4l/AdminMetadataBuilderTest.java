@@ -5,13 +5,14 @@ import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -42,6 +43,18 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
                     "<subfield code='e'>appm</subfield>" +
                  "</datafield>" +
             "</record>");
+    
+    public static final MockMarcxml SOURCE_040$a = TEST_RECORD.openCopy()
+            .findDatafield("040")
+            .addSubfield("a", "NIC")
+            .deleteSubfield("c")
+            .lock();
+
+    
+    public static final MockMarcxml SOURCE_040$a$c = TEST_RECORD.openCopy()
+            .findDatafield("040")
+            .addSubfield("a", "NIC")
+            .lock();
     
     public static final MockMarcxml INVALID_005_VALUE =  MINIMAL_RECORD.openCopy()
             .addControlfield("005", "20130330")
@@ -91,8 +104,8 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     public void testInstanceHasAdminMetadata() throws Exception {
         Entity instance = new InstanceEntity();
         Entity adminMetadata = buildAdminMetadata(instance, TEST_RECORD);
-        Assert.assertSame(instance.getChild(Ld4lObjectProp.HAS_ADMIN_METADATA), 
-                adminMetadata);
+        Assert.assertSame(instance.getChild( 
+                Ld4lObjectProp.HAS_ADMIN_METADATA), adminMetadata);
     }
     
     @Test
@@ -103,9 +116,26 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testHasSource() throws Exception {
+    @Ignore
+    public void testSource_040$a() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(SOURCE_040$a);
+        Assert.assertNotNull(
+                adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
+    }
+    
+    @Test
+    public void testSource_040$c() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
-        Assert.assertNotNull(adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
+        Assert.assertNotNull(
+                adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE));
+    }
+    
+    @Test
+    @Ignore
+    public void testTwoSources() throws Exception {
+        Entity adminMetadata = buildAdminMetadata(SOURCE_040$a$c);
+        Assert.assertEquals(2, adminMetadata.getChildren(
+                Ld4lObjectProp.HAS_SOURCE).size());
     }
     
     @Test
@@ -148,8 +178,6 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testDescriptionConventions() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
-        Entity conventions = adminMetadata.getChild(
-                Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS);
         Assert.assertEquals(2, (adminMetadata.getChildren(
                 Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS)).size());   
     }

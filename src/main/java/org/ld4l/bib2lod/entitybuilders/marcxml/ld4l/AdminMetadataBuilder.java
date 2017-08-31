@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
@@ -97,17 +99,24 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         
         // $a non-repeating, $c non-repeating
 
-        MarcxmlSubfield subfield = field.getSubfield('c');
-        if (subfield == null) {
+        List<MarcxmlSubfield> subfields = new ArrayList<>();
+        //subfields.add(field.getSubfield('a'));
+        subfields.add(field.getSubfield('c'));
+        
+        if (subfields.isEmpty()) {
             return;
         }
 
         EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
         BuildParams params = new BuildParams()
                 .setParent(adminMetadata)
-                .setSubfield(subfield)
                 .setRelationship(Ld4lObjectProp.HAS_SOURCE);
-        builder.build(params);                 
+        
+        for (MarcxmlSubfield subfield : subfields) {
+            params.setSubfield(subfield);
+            builder.build(params); 
+        }
+                        
     }
     
     private void addDescriptionLanguage(MarcxmlDataField field) {
