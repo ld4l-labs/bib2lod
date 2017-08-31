@@ -174,9 +174,9 @@ public class MarcxmlDataField extends BaseMarcxmlField
     }
     
     /**
-     * Returns the subfield of the datafield with the specified code. Use for 
-     * non-repeating  subfields. If sent a repeating subfield, returns the first 
-     * encountered. Returns null if no subfield found. 
+     * Returns the subfield of the datafield with the specified code. Use 
+     * for  non-repeating  subfields. If sent a repeating subfield, returns  
+     * the first encountered. Returns null if no subfield found. 
      * @param String code - the subfield code
      */
     public MarcxmlSubfield getSubfield(char code) {

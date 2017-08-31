@@ -116,7 +116,6 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    @Ignore
     public void testSource_040$a() throws Exception {
         Entity adminMetadata = buildAdminMetadata(SOURCE_040$a);
         Assert.assertNotNull(
@@ -131,7 +130,6 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    @Ignore
     public void testTwoSources() throws Exception {
         Entity adminMetadata = buildAdminMetadata(SOURCE_040$a$c);
         Assert.assertEquals(2, adminMetadata.getChildren(

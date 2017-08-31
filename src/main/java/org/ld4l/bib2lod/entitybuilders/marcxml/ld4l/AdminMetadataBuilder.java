@@ -1,6 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -88,20 +88,18 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         if (field == null) {
             return;
         }
-        addSource(field);
+        addSources(field);
         addDescriptionLanguage(field);
-        addDescriptionModifier(field); 
+        addDescriptionModifiers(field); 
         addDescriptionConventions(field);  
     }
 
-    private void addSource(MarcxmlDataField field) 
+    private void addSources(MarcxmlDataField field) 
             throws EntityBuilderException {
         
         // $a non-repeating, $c non-repeating
-
-        List<MarcxmlSubfield> subfields = new ArrayList<>();
-        //subfields.add(field.getSubfield('a'));
-        subfields.add(field.getSubfield('c'));
+        List<MarcxmlSubfield> subfields =  
+                field.getSubfields(Arrays.asList('a', 'c'));
         
         if (subfields.isEmpty()) {
             return;
@@ -113,10 +111,11 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
                 .setRelationship(Ld4lObjectProp.HAS_SOURCE);
         
         for (MarcxmlSubfield subfield : subfields) {
-            params.setSubfield(subfield);
-            builder.build(params); 
-        }
-                        
+            if (subfield != null) {
+                params.setSubfield(subfield);
+                builder.build(params); 
+            }
+        }                       
     }
     
     private void addDescriptionLanguage(MarcxmlDataField field) {
@@ -134,9 +133,12 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
     }
 
     
-    private void addDescriptionModifier(MarcxmlDataField field) {
+    private void addDescriptionModifiers(MarcxmlDataField field) {
 
         // $d repeating
+        
+        // TODO *** Use agent builder
+        
         for (MarcxmlSubfield subfield : field.getSubfields('d')) {
             Entity agent = new Entity(Ld4lAgentType.superClass());
             agent.addAttribute(Ld4lDatatypeProp.NAME, 
