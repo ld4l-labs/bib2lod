@@ -4,9 +4,9 @@ import java.util.regex.Pattern;
 
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -19,7 +19,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class AdminMetadataBuilder extends BaseEntityBuilder {
+public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
  
     private static final Pattern PATTERN_005 = 
             Pattern.compile("^[\\d]{14}\\.\\d$");
@@ -35,10 +35,17 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         parseBuildParams(params);
 
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
+     
+        // Control field 001
+        convertControlField(
+                Ld4lIdentifierType.superClass(), adminMetadata, record, 1);
         
-        convert001();
-        convert040();
+        // Control field 040
+        convert_040();      
+        
+        // Control field 005
         convert005();
+
         
         if (adminMetadata.isEmpty()) {
             return null;
@@ -72,59 +79,55 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         }
     }
     
-    private void convert001() throws EntityBuilderException {
+    private void convert_040() throws EntityBuilderException {
         
-        MarcxmlControlField controlField_001 = record.getControlField(1);
-
-        if (controlField_001 == null) {
+        MarcxmlDataField field = record.getDataField(40);
+        
+        if (field == null) {
             return;
         }
+        addSource(field);
+        addDescriptionLanguage(field);
+        addDescriptionModifier(field); 
+        addDescriptionConventions(field);  
+    }
+
+    private void addSource(MarcxmlDataField field) 
+            throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
-                
+        // $a non-repeating, $c non-repeating
+
+        MarcxmlSubfield subfield = field.getSubfield('c');
+        if (subfield == null) {
+            return;
+        }
+
+        EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
         BuildParams params = new BuildParams()
                 .setParent(adminMetadata)
-                .setField(controlField_001);
-        builder.build(params);
-    }     
-    
-    private void convert040() {
-        
-        MarcxmlDataField field_040 = record.getDataField(40);
-        
-        if (field_040 == null) {
-            return;
-        }
-        addDescriptionLanguage(field_040);
-        addSource(field_040);
-        addDescriptionModifier(field_040); 
-        addDescriptionConventions(field_040);  
+                .setSubfield(subfield)
+                .setRelationship(Ld4lObjectProp.HAS_SOURCE);
+        builder.build(params);                 
     }
     
     private void addDescriptionLanguage(MarcxmlDataField field) {
 
+        // $b non-repeating
         MarcxmlSubfield subfield = field.getSubfield('b');
-        if (subfield != null) {
-            String language = subfield.getTextValue();
-            adminMetadata.addExternalRelationship( 
-                    Ld4lObjectProp.HAS_LANGUAGE, 
-                        Ld4lNamespace.LC_LANGUAGES.uri() + language); 
+        if (subfield == null) {
+            return;
         }
+        
+        String language = subfield.getTextValue();
+        adminMetadata.addExternalRelationship( 
+                Ld4lObjectProp.HAS_LANGUAGE, 
+                    Ld4lNamespace.LC_LANGUAGES.uri() + language); 
     }
-    
-    private void addSource(MarcxmlDataField field) {
-      
-        MarcxmlSubfield subfield = field.getSubfield('c');
-        if (subfield != null) {
-            Entity agent = new Entity(Ld4lAgentType.superClass());
-            agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                    subfield.getTextValue());
-            adminMetadata.addRelationship(Ld4lObjectProp.HAS_SOURCE, agent);                  
-        }        
-    }
+
     
     private void addDescriptionModifier(MarcxmlDataField field) {
 
+        // $d repeating
         for (MarcxmlSubfield subfield : field.getSubfields('d')) {
             Entity agent = new Entity(Ld4lAgentType.superClass());
             agent.addAttribute(Ld4lDatatypeProp.NAME, 

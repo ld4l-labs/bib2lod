@@ -15,7 +15,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ProviderActivityBuilder;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -47,7 +46,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         
         this.instance = new InstanceEntity();
  
-        // Admin metadata
+        // Admin metadata is built from multiple fields
         buildEntityFromRecord(
                 Ld4lAdminMetadataType.superClass(), instance, record);  
         

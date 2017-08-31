@@ -2,20 +2,22 @@
 
 This change log records API changes that may affect implementing projects.
 
+## Commit #-
+
+### Added
+
+* Added BuildParams.setRelationship() and BuildParams.getRelationship() to
+specify the property linking the parent to the entity being built.
 
 ## Commit #c1d15695
+
+### Removed
 
 * Removed empty packages and changed package names in src/test as well as
 src/main (see commit #9d16ad80).
 
 
 ## Commit #9d16ad80
-
-### Removed
-
-* Removed empty 'xml' packages:
-  * org.ld4l.bib2lod.conversion.xml
-  * org.ld4l.bib2lod.entitybuilders.xml
 
 ### Changed 
 
@@ -24,6 +26,13 @@ src/main (see commit #9d16ad80).
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml => org.ld4l.bib2lod.entitybuilders.marcxml
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities => org.ld4l.bib2lod.entitybuilders.marcxml.activities
   
+
+### Removed
+
+* Removed empty packages:
+  * org.ld4l.bib2lod.conversion.xml
+  * org.ld4l.bib2lod.entitybuilders.xml
+
 
 ## Commit #26cef60d (and preceding)
 

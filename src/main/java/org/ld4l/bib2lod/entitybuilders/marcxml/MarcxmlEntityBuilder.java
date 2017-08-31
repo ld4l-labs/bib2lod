@@ -9,31 +9,24 @@ import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public abstract class MarcxmlEntityBuilder extends BaseEntityBuilder {
     
+/*
+ * TODO
+ * Record as a whole - done
+ * Field as a whole
+ * Field with one or more specific subfields
+ * Field iterating through each subfield (e.g., each subfield generates a distinct entity
+ * Field iterating through all subfields  (or is that just field as a whole?)
+ */
+
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    /*
-     * Consider: store instance variables here (with generic names like
-     * parent, entity, etc.) rather than in subclasses. Then can do reset()
-     * here. First check whether there might be problems with, say,
-     * different types. (E.g., Ld4lActivityType has a label() method.)
-     * 
-     * convert non-repeating field - pass in field
-     * convert non-repeating field - pass in field & subfield
-     * Convert non-repeating field with repeating subfield ?
-     * 
-     * convert repeating field - pass in field
-     * convert repeating field - pass in field & subfield
-     * convert repeating field with repeating subfield 
-     * convert repeating field with non-repeating subfield ?
-     * 
-     * repeat all with a list of subfields? 
-     */
 
     protected void buildEntityFromRecord(Type type, Entity parent, 
             MarcxmlRecord record) throws EntityBuilderException {
@@ -46,37 +39,48 @@ public abstract class MarcxmlEntityBuilder extends BaseEntityBuilder {
         builder.build(params); 
     }
     
-    protected void convertFields(Type type, Entity parent, 
+    protected void convertControlField(Type type, Entity parent, 
+            MarcxmlRecord record, int tag) throws EntityBuilderException {
+        
+        MarcxmlControlField field = record.getControlField(tag);
+        if (field == null) {
+            return;
+        }
+        
+        EntityBuilder builder = getBuilder(type);
+        
+        BuildParams params = new BuildParams()
+                .setParent(parent)
+                .setField(field);
+        
+        builder.build(params);
+    }
+
+/*    
+    protected void convertDataField(Type type, Entity parent, 
             MarcxmlRecord record, int tag) throws EntityBuilderException {
         
         BuildParams params = new BuildParams()
                 .setParent(parent)
                 .setType(type);
                      
-        if (MarcxmlDataField.isRepeating(tag)) {
-            List<MarcxmlDataField> fields = record.getDataFields(tag);
-            if (fields.isEmpty()) {
-                return;
-            }
-            for (MarcxmlDataField field : fields) {
-                convertField(type, field, params);
-            }   
-        } else {
-            MarcxmlDataField field = record.getDataField(tag);
-            if (field != null) {
-                convertField(type, field, params);
-            }
+        // Use a loop even for non-repeating fields; the MARC is responsible
+        // for maintaining the cardinality constraints.
+        List<MarcxmlDataField> fields = record.getDataFields(tag);
+        if (fields.isEmpty()) {
+            return;
         }
-         
+        
+        EntityBuilder builder = getBuilder(type); 
+        
+        for (MarcxmlDataField field : fields) {
+            params.setField(field);
+            builder.build(params);
+        } 
     }
-    
-    // TODO We don't always want to go through the subfields...
-    protected void convertField(Type type, MarcxmlDataField field, 
-            BuildParams params) throws EntityBuilderException {
-        params.setField(field);
-        convertSubfields(type, field, params);        
-    }
-    
+*/
+ 
+/*
     protected void convertSubfields(Type type, MarcxmlDataField field, 
             BuildParams params) throws EntityBuilderException {
         
@@ -87,4 +91,6 @@ public abstract class MarcxmlEntityBuilder extends BaseEntityBuilder {
             builder.build(params);                
         }        
     }
+*/
+    
 }
