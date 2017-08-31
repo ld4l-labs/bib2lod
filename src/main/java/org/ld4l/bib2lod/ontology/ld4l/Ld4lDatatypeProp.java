@@ -18,8 +18,8 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
     /*
-     * rdfs:label is technically an annotation property, but so far functions 
-     * the same as a datatype property for our purposes.
+     * rdfs:label is not technically a datatype property, but functions as
+     * one in our application profile.
      */
     LABEL(Ld4lNamespace.RDFS, "label"),
     NAME(Ld4lNamespace.FOAF, "name"),
@@ -27,10 +27,10 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     RANK(Ld4lNamespace.VIVO, "rank"),
     RESPONSIBILITY_STATEMENT(Ld4lNamespace.BIBFRAME, "responsibilityStatement"),
     /*
-     * rdf:value is an RDF property with range rdfs:Resource. It is defined both
-     * as an Ld4lDatatypeProp and an Ld4lObjectProp for use with either a literal
-     * or non-literal object. For now it doesn't appear that the lack of 
-     * technical accuracy will cause any problems.
+     * rdf:value is an RDF property with range rdfs:Resource. We define it
+     * as both an Ld4lDatatypeProp and an Ld4lObjectProp for use with either 
+     * a literal or non-literal object. For now it doesn't appear that the  
+     * lack of technical accuracy will cause any problems.
      */
     VALUE(Ld4lNamespace.RDF, "value");
     

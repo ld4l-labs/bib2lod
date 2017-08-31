@@ -43,10 +43,10 @@ public enum Ld4lObjectProp implements ObjectProp {
     IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
     MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy"),
     /*
-     * rdf:value is an RDF property with range rdfs:Resource. It is defined both
-     * as an Ld4lDatatypeProp and an Ld4lObjectProp for use with either a literal
-     * or non-literal object. For now it doesn't appear that the lack of 
-     * technical accuracy will cause any problems. 
+     * rdf:value is an RDF property with range rdfs:Resource. We define it
+     * as both an Ld4lDatatypeProp and an Ld4lObjectProp for use with either 
+     * a literal or non-literal object. For now it doesn't appear that the  
+     * lack of technical accuracy will cause any problems.
      */
     VALUE(Ld4lNamespace.RDF, "value");
 
