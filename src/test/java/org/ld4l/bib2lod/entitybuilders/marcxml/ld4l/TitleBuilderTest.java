@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,75 +14,40 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.TitleBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.Record;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
-import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
  * Tests class TitleBuilder.
  */
 public class TitleBuilderTest extends AbstractTestClass {
     
-    public static final String TITLE_WITH_WHITESPACE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'> main title </subfield>" +     
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml TITLE_WITH_WHITESPACE =  MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .findDatafield("245").findSubfield("a").setValue(" main title ")
+            .lock();
+
+    public static final MockMarcxml TITLE_WITH_FINAL_SPACE_COLON =  TITLE_WITH_WHITESPACE.openCopy()
+            .findDatafield("245").findSubfield("a").setValue("main title :")
+            .lock();
     
-    public static final String TITLE_WITH_FINAL_SPACE_COLON = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title :</subfield>" +     
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml TITLE_WITH_FINAL_COLON =  TITLE_WITH_WHITESPACE.openCopy()
+            .findDatafield("245").findSubfield("a").setValue("main title:")
+            .lock();
     
-    public static final String TITLE_WITH_FINAL_COLON = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title:</subfield>" +     
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml TITLE_WITH_SUBTITLE =  TITLE_WITH_FINAL_SPACE_COLON.openCopy()
+            .findDatafield("245").addSubfield("b", "subtitle")
+            .lock();
     
-    public static final String TITLE_WITH_SUBTITLE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title :</subfield>" +     
-                    "<subfield code='b'>subtitle</subfield>" + 
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml TITLE_WITH_TWO_SUBTITLES =  TITLE_WITH_FINAL_SPACE_COLON.openCopy()
+            .findDatafield("245").addSubfield("b", "subtitle one : subtitle two")
+            .lock();
     
 
-    public static final String TITLE_WITH_TWO_SUBTITLES = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title :</subfield>" +     
-                    "<subfield code='b'>subtitle one : subtitle two</subfield>" + 
-                "</datafield>" + 
-            "</record>"; 
-    
     private static BaseMockBib2LodObjectFactory factory;
     private TitleBuilder builder; 
     
@@ -112,7 +79,7 @@ public class TitleBuilderTest extends AbstractTestClass {
     public void nullBibEntity_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, 
                 "A parent entity is required");
-        buildTitle((Entity) null, MarcxmlTestUtils.MINIMAL_RECORD);
+        buildTitle((Entity) null, MINIMAL_RECORD);
     }
     
     @Test
@@ -141,8 +108,7 @@ public class TitleBuilderTest extends AbstractTestClass {
 
     @Test 
     public void testTitleValueFromMainTitleElement() throws Exception {
-        buildTitleAndExpectValue(
-                new Entity(), MarcxmlTestUtils.MINIMAL_RECORD, "main title");
+        buildTitleAndExpectValue(new Entity(), MINIMAL_RECORD, "main title");
     }
     
     @Test 
@@ -179,11 +145,9 @@ public class TitleBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
     
-    private Entity buildTitle(Entity bibEntity, String marcxml) 
+    private Entity buildTitle(Entity bibEntity, MockMarcxml marcxml) 
             throws Exception {
-        MarcxmlRecord record = new MarcxmlRecord(
-                XmlTestUtils.buildElementFromString(marcxml));
-        return buildTitle(bibEntity, record);
+        return buildTitle(bibEntity, marcxml.toRecord());
     }
     
     private Entity buildTitle(Entity bibEntity, Record record) 
@@ -195,7 +159,7 @@ public class TitleBuilderTest extends AbstractTestClass {
     }
     
     private void buildTitleAndExpectValue(
-            Entity bibEntity, String marcxml, String value) throws Exception {
+            Entity bibEntity, MockMarcxml marcxml, String value) throws Exception {
         Entity title = buildTitle(bibEntity, marcxml);
         Assert.assertEquals(value,
                 title.getAttribute(Ld4lDatatypeProp.VALUE).getValue());        

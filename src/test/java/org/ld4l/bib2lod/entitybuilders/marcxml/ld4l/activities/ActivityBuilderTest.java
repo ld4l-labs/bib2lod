@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -10,29 +12,20 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.PublisherActivityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
-
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 public class ActivityBuilderTest extends AbstractTestClass {
     
-    public static final String _260_PUBLISHER = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
-                "</datafield>" +
-            "</record>"; 
+    public static final MockMarcxml _260_PUBLISHER =  MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .findDatafield("245").findSubfield("a").setValue("full title")
+            .addDatafield("260", " ", " ").addSubfield("b", "Grune & Stratton,")
+            .lock();
 
     private static BaseMockBib2LodObjectFactory factory;
     private PublisherActivityBuilder activityBuilder;   
@@ -46,7 +39,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.activityBuilder = new PublisherActivityBuilder();
         this.instanceBuilder = new InstanceBuilder();              
     }   
@@ -98,9 +91,9 @@ public class ActivityBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
          
-    private Entity buildActivity(String input) throws Exception {
+    private Entity buildActivity(MockMarcxml input) throws Exception {
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(input));
+                .setRecord(input.toRecord());
         return buildActivity(params);         
     }   
     

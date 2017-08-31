@@ -10,25 +10,22 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.LocationBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
  * Tests class LocationBuilder.
  */
 public class LocationBuilderTest extends AbstractTestClass {
 
-    public static final String DUPLICATE_LOCATIONS = 
+    public static final MockMarcxml DUPLICATE_LOCATIONS = MockMarcxml.parse( 
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" + 
@@ -44,26 +41,13 @@ public class LocationBuilderTest extends AbstractTestClass {
                 "<subfield code='a'>Leiden :</subfield>" +
                 "<subfield code='b'>E.J. Brill</subfield>" +                 
             "</datafield>" +
-            "</record>";
+            "</record>");
     
-    public static final String DIFFERENT_LOCATIONS = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='a'>Amsterdam :</subfield>" +
-                    "<subfield code='b'>E.J. Brill</subfield>" +               
-                "</datafield>" +
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                "<subfield code='a'>Leiden :</subfield>" +
-                "<subfield code='b'>Random House</subfield>" +                 
-            "</datafield>" +
-            "</record>";
-
+    public static final MockMarcxml DIFFERENT_LOCATIONS = DUPLICATE_LOCATIONS.openCopy()
+            .findDatafield("260", 0).replaceSubfield("a", "Amsterdam :")
+            .findDatafield("260", 1).replaceSubfield("b", "Random House")
+            .lock();
+    
     private static final String NAME_SUBFIELD = 
             "<subfield code='b'>Leiden :</subfield>";
     
@@ -79,7 +63,7 @@ public class LocationBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.instanceBuilder = new InstanceBuilder();   
         this.locationBuilder = new LocationBuilder();
     }
@@ -152,8 +136,7 @@ public class LocationBuilderTest extends AbstractTestClass {
     @Test
     public void testReuseExistingLocation() throws Exception {
         BuildParams params = new BuildParams()
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(
-                        DUPLICATE_LOCATIONS));
+                .setRecord(DUPLICATE_LOCATIONS.toRecord());
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
@@ -166,8 +149,7 @@ public class LocationBuilderTest extends AbstractTestClass {
     @Test
     public void testBuildNewLocation() throws Exception {
         BuildParams params = new BuildParams()
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(
-                        DIFFERENT_LOCATIONS));
+                .setRecord(DIFFERENT_LOCATIONS.toRecord());
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);

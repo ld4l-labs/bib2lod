@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Assert;
@@ -19,11 +21,9 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 
 /** 
@@ -31,125 +31,59 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
  */
 public class PublisherActivityBuilderTest extends AbstractTestClass {
 
-    public static final String _008_NO_LOCATION = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s1957       a     b    000 0 eng  </controlfield>" + 
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
-    
-    public static final String _008_NO_DATE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>860506s        nyua     b    000 0 eng  </controlfield>" + 
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
-    
-    public static final String _008_TWO_CHAR_PUB_LOCATION = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='008'>750226c18529999ne bx p       0   b0eng  </controlfield>" + 
-                "<datafield tag='245' ind1='3' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='c'>1957.</subfield>" +
-            "</datafield>" +
-            "</record>";
-    
-    public static final String _260_PUBLISHER = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>New York,</subfield>" +
-                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
-                    "<subfield code='c'>1957.</subfield>" +
-                "</datafield>" +
-            "</record>"; 
- 
-    public static final String _260_PUBLISHER_NO_DATE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>New York,</subfield>" +
-                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
-                "</datafield>" +
-            "</record>"; 
-    
-    public static final String _260_PUBLISHER_NO_LOCATION = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
-                    "<subfield code='c'>1957.</subfield>" +
-                "</datafield>" +
-            "</record>"; 
-    
-    public static final String _260_CURRENT_PUBLISHER = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='a'>New York,</subfield>" +
-                    "<subfield code='b'>Grune &amp; Stratton,</subfield>" +
-                    "<subfield code='c'>1957.</subfield>" +
-                "</datafield>" +
-            "</record>"; 
-    
-    public static final String TWO_260 = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='a'>Lugduni Batavorum :</subfield>" +
-                    "<subfield code='b'>E.J. Brill</subfield>" +               
-                "</datafield>" +
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='a'>Leiden :</subfield>" +
-                    "<subfield code='b'>E.J. Brill</subfield>" +                 
-            "</datafield>" +
-            "</record>"; 
-    
-    public static final String _008_260$c_DATES = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='c'>1957.</subfield>" +
-                "</datafield>" +
-            "</record>"; 
-    
+    private static final MockMarcxml _008_NO_LOCATION = MINIMAL_RECORD.openCopy()
+            .replaceControlfield("008", "860506s1957       a     b    000 0 eng  ")
+            .lock();
+
+    private static final MockMarcxml _008_NO_DATE = MINIMAL_RECORD.openCopy()
+            .replaceControlfield("008", "860506s        nyua     b    000 0 eng  ")
+            .lock();
+
+    public static final MockMarcxml _008_TWO_CHAR_PUB_LOCATION = MINIMAL_RECORD.openCopy()
+            .findControlfield("008").setValue("750226c18529999ne bx p       0   b0eng  ")
+            .findDatafield("245").setInd1("3")
+            .addDatafield("260", " ", " ").addSubfield("c", "1957.")
+            .lock();
+
+    public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
+            .findDatafield("245").findSubfield("a").setValue("full title")
+            .addDatafield("260", " ", " ").addSubfield("a", "New York")
+            .addSubfield("b", "Grune & Stratton").addSubfield("c", "1957.")
+            .lock();
+
+    public static final MockMarcxml _260_PUBLISHER_NO_DATE = _260_PUBLISHER.openCopy()
+            .findDatafield("260").deleteSubfield("c").lock();
+
+    public static final MockMarcxml _260_PUBLISHER_NO_LOCATION = _260_PUBLISHER.openCopy()
+            .findDatafield("260").deleteSubfield("a").lock();
+
+    public static final MockMarcxml _260_CURRENT_PUBLISHER = _260_PUBLISHER.openCopy()
+            .findDatafield("260").setInd1("3").lock();
+
+    public static final MockMarcxml TWO_260 = MockMarcxml
+            .parse("<record>" + "<leader>01050cam a22003011  4500</leader>"
+                    + "<controlfield tag='001'>102063</controlfield>"
+                    + "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>"
+                    + "<datafield tag='245' ind1='0' ind2='0'>"
+                    + "<subfield code='a'>full title</subfield>"
+                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
+                    + "<subfield code='a'>Lugduni Batavorum :</subfield>"
+                    + "<subfield code='b'>E.J. Brill</subfield>"
+                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
+                    + "<subfield code='a'>Leiden :</subfield>"
+                    + "<subfield code='b'>E.J. Brill</subfield>"
+                    + "</datafield>" + "</record>");
+
+    public static final MockMarcxml _008_260$c_DATES = MockMarcxml
+            .parse("<record>" + "<leader>01050cam a22003011  4500</leader>"
+                    + "<controlfield tag='001'>102063</controlfield>"
+                    + "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>"
+                    + "<datafield tag='245' ind1='0' ind2='0'>"
+                    + "<subfield code='a'>full title</subfield>"
+                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
+                    + "<subfield code='c'>1957.</subfield>" + "</datafield>"
+                    + "</record>");
+
     public static final String _001 = 
             "<controlfield tag='001'>102063</controlfield>";  
     
@@ -168,7 +102,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() throws RecordFieldException {       
+    public void setUp() {       
         this.instanceBuilder = new InstanceBuilder();              
     }
     
@@ -243,10 +177,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void testThreePublishers() throws Exception {
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
-                TWO_260);
-        BuildParams params = new BuildParams() 
-                .setRecord(record);
+        BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
         Entity instance = instanceBuilder.build(params);   
         Assert.assertEquals(3, 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
@@ -255,10 +186,8 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void testCurrentPublishers_008_260() throws Exception {
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
-                _260_CURRENT_PUBLISHER);
         BuildParams params = new BuildParams() 
-                .setRecord(record);
+                .setRecord(_260_CURRENT_PUBLISHER.toRecord());
         Entity instance = instanceBuilder.build(params);   
         Assert.assertEquals(2, 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
@@ -290,14 +219,13 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
 
     private Entity buildActivity() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord());  
+        BuildParams params = new BuildParams()
+                .setRecord(MINIMAL_RECORD.toRecord());
         return buildActivity(params);
     }
 
-    private Entity buildActivity(String input) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(input));
+    private Entity buildActivity(MockMarcxml input) throws Exception {
+        BuildParams params = new BuildParams().setRecord(input.toRecord());
         return buildActivity(params);         
     }   
     
@@ -307,9 +235,8 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
         return instance.getChild(Ld4lObjectProp.HAS_ACTIVITY); 
     }
     
-    private Entity buildInstance(String input) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(input));  
+    private Entity buildInstance(MockMarcxml input) throws Exception {
+        BuildParams params = new BuildParams().setRecord(input.toRecord());
         return instanceBuilder.build(params);
     }
     

@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,12 +10,11 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.AdminMetadataBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 
 /**
@@ -21,7 +22,7 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
  */
 public class AdminMetadataBuilderTest extends AbstractTestClass {
     
-    public static final String TEST_RECORD = 
+    public static final MockMarcxml TEST_RECORD = MockMarcxml.parse(
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='005'>20130330145647.0</controlfield>" +
@@ -37,17 +38,11 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
                     "<subfield code='e'>rda</subfield>" +
                     "<subfield code='e'>appm</subfield>" +
                  "</datafield>" +
-            "</record>";
+            "</record>");
     
-    public static final String INVALID_005_VALUE = 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='005'>20130330</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-            "</record>";
+    public static final MockMarcxml INVALID_005_VALUE =  MINIMAL_RECORD.openCopy()
+            .addControlfield("005", "20130330")
+            .lock();
     
     private AdminMetadataBuilder builder;   
     
@@ -63,7 +58,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void nullRelatedInstance_ThrowsException() throws Exception {      
-        buildAndExpectException(null, MarcxmlTestUtils.MINIMAL_RECORD, 
+        buildAndExpectException(null, MINIMAL_RECORD, 
                 "without a related entity");
     }
     
@@ -78,7 +73,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     
     @Test
     public void noAdminMetadataReturnsNull() throws Exception {
-        Assert.assertNull(buildAdminMetadata(MarcxmlTestUtils.MINIMAL_RECORD));
+        Assert.assertNull(buildAdminMetadata(MINIMAL_RECORD));
     }
     
     @Test
@@ -180,26 +175,26 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
 
-    private Entity buildAdminMetadata(Entity entity, String input) 
+    private Entity buildAdminMetadata(Entity entity, MockMarcxml input) 
             throws Exception {
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.buildRecordFromString(input))                    
+                .setRecord(input.toRecord())                    
                 .setParent(entity);
         return builder.build(params);        
     }
     
-    private Entity buildAdminMetadata(String input) 
+    private Entity buildAdminMetadata(MockMarcxml input) 
             throws Exception {
         return buildAdminMetadata(new Entity(), input);      
     }
     
     private void buildAndExpectException(
-            Entity entity, String input, String error) throws Exception {            
+            Entity entity, MockMarcxml input, String error) throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildAdminMetadata(entity, input);
     }
     
-    private void buildAndExpectException(String input, String error) 
+    private void buildAndExpectException(MockMarcxml input, String error) 
             throws Exception {
         buildAndExpectException(new Entity(), input, error);
     }
