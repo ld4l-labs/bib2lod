@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.LegacySourceDataType;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
@@ -27,7 +27,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 /**
  * Builds an Identifier for a bib resource from a field in the record.
  */
-public class IdentifierBuilder extends BaseEntityBuilder { 
+public class IdentifierBuilder extends MarcxmlEntityBuilder { 
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -69,7 +69,7 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         }        
     }
     
-    public static Map<String, Entity> getSources() {
+    protected static Map<String, Entity> getSources() {
         return sources;
     }
     
@@ -116,12 +116,10 @@ public class IdentifierBuilder extends BaseEntityBuilder {
             throw new EntityBuilderException("Invalid field type.");
         }
     }
-    
 
-    
     /**
-     * Returns a source Entity built from a label. No type is specified, and the 
-     * label is the organization code in the identifier.
+     * Returns a source Entity built from a label. No type is specified, and 
+     * the label is the organization code in the identifier.
      * @throws EntityBuilderException 
      */
     private static final Entity buildSource(String label) 
@@ -135,21 +133,21 @@ public class IdentifierBuilder extends BaseEntityBuilder {
     }              
     
     /**
-     * Builds an Identifier from a control field. Returns null if the control
-     * field is not recognized or implemented.
+     * Builds an Identifier from a control field. Returns null if the 
+     * control field is not recognized or implemented.
      */   
     private Entity build(MarcxmlControlField field) {
         
         Entity identifier = null;
         
-        if (((MarcxmlControlField) field).getTag() == 1) {
-            identifier = new Entity(Ld4lIdentifierType.LOCAL);
-            String value = field.getTextValue();
-            identifier.addAttribute(Ld4lDatatypeProp.VALUE, value);    
+        if (field.getTag() == 1) {
+            identifier = buildFromTextField(Ld4lIdentifierType.LOCAL, 
+                    Ld4lDatatypeProp.VALUE, field); 
         }
         
         return identifier;
     }
+    
     /**
      * Builds an identifier from a data field. Returns null if the field is
      * not recognized or implemented.
@@ -163,17 +161,17 @@ public class IdentifierBuilder extends BaseEntityBuilder {
                 (MarcxmlSubfield) params.getSubfields().get(0);
  
         if (field.getTag() == 35) {
-            identifier = convert035(subfield);
+            identifier = convert_035(subfield);
         }
         
         return identifier;
     }
 
     /**
-     * Builds an identifier from field 035. Returns null if the identifier value
-     * is already attached to the resource's AdminMetadata object.
+     * Builds an identifier from field 035. Returns null if the identifier 
+     * value is already attached to the resource's AdminMetadata object.
      */
-    private Entity convert035(MarcxmlSubfield subfield) 
+    private Entity convert_035(MarcxmlSubfield subfield) 
             throws EntityBuilderException {
         
         Entity identifier;
@@ -182,13 +180,15 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         
         // Ignoring $6 and $8 (not mapped by LC)
         if (code != 'a' && code != 'z') {
-            throw new EntityBuilderException("Invalid subfield for field 035.");                
+            throw new EntityBuilderException(
+                    "Invalid subfield for field 035.");                
         }
 
         Matcher matcher = 
                 PATTERN_035_IDENTIFIER.matcher(subfield.getTextValue());
         if (! matcher.matches()) {
-            throw new EntityBuilderException("Invalid value for field 035.");
+            throw new EntityBuilderException(
+                    "Invalid value for field 035.");
         }
         
         identifier = new Entity(Ld4lIdentifierType.LOCAL);
