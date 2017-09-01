@@ -137,7 +137,6 @@ public class TitleElementBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    @Ignore
     public void testPreserveFinalSpaceInNonSortElement() throws Exception {
         buildAndExpectValue(Ld4lTitleElementType.NON_SORT_ELEMENT, 
                 NON_SORT_ELEMENT_WITH_FINAL_SPACE, "L' ");             

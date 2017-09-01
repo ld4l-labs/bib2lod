@@ -24,18 +24,11 @@ public class TitleElementBuilder extends BaseEntityBuilder {
         Entity titleElement = new Entity(type);
         
         /*
-         * Remove final punctuation. Colon is used at the end of the main title 
-         * when a subtitle follows, and should be removed. Final periods also
-         * occur.
-         */
-        value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(value);    
-        
-        /*
          * NB Final space must be retained in non-sort elements, in order to
          * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
          */
         if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
-            value = value.trim();
+            value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(value);
         } 
 
         titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);
