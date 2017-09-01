@@ -173,6 +173,10 @@ public class MarcxmlDataField extends BaseMarcxmlField
         return list;
     }
     
+    public List<MarcxmlSubfield> getSubfields(Character...codes) {
+        return getSubfields(Arrays.asList(codes));
+    }
+    
     /**
      * Returns the subfield of the datafield with the specified code. Use 
      * for  non-repeating  subfields. If sent a repeating subfield, returns  
