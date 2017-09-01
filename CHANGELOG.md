@@ -2,20 +2,46 @@
 
 This change log records API changes that may affect implementing projects.
 
+## Commit #16c15108 (2017-09-01)
 
-## Commit #c1d15695
+### Added
+
+* Added BuildParams.setRelationship() and BuildParams.getRelationship() to
+specify the property linking the parent to the entity being built.
+
+* Added BuildParams.setProperty() and BuildParams.getProperty() to specify
+a datatype property to use assert a literal value. Relates to change of
+MarcxmlEntityBuilder from abstract to concrete; see below.
+
+### Changed
+
+* Made MarcxmlEntityBuilder concrete, and added a build() method to 
+generalize simple entity builds where no more specific builder is required.
+
+
+## Commit #721d4b87 (2017-08-30)
+
+### Added
+
+* Added abstract MarcxmlEntityBuilder to provide utility build methods.
+
+## Commit #1fac2538 (2017-08-30)
+
+### Added
+
+* Added framework to manipulate test MARCXML records to reduce number of
+defined test strings by providing methods to add and remove elements from a
+record.
+
+## Commit #c1d15695 (2017-08-29)
+
+### Removed
 
 * Removed empty packages and changed package names in src/test as well as
 src/main (see commit #9d16ad80).
 
 
 ## Commit #9d16ad80
-
-### Removed
-
-* Removed empty 'xml' packages:
-  * org.ld4l.bib2lod.conversion.xml
-  * org.ld4l.bib2lod.entitybuilders.xml
 
 ### Changed 
 
@@ -24,7 +50,12 @@ src/main (see commit #9d16ad80).
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml => org.ld4l.bib2lod.entitybuilders.marcxml
   * org.ld4l.bib2lod.entitybuilders.xml.marcxml.activities => org.ld4l.bib2lod.entitybuilders.marcxml.activities
   
-Implementers can do the same with their packages.
+
+### Removed
+
+* Removed empty packages:
+  * org.ld4l.bib2lod.conversion.xml
+  * org.ld4l.bib2lod.entitybuilders.xml
 
 
 ## Commit #26cef60d (and preceding)

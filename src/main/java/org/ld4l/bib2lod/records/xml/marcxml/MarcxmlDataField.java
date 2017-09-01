@@ -21,6 +21,10 @@ import org.w3c.dom.NodeList;
  */
 public class MarcxmlDataField extends BaseMarcxmlField 
         implements MarcxmlTaggedField {
+    
+    private static List<Integer> NON_REPEATING_FIELDS = Arrays.asList(
+            
+            );
 
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -169,10 +173,14 @@ public class MarcxmlDataField extends BaseMarcxmlField
         return list;
     }
     
+    public List<MarcxmlSubfield> getSubfields(Character...codes) {
+        return getSubfields(Arrays.asList(codes));
+    }
+    
     /**
-     * Returns the subfield of the datafield with the specified code. Use for 
-     * non-repeating  subfields. If sent a repeating subfield, returns the first 
-     * encountered. Returns null if no subfield found. 
+     * Returns the subfield of the datafield with the specified code. Use 
+     * for  non-repeating  subfields. If sent a repeating subfield, returns  
+     * the first encountered. Returns null if no subfield found. 
      * @param String code - the subfield code
      */
     public MarcxmlSubfield getSubfield(char code) {
@@ -271,6 +279,14 @@ public class MarcxmlDataField extends BaseMarcxmlField
                        "Subfield $a or $k required for field 245.");
            }
         }
+    }
+    
+    public static boolean isNonRepeating(int tag) {
+        return NON_REPEATING_FIELDS.contains(tag);
+    }
+    
+    public static boolean isRepeating(int tag) {
+        return ! NON_REPEATING_FIELDS.contains(tag);
     }
     
 }

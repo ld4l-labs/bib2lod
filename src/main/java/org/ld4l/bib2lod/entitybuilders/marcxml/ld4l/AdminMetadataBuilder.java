@@ -1,12 +1,13 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -19,7 +20,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class AdminMetadataBuilder extends BaseEntityBuilder {
+public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
  
     private static final Pattern PATTERN_005 = 
             Pattern.compile("^[\\d]{14}\\.\\d$");
@@ -35,10 +36,17 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         parseBuildParams(params);
 
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
+     
+        // Control field 001
+        convertControlField(
+                Ld4lIdentifierType.superClass(), adminMetadata, record, 1);
         
-        convert001();
-        convert040();
+        // Control field 040
+        convert_040();      
+        
+        // Control field 005
         convert005();
+
         
         if (adminMetadata.isEmpty()) {
             return null;
@@ -72,77 +80,97 @@ public class AdminMetadataBuilder extends BaseEntityBuilder {
         }
     }
     
-    private void convert001() throws EntityBuilderException {
+    private void convert_040() throws EntityBuilderException {
         
-        MarcxmlControlField controlField_001 = record.getControlField(1);
-
-        if (controlField_001 == null) {
+        MarcxmlDataField field = record.getDataField(40);
+        
+        if (field == null) {
             return;
         }
+        addSources(field);
+        addDescriptionLanguage(field);
+        addDescriptionModifiers(field); 
+        addDescriptionConventions(field);  
+    }
+
+    private void addSources(MarcxmlDataField field) 
+            throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.superClass());
-                
+        // 040 $a non-repeating, $c non-repeating
+        List<MarcxmlSubfield> subfields =  field.getSubfields('a', 'c');        
+        
+        if (subfields.isEmpty()) {
+            return;
+        }
+
+        EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
         BuildParams params = new BuildParams()
                 .setParent(adminMetadata)
-                .setField(controlField_001);
-        builder.build(params);
-    }     
-    
-    private void convert040() {
+                .setRelationship(Ld4lObjectProp.HAS_SOURCE);
         
-        MarcxmlDataField field_040 = record.getDataField(40);
-        
-        if (field_040 == null) {
-            return;
-        }
-        addDescriptionLanguage(field_040);
-        addSource(field_040);
-        addDescriptionModifier(field_040); 
-        addDescriptionConventions(field_040);  
+        for (MarcxmlSubfield subfield : subfields) {
+            if (subfield != null) {
+                params.setSubfield(subfield);
+                builder.build(params); 
+            }
+        }                       
     }
     
     private void addDescriptionLanguage(MarcxmlDataField field) {
 
+        // 040 $b non-repeating
         MarcxmlSubfield subfield = field.getSubfield('b');
-        if (subfield != null) {
-            String language = subfield.getTextValue();
-            adminMetadata.addExternalRelationship( 
-                    Ld4lObjectProp.HAS_LANGUAGE, 
-                        Ld4lNamespace.LC_LANGUAGES.uri() + language); 
+        if (subfield == null) {
+            return;
         }
+        
+        String language = subfield.getTextValue();
+        adminMetadata.addExternalRelationship( 
+                Ld4lObjectProp.HAS_LANGUAGE, 
+                    Ld4lNamespace.LC_LANGUAGES.uri() + language); 
     }
-    
-    private void addSource(MarcxmlDataField field) {
-      
-        MarcxmlSubfield subfield = field.getSubfield('c');
-        if (subfield != null) {
-            Entity agent = new Entity(Ld4lAgentType.superClass());
-            agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                    subfield.getTextValue());
-            adminMetadata.addRelationship(Ld4lObjectProp.HAS_SOURCE, agent);                  
-        }        
-    }
-    
-    private void addDescriptionModifier(MarcxmlDataField field) {
 
-        for (MarcxmlSubfield subfield : field.getSubfields('d')) {
-            Entity agent = new Entity(Ld4lAgentType.superClass());
-            agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                    subfield.getTextValue());
-            adminMetadata.addRelationship(
-                    Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER, agent);
-        }       
+    
+    private void addDescriptionModifiers(MarcxmlDataField field) 
+            throws EntityBuilderException {
+
+        // 040 $d repeating
+        List<MarcxmlSubfield> subfields = field.getSubfields('d');
+        
+        if (subfields.isEmpty()) {
+            return;
+        }
+        
+        EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
+        BuildParams params = new BuildParams()
+                .setParent(adminMetadata)
+                .setRelationship(Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
+        
+        for (MarcxmlSubfield subfield : subfields) {
+            if (subfield != null) {
+                params.setSubfield(subfield);
+                builder.build(params); 
+            }
+        }     
     }
     
-    private void addDescriptionConventions(MarcxmlDataField field) {
+    private void addDescriptionConventions(MarcxmlDataField field) 
+            throws EntityBuilderException {
 
         for (MarcxmlSubfield subfield : field.getSubfields('e')) {
-            Entity conventions = 
-                    new Entity(Ld4lDescriptionConventionsType.superClass());
-            conventions.addAttribute(Ld4lDatatypeProp.LABEL, 
-                    subfield.getTextValue());
-            adminMetadata.addRelationship(
-                    Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS, conventions);
+
+            /* Add a generic method to MarcxmlEntityBuilder - pass in
+            type, subfield, property to add subfield text value to, and
+            relationship.*/
+            
+            BuildParams params = new BuildParams()
+                    .setType(Ld4lDescriptionConventionsType.superClass())
+                    .setProperty(Ld4lDatatypeProp.LABEL)
+                    .setSubfield(subfield)
+                    .setParent(adminMetadata)
+                    .setRelationship(
+                            Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS);
+            super.build(params);
         }       
     }
     

@@ -4,22 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.records.RecordField;
 
 public class BuildParams {
 
-  
     private RecordField field;
+    
     // Parent of the parent; e.g., the bib resource of an Activity of an 
     // Agent
     private Entity grandparent; 
-    // The "parent" Entity of this Entity: e.g., the Instance of a Title or
-    // PublicationActivity
+    
+    // The "parent" of the Entity being built: e.g., the Instance of a Title 
+    // or PublicationActivity
     private Entity parent;
-    private Record record; 
+    
+    // Datatype property to add to the Entity. Uses either subfield text
+    // value or the value String as the object.
+    private DatatypeProp property;
+    
+    private Record record;
+    
+    // MAYBE TEMPORARY?
+    // Relationship from parent to the Entity being built
+    private ObjectProp relationship;
+    
     private List<RecordField> subfields;
+    
     private Type type;
     private String value;
 
@@ -31,6 +45,7 @@ public class BuildParams {
         this.grandparent = null;
         this.parent = null;
         this.record = null;
+        this.relationship = null;
         this.subfields = new ArrayList<>();
         this.type = null;
         this.value = null;      
@@ -76,6 +91,19 @@ public class BuildParams {
     }
     
     /**
+     * Returns null if no datatype property has been set.
+     */
+    public DatatypeProp getProperty() {
+        return property;
+    }
+
+    public BuildParams setProperty(DatatypeProp property) {
+        this.property = property;
+        // Return this for method chaining
+        return this;
+    }
+
+    /**
      * Returns null if no record has been set.
      */
     public Record getRecord() {
@@ -84,6 +112,19 @@ public class BuildParams {
 
     public BuildParams setRecord(Record record) {
         this.record = record;
+        // Return this for method chaining
+        return this;
+    }
+
+    /**
+     * Returns null if no relationship has been set.
+     */
+    public ObjectProp getRelationship() {
+        return relationship;
+    }
+
+    public BuildParams setRelationship(ObjectProp property) {
+        this.relationship = property;
         // Return this for method chaining
         return this;
     }

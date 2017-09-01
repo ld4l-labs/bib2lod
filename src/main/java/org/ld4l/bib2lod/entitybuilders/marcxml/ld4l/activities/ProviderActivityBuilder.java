@@ -67,8 +67,8 @@ public class ProviderActivityBuilder extends ActivityBuilder {
         BuildParams params = new BuildParams() 
               .setGrandparent(parent)
               .setParent(activity)
-              .addSubfield(subfield)
-              .setType(Ld4lAgentType.superClass());
+              .setSubfield(subfield);
+              //.setType(Ld4lAgentType.superClass());
         builder.build(params);  
     }
     

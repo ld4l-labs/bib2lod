@@ -5,6 +5,7 @@ import java.util.List;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
@@ -12,11 +13,15 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AgentBuilder extends BaseEntityBuilder {
+    
+    private static ObjectProp DEFAULT_RELATIONSHIP = 
+            Ld4lObjectProp.HAS_AGENT;
 
     private Entity agent;
     private Entity grandparent;
     private String name;
     private Entity parent;
+    private ObjectProp relationship;
     private MarcxmlSubfield subfield;
     private Type type;
 
@@ -35,6 +40,10 @@ public class AgentBuilder extends BaseEntityBuilder {
             name = subfield.getTrimmedTextValue();                  
         }
         
+        if (relationship == null) {
+            this.relationship = DEFAULT_RELATIONSHIP;
+        }
+        
         Entity existingAgent = findDuplicateAgent();
         if (existingAgent != null) {
             this.agent = existingAgent;
@@ -43,7 +52,7 @@ public class AgentBuilder extends BaseEntityBuilder {
             agent.addAttribute(Ld4lDatatypeProp.NAME, name);
         }
         
-        parent.addRelationship(Ld4lObjectProp.HAS_AGENT, agent);
+        parent.addRelationship(relationship, agent);
         
         return agent;
     }
@@ -52,6 +61,7 @@ public class AgentBuilder extends BaseEntityBuilder {
         this.agent = null;
         this.name = null;
         this.parent = null;  
+        this.relationship = null;
         this.subfield = null;     
     }
     
@@ -63,8 +73,10 @@ public class AgentBuilder extends BaseEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build an agent.");
         }
+        
+        this.relationship = params.getRelationship();
 
-        this.subfield = (MarcxmlSubfield) params.getSubfield(0);
+        this.subfield = (MarcxmlSubfield) params.getSubfield();
         this.name = params.getValue(); 
         
         if (subfield == null && name == null) {
