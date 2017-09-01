@@ -171,12 +171,6 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
                     .setRelationship(
                             Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS);
             super.build(params);
-//            Entity conventions = 
-//                    new Entity(Ld4lDescriptionConventionsType.superClass());
-//            conventions.addAttribute(Ld4lDatatypeProp.LABEL, 
-//                    subfield.getTextValue());
-//            adminMetadata.addRelationship(
-//                    Ld4lObjectProp.HAS_DESCRIPTION_CONVENTIONS, conventions);
         }       
     }
     

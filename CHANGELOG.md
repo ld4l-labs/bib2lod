@@ -2,14 +2,38 @@
 
 This change log records API changes that may affect implementing projects.
 
-## Commit #-
+## Commit #16c15108 (2017-09-01)
 
 ### Added
 
 * Added BuildParams.setRelationship() and BuildParams.getRelationship() to
 specify the property linking the parent to the entity being built.
 
-## Commit #c1d15695
+* Added BuildParams.setProperty() and BuildParams.getProperty() to specify
+a datatype property to use assert a literal value. Relates to change of
+MarcxmlEntityBuilder from abstract to concrete; see below.
+
+### Changed
+
+* Made MarcxmlEntityBuilder concrete, and added a build() method to 
+generalize simple entity builds where no more specific builder is required.
+
+
+## Commit #721d4b87 (2017-08-30)
+
+### Added
+
+* Added abstract MarcxmlEntityBuilder to provide utility build methods.
+
+## Commit #1fac2538 (2017-08-30)
+
+### Added
+
+* Added framework to manipulate test MARCXML records to reduce number of
+defined test strings by providing methods to add and remove elements from a
+record.
+
+## Commit #c1d15695 (2017-08-29)
 
 ### Removed
 
