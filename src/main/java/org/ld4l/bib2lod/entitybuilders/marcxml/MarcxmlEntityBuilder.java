@@ -153,5 +153,15 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         
         return entity;
     }
+    
+    protected Entity buildFromString(
+            Type type, Ld4lDatatypeProp property, String value) {
+        
+        Entity entity = new Entity(type);
+        entity.addAttribute(property, value);
+        
+        return entity;
+    }
+   
    
 }

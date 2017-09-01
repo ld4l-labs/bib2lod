@@ -5,13 +5,14 @@ import java.util.List;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class LocationBuilder extends BaseEntityBuilder {
+public class LocationBuilder extends MarcxmlEntityBuilder {
 
     private Entity grandparent;
     private Entity location;
@@ -38,8 +39,8 @@ public class LocationBuilder extends BaseEntityBuilder {
         if (existingLocation != null) {
             this.location = existingLocation;
         } else {
-            this.location = new Entity(type);      
-            location.addAttribute(Ld4lDatatypeProp.NAME, name);
+            this.location = buildFromString(
+                    type, Ld4lDatatypeProp.NAME, name);                  
         }
         
         parent.addRelationship(Ld4lObjectProp.HAS_LOCATION, location);
