@@ -9,7 +9,8 @@ import org.apache.logging.log4j.Logger;
  * An abstract implementation.
  */
 public abstract class BaseParser implements Parser {
-
+    
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
  
 }

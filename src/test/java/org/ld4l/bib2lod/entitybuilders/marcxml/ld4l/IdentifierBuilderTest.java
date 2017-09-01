@@ -255,6 +255,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         buildIdentifier(entity, input, tag);
     }
     
+    @SuppressWarnings("unused")
     private void buildAndExpectException(MockMarcxml input, int tag, String error) 
             throws Exception {
         buildAndExpectException(new Entity(), input, tag, error);

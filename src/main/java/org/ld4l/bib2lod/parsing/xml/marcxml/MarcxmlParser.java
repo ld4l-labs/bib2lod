@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlParser extends XmlParser {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
               
     private static final String RECORD_TAG_NAME = "record";   

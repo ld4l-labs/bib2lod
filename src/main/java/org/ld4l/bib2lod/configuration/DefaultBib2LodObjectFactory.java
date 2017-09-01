@@ -18,6 +18,8 @@ import org.ld4l.bib2lod.util.collections.MapOfLists;
  * Serve these instances on request.
  */
 public class DefaultBib2LodObjectFactory extends Bib2LodObjectFactory {
+    
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
     private MapOfLists<Class<?>, Object> configuredInstances = new MapOfLists<>();

@@ -10,6 +10,7 @@ import org.ld4l.bib2lod.entity.Entity;
  */
 public abstract class BaseUriService implements UriService {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     protected String localNamespace;

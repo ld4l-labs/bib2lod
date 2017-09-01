@@ -12,6 +12,7 @@ import org.ld4l.bib2lod.datatypes.XsdDatatype;
  */
 public class Attribute {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     private final String value;

@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
  */
 public abstract class XmlParser extends BaseParser {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
 
     /*

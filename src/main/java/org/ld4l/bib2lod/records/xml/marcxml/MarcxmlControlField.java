@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 public class MarcxmlControlField extends BaseMarcxmlField 
         implements MarcxmlTaggedField, XmlTextElement {
  
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     

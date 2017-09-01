@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class BaseRecordField implements RecordField {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
 }

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 // gets in the way. What are the methods common to XML and non-XML input?
 public abstract class BaseRecord implements Record {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
 

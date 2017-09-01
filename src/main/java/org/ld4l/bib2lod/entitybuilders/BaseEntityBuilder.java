@@ -12,6 +12,7 @@ import org.ld4l.bib2lod.ontology.Type;
  */
 public abstract class BaseEntityBuilder implements EntityBuilder { 
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     @Override

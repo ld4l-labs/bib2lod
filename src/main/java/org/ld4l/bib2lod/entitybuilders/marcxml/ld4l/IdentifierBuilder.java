@@ -29,6 +29,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
  */
 public class IdentifierBuilder extends MarcxmlEntityBuilder { 
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     private static Map<String, Entity> sources;

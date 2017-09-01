@@ -33,6 +33,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
  */
 public class InstanceBuilder extends MarcxmlEntityBuilder {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
     private InstanceEntity instance;

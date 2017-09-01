@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
  */
 public abstract class BaseMarcxmlField extends BaseXmlElement { 
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     /**

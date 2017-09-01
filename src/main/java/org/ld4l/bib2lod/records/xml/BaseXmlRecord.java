@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
  */
 public abstract class BaseXmlRecord implements XmlRecord {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     protected ArrayList<Element> elements;
