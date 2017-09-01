@@ -20,9 +20,7 @@ public class TitleElementBuilder extends BaseEntityBuilder {
         
         reset();
         parseBuildParams(params);
- 
- 
-        
+
         Entity titleElement = new Entity(type);
         
         /*

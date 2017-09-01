@@ -56,16 +56,20 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
 
         switch (field.getTag()) {
         case 300: 
-            return convert300();
+            return convert_300();
         default:
             return null;
         }
     }
     
-    private Entity convert300() {
+    private Entity convert_300() {
+        
+        Entity entity = null;
         
         if (subfield.hasCode('a')) {
-            entity = new Entity(Ld4lExtentType.superClass());
+//            entity = buildFromSubfield(Ld4lExtentType.superClass(),
+//                    parent, Ld4lDatatypeProp.LABEL, subfield);
+            entity = new Entity();
             entity.addAttribute(Ld4lDatatypeProp.LABEL, subfield.getTextValue());
             parent.addRelationship(Ld4lObjectProp.HAS_EXTENT, entity);
         }

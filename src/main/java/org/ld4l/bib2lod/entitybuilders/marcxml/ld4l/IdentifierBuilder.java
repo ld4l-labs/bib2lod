@@ -140,9 +140,9 @@ public class IdentifierBuilder extends MarcxmlEntityBuilder {
         
         Entity identifier = null;
         
-        if (((MarcxmlControlField) field).getTag() == 1) {
-            identifier = buildFromString(Ld4lIdentifierType.LOCAL, 
-                    Ld4lDatatypeProp.VALUE, field.getTextValue()); 
+        if (field.getTag() == 1) {
+            identifier = buildFromTextField(Ld4lIdentifierType.LOCAL, 
+                    Ld4lDatatypeProp.VALUE, field); 
         }
         
         return identifier;

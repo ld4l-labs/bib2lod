@@ -10,6 +10,8 @@ import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -101,12 +103,17 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         }
         
         this.relationship = params.getRelationship();
-        if (relationship == null) 
+        if (relationship == null) {
             throw new EntityBuilderException("A relationship to the " +
                     "parent entity is required to build this entity.");
-        } 
+        }
+    }
     
-    protected Entity buildFromRecord(Type type, Entity parent, 
+    /*
+     * Utility methods to build a child of the current Entity 
+     */
+    
+    protected Entity buildChildFromRecord(Type type, Entity parent, 
             MarcxmlRecord record) throws EntityBuilderException {
 
         EntityBuilder builder = getBuilder(type);
@@ -117,7 +124,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params); 
     }
     
-    protected Entity buildFromControlField(Type type, Entity parent, 
+    protected Entity buildChildFromControlField(Type type, Entity parent, 
             MarcxmlRecord record, int tag) throws EntityBuilderException {
         
         MarcxmlControlField field = record.getControlField(tag);
@@ -134,10 +141,16 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params);
     }
     
-    protected Entity buildFromString(Type type, Ld4lDatatypeProp property, 
-            String value) {
-        Entity entity = new Entity(type);
-        entity.addAttribute(property, value);
+    /*
+     * Utility methods to build the current Entity.
+     */
+    
+    protected Entity buildFromTextField(Type type,  
+            Ld4lDatatypeProp property, XmlTextElement textField) {
+        
+        Entity entity = new Entity();
+        entity.addAttribute(property, textField.getTextValue());
+        
         return entity;
     }
    
