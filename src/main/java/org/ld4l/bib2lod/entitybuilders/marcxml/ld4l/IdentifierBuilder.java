@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.LegacySourceDataType;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
@@ -27,7 +27,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 /**
  * Builds an Identifier for a bib resource from a field in the record.
  */
-public class IdentifierBuilder extends BaseEntityBuilder { 
+public class IdentifierBuilder extends MarcxmlEntityBuilder { 
 
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -69,7 +69,7 @@ public class IdentifierBuilder extends BaseEntityBuilder {
         }        
     }
     
-    public static Map<String, Entity> getSources() {
+    protected static Map<String, Entity> getSources() {
         return sources;
     }
     
@@ -133,17 +133,16 @@ public class IdentifierBuilder extends BaseEntityBuilder {
     }              
     
     /**
-     * Builds an Identifier from a control field. Returns null if the control
-     * field is not recognized or implemented.
+     * Builds an Identifier from a control field. Returns null if the 
+     * control field is not recognized or implemented.
      */   
     private Entity build(MarcxmlControlField field) {
         
         Entity identifier = null;
         
         if (((MarcxmlControlField) field).getTag() == 1) {
-            identifier = new Entity(Ld4lIdentifierType.LOCAL);
-            String value = field.getTextValue();
-            identifier.addAttribute(Ld4lDatatypeProp.VALUE, value);    
+            identifier = buildFromString(Ld4lIdentifierType.LOCAL, 
+                    Ld4lDatatypeProp.VALUE, field.getTextValue()); 
         }
         
         return identifier;

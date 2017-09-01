@@ -37,8 +37,8 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
 
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
      
-        // Control field 001
-        convertControlField(
+        // Control field 001: 
+        buildFromControlField(
                 Ld4lIdentifierType.superClass(), adminMetadata, record, 1);
         
         convert_040();      

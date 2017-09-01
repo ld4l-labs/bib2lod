@@ -47,7 +47,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         this.instance = new InstanceEntity();
  
         // Admin metadata is built from multiple fields
-        buildEntityFromRecord(
+        buildFromRecord(
                 Ld4lAdminMetadataType.superClass(), instance, record);  
         
         buildIdentifiers();       

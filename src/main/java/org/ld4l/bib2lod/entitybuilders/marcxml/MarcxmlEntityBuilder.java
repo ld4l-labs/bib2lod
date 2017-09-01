@@ -9,6 +9,7 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -105,7 +106,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
                     "parent entity is required to build this entity.");
         } 
     
-    protected void buildEntityFromRecord(Type type, Entity parent, 
+    protected Entity buildFromRecord(Type type, Entity parent, 
             MarcxmlRecord record) throws EntityBuilderException {
 
         EntityBuilder builder = getBuilder(type);
@@ -113,15 +114,15 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         BuildParams params = new BuildParams()
                 .setParent(parent)
                 .setRecord(record);
-        builder.build(params); 
+        return builder.build(params); 
     }
     
-    protected void convertControlField(Type type, Entity parent, 
+    protected Entity buildFromControlField(Type type, Entity parent, 
             MarcxmlRecord record, int tag) throws EntityBuilderException {
         
         MarcxmlControlField field = record.getControlField(tag);
         if (field == null) {
-            return;
+            return null;
         }
         
         EntityBuilder builder = getBuilder(type);
@@ -130,44 +131,14 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
                 .setParent(parent)
                 .setField(field);
         
-        builder.build(params);
+        return builder.build(params);
     }
-
-/*    
-    protected void convertDataField(Type type, Entity parent, 
-            MarcxmlRecord record, int tag) throws EntityBuilderException {
-        
-        BuildParams params = new BuildParams()
-                .setParent(parent)
-                .setType(type);
-                     
-        // Use a loop even for non-repeating fields; the MARC is responsible
-        // for maintaining the cardinality constraints.
-        List<MarcxmlDataField> fields = record.getDataFields(tag);
-        if (fields.isEmpty()) {
-            return;
-        }
-        
-        EntityBuilder builder = getBuilder(type); 
-        
-        for (MarcxmlDataField field : fields) {
-            params.setField(field);
-            builder.build(params);
-        } 
-    }
-*/
- 
-/*
-    protected void convertSubfields(Type type, MarcxmlDataField field, 
-            BuildParams params) throws EntityBuilderException {
-        
-        EntityBuilder builder = getBuilder(type);        
-        List<MarcxmlSubfield> subfields = field.getSubfields();
-        for (MarcxmlSubfield subfield : subfields) {
-            params.setSubfield(subfield);
-            builder.build(params);                
-        }        
-    }
-*/
     
+    protected Entity buildFromString(Type type, Ld4lDatatypeProp property, 
+            String value) {
+        Entity entity = new Entity(type);
+        entity.addAttribute(property, value);
+        return entity;
+    }
+   
 }
