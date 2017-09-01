@@ -36,7 +36,7 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
 
     private void convert_008() {
         
-        MarcxmlControlField field008 = (MarcxmlControlField) field;
+        MarcxmlControlField field_008 = (MarcxmlControlField) field;
         
         this.activity = new Entity(TYPE);
       
@@ -45,14 +45,14 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
                 Ld4lNamedIndividual.CURRENT);
 
         // Publication date
-        String year = field008.getTextSubstring(7, 11);
+        String year = field_008.getTextSubstring(7, 11);
         if (! StringUtils.isBlank(year)) {
           activity.addAttribute(
                   Ld4lDatatypeProp.DATE, year, BibDatatype.EDTF);
         } 
         
         // Publication location
-        String location = field008.getTextSubstring(15, 18);
+        String location = field_008.getTextSubstring(15, 18);
         if (! StringUtils.isBlank(location)) {
             // Two or three characters - "ne", "nyu"
             location = location.trim();

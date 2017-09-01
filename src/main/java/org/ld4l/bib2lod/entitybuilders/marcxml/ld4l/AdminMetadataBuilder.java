@@ -41,11 +41,9 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         convertControlField(
                 Ld4lIdentifierType.superClass(), adminMetadata, record, 1);
         
-        // Control field 040
         convert_040();      
         
-        // Control field 005
-        convert005();
+        convert_005();
 
         
         if (adminMetadata.isEmpty()) {
@@ -97,6 +95,8 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
             throws EntityBuilderException {
         
         // 040 $a non-repeating, $c non-repeating
+        // $a and $c use the same predicate though they are distinct in
+        // MARC.
         List<MarcxmlSubfield> subfields =  field.getSubfields('a', 'c');        
         
         if (subfields.isEmpty()) {
@@ -174,7 +174,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         }       
     }
     
-    private void convert005() throws EntityBuilderException {
+    private void convert_005() throws EntityBuilderException {
         
         MarcxmlControlField field_005 = record.getControlField(5);
         
