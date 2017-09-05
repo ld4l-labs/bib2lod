@@ -3,7 +3,6 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
@@ -27,13 +26,7 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
         reset();       
         parseBuildParams(params);
         
-        if (type == null) {
-            type = Ld4lLocationType.superClass();
-        }
 
-        if (name == null) {
-            name = subfield.getTrimmedTextValue();                 
-        }
         
         Entity existingLocation = findDuplicateLocation();
         if (existingLocation != null) {
@@ -65,8 +58,15 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build a location.");
         }
+        
+        this.type = params.getType(); 
+        if (type == null) {
+            type = Ld4lLocationType.superClass();
+        } else if (! (type instanceof Ld4lLocationType)) {
+            throw new EntityBuilderException("Invalid location type");
+        } 
 
-        this.subfield = (MarcxmlSubfield) params.getSubfield(0);
+        this.subfield = (MarcxmlSubfield) params.getSubfield();
         this.name = params.getValue();
 
         if (subfield == null && name == null) {
@@ -74,12 +74,10 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
                     "A subfield or name value is required to build a " +
                             "location.");
         }
-        
-        this.type = params.getType(); 
-        if (type != null && ! (type instanceof Ld4lLocationType)) {
-            throw new EntityBuilderException("Invalid location type");
-        } 
-        
+        if (name == null) {
+            name = subfield.getTrimmedTextValue();                 
+        }
+
         this.grandparent = params.getGrandparent();
     }
 

@@ -28,7 +28,8 @@ public class TitleElementBuilder extends BaseEntityBuilder {
          * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
          */
         if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
-            value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(value);
+            value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(
+                    value).trim();
         } 
 
         titleElement.addAttribute(Ld4lDatatypeProp.VALUE, value);

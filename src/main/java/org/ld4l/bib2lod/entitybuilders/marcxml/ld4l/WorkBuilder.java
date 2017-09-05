@@ -48,10 +48,10 @@ public class WorkBuilder extends BaseEntityBuilder {
         
         this.work = new Entity(Ld4lWorkType.superClass());
         
-        addTitle();
-        
+        addTitle();       
         addWorkTypes();        
         addLanguages();
+        buildActivities();
         
         instance.addRelationship(Ld4lObjectProp.IS_INSTANCE_OF, work);
 
@@ -116,6 +116,18 @@ public class WorkBuilder extends BaseEntityBuilder {
             work.addExternalRelationship(Ld4lObjectProp.HAS_LANGUAGE, 
                     Ld4lNamespace.LC_LANGUAGES.uri() + code);
         }
+    }
+    
+    private void buildActivities() {
+        
+        buildAuthorActivity();
+    }
+    
+    private void buildAuthorActivity() {
+        
+        // Field 100 non-repeating 
+        // Not sure yet whether there are other fields for AuthorActivity
+        //buildChildFromDataField(Ld4lActivityType.AUTHOR_ACTIVITY, )
     }
 
 }
