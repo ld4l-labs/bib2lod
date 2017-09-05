@@ -29,7 +29,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
 
-    private Integer tag;
+    private String tag;
     private Integer ind1;
     private Integer ind2;
     private List<MarcxmlSubfield> subfields;
@@ -41,13 +41,8 @@ public class MarcxmlDataField extends BaseMarcxmlField
     public MarcxmlDataField(Element element) throws RecordFieldException {
 
         super(element);
-        
-        try {
-            tag = Integer.parseInt(element.getAttribute("tag"));
-        } catch (NumberFormatException e) {
-            throw new RecordFieldException("Tag value is not an integer.");
-        }
 
+        this.tag = element.getAttribute("tag");
         this.ind1 = getIndicatorValue("ind1", element);
         this.ind2 = getIndicatorValue("ind2", element);
 
@@ -127,7 +122,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
     }
       
     @Override
-    public int getTag() {
+    public String getTag() {
         return tag;
     }
     
@@ -246,10 +241,10 @@ public class MarcxmlDataField extends BaseMarcxmlField
      * Returns the first if multiple are found. Returns null if none are found. 
      */
     public static MarcxmlDataField get(
-            List<MarcxmlDataField> fields, int tag) {
+            List<MarcxmlDataField> fields, String tag) {
         
         for (MarcxmlDataField field: fields) {
-            if (field.getTag() == tag) {
+            if (field.getTag().equals(tag)) {
                 return field;
             }
         }
@@ -258,12 +253,12 @@ public class MarcxmlDataField extends BaseMarcxmlField
 
     private void isValid() throws RecordFieldException {
 
-        if (tag == null) {
-            throw new RecordFieldException("Tag is null.");
+        if (StringUtils.isBlank(tag)) {
+            throw new RecordFieldException("Tag must be non-empty.");
         }
-        if (! (tag  > 0 && tag < 1000) ) {
+        if (tag.length() != 3) {
             throw new RecordFieldException(
-                    "Tag value is not between 1 and 999.");
+                    "Tag must be exactly 3 characters long.");
         }
         /*
          * Bad test: when pretty-printed there is whitespace inside the element.
@@ -274,7 +269,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
         if (subfields.isEmpty()) {
             throw new RecordFieldException("field has no subfields");
         }
-        if (tag == 245) {
+        if (tag.equals("245")) {
            if (! ( hasSubfield('a') || hasSubfield('k') ) ) {
                throw new RecordFieldException(
                        "Subfield $a or $k required for field 245.");

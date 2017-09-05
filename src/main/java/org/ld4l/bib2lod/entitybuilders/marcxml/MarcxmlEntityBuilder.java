@@ -126,7 +126,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
     }
     
     protected Entity buildChildFromControlField(Type type, Entity parent, 
-            MarcxmlRecord record, int tag) throws EntityBuilderException {
+            MarcxmlRecord record, String tag) throws EntityBuilderException {
         
         MarcxmlControlField field = record.getControlField(tag);
         if (field == null) {
@@ -143,7 +143,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
     }
     
     protected Entity buildChildFromDataField(Type type, Entity parent, 
-            MarcxmlRecord record, int tag) throws EntityBuilderException {
+            MarcxmlRecord record, String tag) throws EntityBuilderException {
         
         MarcxmlDataField field = record.getDataField(tag);
         if (field == null) {

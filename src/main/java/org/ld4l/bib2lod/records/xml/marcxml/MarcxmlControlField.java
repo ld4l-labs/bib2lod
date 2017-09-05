@@ -2,6 +2,7 @@
 
 package org.ld4l.bib2lod.records.xml.marcxml;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.records.xml.XmlTextElement;
@@ -17,7 +18,7 @@ public class MarcxmlControlField extends BaseMarcxmlField
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
-    private Integer tag;
+    private String tag;
     private String textValue;
 
     
@@ -26,14 +27,9 @@ public class MarcxmlControlField extends BaseMarcxmlField
      */
     public MarcxmlControlField(Element element) throws RecordFieldException {
         super(element);
-        try {
-            tag = Integer.parseInt(
-                    element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME));
-            textValue = retrieveTextValue(this.element);
-            isValid();
-        } catch (NumberFormatException e) {
-            throw new RecordFieldException("Control number is not an integer.");
-        }
+        tag = element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
+        textValue = retrieveTextValue(this.element);
+        isValid();
     }
     
     static String getControlNumberAttributeName() {
@@ -43,12 +39,12 @@ public class MarcxmlControlField extends BaseMarcxmlField
     /**
      * Alias of getTag().
      */
-    public int getControlNumber() {
+    public String getControlNumber() {
         return tag;
     }
     
     @Override
-    public int getTag() {
+    public String getTag() {
         return tag;
     }
     
@@ -59,22 +55,29 @@ public class MarcxmlControlField extends BaseMarcxmlField
 
     private void isValid() throws RecordFieldException {
         
-        if (tag == null) {
-            throw new RecordFieldException("Control number is null.");
+        if (StringUtils.isBlank(tag)) {
+            throw new RecordFieldException("Control number must be non-empty.");
         }
-        if (! (tag > 0 && tag < 10)) {
-            throw new RecordFieldException(
-                    "Control number is not between 1 and 9.");
-        }
-        if (textValue == null) {
-            throw new RecordFieldException("Text value is null.");
-        }
-        if (textValue.isEmpty()) {
-            throw new RecordFieldException("Text value is empty.");
-        }
-        if (tag == 8 && textValue.length() != 40) {
-            throw new RecordFieldException(
-                    "Control field 008 does not contain exactly 40 characters.");
+        
+        try {
+            int tagValue = Integer.parseInt(tag);
+            
+            if (! (tagValue > 0 && tagValue < 10)) {
+                throw new RecordFieldException(
+                        "Control number is not between 1 and 9.");
+            }
+            if (textValue == null) {
+                throw new RecordFieldException("Text value is null.");
+            }
+            if (textValue.isEmpty()) {
+                throw new RecordFieldException("Text value is empty.");
+            }
+            if (tagValue == 8 && textValue.length() != 40) {
+                throw new RecordFieldException("Control field 008 does not "
+                        + "contain exactly 40 characters.");
+            }
+        } catch (NumberFormatException e) {
+            throw new RecordFieldException("Control number must be numeric");
         }
     }
 

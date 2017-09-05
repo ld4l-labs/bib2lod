@@ -138,14 +138,14 @@ public class MarcxmlRecord extends BaseXmlRecord {
     
     private void checkRequiredControlFields() throws RecordException {
         
-        if (! hasControlField(8)) {
+        if (! hasControlField("008")) {
             throw new RecordException("Record has no 008 control field.");            
         }
     }
     
     private void checkRequiredDataFields() throws RecordException {
         
-        if (! hasDataField(245)) {
+        if (! hasDataField("245")) {
             throw new RecordException("Record has no 245 data field.");            
         }
     }
@@ -171,10 +171,10 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * tag is found.
      * @param String tag - the value of the tag attribute
      */
-    public MarcxmlControlField getControlField(int controlNumber) {
+    public MarcxmlControlField getControlField(String string) {
         
         for (MarcxmlControlField controlField : controlFields) {
-            if (controlField.getControlNumber() == controlNumber) {
+            if (controlField.getControlNumber().equals(string)) {
                 return controlField;
             }
         }
@@ -184,8 +184,8 @@ public class MarcxmlRecord extends BaseXmlRecord {
     /**
      * Returns true iff the Record has the specified control field
      */
-    public boolean hasControlField(int controlNumber) {
-        return getControlField(controlNumber) !=  null;
+    public boolean hasControlField(String string) {
+        return getControlField(string) !=  null;
     }
     
     /**
@@ -200,23 +200,23 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Use with repeating datafields. Returns an empty List if none are found.
      * @param String tag - the value of the tag attribute
      */
-    public List<MarcxmlDataField> getDataFields(int tag) {
+    public List<MarcxmlDataField> getDataFields(String tag) {
         
         List<MarcxmlDataField> fields = new ArrayList<MarcxmlDataField>();
         
         for (MarcxmlDataField field : dataFields) {
-            if (field.getTag() == tag) {
+            if (field.getTag().equals(tag)) {
                 fields.add(field);
             }
         }     
         return fields;
     }
     
-    public List<MarcxmlDataField> getDataFields(List<Integer> tags) {
+    public List<MarcxmlDataField> getDataFields(List<String> tags) {
         
         List<MarcxmlDataField> fields = new ArrayList<MarcxmlDataField>();
         
-        for (int tag : tags) {
+        for (String tag : tags) {
             fields.addAll(getDataFields(tag));
         }
         
@@ -229,10 +229,10 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Returns null if no data field is found.
      * @param String tag - the value of the tag attribute
      */
-    public MarcxmlDataField getDataField(int tag) {
+    public MarcxmlDataField getDataField(String tag) {
    
         for (MarcxmlDataField field : dataFields) {
-            if (field.getTag() == tag) {
+            if (field.getTag().equals(tag)) {
                 return field;
             }
         }       
@@ -242,7 +242,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
     /**
      * Returns true iff the Record has the specified data field.
      */
-    public boolean hasDataField(int tag) {
+    public boolean hasDataField(String tag) {
         return getDataField(tag) != null;        
     }
     
@@ -251,10 +251,10 @@ public class MarcxmlRecord extends BaseXmlRecord {
      * Returns null if no field is found.
      * @throws RecordFieldException 
      */
-    public MarcxmlTaggedField getTaggedField(int tag) throws RecordFieldException {
+    public MarcxmlTaggedField getTaggedField(String tag) throws RecordFieldException {
         List<MarcxmlTaggedField> fields = getTaggedFields();
         for (MarcxmlTaggedField field : fields) {
-            if (field.getTag() == tag) {
+            if (field.getTag().equals(tag)) {
                 return field;
             }
         }

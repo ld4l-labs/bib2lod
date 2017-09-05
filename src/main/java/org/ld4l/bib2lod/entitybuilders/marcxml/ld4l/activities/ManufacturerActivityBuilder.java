@@ -20,7 +20,7 @@ public class ManufacturerActivityBuilder extends ProviderActivityBuilder {
         this.type = TYPE;
         
         // Not sure if any other tags apply
-        if (field.getTag() == 260) {
+        if (field.getTag().equals("260")) {
             convert_260();
         }   
     }
