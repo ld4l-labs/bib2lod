@@ -52,7 +52,7 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
     private Entity convertByField() {
 
         switch (field.getTag()) {
-        case 300: 
+        case "300": 
             return convert_300();
         default:
             return null;

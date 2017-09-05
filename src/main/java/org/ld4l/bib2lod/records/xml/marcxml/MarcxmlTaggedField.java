@@ -8,7 +8,7 @@ import org.ld4l.bib2lod.records.RecordField;
  */
 public interface MarcxmlTaggedField extends RecordField {
     
-    public int getTag();
+    public String getTag();
 
 }
 

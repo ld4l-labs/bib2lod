@@ -28,9 +28,9 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
    
         this.type = TYPE;
         
-        if (field.getTag() == 8) {
+        if (field.getTag().equals("008")) {
             convert_008();
-        } else if (field.getTag() == 260) {
+        } else if (field.getTag().equals("260")) {
             convert_260();
         }           
     }
@@ -74,7 +74,7 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         // First indicator == 3
         if ( (ind1 != null && ind1 == 3) ||
                 // This is the only 260
-                record.getDataFields(260).size() == 1) {  
+                record.getDataFields("260").size() == 1) {  
             activity.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, 
                     Ld4lNamedIndividual.CURRENT);
         }

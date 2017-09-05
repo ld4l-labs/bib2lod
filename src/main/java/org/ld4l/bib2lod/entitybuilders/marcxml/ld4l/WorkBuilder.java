@@ -109,8 +109,8 @@ public class WorkBuilder extends BaseEntityBuilder {
         
         /* TODO Codes not the same between lexvo and lc. Just use lc URIs for now. */
         // Language from 008
-        MarcxmlControlField field008 = record.getControlField(8);
-        String code = field008.getTextSubstring(35,38);
+        MarcxmlControlField field_008 = record.getControlField("008");
+        String code = field_008.getTextSubstring(35,38);
         if (code != null && code.length() > 0) {
             // Lexvo iso639-3 codes are not completely identical with LC 
             work.addExternalRelationship(Ld4lObjectProp.HAS_LANGUAGE, 
