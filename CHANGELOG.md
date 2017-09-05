@@ -2,6 +2,12 @@
 
 This change log records API changes that may affect implementing projects.
 
+## Commit #8b7efc6a (2017-09-05)
+
+### Changed
+
+* MarcxmlTaggedField.getTag() returns a String rather than an int.
+
 ## Commit #16c15108 (2017-09-01)
 
 ### Added
