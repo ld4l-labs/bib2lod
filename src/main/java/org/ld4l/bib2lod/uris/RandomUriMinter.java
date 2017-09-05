@@ -15,6 +15,7 @@ import org.ld4l.bib2lod.entity.Entity;
  */
 public class RandomUriMinter extends BaseUriService {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
 
     private String LOCAL_NAME_ALPHA_PREFIX = "n";
@@ -34,6 +35,7 @@ public class RandomUriMinter extends BaseUriService {
      * APIs that do not allow or understand local names beginning with 
      * non-alphabetic characters.
      */
+    @Override
     protected String getLocalName(Entity entity) {
         String uuid = UUID.randomUUID().toString();
         // NB A digit is not a legal initial character of a local name in 

@@ -4,7 +4,6 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -12,7 +11,6 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
     
-    private Entity entity;
     private MarcxmlDataField field;
     private Entity parent;
     private MarcxmlSubfield subfield;
@@ -26,7 +24,6 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
     }
     
     private void reset() {
-        this.entity = null;
         this.parent = null;
     }
     
@@ -67,8 +64,6 @@ public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
         Entity entity = null;
         
         if (subfield.hasCode('a')) {
-//            entity = buildFromSubfield(Ld4lExtentType.superClass(),
-//                    parent, Ld4lDatatypeProp.LABEL, subfield);
             entity = new Entity();
             entity.addAttribute(Ld4lDatatypeProp.LABEL, subfield.getTextValue());
             parent.addRelationship(Ld4lObjectProp.HAS_EXTENT, entity);

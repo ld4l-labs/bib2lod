@@ -10,9 +10,9 @@ import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
@@ -27,6 +27,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
  * Field iterating through all subfields  (or is that just field as a whole?)
  */
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     private Entity parent;
@@ -141,6 +142,27 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params);
     }
     
+    protected Entity buildChildFromDataField(Type type, Entity parent, 
+            MarcxmlRecord record, int tag) throws EntityBuilderException {
+        
+        MarcxmlDataField field = record.getDataField(tag);
+        if (field == null) {
+            return null;
+        }
+        
+        EntityBuilder builder = getBuilder(type);
+        
+        BuildParams params = new BuildParams()
+                .setType(type)
+                .setParent(parent)
+                .setField(field);
+        
+        return builder.build(params);
+        
+    }
+    
+    
+    
     /*
      * Utility methods to build the current Entity.
      */
@@ -162,6 +184,8 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         
         return entity;
     }
+    
+
    
    
 }

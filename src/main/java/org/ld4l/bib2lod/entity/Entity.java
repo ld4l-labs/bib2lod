@@ -26,6 +26,7 @@ import org.ld4l.bib2lod.util.collections.MapOfUniqueLists;
  */
 public class Entity {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     /*

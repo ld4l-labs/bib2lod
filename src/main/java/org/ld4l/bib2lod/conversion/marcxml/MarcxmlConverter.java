@@ -17,6 +17,7 @@ import org.ld4l.bib2lod.records.Record;
  */
 public class MarcxmlConverter extends BaseConverter {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
 

@@ -26,6 +26,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
             
             );
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
 
     private Integer tag;

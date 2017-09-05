@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlLeader extends BaseMarcxmlField implements XmlTextElement {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     private String textValue;

@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
  */
 public class MarcxmlSubfield extends BaseMarcxmlField implements XmlTextElement {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     private char code;

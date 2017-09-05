@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
  * indirectly.
  */
 public class InterfaceLister {
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final Set<Class<?>> interfaces = new HashSet<>();

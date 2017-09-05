@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
  */
 public abstract class BaseXmlElement implements RecordField {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     protected Element element;

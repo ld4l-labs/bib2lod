@@ -8,6 +8,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 
 public class ManufacturerActivityBuilder extends ProviderActivityBuilder {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     private static final Ld4lActivityType TYPE = 

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public class MarcxmlCleaner extends BaseCleaner {
  
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
     /* (non-Javadoc)

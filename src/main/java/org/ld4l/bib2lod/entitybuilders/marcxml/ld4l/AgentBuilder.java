@@ -7,12 +7,15 @@ import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AgentBuilder extends BaseEntityBuilder {
+    
+    private static Type DEFAULT_TYPE = Ld4lAgentType.superClass();
     
     private static ObjectProp DEFAULT_RELATIONSHIP = 
             Ld4lObjectProp.HAS_AGENT;
@@ -31,18 +34,6 @@ public class AgentBuilder extends BaseEntityBuilder {
         reset();
         
         parseBuildParams(params);
-        
-        if (type == null) {
-            type = Ld4lAgentType.superClass();
-        }
-
-        if (name == null) {
-            name = subfield.getTrimmedTextValue();                  
-        }
-        
-        if (relationship == null) {
-            this.relationship = DEFAULT_RELATIONSHIP;
-        }
         
         Entity existingAgent = findDuplicateAgent();
         if (existingAgent != null) {
@@ -74,7 +65,6 @@ public class AgentBuilder extends BaseEntityBuilder {
                     "A parent entity is required to build an agent.");
         }
         
-        this.relationship = params.getRelationship();
 
         this.subfield = (MarcxmlSubfield) params.getSubfield();
         this.name = params.getValue(); 
@@ -83,11 +73,21 @@ public class AgentBuilder extends BaseEntityBuilder {
             throw new EntityBuilderException("A subfield or name value " + 
                     "is required to build an agent.");
         }
-        
+        if (name == null) {
+            name = subfield.getTrimmedTextValue();                  
+        }
+
         this.type = params.getType();
-        if (type != null && ! (type instanceof Ld4lAgentType)) {
+        if (type == null) {
+            type = DEFAULT_TYPE;
+        } else if (! (type instanceof Ld4lAgentType)) {
             throw new EntityBuilderException("Invalid agent type");
         } 
+        
+        this.relationship = params.getRelationship();       
+        if (relationship == null) {
+            this.relationship = DEFAULT_RELATIONSHIP;
+        }
 
         this.grandparent = params.getGrandparent();
     }

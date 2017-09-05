@@ -44,6 +44,7 @@ public enum Ld4lNamespace implements Namespace {
     LEXVO("http://lexvo.org/id/iso639-3/", "lexvo"),
     VIAF("http://viaf.org/viaf/");
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
     
     private final String uri;

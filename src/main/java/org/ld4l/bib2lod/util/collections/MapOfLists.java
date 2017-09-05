@@ -3,12 +3,10 @@
 package org.ld4l.bib2lod.util.collections;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -85,29 +83,6 @@ public class MapOfLists<K, V> {
         return (values.contains(value));
     }
     
-    /**
-     * Returns the submap of this.map in which the keys are contained in the
-     * specified list of keys.
-     */
-    @SuppressWarnings("unchecked")
-    public MapOfLists<K, V> getSubmap(List<K> keys) {
-        
-        MapOfLists<K, V> submap = new MapOfLists<>();
-        for (Entry<K, List<V>> entry : map.entrySet()) {
-            if (keys.contains(entry.getKey())) {
-                submap.addValues(entry.getKey(), (List<V>) entry.getValue());
-            }
-        }
-        return submap;
-    }
-    
-    /**
-     * Convenience method to pass array rather than List to getSlice().
-     */
-    public MapOfLists<K, V> getSubmap(K[] keys) {
-        return getSubmap(Arrays.asList(keys));
-    }
-
     /**
      * Remove all of the values associated with this key.
      */

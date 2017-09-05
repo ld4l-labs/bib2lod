@@ -74,6 +74,7 @@ public class XmlParserTest extends AbstractTestClass {
             return RECORD_TAG_NAME;
         }
 
+        @Override
         protected XmlRecord createRecord(Element recordElement)
                 throws RecordException {
             return new MockXmlRecord(recordElement);

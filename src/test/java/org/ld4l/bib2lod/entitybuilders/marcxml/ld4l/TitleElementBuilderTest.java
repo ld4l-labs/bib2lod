@@ -2,7 +2,6 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;

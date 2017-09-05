@@ -9,6 +9,7 @@ import org.ld4l.bib2lod.configuration.Configuration;
 //the input type (Node for XML, etc.)
 public abstract class BaseCleaner implements Cleaner {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     protected Configuration configuration;

@@ -19,9 +19,10 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
 public class ActivityBuilder extends BaseEntityBuilder {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private static final Ld4lActivityType TYPE = 
+    private static final Ld4lActivityType DEFAULT_TYPE = 
             Ld4lActivityType.superClass();
 
     protected Entity activity;
@@ -80,22 +81,30 @@ public class ActivityBuilder extends BaseEntityBuilder {
         if (! (field instanceof MarcxmlTaggedField)) {
             throw new EntityBuilderException("A data field or control " + 
                     "field is required to build an activity");
-        }
-        
+        }        
         this.field = (MarcxmlTaggedField) field;
+        
+        this.type = (Ld4lActivityType) params.getType();
+        if (type == null) {
+            type = DEFAULT_TYPE;
+        } else if (! (type instanceof Ld4lActivityType)) {
+            throw new EntityBuilderException("Invalid type.");
+        }
+
         
         /* *** KLUGE: this needs to be a list of MarcxmlSubfields in order
          * to get the codes, but in BuildParams it's just a list of 
-         * RecordFields. Figure out how to handle this better.
+         * RecordFields. Is there a better way to do this?
          */
         for (RecordField subfield : params.getSubfields()) {
             this.subfields.add((MarcxmlSubfield) subfield);
         }
+        
+
     }
     
     protected void build() throws EntityBuilderException {
-        // TODO If we don't use this, make ActivityBuilder abstract.
-        throw new EntityBuilderException("Method not implemented.");
+
     }
 
 }

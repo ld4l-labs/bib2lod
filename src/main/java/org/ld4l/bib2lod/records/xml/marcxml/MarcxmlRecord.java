@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
  */
 public class MarcxmlRecord extends BaseXmlRecord {
     
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     private enum Field {

@@ -17,8 +17,10 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class ProviderActivityBuilder extends ActivityBuilder {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
+    @SuppressWarnings("unused")
     private static final Ld4lActivityType TYPE = 
             Ld4lActivityType.PROVIDER_ACTIVITY;
     

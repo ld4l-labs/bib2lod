@@ -103,6 +103,9 @@ public class JsonConfigurationFileParser implements Configurator {
     }
 
     public static class ParsingException extends ConfigurationException {
+
+        private static final long serialVersionUID = 1L;
+
         public ParsingException(ConfigurationFieldPath path, String message) {
             super("Problem parsing JSON at " + path + " -- " + message);
         }
