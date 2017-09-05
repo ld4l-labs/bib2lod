@@ -39,7 +39,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
      
         // Control field 001: local identifier 
         buildChildFromControlField(
-                Ld4lIdentifierType.superClass(), adminMetadata, record, 1);
+                Ld4lIdentifierType.superClass(), adminMetadata, record, "001");
         
         convert_040();      
         
@@ -80,7 +80,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
     
     private void convert_040() throws EntityBuilderException {
         
-        MarcxmlDataField field = record.getDataField(40);
+        MarcxmlDataField field = record.getDataField("040");
         
         if (field == null) {
             return;
@@ -176,7 +176,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
     
     private void convert_005() throws EntityBuilderException {
         
-        MarcxmlControlField field_005 = record.getControlField(5);
+        MarcxmlControlField field_005 = record.getControlField("005");
         
         if (field_005 == null) {
             return;

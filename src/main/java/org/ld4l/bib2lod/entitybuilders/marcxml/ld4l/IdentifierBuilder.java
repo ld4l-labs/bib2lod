@@ -141,7 +141,7 @@ public class IdentifierBuilder extends MarcxmlEntityBuilder {
         
         Entity identifier = null;
         
-        if (field.getTag() == 1) {
+        if (field.getTag().equals("001")) {
             identifier = buildFromTextField(Ld4lIdentifierType.LOCAL, 
                     Ld4lDatatypeProp.VALUE, field); 
         }
@@ -161,7 +161,7 @@ public class IdentifierBuilder extends MarcxmlEntityBuilder {
         MarcxmlSubfield subfield = 
                 (MarcxmlSubfield) params.getSubfields().get(0);
  
-        if (field.getTag() == 35) {
+        if (field.getTag().equals("035")) {
             identifier = convert_035(subfield);
         }
         

@@ -97,26 +97,26 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
 
     @Test
     public void noTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "not an integer");
+        expectException(RecordFieldException.class, "must be non-empty");
         buildFromString(NO_TAG);
     }
 
     @Test
     public void emptyTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "not an integer");
+        expectException(RecordFieldException.class, "must be non-empty");
         buildFromString(EMPTY_TAG);
     }
     
     @Test
     public void blankTag_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "not an integer");
+        expectException(RecordFieldException.class, "must be non-empty");
         buildFromString(BLANK_TAG);
     }
     
     @Test
     public void invalidTag_ThrowsException() throws Exception {
         expectException(RecordFieldException.class, 
-                "value is not between 1 and 999");
+                "must be exactly 3 characters long");
         buildFromString(INVALID_TAG);
     }
     
@@ -140,7 +140,8 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     
     @Test
     public void invalidField245_ThrowsException() throws Exception {
-        expectException(RecordFieldException.class, "required for field 245");
+        expectException(
+                RecordFieldException.class, "required for field 245");
         buildFromString(INVALID_FIELD_245);
     }
     

@@ -115,32 +115,32 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     @Test
     public void invalidSubfieldCode_ThrowsException() throws Exception {
         buildAndExpectException(
-                _035_INVALID_SUBFIELD_CODE, 35, 'b', "Invalid subfield");
+                _035_INVALID_SUBFIELD_CODE, "035", 'b', "Invalid subfield");
     }
     
     @Test
     public void invalidValue_035_ThrowsException() throws Exception {
         buildAndExpectException(
-                _035_INVALID_VALUE, 35, 'a', "Invalid value for field");
+                _035_INVALID_VALUE, "035", 'a', "Invalid value for field");
     }
     
     @Test
     public void testStatusCancelled_035() throws Exception {
-        Entity identifier = buildIdentifier(_035_CANCELLED, 35, 'z');
+        Entity identifier = buildIdentifier(_035_CANCELLED, "035", 'z');
         Assert.assertEquals(Ld4lNamedIndividual.CANCELLED.uri(), 
                 identifier.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
     @Test
     public void test_001() throws Exception {   
-        Entity identifier = buildIdentifier(_001, 1);
+        Entity identifier = buildIdentifier(_001, "001");
         Assert.assertEquals("102063", 
                 identifier.getValue(Ld4lDatatypeProp.VALUE));
     }
     
     @Test
     public void testOrgCode_035() throws Exception {       
-        Entity identifier = buildIdentifier(_035_NIC, 35, 'a');
+        Entity identifier = buildIdentifier(_035_NIC, "035", 'a');
         Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
         Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
         Literal literal = ResourceFactory.createTypedLiteral(
@@ -168,7 +168,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     
     @Test
     public void testNewOrgCode_035() throws Exception {
-        Entity identifier = buildIdentifier(_035_NEW_ORG_CODE, 35, 'a'); 
+        Entity identifier = buildIdentifier(_035_NEW_ORG_CODE, "035", 'a'); 
         Entity source = identifier.getChild(Ld4lObjectProp.HAS_SOURCE);
         Attribute attribute = source.getAttribute(Ld4lDatatypeProp.LABEL);
         Literal literal = ResourceFactory.createTypedLiteral(
@@ -178,7 +178,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     
     @Test
     public void testNewKeyAddedToSources_035() throws Exception {
-        buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
+        buildIdentifier(_035_NEW_ORG_CODE, "035", 'a');
         Map<String, Entity> sources = 
                 IdentifierBuilder.getSources();
         Assert.assertTrue(sources.containsKey("ABC"));       
@@ -186,7 +186,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     
     @Test
     public void testNewSourceAddedToSources_035() throws Exception {
-        buildIdentifier(_035_NEW_ORG_CODE, 35, 'a');
+        buildIdentifier(_035_NEW_ORG_CODE, "035", 'a');
         Map<String, Entity> sources = 
                 IdentifierBuilder.getSources();
         Entity source = sources.get("ABC");
@@ -198,13 +198,13 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     
     @Test
     public void testNoSource_035() throws Exception {
-        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
+        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, "035", 'a');
         Assert.assertNull(identifier.getChild(Ld4lObjectProp.HAS_SOURCE));        
     }
     
     @Test
     public void testValueWithNoSource_035() throws Exception {
-        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, 35, 'a');
+        Entity identifier = buildIdentifier(_035_NO_ORG_CODE, "035", 'a');
         Assert.assertEquals("1345399", identifier.getValue(Ld4lDatatypeProp.VALUE));      
     }
 
@@ -214,7 +214,7 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     
     private Entity buildIdentifier( 
-            Entity entity, MockMarcxml input, int tag) throws Exception {
+            Entity entity, MockMarcxml input, String tag) throws Exception {
 
         MarcxmlRecord record = input.toRecord(); 
         MarcxmlTaggedField field = record.getTaggedField(tag);
@@ -225,13 +225,13 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         return builder.build(params);   
     }
 
-    private Entity buildIdentifier(MockMarcxml input, int tag) 
+    private Entity buildIdentifier(MockMarcxml input, String tag) 
             throws Exception {
         return buildIdentifier(new Entity(), input, tag);     
     }
     
     private Entity buildIdentifier(Entity entity, MockMarcxml input,  
-            int tag, char code) throws Exception {
+            String tag, char code) throws Exception {
         MarcxmlRecord record = input.toRecord();  
         MarcxmlDataField field = record.getDataField(tag);
         MarcxmlSubfield subfield = field.getSubfield(code);
@@ -244,32 +244,32 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     }
     
     private Entity buildIdentifier(MockMarcxml input,  
-            int tag, char code) throws Exception {
+            String tag, char code) throws Exception {
         return buildIdentifier(new Entity(), input, tag, code);
     }
     
     private void buildAndExpectException(
-            Entity entity, MockMarcxml input, int tag, String error) 
+            Entity entity, MockMarcxml input, String tag, String error) 
                     throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildIdentifier(entity, input, tag);
     }
     
     @SuppressWarnings("unused")
-    private void buildAndExpectException(MockMarcxml input, int tag, String error) 
-            throws Exception {
+    private void buildAndExpectException(MockMarcxml input, String tag, 
+            String error) throws Exception {
         buildAndExpectException(new Entity(), input, tag, error);
     }
     
-    private void buildAndExpectException(
-            Entity entity, MockMarcxml input, int tag, char code, String error) 
+    private void buildAndExpectException(Entity entity, MockMarcxml input, 
+            String tag, char code, String error) 
                     throws Exception {            
         expectException(EntityBuilderException.class, error);
         buildIdentifier(entity, input, tag, code);
     }
     
-    private void buildAndExpectException(
-            MockMarcxml input, int tag, char code, String error) throws Exception {        
+    private void buildAndExpectException(MockMarcxml input, String tag, 
+            char code, String error) throws Exception {        
         buildAndExpectException(new Entity(), input, tag, code, error);
     }
     

@@ -88,7 +88,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     private void convert_035() throws EntityBuilderException {
 
         // 035 is a repeating field
-        List<MarcxmlDataField> fields = record.getDataFields(35);
+        List<MarcxmlDataField> fields = record.getDataFields("035");
         if (fields.isEmpty()) {
             return;
         }
@@ -127,7 +127,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     private void buildExtent() throws EntityBuilderException {
         
         // 300
-        List<MarcxmlDataField> fields = record.getDataFields(300);
+        List<MarcxmlDataField> fields = record.getDataFields("300");
         
         if (fields.size() == 0) {
             return;
@@ -187,12 +187,12 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
                 .setRecord(record);
         
         // First build current publisher activity from mandatory 008.        
-        builder.build(params.setField(record.getControlField(8)));
+        builder.build(params.setField(record.getControlField("008")));
 
         // 260 fields: build additional publisher activities and add data to 
         // current publisher activity from 008.
         List<Character> publisherCodes = Arrays.asList('a', 'b', 'c');
-        for (MarcxmlDataField field : record.getDataFields(260)) {
+        for (MarcxmlDataField field : record.getDataFields("260")) {
             params.setField(field);
             List<List<RecordField>> subfieldLists = ProviderActivityBuilder.
                     getActivitySubfields(field, publisherCodes);
@@ -208,15 +208,15 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
 
         // Each 260 and 264 yields one statement from all $a$b$c concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList(260, 264), Arrays.asList('a', 'b', 'c'));
+                Arrays.asList("260", "264"), Arrays.asList('a', 'b', 'c'));
         
         // Each 260 yields one statement from all $e$f$g concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList(260), Arrays.asList('e', 'f', 'g'));
+                Arrays.asList("260"), Arrays.asList('e', 'f', 'g'));
     }
     
     private void buildProvisionActivityStatements(
-            List<Integer> tags, List<Character> codes) {
+            List<String> tags, List<Character> codes) {
 
         for (MarcxmlDataField field : record.getDataFields(tags)) {
             
@@ -246,7 +246,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
 
         // Build manufacturer activities from 260$e$f$g
         List<Character> manufacturerCodes = Arrays.asList('e', 'f', 'g');
-        for (MarcxmlDataField field : record.getDataFields(260)) {
+        for (MarcxmlDataField field : record.getDataFields("260")) {
             params.setField(field);
             List<List<RecordField>> subfieldLists = 
                     ProviderActivityBuilder.getActivitySubfields(
@@ -269,7 +269,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
      */
     private void buildResponsiblityStatement() {
         
-        MarcxmlDataField field = record.getDataField(245);        
+        MarcxmlDataField field = record.getDataField("245");        
         if (field == null) {
             return;
         }
