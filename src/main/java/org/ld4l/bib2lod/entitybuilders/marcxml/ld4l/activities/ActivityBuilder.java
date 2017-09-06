@@ -9,6 +9,7 @@ import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -17,7 +18,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
-public class ActivityBuilder extends BaseEntityBuilder {
+public class ActivityBuilder extends MarcxmlEntityBuilder {
     
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();

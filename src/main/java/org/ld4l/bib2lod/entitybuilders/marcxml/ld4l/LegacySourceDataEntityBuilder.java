@@ -2,8 +2,9 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 
@@ -11,7 +12,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
  * Builds an entity used to store unparsed, unnormalized legacy data. May or
  * may not have a specific type assigned.
  */
-public class LegacySourceDataEntityBuilder extends BaseEntityBuilder {
+public class LegacySourceDataEntityBuilder extends MarcxmlEntityBuilder {
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {

@@ -10,9 +10,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -26,7 +27,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 /**
  * Builds a Title Entity from a MARCXML record and an Instance.
  */
-public class TitleBuilder extends BaseEntityBuilder {
+public class TitleBuilder extends MarcxmlEntityBuilder {
 
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();

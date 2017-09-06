@@ -3,8 +3,9 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
@@ -12,7 +13,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class AgentBuilder extends BaseEntityBuilder {
+public class AgentBuilder extends MarcxmlEntityBuilder {
     
     private static Type DEFAULT_TYPE = Ld4lAgentType.superclass();
     

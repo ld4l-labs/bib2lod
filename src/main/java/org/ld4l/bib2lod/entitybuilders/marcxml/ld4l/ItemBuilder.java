@@ -1,13 +1,13 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class ItemBuilder extends BaseEntityBuilder {
+public class ItemBuilder extends MarcxmlEntityBuilder {
     
     private Entity instance;
     private Entity item;

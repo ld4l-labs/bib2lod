@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ActivityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 
 public class AuthorActivityBuilder extends ActivityBuilder {
 
@@ -33,14 +32,10 @@ public class AuthorActivityBuilder extends ActivityBuilder {
  
     private void convert_100() {
         
-        MarcxmlDataField datafield = (MarcxmlDataField) field;
+        // MarcxmlDataField datafield = (MarcxmlDataField) field;
         
         this.activity = new Entity(TYPE);
       
-
     }
-
-
-
-    
+   
 }
