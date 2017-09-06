@@ -1,10 +1,14 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.junit.Assert.fail;
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -51,6 +55,28 @@ public class AgentBuilderTest extends AbstractTestClass {
             
     private static final String NAME_SUBFIELD = 
             "<subfield code='b'>E.J. Brill</subfield>";
+    
+    public static final MockMarcxml AUTHOR_FULL_NAME = MINIMAL_RECORD.openCopy()
+            .addDatafield("100", "1", "")
+            //.findDatafield("100")
+            .addSubfield("a", "Austen, Jane")
+            .addSubfield("d", "1775-1817")
+            .lock();
+    
+    public static final MockMarcxml AUTHOR_SURNAME = MINIMAL_RECORD.openCopy()
+            .addDatafield("100", "1", "")
+            //.findDatafield("100")
+            .addSubfield("a", "Watson,")
+            .addSubfield("c", "Rev.")
+            .addSubfield("d", "1775-1817")
+            .lock();
+    
+    public static final MockMarcxml AUTHOR_FORENAME = MINIMAL_RECORD.openCopy()
+            .addDatafield("100", "1", "")
+            //.findDatafield("100")
+            .addSubfield("a", "John")
+            .addSubfield("c", "the Baptist, Saint.")
+            .lock();
     
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder instanceBuilder;
@@ -157,6 +183,24 @@ public class AgentBuilderTest extends AbstractTestClass {
         Entity activity2 = activities.get(2);
         Assert.assertNotEquals(activity1.getChild(Ld4lObjectProp.HAS_AGENT), 
                 activity2.getChild(Ld4lObjectProp.HAS_AGENT));
+    }
+    
+    @Test
+    @Ignore
+    public void testAuthorFullName() throws Exception {
+        fail("testAuthorName not yet implemented.");
+    }
+    
+    @Test
+    @Ignore
+    public void testAuthorDates() throws Exception {
+        fail("testAuthorDates not yet implemented.");
+    }
+    
+    @Test
+    @Ignore
+    public void testAuthorBirthdate() throws Exception {
+        fail("testAuthorBirthdate not yet implemented.");
     }
     
     

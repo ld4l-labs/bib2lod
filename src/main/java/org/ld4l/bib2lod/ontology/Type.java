@@ -17,5 +17,7 @@ public interface Type {
     // Possibly return an OntClass instead, if the functionality is useful 
     // (e.g., in subclass inferencing).
     public Resource ontClass();
+    
+//    public Type supertype();
 
 }

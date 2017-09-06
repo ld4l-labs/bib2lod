@@ -20,6 +20,16 @@ public abstract class BaseEntityBuilder implements EntityBuilder {
         EntityBuilderFactory factory = Bib2LodObjectFactory.getFactory()
                 .instanceForInterface(EntityBuilderFactory.class);
         return factory.getBuilder(type);
+// If no builder defined for this type, use builder for its supertype
+//        EntityBuilder builder = factory.getBuilder(type);
+//        if (builder != null) {
+//            return builder;
+//        }
+//        Type superType = type.superType();
+//        if (superType != null) {
+//            return factory.getBuilder(superType);
+//        }
+//        return null;
     }
     
 }

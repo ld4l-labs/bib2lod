@@ -104,7 +104,7 @@ public class ActivityBuilder extends BaseEntityBuilder {
     }
     
     protected void build() throws EntityBuilderException {
-
+        // If never used, make this an abstract class.
     }
 
 }

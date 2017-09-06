@@ -161,6 +161,23 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         
     }
     
+    protected Entity buildChildFromDataField(Type type,  
+            MarcxmlRecord record, String tag) throws EntityBuilderException {
+        
+        MarcxmlDataField field = record.getDataField(tag);
+        if (field == null) {
+            return null;
+        }
+        
+        EntityBuilder builder = getBuilder(type);
+        
+        BuildParams params = new BuildParams()
+                .setType(type)
+                .setField(field);
+        
+        return builder.build(params);
+        
+    } 
     
     
     /*

@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lWorkType;
@@ -14,7 +16,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 
-public class WorkBuilder extends BaseEntityBuilder {
+public class WorkBuilder extends MarcxmlEntityBuilder {
   
     private Entity instance;
     private MarcxmlRecord record;
@@ -48,7 +50,7 @@ public class WorkBuilder extends BaseEntityBuilder {
         
         this.work = new Entity(Ld4lWorkType.superClass());
         
-        addTitle();       
+        buildTitle();       
         addWorkTypes();        
         addLanguages();
         buildActivities();
@@ -80,7 +82,7 @@ public class WorkBuilder extends BaseEntityBuilder {
         }        
     }
     
-    private void addTitle() {
+    private void buildTitle() {
         
         Entity instanceTitle = 
                 instance.getChild(Ld4lObjectProp.HAS_PREFERRED_TITLE); 
@@ -107,7 +109,8 @@ public class WorkBuilder extends BaseEntityBuilder {
     
     private void addLanguages() {
         
-        /* TODO Codes not the same between lexvo and lc. Just use lc URIs for now. */
+        /* TODO Codes not the same between lexvo and lc. Just use lc URIs 
+         * for now. Eventually need a concordance. */
         // Language from 008
         MarcxmlControlField field_008 = record.getControlField("008");
         String code = field_008.getTextSubstring(35,38);
@@ -118,16 +121,16 @@ public class WorkBuilder extends BaseEntityBuilder {
         }
     }
     
-    private void buildActivities() {
+    private void buildActivities() throws EntityBuilderException {
         
         buildAuthorActivity();
     }
     
-    private void buildAuthorActivity() {
+    private void buildAuthorActivity() throws EntityBuilderException {
         
         // Field 100 non-repeating 
-        // Not sure yet whether there are other fields for AuthorActivity
-        //buildChildFromDataField(Ld4lActivityType.AUTHOR_ACTIVITY, )
+        buildChildFromDataField(
+                Ld4lActivityType.AUTHOR_ACTIVITY, work, record, "100");
     }
 
 }

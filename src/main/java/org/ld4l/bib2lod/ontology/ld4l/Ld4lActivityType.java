@@ -9,6 +9,8 @@ public enum Ld4lActivityType implements Type {
     
     /* List in alpha order */
     ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
+    AUTHOR_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "AuthorActivity", "Author"),    
     DISTRIBUTOR_ACTIVITY(
             Ld4lNamespace.BIBLIOTEKO, "DistributorActivity", "Distributor"),
     MANUFACTURER_ACTIVITY(
@@ -56,4 +58,5 @@ public enum Ld4lActivityType implements Type {
     public static Ld4lActivityType superClass() {
         return ACTIVITY;
     }
+
 }

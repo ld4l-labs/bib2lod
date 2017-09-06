@@ -30,6 +30,7 @@ public class MarcxmlToLd4lEntityBuilderFactory extends BaseEntityBuilderFactory 
         typeToBuilderClass.put(Ld4lActivityType.ACTIVITY, ActivityBuilder.class);
         typeToBuilderClass.put(Ld4lAdminMetadataType.ADMIN_METADATA, AdminMetadataBuilder.class);
         typeToBuilderClass.put(Ld4lAgentType.AGENT, AgentBuilder.class);
+        typeToBuilderClass.put(Ld4lActivityType.AUTHOR_ACTIVITY, AuthorActivityBuilder.class);
         typeToBuilderClass.put(Ld4lExtentType.EXTENT, PhysicalDescriptionBuilder.class);
         typeToBuilderClass.put(Ld4lIdentifierType.IDENTIFIER, IdentifierBuilder.class);
         typeToBuilderClass.put(Ld4lInstanceType.INSTANCE, InstanceBuilder.class);
