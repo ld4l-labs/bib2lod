@@ -37,7 +37,7 @@ public enum Ld4lIdentifierType implements Type {
         return ontClass;
     } 
 
-    public static Type superClass() {
+    public static Type superclass() {
         return IDENTIFIER;
     }
 

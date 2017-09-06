@@ -35,7 +35,7 @@ public enum Ld4lConceptType implements Type {
         return ontClass;
     } 
 
-    public static Type superClass() {
+    public static Type superclass() {
         return CONCEPT;
     }
 }

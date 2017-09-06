@@ -40,7 +40,7 @@ public enum Ld4lTitleElementType implements Type {
         return ontClass;
     } 
 
-    public static Type superClass() {
+    public static Type superclass() {
         return TITLE_ELEMENT;
     }
 }

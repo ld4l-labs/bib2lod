@@ -39,7 +39,7 @@ public enum Ld4lInstanceType implements Type {
         return ontClass;
     } 
 
-    public static Type superClass() {
+    public static Type superclass() {
         return INSTANCE;
     }
 

@@ -55,7 +55,7 @@ public enum Ld4lActivityType implements Type {
         return label;
     }
 
-    public static Ld4lActivityType superClass() {
+    public static Ld4lActivityType superclass() {
         return ACTIVITY;
     }
 

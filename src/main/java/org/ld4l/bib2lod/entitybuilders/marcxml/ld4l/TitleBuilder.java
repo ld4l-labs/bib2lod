@@ -43,7 +43,7 @@ public class TitleBuilder extends BaseEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.title = new Entity(Ld4lTitleType.superClass());
+        this.title = new Entity(Ld4lTitleType.superclass());
         
         addTitleElements();       
         addTitleValue();
@@ -81,7 +81,7 @@ public class TitleBuilder extends BaseEntityBuilder {
     private void addTitleElements() throws EntityBuilderException {
 
         this.titleElementBuilder = getBuilder(
-                Ld4lTitleElementType.superClass());
+                Ld4lTitleElementType.superclass());
         
         buildTitleElements();
 

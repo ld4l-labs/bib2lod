@@ -23,7 +23,7 @@ public class ActivityBuilder extends BaseEntityBuilder {
     private static final Logger LOGGER = LogManager.getLogger();
     
     private static final Ld4lActivityType DEFAULT_TYPE = 
-            Ld4lActivityType.superClass();
+            Ld4lActivityType.superclass();
 
     protected Entity activity;
     protected Entity parent;

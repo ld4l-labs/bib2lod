@@ -11,7 +11,7 @@ public class InstanceEntity extends Entity {
      * Constructor
      */
     public InstanceEntity() {
-        super(Ld4lInstanceType.superClass());
+        super(Ld4lInstanceType.superclass());
     }
     
     /**

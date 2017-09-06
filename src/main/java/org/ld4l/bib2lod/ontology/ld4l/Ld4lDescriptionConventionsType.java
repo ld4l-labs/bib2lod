@@ -32,7 +32,7 @@ public enum Ld4lDescriptionConventionsType implements Type {
         return ontClass;
     }
     
-    public static Type superClass() {
+    public static Type superclass() {
         return DESCRIPTION_CONVENTIONS;
     }
 

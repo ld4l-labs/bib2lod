@@ -48,10 +48,10 @@ public class WorkBuilder extends MarcxmlEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.work = new Entity(Ld4lWorkType.superClass());
+        this.work = new Entity(Ld4lWorkType.superclass());
         
         buildTitle();       
-        addWorkTypes();        
+        assignType();        
         addLanguages();
         buildActivities();
         
@@ -93,7 +93,7 @@ public class WorkBuilder extends MarcxmlEntityBuilder {
         }
     }
     
-    private void addWorkTypes() {
+    private void assignType() {
 
         // Work type from leader
         MarcxmlLeader leader = record.getLeader();

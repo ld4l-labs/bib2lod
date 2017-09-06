@@ -21,7 +21,7 @@ public class ItemBuilder extends BaseEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.item = new Entity(Ld4lItemType.superClass());
+        this.item = new Entity(Ld4lItemType.superclass());
         
         // TODO Fill in other data about Item from other fields in the record
         

@@ -35,11 +35,11 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         reset();
         parseBuildParams(params);
 
-        this.adminMetadata = new Entity(Ld4lAdminMetadataType.superClass());
+        this.adminMetadata = new Entity(Ld4lAdminMetadataType.superclass());
      
         // Control field 001: local identifier 
         buildChildFromControlField(
-                Ld4lIdentifierType.superClass(), adminMetadata, record, "001");
+                Ld4lIdentifierType.superclass(), adminMetadata, record, "001");
         
         convert_040();      
         
@@ -103,7 +103,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
             return;
         }
 
-        EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
+        EntityBuilder builder = getBuilder(Ld4lAgentType.superclass());
         BuildParams params = new BuildParams()
                 .setParent(adminMetadata)
                 .setRelationship(Ld4lObjectProp.HAS_SOURCE);
@@ -141,7 +141,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
             return;
         }
         
-        EntityBuilder builder = getBuilder(Ld4lAgentType.superClass());
+        EntityBuilder builder = getBuilder(Ld4lAgentType.superclass());
         BuildParams params = new BuildParams()
                 .setParent(adminMetadata)
                 .setRelationship(Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER);
@@ -164,7 +164,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
             relationship.*/
             
             BuildParams params = new BuildParams()
-                    .setType(Ld4lDescriptionConventionsType.superClass())
+                    .setType(Ld4lDescriptionConventionsType.superclass())
                     .setProperty(Ld4lDatatypeProp.LABEL)
                     .setSubfield(subfield)
                     .setParent(adminMetadata)
