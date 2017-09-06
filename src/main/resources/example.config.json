@@ -19,7 +19,7 @@
     "class": "org.ld4l.bib2lod.cleaning.MarcxmlCleaner"
   },
   "Converter": {
-    "class": "org.ld4l.bib2lod.conversion.xml.marcxml.MarcxmlConverter"
+    "class": "org.ld4l.bib2lod.conversion.marcxml.MarcxmlConverter"
   },
   "Parser": {
     "class": "org.ld4l.bib2lod.parsing.xml.marcxml.MarcxmlParser"
