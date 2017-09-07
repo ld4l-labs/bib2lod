@@ -184,6 +184,20 @@ public class Entity {
     }
     
     /**
+     * Returns the first Entity for the specified object property
+     * and of the specified type, or null if there are none. Use when only a 
+     * single value of the property is expected. 
+     */
+    public Entity getChild(ObjectProp prop, Type type) {
+    	List<Entity> children =  getChildren(prop, type);
+        if (children.isEmpty()) {
+            return null;
+        } else {
+            return children.get(0);
+        }
+    }
+    
+    /**
      * Removes child from the relationships associated with prop. Does
      * nothing if child is not found. Child may be null.
      */
