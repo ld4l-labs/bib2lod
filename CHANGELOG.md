@@ -1,6 +1,12 @@
 # Bib2Lod Change Log
 
-This change log records API changes that may affect implementing projects.
+Records API changes that may affect implementing projects.
+
+## Commit ecb99ef9 (2017-09-19)
+
+### Added
+
+* Type.superclass() method. All Type implementers must define this method.
 
 ## Commit #8b7efc6a (2017-09-05)
 
