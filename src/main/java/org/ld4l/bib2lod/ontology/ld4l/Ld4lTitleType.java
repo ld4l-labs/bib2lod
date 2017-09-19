@@ -36,7 +36,7 @@ public enum Ld4lTitleType implements Type {
         return ontClass;
     } 
 
-    public static Type superclass() {
+    public static Type defaultType() {
         return TITLE;
     }
 

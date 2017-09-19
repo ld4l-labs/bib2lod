@@ -35,7 +35,7 @@ public enum Ld4lItemType implements Type {
         return ontClass;
     } 
 
-    public static Type superclass() {
+    public static Type defaultType() {
         return ITEM;
     }
 }

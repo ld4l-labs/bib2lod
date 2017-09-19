@@ -35,7 +35,7 @@ public enum Ld4lLocationType implements Type {
         return ontClass;
     } 
 
-    public static Type superclass() {
+    public static Type defaultType() {
         return LOCATION;
     }
 }

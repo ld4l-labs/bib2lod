@@ -139,7 +139,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     public void testSourceIsAgent_040() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
         Entity agent = adminMetadata.getChild(Ld4lObjectProp.HAS_SOURCE);
-        Assert.assertTrue(agent.hasType(Ld4lAgentType.superclass()));
+        Assert.assertTrue(agent.hasType(Ld4lAgentType.defaultType()));
     }
     
     @Test
@@ -161,7 +161,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);  
         Entity agent = (adminMetadata.getChildren(
                 Ld4lObjectProp.HAS_DESCRIPTION_MODIFIER)).get(0);
-        Assert.assertTrue(agent.hasType(Ld4lAgentType.superclass()));
+        Assert.assertTrue(agent.hasType(Ld4lAgentType.defaultType()));
     }
     
     @Test

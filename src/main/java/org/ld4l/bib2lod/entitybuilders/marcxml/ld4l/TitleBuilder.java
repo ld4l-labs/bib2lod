@@ -44,7 +44,7 @@ public class TitleBuilder extends MarcxmlEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.title = new Entity(Ld4lTitleType.superclass());
+        this.title = new Entity(Ld4lTitleType.defaultType());
         
         addTitleElements();       
         addTitleValue();
@@ -82,7 +82,7 @@ public class TitleBuilder extends MarcxmlEntityBuilder {
     private void addTitleElements() throws EntityBuilderException {
 
         this.titleElementBuilder = getBuilder(
-                Ld4lTitleElementType.superclass());
+                Ld4lTitleElementType.defaultType());
         
         buildTitleElements();
 

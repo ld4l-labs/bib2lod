@@ -44,7 +44,7 @@ public enum Ld4lWorkType implements Type {
         return ontClass;
     } 
 
-    public static Type superclass() {
+    public static Type defaultType() {
         return WORK;
     }
 }

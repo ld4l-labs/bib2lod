@@ -35,7 +35,7 @@ public enum Ld4lAgentType implements Type {
         return ontClass;
     }
 
-    public static Type superclass() {
+    public static Type defaultType() {
         return AGENT;
     }
 }

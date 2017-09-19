@@ -49,7 +49,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
  
         // Admin metadata is built from multiple fields
         buildChildFromRecord(
-                Ld4lAdminMetadataType.superclass(), instance, record);  
+                Ld4lAdminMetadataType.defaultType(), instance, record);  
         
         buildIdentifiers();       
         buildTitles();
@@ -93,7 +93,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
             return;
         }
 
-        EntityBuilder builder = getBuilder(Ld4lIdentifierType.superclass());
+        EntityBuilder builder = getBuilder(Ld4lIdentifierType.defaultType());
         BuildParams params = new BuildParams()
                 .setParent(instance);
         for (MarcxmlDataField field : fields) {
@@ -110,7 +110,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         
         // TODO Not yet handling titles from other fields
         
-        EntityBuilder builder = getBuilder(Ld4lTitleType.superclass());
+        EntityBuilder builder = getBuilder(Ld4lTitleType.defaultType());
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setParent(instance);
@@ -133,7 +133,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
             return;
         }
         
-        EntityBuilder builder = getBuilder(Ld4lExtentType.superclass());
+        EntityBuilder builder = getBuilder(Ld4lExtentType.defaultType());
         BuildParams params = new BuildParams()
                 .setParent(instance);     
         
@@ -154,7 +154,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         // but new resources.
         // Need method of EntityBuilder.clone() or copy?
         
-        EntityBuilder builder = getBuilder(Ld4lWorkType.superclass());
+        EntityBuilder builder = getBuilder(Ld4lWorkType.defaultType());
         BuildParams params = new BuildParams()
                 .setRecord(record)
                 .setParent(instance);
@@ -163,7 +163,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     
     private void buildItem() throws EntityBuilderException {
         
-        EntityBuilder builder = getBuilder(Ld4lItemType.superclass());
+        EntityBuilder builder = getBuilder(Ld4lItemType.defaultType());
 
         BuildParams params = new BuildParams()
                 .setRecord(record)

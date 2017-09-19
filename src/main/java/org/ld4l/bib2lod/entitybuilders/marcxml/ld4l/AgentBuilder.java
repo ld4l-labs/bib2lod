@@ -15,7 +15,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AgentBuilder extends MarcxmlEntityBuilder {
     
-    private static Type DEFAULT_TYPE = Ld4lAgentType.superclass();
+    private static Type DEFAULT_TYPE = Ld4lAgentType.defaultType();
     
     private static ObjectProp DEFAULT_RELATIONSHIP = 
             Ld4lObjectProp.HAS_AGENT;

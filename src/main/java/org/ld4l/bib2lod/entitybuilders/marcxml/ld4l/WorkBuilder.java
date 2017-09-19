@@ -47,7 +47,7 @@ public class WorkBuilder extends MarcxmlEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.work = new Entity(Ld4lWorkType.superclass());
+        this.work = new Entity(Ld4lWorkType.defaultType());
         
         buildTitle();       
         assignType();        

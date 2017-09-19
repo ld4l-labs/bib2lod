@@ -21,7 +21,7 @@ public class ItemBuilder extends MarcxmlEntityBuilder {
         reset();
         parseBuildParams(params);
         
-        this.item = new Entity(Ld4lItemType.superclass());
+        this.item = new Entity(Ld4lItemType.defaultType());
         
         // TODO Fill in other data about Item from other fields in the record
         
