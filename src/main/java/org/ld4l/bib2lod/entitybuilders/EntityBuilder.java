@@ -54,7 +54,8 @@ public interface EntityBuilder {
     /**
      * Retrieves the EntityBuilder for the specified type from the 
      * EntityBuilderFactory instance.
+     * @throws EntityBuilderException 
      */
-    public EntityBuilder getBuilder(Type type);
+    public EntityBuilder getBuilder(Type type) throws EntityBuilderException;
 
 }
