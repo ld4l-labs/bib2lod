@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.NamedIndividual;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.records.Record;
@@ -35,6 +36,7 @@ public class BuildParams {
     private List<RecordField> subfields;
     
     private Type type;
+    private NamedIndividual namedIndividual;
     private String value;
 
     /**
@@ -48,6 +50,7 @@ public class BuildParams {
         this.relationship = null;
         this.subfields = new ArrayList<>();
         this.type = null;
+        this.namedIndividual = null;
         this.value = null;      
     }
     
@@ -198,6 +201,19 @@ public class BuildParams {
 
     public BuildParams setType(Type type) {
         this.type = type;
+        // Return this for method chaining
+        return this;
+    }
+    
+    /**
+     * Returns null if no NamedIndividual has been set.
+     */
+    public NamedIndividual getNamedIndividual() {
+    	return namedIndividual;
+    }
+
+    public BuildParams setNamedIndividual(NamedIndividual namedIndividual) {
+        this.namedIndividual = namedIndividual;
         // Return this for method chaining
         return this;
     }
