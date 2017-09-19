@@ -18,6 +18,6 @@ public interface Type {
     // (e.g., in subclass inferencing).
     public Resource ontClass();
     
-//    public Type supertype();
+    public Type superclass();
 
 }

@@ -18,6 +18,8 @@ public enum Ld4lTitleElementType implements Type {
     PART_NUMBER_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "PartNumberElement"),
     SUBTITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "SubtitleElement"),
     TITLE_ELEMENT(Ld4lNamespace.BIBLIOTEKO, "TitleElement");
+    
+    public static final Type DEFAULT_TYPE = TITLE_ELEMENT;
  
     private final String uri;
     private final Resource ontClass;
@@ -39,8 +41,13 @@ public enum Ld4lTitleElementType implements Type {
     public Resource ontClass() {
         return ontClass;
     } 
+    
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
+    }
 
     public static Type defaultType() {
-        return TITLE_ELEMENT;
+        return DEFAULT_TYPE;
     }
 }

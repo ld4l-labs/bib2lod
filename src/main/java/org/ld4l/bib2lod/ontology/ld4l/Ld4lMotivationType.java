@@ -10,6 +10,8 @@ public enum Ld4lMotivationType implements Type {
     /* List in alpha order */
     MOTIVATION(Ld4lNamespace.OA, "Motivation");
     
+    private static final Type DEFAULT_TYPE = MOTIVATION;
+    
     private final String uri;
     private final Resource ontClass;
     
@@ -24,6 +26,11 @@ public enum Ld4lMotivationType implements Type {
     @Override
     public String uri() {
         return uri;
+    }
+    
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
     }
 
     @Override

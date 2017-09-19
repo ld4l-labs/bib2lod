@@ -24,6 +24,7 @@ public enum Ld4lActivityType implements Type {
     PUBLISHER_ACTIVITY(
             Ld4lNamespace.BIBLIOTEKO, "PublisherActivity", "Publishing");
 
+    private static final Type DEFAULT_TYPE = ACTIVITY;
     
     private final String uri;
     private final Resource ontClass;
@@ -55,8 +56,14 @@ public enum Ld4lActivityType implements Type {
         return label;
     }
 
-    public static Ld4lActivityType superclass() {
-        return ACTIVITY;
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
+    }
+
+
+    public static Type defaultType() {
+        return DEFAULT_TYPE;
     }
 
 }

@@ -36,6 +36,11 @@ public enum Ld4lIdentifierType implements Type {
     public Resource ontClass() {
         return ontClass;
     } 
+    
+    @Override
+    public Type superclass() {
+        return defaultType();
+    }
 
     public static Type defaultType() {
         return IDENTIFIER;

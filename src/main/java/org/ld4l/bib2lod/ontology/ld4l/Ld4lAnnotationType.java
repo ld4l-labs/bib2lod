@@ -25,6 +25,11 @@ public enum Ld4lAnnotationType implements Type {
     public String uri() {
         return uri;
     }
+    
+    @Override
+    public Type superclass() {
+        return ANNOTATION;
+    }
 
     @Override
     public Resource ontClass() {

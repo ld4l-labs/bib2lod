@@ -30,6 +30,11 @@ public enum Ld4lAdminMetadataType implements Type {
     public Resource ontClass() {
         return ontClass;
     }
+
+    @Override
+    public Type superclass() {
+        return defaultType();
+    }
     
     public static Type defaultType() {
         return ADMIN_METADATA;

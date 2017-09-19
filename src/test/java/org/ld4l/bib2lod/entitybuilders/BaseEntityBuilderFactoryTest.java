@@ -53,6 +53,11 @@ public class BaseEntityBuilderFactoryTest extends AbstractTestClass {
         public Resource ontClass() {
             throw new RuntimeException("Method not implemented.");
         }
+
+        @Override
+        public Type superclass() {           
+            return TEST_TYPE;
+        }
     }
     
 

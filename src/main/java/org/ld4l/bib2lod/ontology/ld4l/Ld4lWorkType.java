@@ -23,6 +23,8 @@ public enum Ld4lWorkType implements Type {
     TEXT(Ld4lNamespace.BIBFRAME, "Text"),
     WORK(Ld4lNamespace.BIBFRAME, "Work");
     
+    private static final Type DEFAULT_TYPE = WORK;
+    
     private final String uri;
     private final Resource ontClass;
     
@@ -43,8 +45,13 @@ public enum Ld4lWorkType implements Type {
     public Resource ontClass() {
         return ontClass;
     } 
+    
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
+    }
 
     public static Type defaultType() {
-        return WORK;
+        return DEFAULT_TYPE;
     }
 }

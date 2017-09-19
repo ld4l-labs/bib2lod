@@ -70,7 +70,12 @@ public class LegacySourceDataTypeTest extends AbstractTestClass {
         @Override
         public Resource ontClass() {
             return ontClass;
-        }        
+        }   
+        
+        @Override
+        public Type superclass() {
+            return TEST_TYPE;
+        }
     }
     
     public static enum MockDatatypeProp implements DatatypeProp {

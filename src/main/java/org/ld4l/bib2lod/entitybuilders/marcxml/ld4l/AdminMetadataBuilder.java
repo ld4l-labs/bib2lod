@@ -164,7 +164,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
             relationship.*/
             
             BuildParams params = new BuildParams()
-                    .setType(Ld4lDescriptionConventionsType.superclass())
+                    .setType(Ld4lDescriptionConventionsType.defaultType())
                     .setProperty(Ld4lDatatypeProp.LABEL)
                     .setSubfield(subfield)
                     .setParent(adminMetadata)

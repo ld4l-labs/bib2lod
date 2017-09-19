@@ -11,6 +11,8 @@ public enum Ld4lDescriptionConventionsType implements Type {
     DESCRIPTION_CONVENTIONS(
             Ld4lNamespace.BIBFRAME, "DescriptionConventions");
     
+    private static final Type DEFAULT_TYPE = DESCRIPTION_CONVENTIONS;
+    
     private final String uri;
     private final Resource ontClass;
     
@@ -32,8 +34,13 @@ public enum Ld4lDescriptionConventionsType implements Type {
         return ontClass;
     }
     
-    public static Type superclass() {
-        return DESCRIPTION_CONVENTIONS;
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
+    }
+    
+    public static Type defaultType() {
+        return DEFAULT_TYPE;
     }
 
 }

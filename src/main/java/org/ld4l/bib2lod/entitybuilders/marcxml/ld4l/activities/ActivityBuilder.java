@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
@@ -24,7 +23,7 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
     private static final Logger LOGGER = LogManager.getLogger();
     
     private static final Ld4lActivityType DEFAULT_TYPE = 
-            Ld4lActivityType.superclass();
+            (Ld4lActivityType) Ld4lActivityType.defaultType();
 
     protected Entity activity;
     protected Entity parent;

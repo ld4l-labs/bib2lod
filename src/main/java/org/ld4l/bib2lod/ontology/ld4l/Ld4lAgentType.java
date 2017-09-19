@@ -12,8 +12,7 @@ public enum Ld4lAgentType implements Type {
     FAMILY(Ld4lNamespace.BIBFRAME, "Family"),
     PERSON(Ld4lNamespace.FOAF, "Person"),
     ORGANIZATION(Ld4lNamespace.FOAF, "Organization");
-
-    
+ 
     private final String uri;
     private final Resource ontClass;
     
@@ -33,6 +32,11 @@ public enum Ld4lAgentType implements Type {
     @Override
     public Resource ontClass() {
         return ontClass;
+    }
+    
+    @Override
+    public Type superclass() {
+        return defaultType();
     }
 
     public static Type defaultType() {

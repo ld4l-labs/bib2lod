@@ -14,6 +14,8 @@ public enum Ld4lTitleType implements Type {
     /* List in alpha order */
     ABBREVIATED_TITLE(Ld4lNamespace.BIBLIOTEKO, "AbbreviatedTitle"),
     TITLE(Ld4lNamespace.BIBFRAME, "Title");
+    
+    private static final Type DEFAULT_TYPE = TITLE;
  
     private final String uri;
     private final Resource ontClass;
@@ -35,9 +37,14 @@ public enum Ld4lTitleType implements Type {
     public Resource ontClass() {
         return ontClass;
     } 
+    
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
+    }
 
     public static Type defaultType() {
-        return TITLE;
+        return DEFAULT_TYPE;
     }
 
 }
