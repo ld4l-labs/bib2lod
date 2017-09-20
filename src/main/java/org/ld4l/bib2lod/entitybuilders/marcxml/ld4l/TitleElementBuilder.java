@@ -7,7 +7,7 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
-import org.ld4l.bib2lod.util.Bib2LodStringUtils;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 
 public class TitleElementBuilder extends MarcxmlEntityBuilder {
     
@@ -28,7 +28,7 @@ public class TitleElementBuilder extends MarcxmlEntityBuilder {
          * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
          */
         if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
-            value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(
+            value = XmlTextElement.removeFinalPunctAndWhitespace(
                     value).trim();
         } 
 

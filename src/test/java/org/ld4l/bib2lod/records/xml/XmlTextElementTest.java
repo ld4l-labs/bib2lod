@@ -1,4 +1,4 @@
-package org.ld4l.bib2lod.record.xml;
+package org.ld4l.bib2lod.records.xml;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,6 +77,34 @@ public class XmlTextElementTest extends AbstractTestClass {
     public void testGetCharAt() throws Exception {
         element = build("<field>elephant</field>");
         Assert.assertEquals('h', element.getCharAt(4));
+    }
+    
+    @Test
+    public void testPunctFinal() {
+        Assert.assertTrue(XmlTextElement.endsWithPunct("test."));
+    }
+    
+    @Test
+    public void testNonPunctFinal() {
+        Assert.assertFalse(XmlTextElement.endsWithPunct("test"));        
+    }
+    
+    @Test 
+    public void testRemoveFinalPunct() {
+        Assert.assertEquals(
+                "test", XmlTextElement.removeFinalPunct("test."));
+    }
+    
+    @Test 
+    public void testRemoveFinalPunctAndWhitespace() {
+        Assert.assertEquals("test", 
+                XmlTextElement.removeFinalPunctAndWhitespace("test : "));
+    }
+    
+    @Test 
+    public void testTrim() {
+        Assert.assertEquals(
+                "test", XmlTextElement.trim(" test : "));        
     }
 
     // ---------------------------------------------------------------------

@@ -1,6 +1,6 @@
 /* $This file is distributed under the terms of the license in /doc/license.txt$ */
 
-package org.ld4l.bib2lod.record.xml.marcxml;
+package org.ld4l.bib2lod.records.xml.marcxml;
 
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
