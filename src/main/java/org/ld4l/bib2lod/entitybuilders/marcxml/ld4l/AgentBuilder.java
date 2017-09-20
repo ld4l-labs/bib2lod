@@ -10,16 +10,15 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 public class AgentBuilder extends MarcxmlEntityBuilder {
     
-    private static Type DEFAULT_TYPE = Ld4lAgentType.defaultType();
-    
     private static ObjectProp DEFAULT_RELATIONSHIP = 
             Ld4lObjectProp.HAS_AGENT;
 
-    private Entity agent;
+    private MarcxmlDataField field;
     private Entity grandparent;
     private String name;
     private Entity parent;
@@ -34,12 +33,13 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         
         parseBuildParams(params);
         
+        Entity agent;
+        
         Entity existingAgent = findDuplicateAgent();
         if (existingAgent != null) {
-            this.agent = existingAgent;
+            agent = existingAgent;
         } else {
-            this.agent = new Entity(type);      
-            agent.addAttribute(Ld4lDatatypeProp.NAME, name);
+            agent = buildAgent();
         }
         
         parent.addRelationship(relationship, agent);
@@ -48,7 +48,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     }
     
     private void reset() {
-        this.agent = null;
+        this.field = null;
         this.name = null;
         this.parent = null;  
         this.relationship = null;
@@ -64,7 +64,6 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
                     "A parent entity is required to build an agent.");
         }
         
-
         this.subfield = (MarcxmlSubfield) params.getSubfield();
         this.name = params.getValue(); 
         
@@ -75,11 +74,11 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         if (name == null) {
             name = subfield.getTrimmedTextValue();                  
         }
+        
+        this.field = (MarcxmlDataField) params.getField();
 
         this.type = params.getType();
-        if (type == null) {
-            type = DEFAULT_TYPE;
-        } else if (! (type instanceof Ld4lAgentType)) {
+        if (type != null && ! (type instanceof Ld4lAgentType)) {
             throw new EntityBuilderException("Invalid agent type");
         } 
         
@@ -116,6 +115,69 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         }
         
         return null;        
+    }
+    
+    private Entity buildAgent() { 
+
+        // First use type specified in build params, if any.
+        if (type == null) {
+            // If none specified, try to determine from input data.
+            type = getType();
+        }
+        
+        Entity agent = new Entity(type);
+        
+        if (type.equals(Ld4lAgentType.PERSON)) {
+            return buildPerson(agent);
+        } 
+        if (type.equals(Ld4lAgentType.FAMILY)) {
+            return buildFamily(agent);
+        } else {
+            return buildDefaultAgent(agent);    
+        }
+    }
+    
+    /**
+     * Determines type from input data. Defaults to Ld4lAgentType default
+     * type. Never returns null.
+     */
+    private Type getType() {
+        
+        // Try to determine person vs family from 100 etc.
+        
+        return Ld4lAgentType.defaultType();        
+    }
+    
+    /** 
+     * Builds a generic Agent.
+     */
+    private Entity buildDefaultAgent(Entity agent) {
+        agent.addAttribute(Ld4lDatatypeProp.NAME, name);  
+        return agent;
+    }
+    
+    /**
+     * Builds a Person Entity.
+     */
+    /*
+     * For now, define a method rather than a subclass, since not much 
+     * content. Later can define subclass if needed.
+     */
+    private Entity buildPerson(Entity agent) {
+        agent.addAttribute(Ld4lDatatypeProp.NAME, name);    
+        return agent;
+    }
+    
+    /**
+     * Builds a Family Entity.
+     */
+    /*
+     * For now, define a method rather than a subclass, since not much 
+     * content. Later can define subclass if needed.
+     */
+    private Entity buildFamily(Entity agent) {
+        agent.addAttribute(Ld4lDatatypeProp.NAME, name); 
+        return agent;
     }
 
 }
