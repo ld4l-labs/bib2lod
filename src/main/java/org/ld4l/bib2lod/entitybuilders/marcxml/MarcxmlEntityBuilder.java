@@ -15,6 +15,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
 public class MarcxmlEntityBuilder extends BaseEntityBuilder {
     
@@ -125,36 +126,10 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params); 
     }
     
-    // TODO Combine with data field methods
-    protected Entity buildChildFromControlField(Type builderType, Entity parent, 
-            MarcxmlRecord record, String tag) throws EntityBuilderException {
+    protected Entity buildChildFromTaggedField(Type builderType, 
+            Entity parent, MarcxmlTaggedField field, String tag, 
+                    Type entityType) throws EntityBuilderException {
         
-        MarcxmlControlField field = record.getControlField(tag);
-        if (field == null) {
-            return null;
-        }
-        
-        EntityBuilder builder = getBuilder(builderType);
-        
-        BuildParams params = new BuildParams()
-                .setParent(parent)
-                .setField(field);
-        
-        return builder.build(params);
-    }
-    
-    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
-            MarcxmlRecord record, String tag) throws EntityBuilderException {
-        
-        return buildChildFromDataField(
-                builderType, parent, record, tag, null);        
-    }
-    
-    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
-            MarcxmlRecord record, String tag, Type entityType) 
-                    throws EntityBuilderException {
-        
-        MarcxmlDataField field = record.getDataField(tag);
         if (field == null) {
             return null;
         }
@@ -169,25 +144,33 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
             params.setType(entityType);
         }
         
-        return builder.build(params);       
+        return builder.build(params);
     }
     
-    protected Entity buildChildFromDataField(Type builderType,  
+    protected Entity buildChildFromControlField(Type builderType, 
+            Entity parent, MarcxmlRecord record, String tag) 
+                    throws EntityBuilderException {
+        
+        MarcxmlControlField field = record.getControlField(tag);
+        return buildChildFromTaggedField(
+                builderType, parent, field, tag, null);
+    }
+    
+    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
             MarcxmlRecord record, String tag) throws EntityBuilderException {
         
+        return buildChildFromDataField(
+                builderType, parent, record, tag, null);        
+    }
+    
+    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
+            MarcxmlRecord record, String tag, Type entityType) 
+                    throws EntityBuilderException {
+        
         MarcxmlDataField field = record.getDataField(tag);
-        if (field == null) {
-            return null;
-        }
-        
-        EntityBuilder builder = getBuilder(builderType);
-        
-        BuildParams params = new BuildParams()
-                .setField(field);
-        
-        return builder.build(params);
-        
-    }     
+        return buildChildFromTaggedField(
+                builderType, parent, field, tag, entityType);
+    }
     
     
     /*
