@@ -34,7 +34,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         
         parseBuildParams(params);
         
-        this.agent = buildAgent();
+        buildAgent();
         
         parent.addRelationship(relationship, agent);
         
@@ -86,28 +86,28 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
      * new one. Current deduping is based only on the agent name strings, 
      * since that is what is available in, e.g., MARC 260$b.
      */
-    private Entity findDuplicateAgent() {
+    private void dedupeAgent() {
 
         if (grandparent == null) {
-            return null;
+            return;
         }
         
         List<Entity> activities = grandparent.getChildren(
                 Ld4lObjectProp.HAS_ACTIVITY, parent.getType());
         for (Entity activity : activities) {
-            Entity agent = activity.getChild(Ld4lObjectProp.HAS_AGENT);
-            if (agent != null) {
-                String agentName = agent.getValue(Ld4lDatatypeProp.NAME);
+            Entity existingAgent = 
+                    activity.getChild(Ld4lObjectProp.HAS_AGENT);
+            if (existingAgent != null) {
+                String agentName = 
+                        existingAgent.getValue(Ld4lDatatypeProp.NAME);
                 if (name.equals(agentName)) {
-                    return agent;
+                    agent = existingAgent;
                 }                
             }
-        }
-        
-        return null;        
+        }       
     }
     
-    private Entity buildAgent() { 
+    private void buildAgent() { 
 
         // Use type specified in build params, if any.
         if (type == null) {
@@ -115,23 +115,26 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
             type = getType();
         }
         
-        Entity agent = new Entity(type);
+        this.agent = new Entity(type);
+        
+        addAgentName();
+        
+        dedupeAgent();
+    }
+    
+    private void addAgentName() {
+        
+        if (name == null) {
+            if (subfield != null) {
+                this.name = subfield.getTrimmedTextValue();
+            } else {
+                this.name = buildNameFromDataField(agent);
+            }           
+        } 
         
         if (name != null) {
             agent.addAttribute(Ld4lDatatypeProp.NAME, name);
-        } else if (subfield != null) {
-            agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                    subfield.getTrimmedTextValue());
-        } else {
-            buildAgentFromDataField(agent);
-        }
-        
-//        Entity existingAgent = findDuplicateAgent();
-//        if (existingAgent != null) {
-//            agent = existingAgent;
-//        } 
- 
-        return agent;
+        }       
     }
     
     /**
@@ -151,8 +154,8 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         return Ld4lAgentType.defaultType();
     }
     
-    private Entity buildAgentFromDataField(Entity agent) {
-
+    private String buildNameFromDataField(Entity agent) {
+        
         /*
          * Note that in field 100, ind1 value 0 means given name first, 
          * value 1 means family name first, but since for now we are not  
@@ -165,11 +168,10 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
          * TODO Add other agent attributes from other subfields.
          */
         if (field != null && field.getTag().equals("100")) {
-            agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                    field.getSubfield('a').getTrimmedTextValue());
+            return field.getSubfield('a').getTrimmedTextValue();
         }
         
-        return agent;
+        return null;
     }
     
 }
