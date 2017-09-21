@@ -100,8 +100,6 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         for (RecordField subfield : params.getSubfields()) {
             this.subfields.add((MarcxmlSubfield) subfield);
         }
-        
-
     }
     
     protected void build() throws EntityBuilderException {

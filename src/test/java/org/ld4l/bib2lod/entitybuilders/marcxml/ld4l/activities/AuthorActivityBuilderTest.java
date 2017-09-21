@@ -5,14 +5,13 @@ import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.AuthorActivityBuilder;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -28,7 +27,7 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
             .lock();
 
     private static BaseMockBib2LodObjectFactory factory;
-    private InstanceBuilder instanceBuilder;
+    private ActivityBuilder builder;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -39,8 +38,7 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() {       
-        new AuthorActivityBuilder();
-        this.instanceBuilder = new InstanceBuilder();              
+        this.builder = new AuthorActivityBuilder();          
     }   
     
     // ---------------------------------------------------------------------
@@ -48,16 +46,21 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     
     @Test
-    @Ignore
-    public void testActivityType_100() throws Exception {
-        // *** TODO - don't need instance - just go directly to work
+    public void testActivityTypeSpecified_100() throws Exception {
+        Entity activity = buildActivity(_100_AUTHOR, 
+                Ld4lActivityType.AUTHOR_ACTIVITY);
+        Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
+                activity.getType());
+    }
+    
+    @Test
+    public void testActivityTypeNotSpecified_100() throws Exception {
         Entity activity = buildActivity(_100_AUTHOR);
         Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
                 activity.getType());
     }
     
     @Test
-    @Ignore
     public void testActivityHasAuthor_100() throws Exception {
         Entity activity = buildActivity(_100_AUTHOR);
         Assert.assertNotNull(activity.getChild(Ld4lObjectProp.HAS_AGENT));
@@ -67,16 +70,21 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
     // Helper methods
     // --------------------------------------------------------------------- 
 
-    // *** TODO - don't need instance - just go directly to work
-    protected Entity buildActivity(MockMarcxml input) throws Exception {
+    private Entity buildActivity(MockMarcxml record) 
+            throws Exception {
         BuildParams params = new BuildParams() 
-                .setRecord(input.toRecord());
-        return buildActivity(params);         
+                .setField(record.toRecord().getDataField("100"))
+                .setParent(new Entity());
+        return builder.build(params);         
     }
     
-    // *** TODO - don't need instance - just go directly to workdraw 
-    private Entity buildActivity(BuildParams params) throws Exception {             
-        Entity instance = instanceBuilder.build(params);
-        return instance.getChild(Ld4lObjectProp.HAS_ACTIVITY); 
+    private Entity buildActivity(
+            MockMarcxml record, Type type) throws Exception {
+        BuildParams params = new BuildParams() 
+                .setField(record.toRecord().getDataField("100"))
+                .setType(type)
+                .setParent(new Entity());
+        return builder.build(params);         
     }
+
 }
