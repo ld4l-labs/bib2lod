@@ -38,8 +38,8 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         this.adminMetadata = new Entity(Ld4lAdminMetadataType.defaultType());
      
         // Control field 001: local identifier 
-        buildChildFromControlField(
-                Ld4lIdentifierType.defaultType(), adminMetadata, record, "001");
+        buildChildFromControlField(Ld4lIdentifierType.defaultType(), 
+                adminMetadata, record, "001");
         
         convert_040();      
         

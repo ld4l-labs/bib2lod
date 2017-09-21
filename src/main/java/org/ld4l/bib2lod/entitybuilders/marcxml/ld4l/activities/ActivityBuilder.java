@@ -92,7 +92,8 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         }
 
         
-        /* *** KLUGE: this needs to be a list of MarcxmlSubfields in order
+        /* 
+         * This needs to be a list of MarcxmlSubfields in order
          * to get the codes, but in BuildParams it's just a list of 
          * RecordFields. Is there a better way to do this?
          */

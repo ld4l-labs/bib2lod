@@ -3,8 +3,11 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ActivityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 
 public class AuthorActivityBuilder extends ActivityBuilder {
 
@@ -30,12 +33,14 @@ public class AuthorActivityBuilder extends ActivityBuilder {
     }
         
  
-    private void convert_100() {
-        
-        // MarcxmlDataField datafield = (MarcxmlDataField) field;
-        
+    private void convert_100() throws EntityBuilderException {
+
         this.activity = new Entity(TYPE);
-      
+        EntityBuilder builder = getBuilder(Ld4lAgentType.defaultType());
+        BuildParams params = new BuildParams()
+                .setField(field)
+                .setParent(activity);
+        builder.build(params);
     }
    
 }

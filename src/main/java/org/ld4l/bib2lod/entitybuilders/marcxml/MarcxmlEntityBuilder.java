@@ -125,7 +125,8 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params); 
     }
     
-    protected Entity buildChildFromControlField(Type type, Entity parent, 
+    // TODO Combine with data field methods
+    protected Entity buildChildFromControlField(Type builderType, Entity parent, 
             MarcxmlRecord record, String tag) throws EntityBuilderException {
         
         MarcxmlControlField field = record.getControlField(tag);
@@ -133,7 +134,7 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
             return null;
         }
         
-        EntityBuilder builder = getBuilder(type);
+        EntityBuilder builder = getBuilder(builderType);
         
         BuildParams params = new BuildParams()
                 .setParent(parent)
@@ -142,26 +143,36 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         return builder.build(params);
     }
     
-    protected Entity buildChildFromDataField(Type type, Entity parent, 
+    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
             MarcxmlRecord record, String tag) throws EntityBuilderException {
+        
+        return buildChildFromDataField(
+                builderType, parent, record, tag, null);        
+    }
+    
+    protected Entity buildChildFromDataField(Type builderType, Entity parent, 
+            MarcxmlRecord record, String tag, Type entityType) 
+                    throws EntityBuilderException {
         
         MarcxmlDataField field = record.getDataField(tag);
         if (field == null) {
             return null;
         }
         
-        EntityBuilder builder = getBuilder(type);
+        EntityBuilder builder = getBuilder(builderType);
         
         BuildParams params = new BuildParams()
-                .setType(type)
                 .setParent(parent)
                 .setField(field);
         
-        return builder.build(params);
+        if (entityType != null) {
+            params.setType(entityType);
+        }
         
+        return builder.build(params);       
     }
     
-    protected Entity buildChildFromDataField(Type type,  
+    protected Entity buildChildFromDataField(Type builderType,  
             MarcxmlRecord record, String tag) throws EntityBuilderException {
         
         MarcxmlDataField field = record.getDataField(tag);
@@ -169,15 +180,14 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
             return null;
         }
         
-        EntityBuilder builder = getBuilder(type);
+        EntityBuilder builder = getBuilder(builderType);
         
         BuildParams params = new BuildParams()
-                .setType(type)
                 .setField(field);
         
         return builder.build(params);
         
-    } 
+    }     
     
     
     /*
