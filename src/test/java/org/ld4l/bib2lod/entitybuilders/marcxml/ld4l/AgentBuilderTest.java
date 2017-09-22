@@ -160,7 +160,6 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    @Ignore
     public void testReuseExistingAgent() throws Exception {
         BuildParams params = new BuildParams()
                 .setRecord(DUPLICATE_AGENTS.toRecord());
