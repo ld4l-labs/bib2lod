@@ -40,6 +40,7 @@ public enum Ld4lObjectProp implements ObjectProp {
     IDENTIFIED_BY(Ld4lNamespace.BIBFRAME, "identifiedBy"),
     IS_INSTANCE_OF(Ld4lNamespace.BIBFRAME, "instanceOf"),
     IS_LOCATION_OF(Ld4lNamespace.BIBLIOTEKO, "isLocationOf"),
+    IS_PART_OF(Ld4lNamespace.DCTERMS, "isPartOf"),
     IS_TITLE_OF(Ld4lNamespace.BIBLIOTEKO, "isTitleOf"),
     MOTIVATED_BY(Ld4lNamespace.OA, "motivatedBy"),
     /*
