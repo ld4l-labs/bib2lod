@@ -21,7 +21,7 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 public class AuthorActivityBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml _100_AUTHOR =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _100_AUTHOR = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("100", "0", " ").addSubfield("a", "Manya K'Omalowete a Djonga,")
             .lock();

@@ -13,11 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

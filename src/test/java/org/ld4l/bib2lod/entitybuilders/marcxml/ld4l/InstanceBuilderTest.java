@@ -25,12 +25,12 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class InstanceBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml RESPONSIBILITY_STATEMENT =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml RESPONSIBILITY_STATEMENT = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addSubfield("c", "responsibility statement")
             .lock();
     
-    public static final MockMarcxml _260_PUBLISHER =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", "3", " ")
             .addSubfield("a", "New York,")
@@ -38,7 +38,7 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("c", "1957.")
             .lock();
 
-    public static final MockMarcxml _260_PUBLISHER_AND_MANUFACTURER =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _260_PUBLISHER_AND_MANUFACTURER = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", " ", " ")
             .addSubfield("a", "Springfield, Va. :")
@@ -48,25 +48,17 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("f", "Oak Ridge National Laboratory ")
             .lock();
     
-    public static final MockMarcxml _260_TWO_FIELDS_TWO_PUBLISHERS = MockMarcxml.parse(
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='2' ind2=' '>" +
-                    "<subfield code='a'>place1</subfield>" +
-                    "<subfield code='c'>date1</subfield>" +
-                "</datafield>" +
-                "<datafield tag='260' ind1='2' ind2=' '>" +
-                    "<subfield code='a'>place1</subfield>" +
-                    "<subfield code='b'>name2</subfield>" +
-                    "<subfield code='c'>date2</subfield>" +
-                "</datafield>" +
-            "</record>");
-    
+    public static final MockMarcxml _260_TWO_FIELDS_TWO_PUBLISHERS = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", "2", " ")
+            .addSubfield("a", "place1")
+            .addSubfield("c", "date1")
+            .addDatafield("260", "2", " ")
+            .addSubfield("a", "place1")
+            .addSubfield("b", "name2")
+            .addSubfield("c", "date2")
+            .lock();        
+            
     public static final MockMarcxml _260_TWO_PUBLISHERS_AND_MANUFACTURER = 
             _260_TWO_FIELDS_TWO_PUBLISHERS.openCopy()
             .findDatafield("260", 0)

@@ -59,30 +59,16 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
 
     public static final MockMarcxml _260_CURRENT_PUBLISHER = _260_PUBLISHER.openCopy()
             .findDatafield("260").setInd1("3").lock();
-
-    public static final MockMarcxml TWO_260 = MockMarcxml
-            .parse("<record>" + "<leader>01050cam a22003011  4500</leader>"
-                    + "<controlfield tag='001'>102063</controlfield>"
-                    + "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>"
-                    + "<datafield tag='245' ind1='0' ind2='0'>"
-                    + "<subfield code='a'>full title</subfield>"
-                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
-                    + "<subfield code='a'>Lugduni Batavorum :</subfield>"
-                    + "<subfield code='b'>E.J. Brill</subfield>"
-                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
-                    + "<subfield code='a'>Leiden :</subfield>"
-                    + "<subfield code='b'>E.J. Brill</subfield>"
-                    + "</datafield>" + "</record>");
-
-    public static final MockMarcxml _008_260$c_DATES = MockMarcxml
-            .parse("<record>" + "<leader>01050cam a22003011  4500</leader>"
-                    + "<controlfield tag='001'>102063</controlfield>"
-                    + "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>"
-                    + "<datafield tag='245' ind1='0' ind2='0'>"
-                    + "<subfield code='a'>full title</subfield>"
-                    + "</datafield>" + "<datafield tag='260' ind1='3' ind2=' '>"
-                    + "<subfield code='c'>1957.</subfield>" + "</datafield>"
-                    + "</record>");
+    
+    public static final MockMarcxml TWO_260 = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Lugduni Batavorum :")
+            .addSubfield("b", "E.J. Brill")
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Leiden :")
+            .addSubfield("b", "E.J. Brill")
+            .lock();
 
     public static final String _001 = 
             "<controlfield tag='001'>102063</controlfield>";  

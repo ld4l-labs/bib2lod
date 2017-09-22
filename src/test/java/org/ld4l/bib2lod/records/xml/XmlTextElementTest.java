@@ -2,7 +2,6 @@ package org.ld4l.bib2lod.records.xml;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Element;

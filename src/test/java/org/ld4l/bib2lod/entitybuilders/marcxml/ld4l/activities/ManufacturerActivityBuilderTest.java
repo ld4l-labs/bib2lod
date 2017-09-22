@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,21 +35,29 @@ public class ManufacturerActivityBuilderTest extends AbstractTestClass {
         this.instanceBuilder = new InstanceBuilder();              
     }
  
-    public static final MockMarcxml _260_MANUFACTURER = MockMarcxml.parse(
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                    "<subfield code='e'>Oak Ridge, Tenn. :</subfield>" +
-                    "<subfield code='f'>Oak Ridge National Laboratory </subfield>" +
-                    "<subfield code='g'>1974</subfield>" +
-                "</datafield>" +
-            "</record>"
-            );
+//    public static final MockMarcxml _260_MANUFACTURER = MockMarcxml.parse(
+//            "<record>" +
+//                "<leader>01050cam a22003011  4500</leader>" +
+//                "<controlfield tag='001'>102063</controlfield>" + 
+//                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+//                "<datafield tag='245' ind1='0' ind2='0'>" +
+//                    "<subfield code='a'>full title</subfield>" +  
+//                "</datafield>" +   
+//                "<datafield tag='260' ind1=' ' ind2=' '>" +
+//                    "<subfield code='e'>Oak Ridge, Tenn. :</subfield>" +
+//                    "<subfield code='f'>Oak Ridge National Laboratory </subfield>" +
+//                    "<subfield code='g'>1974</subfield>" +
+//                "</datafield>" +
+//            "</record>"
+//            );
+    
+    public static final MockMarcxml _260_MANUFACTURER = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", " ", " ")
+            .addSubfield("e", "Oak Ridge, Tenn. :")
+            .addSubfield("f", "Oak Ridge National Laboratory ")
+            .addSubfield("g", "1974")
+            .lock();        
     
     // ---------------------------------------------------------------------
     // The tests

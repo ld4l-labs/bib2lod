@@ -26,24 +26,24 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class TitleBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml TITLE_WITH_WHITESPACE =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml TITLE_WITH_WHITESPACE = MINIMAL_RECORD.openCopy()
             .addControlfield("001", "102063")
             .findDatafield("245").findSubfield("a").setValue(" main title ")
             .lock();
 
-    public static final MockMarcxml TITLE_WITH_FINAL_SPACE_COLON =  TITLE_WITH_WHITESPACE.openCopy()
+    public static final MockMarcxml TITLE_WITH_FINAL_SPACE_COLON = TITLE_WITH_WHITESPACE.openCopy()
             .findDatafield("245").findSubfield("a").setValue("main title :")
             .lock();
     
-    public static final MockMarcxml TITLE_WITH_FINAL_COLON =  TITLE_WITH_WHITESPACE.openCopy()
+    public static final MockMarcxml TITLE_WITH_FINAL_COLON = TITLE_WITH_WHITESPACE.openCopy()
             .findDatafield("245").findSubfield("a").setValue("main title:")
             .lock();
     
-    public static final MockMarcxml TITLE_WITH_SUBTITLE =  TITLE_WITH_FINAL_SPACE_COLON.openCopy()
+    public static final MockMarcxml TITLE_WITH_SUBTITLE = TITLE_WITH_FINAL_SPACE_COLON.openCopy()
             .findDatafield("245").addSubfield("b", "subtitle")
             .lock();
     
-    public static final MockMarcxml TITLE_WITH_TWO_SUBTITLES =  TITLE_WITH_FINAL_SPACE_COLON.openCopy()
+    public static final MockMarcxml TITLE_WITH_TWO_SUBTITLES = TITLE_WITH_FINAL_SPACE_COLON.openCopy()
             .findDatafield("245").addSubfield("b", "subtitle one : subtitle two")
             .lock();
     

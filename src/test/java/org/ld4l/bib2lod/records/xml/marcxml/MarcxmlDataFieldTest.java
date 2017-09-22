@@ -11,9 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Element;
 
@@ -180,9 +178,8 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     }
     
     @Test
-    public void testGetSubfieldCodes() throws RecordFieldException {
-        MarcxmlDataField field = 
-                MarcxmlTestUtils.buildDataFieldFromString(MULTIPLE_SUBFIELDS);
+    public void testGetSubfieldCodes() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);                
         List<Character> expected = Arrays.asList(
                 'a', 'a', 'a', 'b', 'b', 'c');
         Assert.assertEquals(expected, field.getSubfieldCodes());
@@ -190,25 +187,23 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     }
     
     @Test
-    public void testGetUniqueSubfieldCodes() throws RecordFieldException {
-        MarcxmlDataField field = 
-                MarcxmlTestUtils.buildDataFieldFromString(MULTIPLE_SUBFIELDS);
+    public void testGetUniqueSubfieldCodes() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);                
         Set<Character> expected = new HashSet<>(Arrays.asList('a', 'b', 'c'));
         Assert.assertEquals(expected, field.getUniqueSubfieldCodes());        
     }
     
     @Test
-    public void testContainsSomeSubfield() throws RecordFieldException {
-        MarcxmlDataField field = 
-                MarcxmlTestUtils.buildDataFieldFromString(VALID_DATAFIELD);
+    public void testContainsSomeSubfield() throws Exception {
+        MarcxmlDataField field = buildFromString(VALID_DATAFIELD);
+                
         Character[] codes = {'a', 'e', 'g'};
         Assert.assertTrue(field.containsAnySubfield(codes));
     }
     
     @Test
     public void testDoesNotContainSomeSubfield() throws Exception {
-        MarcxmlDataField field = 
-                MarcxmlTestUtils.buildDataFieldFromString(VALID_DATAFIELD);
+        MarcxmlDataField field = buildFromString(VALID_DATAFIELD);               
         Character[] codes = {'e', 'f', 'g'};
         Assert.assertFalse(field.containsAnySubfield(codes));
     }

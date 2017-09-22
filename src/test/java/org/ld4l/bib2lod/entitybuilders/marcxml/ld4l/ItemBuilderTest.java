@@ -10,7 +10,6 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**

@@ -15,9 +15,10 @@ import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFa
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 public class ActivityBuilderTest extends AbstractTestClass {
     
@@ -75,8 +76,9 @@ public class ActivityBuilderTest extends AbstractTestClass {
         BuildParams params = new BuildParams()
                 .setParent(new Entity())
                 .setRecord(null)
-                .setField(MarcxmlTestUtils.buildSubfieldFromString(
-                        "<subfield code='a'>test</subfield>"));
+                .setField(new MarcxmlSubfield(
+                        XmlTestUtils.buildElementFromString(
+                                "<subfield code='a'>test</subfield>")));
         activityBuilder.build(params);        
     }
     

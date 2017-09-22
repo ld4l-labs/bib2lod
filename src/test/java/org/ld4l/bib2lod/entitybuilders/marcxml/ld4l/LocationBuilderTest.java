@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,9 +17,11 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
@@ -42,6 +46,16 @@ public class LocationBuilderTest extends AbstractTestClass {
                 "<subfield code='b'>E.J. Brill</subfield>" +                 
             "</datafield>" +
             "</record>");
+    
+    public static final MockMarcxml _260_TWO_FIELDS_TWO_PUBLISHERS = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Leiden")
+            .addSubfield("b", "E.J. Brill")
+            .addDatafield("260", " ", " ")
+            .addSubfield("a", "Leiden :")
+            .addSubfield("b", "E.J. Brill")
+            .lock(); 
     
     public static final MockMarcxml DIFFERENT_LOCATIONS = DUPLICATE_LOCATIONS.openCopy()
             .findDatafield("260", 0).replaceSubfield("a", "Amsterdam :")
@@ -94,8 +108,8 @@ public class LocationBuilderTest extends AbstractTestClass {
                 "Invalid location type");  
         BuildParams params = new BuildParams()
                 .setType(Ld4lInstanceType.INSTANCE)
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
-                        NAME_SUBFIELD))
+                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
+                        
                 .setParent(new Entity());
         locationBuilder.build(params);
     }
@@ -105,8 +119,8 @@ public class LocationBuilderTest extends AbstractTestClass {
         Type type = Ld4lLocationType.LOCATION;
         BuildParams params = new BuildParams()
                 .setType(type)
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
-                        NAME_SUBFIELD))
+                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
+                        
                 .setParent(new Entity());
         Entity location = locationBuilder.build(params);
         Assert.assertTrue(location.hasType(type));
@@ -125,8 +139,7 @@ public class LocationBuilderTest extends AbstractTestClass {
     @Test
     public void testNameFromSubfield() throws Exception {
         BuildParams params = new BuildParams()
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
-                        NAME_SUBFIELD))
+                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
                 .setParent(new Entity());
         Entity location = locationBuilder.build(params);
         Assert.assertEquals("Leiden", 
@@ -164,5 +177,11 @@ public class LocationBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
+
+  
+    private MarcxmlSubfield buildSubfieldFromString(
+            String element) throws RecordFieldException {                   
+        return new MarcxmlSubfield(
+                XmlTestUtils.buildElementFromString(element));
+    } 
 }

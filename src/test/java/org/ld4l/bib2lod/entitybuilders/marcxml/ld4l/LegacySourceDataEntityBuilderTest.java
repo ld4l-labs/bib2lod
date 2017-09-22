@@ -39,7 +39,7 @@ public class LegacySourceDataEntityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testLabelDatatype() throws Exception {
+    public void testLabelHasDatatype() throws Exception {
         BuildParams params = new BuildParams()
                 .setValue("Legacy data");
         Entity entity = builder.build(params);

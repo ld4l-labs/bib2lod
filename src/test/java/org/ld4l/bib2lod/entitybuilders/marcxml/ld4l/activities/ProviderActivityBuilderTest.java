@@ -22,7 +22,7 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class ProviderActivityBuilderTest extends AbstractTestClass {
 
-    public static final MockMarcxml _260_PUBLISHER =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", " ", " ")
             .addSubfield("a", "New York,")
