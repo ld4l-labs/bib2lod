@@ -79,9 +79,7 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     
     private Entity buildInstance() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord());  
-        return instanceBuilder.build(params);
+        return buildInstance(MockMarcxml.MINIMAL_RECORD);
     }
     
     private Entity buildInstance(MockMarcxml input) throws Exception {

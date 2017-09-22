@@ -13,8 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.ld4l.bib2lod.records.Record.RecordException;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,9 +31,19 @@ import org.w3c.dom.NodeList;
  * instance, populated with new fields and subfield instances.
  */
 public class MockMarcxml {
-    /** A useful starting place for test values. */
+    
+    /** A useful starting place for test values. */  
+    public static final String MINIMAL_RECORD_STRING = 
+            "<record>" +
+                "<leader>01050cam a22003011  4500</leader>" +
+                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
+                "<datafield tag='245' ind1='0' ind2='0'>" +
+                    "<subfield code='a'>main title</subfield>" +          
+                "</datafield>" + 
+            "</record>";
+    
     public static final MockMarcxml MINIMAL_RECORD = parse(
-            MarcxmlTestUtils.MINIMAL_RECORD);
+            MINIMAL_RECORD_STRING);
 
     /**
      * The entry point. Since constructors are restricted, use this to create an
@@ -131,7 +144,7 @@ public class MockMarcxml {
     }
 
     // ----------------------------------------------------------------------
-    // builder
+    // Builder
     // ----------------------------------------------------------------------
 
     public static class Builder extends FieldFinder.Impl {
@@ -151,7 +164,7 @@ public class MockMarcxml {
     }
 
     // ----------------------------------------------------------------------
-    // Utility methods.
+    // Utility methods
     // ----------------------------------------------------------------------
 
     static List<Element> iterableElements(NodeList nodes) {

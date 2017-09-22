@@ -21,7 +21,7 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 public class ActivityBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml _260_PUBLISHER =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
             .addControlfield("001", "102063")
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", " ", " ").addSubfield("b", "Grune & Stratton,")

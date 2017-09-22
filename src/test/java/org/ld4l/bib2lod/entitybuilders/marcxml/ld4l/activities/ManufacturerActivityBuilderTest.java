@@ -12,10 +12,9 @@ import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFa
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
-import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 public class ManufacturerActivityBuilderTest extends AbstractTestClass {
     
@@ -34,7 +33,7 @@ public class ManufacturerActivityBuilderTest extends AbstractTestClass {
         this.instanceBuilder = new InstanceBuilder();              
     }
  
-    public static final String _260_MANUFACTURER = 
+    public static final MockMarcxml _260_MANUFACTURER = MockMarcxml.parse(
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='001'>102063</controlfield>" + 
@@ -47,7 +46,8 @@ public class ManufacturerActivityBuilderTest extends AbstractTestClass {
                     "<subfield code='f'>Oak Ridge National Laboratory </subfield>" +
                     "<subfield code='g'>1974</subfield>" +
                 "</datafield>" +
-            "</record>"; 
+            "</record>"
+            );
     
     // ---------------------------------------------------------------------
     // The tests
@@ -55,19 +55,12 @@ public class ManufacturerActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void testManufacturer_260() throws Exception {
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(
-                _260_MANUFACTURER);
         BuildParams params = new BuildParams() 
-                .setRecord(record);
+                .setRecord(_260_MANUFACTURER.toRecord());
         Entity instance = instanceBuilder.build(params);       
         Assert.assertEquals(1, 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
                         Ld4lActivityType.MANUFACTURER_ACTIVITY).size());      
     }  
-    
-    // ---------------------------------------------------------------------
-    // Helper methods
-    // ---------------------------------------------------------------------
-
 
 }

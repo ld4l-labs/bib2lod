@@ -13,6 +13,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlLeader;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
  * Tests class MarcxmlRecord.
@@ -20,15 +21,16 @@ import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 public class MarcxmlRecordTest extends AbstractTestClass {
 
     
-    private static final String NO_LEADER = 
+    private static final MockMarcxml NO_LEADER = MockMarcxml.parse(
             "<record>" + 
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
-            "</record>";
+            "</record>"
+            );
     
-    private static final String TWO_LEADERS = 
+    private static final MockMarcxml TWO_LEADERS = MockMarcxml.parse(
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<leader>1234567</leader>" +
@@ -36,19 +38,21 @@ public class MarcxmlRecordTest extends AbstractTestClass {
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
-            "</record>";
+            "</record>"
+            );
 
     
-     private static final String NO_008 = 
+     private static final MockMarcxml NO_008 = MockMarcxml.parse(
              "<record>" + 
                  "<leader>01050cam a22003011  4500</leader>" +
                  "<controlfield tag='001'>102063</controlfield>" +
                  "<datafield tag='245' ind1='0' ind2='0'>" +
                      "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                  "</datafield>" +
-             "</record>";
+             "</record>"
+             );
  
-    private static final String DUPLICATE_008 = 
+    private static final MockMarcxml DUPLICATE_008 = MockMarcxml.parse(
             "<record>" + 
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" + 
@@ -56,9 +60,10 @@ public class MarcxmlRecordTest extends AbstractTestClass {
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
-            "</record>";
+            "</record>"
+            );
     
-    private static final String NO_245 = 
+    private static final MockMarcxml NO_245 = MockMarcxml.parse(
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
@@ -66,9 +71,10 @@ public class MarcxmlRecordTest extends AbstractTestClass {
                     "<subfield code='c'>NIC</subfield>" +
                     "<subfield code='d'>NIC</subfield>" + 
                 "</datafield>" +
-            "</record>";
+            "</record>"
+            );
     
-    private static final String DUPLICATE_245 = 
+    private static final MockMarcxml DUPLICATE_245 = MockMarcxml.parse(
             "<record>" +
                 "<leader>01050cam a22003011  4500</leader>" +
                 "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
@@ -78,7 +84,8 @@ public class MarcxmlRecordTest extends AbstractTestClass {
                 "<datafield tag='245' ind1='0' ind2='0'>" +
                     "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" + 
                 "</datafield>" +
-            "</record>";
+            "</record>"
+            );
 
     
     // ---------------------------------------------------------------------
@@ -88,12 +95,12 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void noLeader_ThrowsException() throws Exception {
         expectException(RecordException.class, "no leader");
-        MarcxmlTestUtils.buildRecordFromString(NO_LEADER);
+        buildRecord(NO_LEADER);
     }
     
     @Test
     public void multipleLeaders_Ignored() throws Exception {
-        MarcxmlRecord record = MarcxmlTestUtils.buildRecordFromString(TWO_LEADERS);
+        MarcxmlRecord record = buildRecord(TWO_LEADERS);
         List<BaseMarcxmlField> fields = record.getFields();
         int leaderCount = 0;
         for (BaseMarcxmlField field : fields) {
@@ -107,13 +114,12 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void no008_ThrowsException() throws Exception {
         expectException(RecordException.class, "no 008");
-        MarcxmlTestUtils.buildRecordFromString(NO_008);
+        buildRecord(NO_008);
     }
     
     @Test
     public void duplicateNonRepeatingControlFields_Ignored() throws Exception {
-        MarcxmlRecord record = 
-                MarcxmlTestUtils.buildRecordFromString(DUPLICATE_008);
+        MarcxmlRecord record = buildRecord(DUPLICATE_008);               
         List<MarcxmlControlField> fields = record.getControlFields();
         int fieldCount = 0;
         for (MarcxmlControlField field : fields) {
@@ -127,19 +133,28 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void no245_ThrowsException() throws Exception {
         expectException(RecordException.class, "no 245");
-        MarcxmlTestUtils.buildRecordFromString(NO_245);
+        buildRecord(NO_245);
     }
     
     @Test
     public void duplicateNonRepeatingDataFields_Ignored() throws Exception {
         // No exception
-        MarcxmlTestUtils.buildRecordFromString(DUPLICATE_245);
+        buildRecord(DUPLICATE_245);
     }
     
     @Test
     public void validRecord_Succeeds() throws Exception {
         // No exception
-       MarcxmlTestUtils.buildRecordFromString(MarcxmlTestUtils.MINIMAL_RECORD);
+        buildRecord(MockMarcxml.MINIMAL_RECORD);
+    }
+    
+    // ---------------------------------------------------------------------
+    // Helper methods
+    // ---------------------------------------------------------------------
+    
+    private MarcxmlRecord buildRecord(MockMarcxml input) 
+            throws RecordException {
+        return input.toRecord();
     }
  
 }

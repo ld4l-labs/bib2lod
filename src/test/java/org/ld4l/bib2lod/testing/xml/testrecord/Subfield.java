@@ -4,6 +4,12 @@ package org.ld4l.bib2lod.testing.xml.testrecord;
 
 import java.util.Objects;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,7 +18,7 @@ public class Subfield {
     final String code;
     final String value;
 
-    Subfield(Element element) {
+    public Subfield(Element element) {
         this.code = element.getAttribute("code");
         this.value = element.getTextContent();
     }
@@ -31,6 +37,30 @@ public class Subfield {
 
     Builder builder(MockMarcxml.Builder mmb, Datafield.Builder df) {
         return new Builder(mmb, df, this.code, this.value);
+    }
+    
+    /**
+     * Create an XML structure from this instance.
+     */
+    public Element toElement() {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            Document doc = builder.newDocument();
+
+            Element element = doc.createElement("subfield");
+            element.setAttribute("code", code);
+            element.setTextContent(value);
+            return element;
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Can't convert to XML", e);
+        }
+    }
+    
+    
+    MarcxmlSubfield toSubfield() 
+            throws RecordFieldException {
+        return new MarcxmlSubfield(this.toElement());         
     }
 
     @Override
@@ -55,7 +85,7 @@ public class Subfield {
     }
 
     // ----------------------------------------------------------------------
-    // builder
+    // Builder
     // ----------------------------------------------------------------------
 
     public static class Builder extends SubfieldFinder.Wrapper {

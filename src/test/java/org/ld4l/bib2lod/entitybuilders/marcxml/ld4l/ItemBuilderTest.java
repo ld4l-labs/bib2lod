@@ -11,6 +11,7 @@ import org.ld4l.bib2lod.ontology.ld4l.Ld4lItemType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
  * Tests class ItemBuilder.
@@ -33,7 +34,7 @@ public class ItemBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "A related instance is required");
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord());  
+                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord());  
         builder.build(params);        
     }
     
@@ -49,7 +50,7 @@ public class ItemBuilderTest extends AbstractTestClass {
     @Test 
     public void testItemType() throws Exception {
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord())
+                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord())
                 .setParent(new Entity()); 
         Entity item = builder.build(params);     
         Assert.assertTrue(item.hasType(Ld4lItemType.ITEM));
@@ -59,7 +60,7 @@ public class ItemBuilderTest extends AbstractTestClass {
     public void testInstanceHasItem() throws Exception {
         Entity instance = new InstanceEntity();
         BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord())
+                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord())
                 .setParent(instance); 
         Entity item = builder.build(params);   
         Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_ITEM, item));
