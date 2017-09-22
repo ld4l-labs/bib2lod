@@ -2,8 +2,12 @@
 
 package org.ld4l.bib2lod.records.xml;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.records.RecordField;
-import org.ld4l.bib2lod.util.Bib2LodStringUtils;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,7 +28,7 @@ public interface XmlTextElement extends RecordField {
      * whitespace and punctuation removed. (See
      */
     public default String getTrimmedTextValue() {
-        return Bib2LodStringUtils.trim(getTextValue());             
+        return trim(getTextValue());             
     }
     
     /**
@@ -68,6 +72,36 @@ public interface XmlTextElement extends RecordField {
     
     default char getCharAt(int pos) throws IndexOutOfBoundsException {
         return getTextSubstring(pos, pos+1).charAt(0);
+    }
+    
+    
+    static final Pattern PATTERN_FINAL_PUNCT = 
+            Pattern.compile(".+[.,;:]$");
+    
+    static final String PATTERN_FINAL_PUNCT_AND_WHITESPACE = 
+            "\\s*[.,;:]?\\s*$";
+    
+    public static boolean endsWithPunct(String s) {
+        Matcher m = PATTERN_FINAL_PUNCT.matcher(s);
+        return m.matches();
+    }
+    
+    public static String removeFinalPunct(String s) {
+        return endsWithPunct(s) ? StringUtils.chop(s) : s;
+    }
+    
+    public static String removeFinalPunctAndWhitespace(String s) {
+        return s.replaceAll(PATTERN_FINAL_PUNCT_AND_WHITESPACE, "");
+    }
+    
+    /**
+     * Removes initial whitespace and final punctuation and  whitespace in any
+     * order. Punctuation includes only ".,;:", since these may occur in the
+     * record extraneously on data values such as dates, locations, names, 
+     * titles, etc. and are not part of the actual text value.
+     */
+    public static String trim(String s) {
+        return removeFinalPunctAndWhitespace(s.trim());
     }
 
 }

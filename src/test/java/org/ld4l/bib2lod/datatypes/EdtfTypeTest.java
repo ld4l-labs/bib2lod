@@ -70,6 +70,11 @@ public class EdtfTypeTest extends AbstractTestClass {
         @Override
         public Resource ontClass() {
             return ontClass;
+        }
+
+        @Override
+        public Type superclass() {
+            return TEST_TYPE;
         }        
     }
     

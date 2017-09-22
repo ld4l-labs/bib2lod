@@ -12,7 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.util.Bib2LodStringUtils;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -72,7 +72,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
                 continue;
             }
             String value = subfield.getTextValue();            
-            values.add(trim ? Bib2LodStringUtils.trim(value) : value);
+            values.add(trim ? XmlTextElement.trim(value) : value);
         }
         return values;        
     }

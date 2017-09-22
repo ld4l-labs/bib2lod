@@ -1,15 +1,15 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
 
-public class PhysicalDescriptionBuilder extends BaseEntityBuilder {
+public class PhysicalDescriptionBuilder extends MarcxmlEntityBuilder {
     
     private MarcxmlDataField field;
     private Entity parent;

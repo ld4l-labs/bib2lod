@@ -7,8 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -17,13 +17,13 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
-public class ActivityBuilder extends BaseEntityBuilder {
+public class ActivityBuilder extends MarcxmlEntityBuilder {
     
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
     private static final Ld4lActivityType DEFAULT_TYPE = 
-            Ld4lActivityType.superClass();
+            (Ld4lActivityType) Ld4lActivityType.defaultType();
 
     protected Entity activity;
     protected Entity parent;
@@ -92,19 +92,18 @@ public class ActivityBuilder extends BaseEntityBuilder {
         }
 
         
-        /* *** KLUGE: this needs to be a list of MarcxmlSubfields in order
+        /* 
+         * This needs to be a list of MarcxmlSubfields in order
          * to get the codes, but in BuildParams it's just a list of 
          * RecordFields. Is there a better way to do this?
          */
         for (RecordField subfield : params.getSubfields()) {
             this.subfields.add((MarcxmlSubfield) subfield);
         }
-        
-
     }
     
     protected void build() throws EntityBuilderException {
-
+        // If never used, make this an abstract class.
     }
 
 }

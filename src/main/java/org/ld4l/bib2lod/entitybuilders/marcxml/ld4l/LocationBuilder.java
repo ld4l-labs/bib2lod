@@ -61,7 +61,7 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
         
         this.type = params.getType(); 
         if (type == null) {
-            type = Ld4lLocationType.superClass();
+            type = Ld4lLocationType.defaultType();
         } else if (! (type instanceof Ld4lLocationType)) {
             throw new EntityBuilderException("Invalid location type");
         } 

@@ -31,7 +31,12 @@ public enum Ld4lExtentType implements Type {
         return ontClass;
     }
     
-    public static Type superClass() {
+    @Override
+    public Type superclass() {
+        return defaultType();
+    }
+    
+    public static Type defaultType() {
         return EXTENT;
     }
 }

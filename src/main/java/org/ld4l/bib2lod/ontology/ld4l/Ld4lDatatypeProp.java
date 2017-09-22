@@ -17,11 +17,15 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     DATE(Ld4lNamespace.DCTERMS, "date"),
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
+    FAMILY_NAME(Ld4lNamespace.FOAF, "familyName"),
+    FIRST_NAME(Ld4lNamespace.FOAF, "firstName"),
+    GIVEN_NAME(Ld4lNamespace.FOAF, "givenName"),
     /*
      * rdfs:label is not technically a datatype property, but functions as
      * one in our application profile.
      */
     LABEL(Ld4lNamespace.RDFS, "label"),
+    LAST_NAME(Ld4lNamespace.FOAF, "lastName"),
     NAME(Ld4lNamespace.FOAF, "name"),
     PROVISION_ACTIVITY_STATEMENT(Ld4lNamespace.BIBFRAME, "provisionActivityStatement"),
     RANK(Ld4lNamespace.VIVO, "rank"),

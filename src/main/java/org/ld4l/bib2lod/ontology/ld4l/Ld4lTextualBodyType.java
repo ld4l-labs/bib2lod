@@ -10,6 +10,8 @@ public enum Ld4lTextualBodyType implements Type {
     /* List in alpha order */
     TEXTUAL_BODY(Ld4lNamespace.OA, "TextualBody");
     
+    private static final Type DEFAULT_TYPE = TEXTUAL_BODY;
+    
     private final String uri;
     private final Resource ontClass;
     
@@ -29,5 +31,10 @@ public enum Ld4lTextualBodyType implements Type {
     @Override
     public Resource ontClass() {
         return ontClass;
+    }
+    
+    @Override
+    public Type superclass() {
+        return DEFAULT_TYPE;
     }
 }

@@ -28,11 +28,17 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
    
         this.type = TYPE;
         
-        if (field.getTag().equals("008")) {
+        switch (field.getTag()) {
+        case "008": 
             convert_008();
-        } else if (field.getTag().equals("260")) {
+            break;
+        case "260":
             convert_260();
-        }           
+            break;
+        default:
+            break;
+        }
+         
     }
 
     private void convert_008() {

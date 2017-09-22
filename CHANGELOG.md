@@ -1,6 +1,24 @@
 # Bib2Lod Change Log
 
-This change log records API changes that may affect implementing projects.
+Records API changes that may affect implementing projects.
+
+## Commit d129b7ff (2017-09-19)
+
+### Removed
+
+* Removed package org.ld4l.bib2lod.util.
+* Removed class org.ld4l.bib2lod.util.Bib2LodStringUtils.
+
+### Changed
+
+* Moved static string util methods from org.ld4l.bib2lod.util.Bib2LodStringUtils to org.ld4l.bib2lod.records.xml.XmlTextElement.
+
+
+## Commit ecb99ef9 (2017-09-19)
+
+### Added
+
+* Type.superclass() method. All Type implementers must define this method.
 
 ## Commit #8b7efc6a (2017-09-05)
 

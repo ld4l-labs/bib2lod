@@ -1,15 +1,15 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
-import org.ld4l.bib2lod.util.Bib2LodStringUtils;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 
-public class TitleElementBuilder extends BaseEntityBuilder {
+public class TitleElementBuilder extends MarcxmlEntityBuilder {
     
     private Entity title;
     private Type type;
@@ -28,7 +28,7 @@ public class TitleElementBuilder extends BaseEntityBuilder {
          * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
          */
         if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
-            value = Bib2LodStringUtils.removeFinalPunctAndWhitespace(
+            value = XmlTextElement.removeFinalPunctAndWhitespace(
                     value).trim();
         } 
 

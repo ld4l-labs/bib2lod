@@ -3,23 +3,23 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entitybuilders.BaseEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ObjectProp;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
-public class AgentBuilder extends BaseEntityBuilder {
-    
-    private static Type DEFAULT_TYPE = Ld4lAgentType.superClass();
+public class AgentBuilder extends MarcxmlEntityBuilder {
     
     private static ObjectProp DEFAULT_RELATIONSHIP = 
             Ld4lObjectProp.HAS_AGENT;
 
     private Entity agent;
+    private MarcxmlDataField field;
     private Entity grandparent;
     private String name;
     private Entity parent;
@@ -34,13 +34,7 @@ public class AgentBuilder extends BaseEntityBuilder {
         
         parseBuildParams(params);
         
-        Entity existingAgent = findDuplicateAgent();
-        if (existingAgent != null) {
-            this.agent = existingAgent;
-        } else {
-            this.agent = new Entity(type);      
-            agent.addAttribute(Ld4lDatatypeProp.NAME, name);
-        }
+        buildAgent();
         
         parent.addRelationship(relationship, agent);
         
@@ -49,6 +43,7 @@ public class AgentBuilder extends BaseEntityBuilder {
     
     private void reset() {
         this.agent = null;
+        this.field = null;
         this.name = null;
         this.parent = null;  
         this.relationship = null;
@@ -63,25 +58,19 @@ public class AgentBuilder extends BaseEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build an agent.");
         }
-        
-
-        this.subfield = (MarcxmlSubfield) params.getSubfield();
-        this.name = params.getValue(); 
-        
-        if (subfield == null && name == null) {
-            throw new EntityBuilderException("A subfield or name value " + 
-                    "is required to build an agent.");
-        }
-        if (name == null) {
-            name = subfield.getTrimmedTextValue();                  
-        }
 
         this.type = params.getType();
-        if (type == null) {
-            type = DEFAULT_TYPE;
-        } else if (! (type instanceof Ld4lAgentType)) {
+        if (type != null && ! (type instanceof Ld4lAgentType)) {
             throw new EntityBuilderException("Invalid agent type");
         } 
+        
+        this.name = params.getValue();                
+        this.subfield = (MarcxmlSubfield) params.getSubfield(); 
+        this.field = (MarcxmlDataField) params.getField();       
+        if (name == null && subfield == null && field == null) {
+            throw new EntityBuilderException("A name value, subfield, or " +
+                    "field is required to build an agent.");
+        }
         
         this.relationship = params.getRelationship();       
         if (relationship == null) {
@@ -97,25 +86,92 @@ public class AgentBuilder extends BaseEntityBuilder {
      * new one. Current deduping is based only on the agent name strings, 
      * since that is what is available in, e.g., MARC 260$b.
      */
-    private Entity findDuplicateAgent() {
+    private void dedupeAgent() {
 
         if (grandparent == null) {
-            return null;
+            return;
         }
         
         List<Entity> activities = grandparent.getChildren(
                 Ld4lObjectProp.HAS_ACTIVITY, parent.getType());
         for (Entity activity : activities) {
-            Entity agent = activity.getChild(Ld4lObjectProp.HAS_AGENT);
-            if (agent != null) {
-                String agentName = agent.getValue(Ld4lDatatypeProp.NAME);
+            Entity existingAgent = 
+                    activity.getChild(Ld4lObjectProp.HAS_AGENT);
+            if (existingAgent != null) {
+                String agentName = 
+                        existingAgent.getValue(Ld4lDatatypeProp.NAME);
                 if (name.equals(agentName)) {
-                    return agent;
+                    agent = existingAgent;
                 }                
             }
+        }       
+    }
+    
+    private void buildAgent() { 
+
+        // Use type specified in build params, if any.
+        if (type == null) {
+            // Otherwise determine type from input data.
+            type = getType();
         }
         
-        return null;        
+        this.agent = new Entity(type);
+        
+        addAgentName();
+        
+        dedupeAgent();
     }
+    
+    private void addAgentName() {
+        
+        if (name == null) {
+            if (subfield != null) {
+                this.name = subfield.getTrimmedTextValue();
+            } else {
+                this.name = buildNameFromDataField(agent);
+            }           
+        } 
+        
+        if (name != null) {
+            agent.addAttribute(Ld4lDatatypeProp.NAME, name);
+        }       
+    }
+    
+    /**
+     * Determines type from input data. Defaults to Ld4lAgentType default
+     * type. Never returns null.
+     */
+    private Type getType() {
 
+        if (field != null && field.getTag().equals("100")) {
+            if (field.getFirstIndicator() == 3) {
+                return Ld4lAgentType.FAMILY;
+            } else {
+                return Ld4lAgentType.PERSON;
+            }
+        } 
+        
+        return Ld4lAgentType.defaultType();
+    }
+    
+    private String buildNameFromDataField(Entity agent) {
+        
+        /*
+         * Note that in field 100, ind1 value 0 means given name first, 
+         * value 1 means family name first, but since for now we are not  
+         * parsing the individual name parts we just set the generic name 
+         * property.
+         * 
+         * TODO: if first indicator == 1, split on comma, assign first part
+         * to family name and last part to given name.
+         * 
+         * TODO Add other agent attributes from other subfields.
+         */
+        if (field != null && field.getTag().equals("100")) {
+            return field.getSubfield('a').getTrimmedTextValue();
+        }
+        
+        return null;
+    }
+    
 }

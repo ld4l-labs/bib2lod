@@ -16,10 +16,27 @@ public abstract class BaseEntityBuilder implements EntityBuilder {
     private static final Logger LOGGER = LogManager.getLogger();
     
     @Override
-    public EntityBuilder getBuilder(Type type) {
+    public EntityBuilder getBuilder(Type type) 
+            throws EntityBuilderException {
+        
         EntityBuilderFactory factory = Bib2LodObjectFactory.getFactory()
                 .instanceForInterface(EntityBuilderFactory.class);
-        return factory.getBuilder(type);
+        
+        // Get builder for the specified type
+        EntityBuilder builder = factory.getBuilder(type);
+        if (builder != null) {
+            return builder;
+        }
+
+        // If no builder defined for this type, use builder for its
+        // superclass
+        Type superclass = type.superclass();
+        if (superclass != null) {
+            return factory.getBuilder(superclass);
+        }
+        
+        throw new EntityBuilderException("No builder defined for type " + 
+                type.getClass().getCanonicalName() + ".");
     }
     
 }

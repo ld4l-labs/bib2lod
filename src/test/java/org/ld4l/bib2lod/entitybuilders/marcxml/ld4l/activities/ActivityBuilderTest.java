@@ -43,6 +43,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
         this.activityBuilder = new PublisherActivityBuilder();
         this.instanceBuilder = new InstanceBuilder();              
     }   
+    
     // ---------------------------------------------------------------------
     // The tests
     // ---------------------------------------------------------------------
@@ -91,14 +92,14 @@ public class ActivityBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
          
-    private Entity buildActivity(MockMarcxml input) throws Exception {
+    protected Entity buildActivity(MockMarcxml input) throws Exception {
         BuildParams params = new BuildParams() 
                 .setRecord(input.toRecord());
         return buildActivity(params);         
-    }   
+    }
+
     
-    private Entity buildActivity(BuildParams params) 
-            throws Exception { 
+    private Entity buildActivity(BuildParams params) throws Exception {             
         Entity instance = instanceBuilder.build(params);
         return instance.getChild(Ld4lObjectProp.HAS_ACTIVITY); 
     }
