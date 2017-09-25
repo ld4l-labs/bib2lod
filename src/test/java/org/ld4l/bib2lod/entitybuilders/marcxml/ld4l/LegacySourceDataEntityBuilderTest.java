@@ -9,8 +9,6 @@ import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.LegacySourceDataType;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 

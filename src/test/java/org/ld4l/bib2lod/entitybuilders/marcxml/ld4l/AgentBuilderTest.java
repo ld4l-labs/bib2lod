@@ -98,7 +98,7 @@ public class AgentBuilderTest extends AbstractTestClass {
     @Test
     public void noNameOrSubfield_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, 
-                "A name value, subfield, or field is required");  
+                "A subfield or field is required");  
         BuildParams params = new BuildParams()
                 .setParent(new Entity());
         agentBuilder.build(params);
@@ -113,27 +113,6 @@ public class AgentBuilderTest extends AbstractTestClass {
                 .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
                 .setParent(new Entity());
         agentBuilder.build(params);
-    }
-    
-    @Test
-    public void testTypeFromBuildParam() throws Exception {
-        Type type = Ld4lAgentType.PERSON;
-        BuildParams params = new BuildParams()
-                .setType(type)
-                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))                     
-                .setParent(new Entity());
-        Entity agent = agentBuilder.build(params);
-        Assert.assertTrue(agent.hasType(type));
-    }
-    
-    @Test
-    public void testNameFromBuildParam() throws Exception {
-        String name = "E.J. Brill";
-        BuildParams params = new BuildParams()
-                .setValue(name)
-                .setParent(new Entity());
-        Entity agent = agentBuilder.build(params);
-        Assert.assertEquals(name, agent.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test

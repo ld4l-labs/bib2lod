@@ -25,37 +25,29 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class AdminMetadataBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml TEST_RECORD = MockMarcxml.parse(
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='005'>20130330145647.0</controlfield>" +
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>main title</subfield>" +          
-                "</datafield>" + 
-                "<datafield tag='040' ind1=' ' ind2=' '>" +
-                    "<subfield code='b'>fre</subfield>" +
-                    "<subfield code='c'>NIC</subfield>" +
-                    "<subfield code='d'>NIC</subfield>" +
-                    "<subfield code='d'>CtY</subfield>" +
-                    "<subfield code='e'>rda</subfield>" +
-                    "<subfield code='e'>appm</subfield>" +
-                 "</datafield>" +
-            "</record>");
-    
+    public static final MockMarcxml TEST_RECORD = MINIMAL_RECORD.openCopy()
+            .addControlfield("005", "20130330145647.0")
+            .addDatafield("040", " ", " ")
+            .addSubfield("b", "fre")
+            .addSubfield("c", "NIC")
+            .addSubfield("d", "NIC")
+            .addSubfield("d", "CtY")
+            .addSubfield("e", "rda")
+            .addSubfield("e", "appm")
+            .lock();
+               
     public static final MockMarcxml SOURCE_040$a = TEST_RECORD.openCopy()
             .findDatafield("040")
             .addSubfield("a", "NIC")
             .deleteSubfield("c")
             .lock();
-
     
     public static final MockMarcxml SOURCE_040$a$c = TEST_RECORD.openCopy()
             .findDatafield("040")
             .addSubfield("a", "NIC")
             .lock();
     
-    public static final MockMarcxml INVALID_005_VALUE =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml INVALID_005_VALUE = MINIMAL_RECORD.openCopy()
             .addControlfield("005", "20130330")
             .lock();
     

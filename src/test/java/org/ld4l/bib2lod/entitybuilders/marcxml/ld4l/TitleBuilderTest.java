@@ -16,7 +16,6 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.Record;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
@@ -72,26 +71,28 @@ public class TitleBuilderTest extends AbstractTestClass {
     public void nullRecord_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, 
                 "A record is required");
-        buildTitle(new Entity(), (Record) null);
+        builder.build(new BuildParams());
     }
     
     @Test 
     public void nullBibEntity_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, 
                 "A parent entity is required");
-        buildTitle((Entity) null, MINIMAL_RECORD);
+        BuildParams params = new BuildParams()
+                .setRecord(MINIMAL_RECORD.toRecord());
+        builder.build(params);
     }
     
     @Test
     public void testTitleElementCount() throws Exception {
-       Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);
+       Entity title = buildTitle(TITLE_WITH_TWO_SUBTITLES);
        List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
        Assert.assertEquals(3, titleElements.size());
     }
     
     @Test
     public void testTitleElementRank() throws Exception {
-        Entity title = buildTitle(new Entity(), TITLE_WITH_TWO_SUBTITLES);  
+        Entity title = buildTitle(TITLE_WITH_TWO_SUBTITLES);  
         List<Entity> titleElements = title.getChildren(Ld4lObjectProp.HAS_PART);
         
         List<String> expected = new ArrayList<>(
@@ -108,36 +109,32 @@ public class TitleBuilderTest extends AbstractTestClass {
 
     @Test 
     public void testTitleValueFromMainTitleElement() throws Exception {
-        buildTitleAndExpectValue(new Entity(), MINIMAL_RECORD, "main title");
+        buildTitleAndExpectValue(MINIMAL_RECORD, "main title");
     }
     
     @Test 
     public void testTitleValueTrimWhitespace() throws Exception {
-        buildTitleAndExpectValue(
-                new Entity(), TITLE_WITH_WHITESPACE, "main title");
+        buildTitleAndExpectValue(TITLE_WITH_WHITESPACE, "main title");
     }
     
     @Test 
     public void testTitleValueWithFinalSpaceColon() throws Exception {
-        buildTitleAndExpectValue(
-                new Entity(), TITLE_WITH_FINAL_SPACE_COLON, "main title");   
+        buildTitleAndExpectValue(TITLE_WITH_FINAL_SPACE_COLON, "main title");   
     }
     
     @Test 
     public void testTitleValueWithFinalColon() throws Exception {
-        buildTitleAndExpectValue(
-                new Entity(), TITLE_WITH_FINAL_COLON, "main title");  
+        buildTitleAndExpectValue(TITLE_WITH_FINAL_COLON, "main title");  
     }
     
     @Test
     public void testTitleValueWithSubtitle() throws Exception {
-        buildTitleAndExpectValue(
-                new Entity(), TITLE_WITH_SUBTITLE, "main title : subtitle");  
+        buildTitleAndExpectValue(TITLE_WITH_SUBTITLE, "main title : subtitle");  
     }
      
     @Test
     public void testTitleValueWithTwoSubtitles() throws Exception {
-        buildTitleAndExpectValue(new Entity(), TITLE_WITH_TWO_SUBTITLES, 
+        buildTitleAndExpectValue(TITLE_WITH_TWO_SUBTITLES, 
                 "main title : subtitle one : subtitle two");     
     }
 
@@ -145,22 +142,17 @@ public class TitleBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
     
-    private Entity buildTitle(Entity bibEntity, MockMarcxml marcxml) 
-            throws Exception {
-        return buildTitle(bibEntity, marcxml.toRecord());
-    }
-    
-    private Entity buildTitle(Entity bibEntity, Record record) 
+    private Entity buildTitle(MockMarcxml marcxml) 
             throws Exception {
         BuildParams params = new BuildParams()
-                .setParent(bibEntity)
-                .setRecord(record);        
-        return builder.build(params);        
+                .setParent(new Entity())
+                .setRecord(marcxml.toRecord());        
+        return builder.build(params);   
     }
     
     private void buildTitleAndExpectValue(
-            Entity bibEntity, MockMarcxml marcxml, String value) throws Exception {
-        Entity title = buildTitle(bibEntity, marcxml);
+            MockMarcxml marcxml, String value) throws Exception {
+        Entity title = buildTitle(marcxml);
         Assert.assertEquals(value,
                 title.getAttribute(Ld4lDatatypeProp.VALUE).getValue());        
     }

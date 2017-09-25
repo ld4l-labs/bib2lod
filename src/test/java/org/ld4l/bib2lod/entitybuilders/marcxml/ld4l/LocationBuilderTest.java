@@ -28,26 +28,8 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  * Tests class LocationBuilder.
  */
 public class LocationBuilderTest extends AbstractTestClass {
-
-    public static final MockMarcxml DUPLICATE_LOCATIONS = MockMarcxml.parse( 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='a'>Leiden</subfield>" +
-                    "<subfield code='b'>E.J. Brill</subfield>" +               
-                "</datafield>" +
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                "<subfield code='a'>Leiden :</subfield>" +
-                "<subfield code='b'>E.J. Brill</subfield>" +                 
-            "</datafield>" +
-            "</record>");
     
-    public static final MockMarcxml _260_TWO_FIELDS_TWO_PUBLISHERS = MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml DUPLICATE_LOCATIONS = MINIMAL_RECORD.openCopy()
             .addControlfield("001", "102063")
             .addDatafield("260", "3", " ")
             .addSubfield("a", "Leiden")

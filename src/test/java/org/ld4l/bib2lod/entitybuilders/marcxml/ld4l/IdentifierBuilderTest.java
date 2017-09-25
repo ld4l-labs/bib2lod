@@ -248,19 +248,6 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         return buildIdentifier(new Entity(), input, tag, code);
     }
     
-    private void buildAndExpectException(
-            Entity entity, MockMarcxml input, String tag, String error) 
-                    throws Exception {            
-        expectException(EntityBuilderException.class, error);
-        buildIdentifier(entity, input, tag);
-    }
-    
-    @SuppressWarnings("unused")
-    private void buildAndExpectException(MockMarcxml input, String tag, 
-            String error) throws Exception {
-        buildAndExpectException(new Entity(), input, tag, error);
-    }
-    
     private void buildAndExpectException(Entity entity, MockMarcxml input, 
             String tag, char code, String error) 
                     throws Exception {            
