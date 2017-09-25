@@ -4,6 +4,7 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -64,7 +65,7 @@ public class PhysicalDescriptionBuilder extends MarcxmlEntityBuilder {
         Entity entity = null;
         
         if (subfield.hasCode('a')) {
-            entity = new Entity();
+            entity = new Entity(Ld4lExtentType.EXTENT);
             entity.addAttribute(Ld4lDatatypeProp.LABEL, subfield.getTextValue());
             parent.addRelationship(Ld4lObjectProp.HAS_EXTENT, entity);
         }
