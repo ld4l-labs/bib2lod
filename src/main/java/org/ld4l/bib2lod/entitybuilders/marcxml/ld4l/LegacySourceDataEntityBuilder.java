@@ -1,15 +1,15 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
-import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 
 /**
- * Builds an entity used to store unparsed, unnormalized legacy data. May or
- * may not have a specific type assigned.
+ * Builds an entity used to store unparsed, unnormalized legacy data. Use
+ * when no specific type is assigned; if there is a specific type, use the
+ * builder for that type and add the datatype to the appropriate literal 
+ * value.
  */
 public class LegacySourceDataEntityBuilder extends MarcxmlEntityBuilder {
 
@@ -24,13 +24,7 @@ public class LegacySourceDataEntityBuilder extends MarcxmlEntityBuilder {
 
         Entity entity = new Entity();
         
-        entity.addAttribute(Ld4lDatatypeProp.LABEL, label, 
-                BibDatatype.LEGACY_SOURCE_DATA);
-        
-        Type type = params.getType();
-        if (type != null) {
-            entity.addType(type);
-        }
+        entity.addLegacySourceDataAttribute(Ld4lDatatypeProp.LABEL, label);
         
         return entity;
     }

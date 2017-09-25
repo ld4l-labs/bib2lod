@@ -49,14 +49,4 @@ public class LegacySourceDataEntityBuilderTest extends AbstractTestClass {
                 Ld4lDatatypeProp.LABEL).toLiteral());
     }
     
-    @Test
-    public void testType() throws Exception {
-        Type type = Ld4lActivityType.ACTIVITY;
-        BuildParams params = new BuildParams()
-                .setType(type)
-                .setValue("Legacy data entity");
-        Entity entity = builder.build(params);
-        Assert.assertTrue(entity.hasType(type));
-    }
-
 }
