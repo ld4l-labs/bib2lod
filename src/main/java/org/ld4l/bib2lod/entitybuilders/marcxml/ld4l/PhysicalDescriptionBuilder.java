@@ -54,13 +54,13 @@ public class PhysicalDescriptionBuilder extends MarcxmlEntityBuilder {
 
         switch (field.getTag()) {
         case "300": 
-            return convert_300();
+            return convert300();
         default:
             return null;
         }
     }
     
-    private Entity convert_300() {
+    private Entity convert300() {
         
         Entity entity = null;
         

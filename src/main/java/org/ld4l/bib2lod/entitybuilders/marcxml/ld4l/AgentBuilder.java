@@ -34,7 +34,9 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         
         Entity agent = buildAgent();
         
-        parent.addRelationship(relationship, agent);
+        if (agent != null) {
+            parent.addRelationship(relationship, agent);
+        }
         
         return agent;
     }

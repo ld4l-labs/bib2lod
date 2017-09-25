@@ -21,11 +21,11 @@ public class ManufacturerActivityBuilder extends ProviderActivityBuilder {
         
         // Not sure if any other tags apply
         if (field.getTag().equals("260")) {
-            convert_260();
+            convert260();
         }   
     }
     
-    private void convert_260() 
+    private void convert260() 
             throws EntityBuilderException {
         
         MarcxmlDataField datafield = (MarcxmlDataField) field;

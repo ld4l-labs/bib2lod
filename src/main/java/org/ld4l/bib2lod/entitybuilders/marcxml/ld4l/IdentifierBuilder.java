@@ -162,7 +162,7 @@ public class IdentifierBuilder extends MarcxmlEntityBuilder {
                 (MarcxmlSubfield) params.getSubfields().get(0);
  
         if (field.getTag().equals("035")) {
-            identifier = convert_035(subfield);
+            identifier = convert035(subfield);
         }
         
         return identifier;
@@ -172,7 +172,7 @@ public class IdentifierBuilder extends MarcxmlEntityBuilder {
      * Builds an identifier from field 035. Returns null if the identifier 
      * value is already attached to the resource's AdminMetadata object.
      */
-    private Entity convert_035(MarcxmlSubfield subfield) 
+    private Entity convert035(MarcxmlSubfield subfield) 
             throws EntityBuilderException {
         
         Entity identifier;

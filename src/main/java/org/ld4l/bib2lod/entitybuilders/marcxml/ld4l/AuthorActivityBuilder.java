@@ -25,7 +25,7 @@ public class AuthorActivityBuilder extends ActivityBuilder {
         
         switch (field.getTag()) {
         case "100": 
-            convert_100();
+            convert100();
             break;
         default:
             break;
@@ -33,7 +33,7 @@ public class AuthorActivityBuilder extends ActivityBuilder {
     }
         
  
-    private void convert_100() throws EntityBuilderException {
+    private void convert100() throws EntityBuilderException {
 
         this.activity = new Entity(TYPE);
         EntityBuilder builder = getBuilder(Ld4lAgentType.defaultType());
