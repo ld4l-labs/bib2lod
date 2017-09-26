@@ -81,11 +81,6 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         }        
         this.field = (MarcxmlTaggedField) field;
         
-        this.type = (Ld4lActivityType) params.getType();
-        if (type != null && ! (type instanceof Ld4lActivityType)) {
-            throw new EntityBuilderException("Invalid type.");
-        }
-        
         /* 
          * This needs to be a list of MarcxmlSubfields in order
          * to get the codes, but in BuildParams it's just a list of 
