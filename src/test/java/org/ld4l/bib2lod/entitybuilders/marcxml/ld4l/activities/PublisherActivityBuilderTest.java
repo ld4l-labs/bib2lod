@@ -82,15 +82,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
             "<datafield tag='245'><subfield code='a'>text</subfield></datafield>";
 
 
-    private static BaseMockBib2LodObjectFactory factory;
     private PublisherActivityBuilder builder;
-    
-    @BeforeClass
-    public static void setUpOnce() throws Exception {
-        factory = new BaseMockBib2LodObjectFactory();  
-        factory.addInstance(EntityBuilderFactory.class, 
-                new MarcxmlToLd4lEntityBuilderFactory());
-    }
     
     @Before
     public void setUp() {       
