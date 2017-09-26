@@ -44,17 +44,10 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // The tests
     // ---------------------------------------------------------------------
+   
     
     @Test
-    public void testActivityTypeSpecified_100() throws Exception {
-        Entity activity = buildActivity(_100_AUTHOR, 
-                Ld4lActivityType.AUTHOR_ACTIVITY);
-        Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
-                activity.getType());
-    }
-    
-    @Test
-    public void testActivityTypeNotSpecified_100() throws Exception {
+    public void testActivityType_100() throws Exception {
         Entity activity = buildActivity(_100_AUTHOR);
         Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
                 activity.getType());
