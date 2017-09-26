@@ -12,6 +12,7 @@ import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.WorkBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -31,9 +32,15 @@ public class ActivityBuilderTest extends AbstractTestClass {
             .addDatafield("260", " ", " ").addSubfield("b", "Grune & Stratton,")
             .lock();
 
+    public static final MockMarcxml _100_AUTHOR = MINIMAL_RECORD.openCopy()
+            .findDatafield("245").findSubfield("a").setValue("full title")
+            .addDatafield("100", "0", " ").addSubfield("a", "Manya K'Omalowete a Djonga,")
+            .lock();
+
     private static BaseMockBib2LodObjectFactory factory;
     private PublisherActivityBuilder activityBuilder;  
     private InstanceBuilder instanceBuilder;
+    private WorkBuilder workBuilder;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -46,6 +53,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
     public void setUp() {       
         this.activityBuilder = new PublisherActivityBuilder();  
         this.instanceBuilder = new InstanceBuilder();
+        this.workBuilder = new WorkBuilder();
     }   
     
     // ---------------------------------------------------------------------
@@ -93,9 +101,15 @@ public class ActivityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testRelationshipToBibResource() throws Exception {
+    public void testRelationshipToInstance() throws Exception {
         Entity instance = buildInstance(MINIMAL_RECORD);
         Assert.assertNotNull(instance.getChild(Ld4lObjectProp.HAS_ACTIVITY));
+    }
+    
+    @Test
+    public void testRelationshipToWork() throws Exception {
+        Entity work = buildWork(_100_AUTHOR);
+        Assert.assertNotNull(work.getChild(Ld4lObjectProp.HAS_ACTIVITY));
     }
 
     
@@ -116,5 +130,12 @@ public class ActivityBuilderTest extends AbstractTestClass {
     private Entity buildInstance(MockMarcxml input) throws Exception {
         return instanceBuilder.build(
                 new BuildParams().setRecord(input.toRecord()));
+    }
+    
+    private Entity buildWork(MockMarcxml input) throws Exception {
+        BuildParams params = new BuildParams()
+                .setParent(new Entity())
+                .setRecord(input.toRecord());        
+        return workBuilder.build(params);
     }
 }
