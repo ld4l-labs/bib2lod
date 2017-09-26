@@ -21,9 +21,6 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
     
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    private static final Ld4lActivityType DEFAULT_TYPE = 
-            (Ld4lActivityType) Ld4lActivityType.defaultType();
 
     protected Entity activity;
     protected Entity parent;
@@ -85,12 +82,9 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         this.field = (MarcxmlTaggedField) field;
         
         this.type = (Ld4lActivityType) params.getType();
-        if (type == null) {
-            type = DEFAULT_TYPE;
-        } else if (! (type instanceof Ld4lActivityType)) {
+        if (type != null && ! (type instanceof Ld4lActivityType)) {
             throw new EntityBuilderException("Invalid type.");
         }
-
         
         /* 
          * This needs to be a list of MarcxmlSubfields in order
