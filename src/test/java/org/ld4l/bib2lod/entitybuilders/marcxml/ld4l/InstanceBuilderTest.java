@@ -199,7 +199,28 @@ public class InstanceBuilderTest extends AbstractTestClass {
         Entity instance = buildInstance(_260_ONE_FIELD_TWO_PUBLISHERS); 
         Assert.assertEquals(3,
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY).size());    
-    }     
+    }    
+    
+    
+    // TODO
+//  public void testThreePublishers() throws Exception {
+//      Entity activity = buildActivity(TWO_260, "260")
+//      BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
+//      Entity instance = instanceBuilder.build(params);   
+//      Assert.assertEquals(3, 
+//              instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+//                      Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+//  }
+  
+//  @Test
+//  public void testCurrentPublishers_008_260() throws Exception {
+//      BuildParams params = new BuildParams() 
+//              .setRecord(_260_CURRENT_PUBLISHER.toRecord());
+//      Entity instance = instanceBuilder.build(params);   
+//      Assert.assertEquals(2, 
+//              instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+//                      Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+//  }
     
     // ---------------------------------------------------------------------
     // Helper methods

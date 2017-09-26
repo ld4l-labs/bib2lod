@@ -2,6 +2,9 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 
 import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Assert;
@@ -14,13 +17,15 @@ import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.RecordField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
@@ -78,7 +83,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
 
 
     private static BaseMockBib2LodObjectFactory factory;
-    private InstanceBuilder instanceBuilder;
+    private PublisherActivityBuilder builder;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -89,7 +94,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() {       
-        this.instanceBuilder = new InstanceBuilder();              
+        this.builder = new PublisherActivityBuilder();         
     }
     
     // ---------------------------------------------------------------------
@@ -98,14 +103,14 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void testPublisherStatus_008() throws Exception {
-        Entity activity = buildActivity();
+        Entity activity = buildActivity("008");
         Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
                 activity.getExternal(Ld4lObjectProp.HAS_STATUS));        
     }
     
     @Test
     public void testPublisherDate_008() throws Exception {
-        Entity activity = buildActivity();
+        Entity activity = buildActivity("008");
         Attribute date = activity.getAttribute(Ld4lDatatypeProp.DATE);
         Literal literal = ResourceFactory.createTypedLiteral("1957",
                 EdtfType.getRdfDatatype());
@@ -114,21 +119,21 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void testTwoCharPubLocation_008() throws Exception {
-        Entity activity = buildActivity(_008_TWO_CHAR_PUB_LOCATION); 
+        Entity activity = buildActivity(_008_TWO_CHAR_PUB_LOCATION, "008"); 
         Assert.assertEquals("http://id.loc.gov/vocabulary/countries/ne", 
                 activity.getExternal(Ld4lObjectProp.HAS_LOCATION));
     }
     
     @Test
     public void testPublisherLocation_008() throws Exception {
-        Entity activity = buildActivity();
+        Entity activity = buildActivity("008");
         Assert.assertEquals("http://id.loc.gov/vocabulary/countries/nyu", 
                 activity.getExternal(Ld4lObjectProp.HAS_LOCATION));
     }
 
     @Test
     public void testLocation_008() throws Exception {       
-        Entity activity = buildActivity(); 
+        Entity activity = buildActivity("008"); 
         String locationUri = 
                 activity.getExternal(Ld4lObjectProp.HAS_LOCATION);
         Assert.assertEquals(
@@ -137,12 +142,12 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
 
     @Test
     public void noLocation_008_Succeeds() throws Exception {
-        buildActivity(_008_NO_LOCATION); 
+        buildActivity(_008_NO_LOCATION, "008"); 
     }
     
     @Test
     public void testActivityDate_008() throws Exception {
-        Entity activity = buildActivity(); 
+        Entity activity = buildActivity("008"); 
         Attribute attribute = activity.getAttribute(Ld4lDatatypeProp.DATE);
         Literal literal = ResourceFactory.createTypedLiteral(
                 "1957", BibDatatype.EDTF.rdfType());
@@ -151,40 +156,19 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     
     @Test
     public void blankDate_008_Succeeds() throws Exception {
-        buildActivity(_008_NO_DATE); 
+        buildActivity(_008_NO_DATE, "008"); 
     }
     
     @Test
     public void testCurrentPublisher_008() throws Exception {
-       Entity activity = buildActivity();
+       Entity activity = buildActivity("008");
        Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
                activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
-    @Test
-    public void testThreePublishers() throws Exception {
-        BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
-        Entity instance = instanceBuilder.build(params);   
-        Assert.assertEquals(3, 
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
-                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
-    }
-    
-    @Test
-    public void testCurrentPublishers_008_260() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(_260_CURRENT_PUBLISHER.toRecord());
-        Entity instance = instanceBuilder.build(params);   
-        Assert.assertEquals(2, 
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
-                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
-    }
-    
     public void testCurrentPublisher_260_ind1Value3() 
             throws Exception {
-        Entity instance = buildInstance(_260_CURRENT_PUBLISHER); 
-        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY))
-                .get(1);
+        Entity activity = buildActivity(_260_CURRENT_PUBLISHER, "260");
         Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
                 activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
@@ -192,9 +176,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     @Test
     public void testCurrentPublisherStatus_ind1ValueEmpty() 
             throws Exception {
-        Entity instance = buildInstance(_260_CURRENT_PUBLISHER); 
-        Entity activity = (instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY))
-                .get(1);        
+        Entity activity = buildActivity(_260_CURRENT_PUBLISHER, "260");     
         Assert.assertEquals(Ld4lNamedIndividual.CURRENT.uri(), 
                 activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
@@ -204,26 +186,36 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     // Helper methods
     // ---------------------------------------------------------------------
 
-    private Entity buildActivity() throws Exception {
+    private Entity buildActivity(String tag) 
+            throws Exception {
+        return buildActivity(MINIMAL_RECORD, tag, null);
+    }
+    
+    private Entity buildActivity(MockMarcxml input, String tag) 
+            throws Exception {
+        return buildActivity(input, tag, null);
+    }
+    
+    private Entity buildActivity(MockMarcxml input, String tag, 
+            List<Character> codes) throws Exception {
+        MarcxmlRecord record = input.toRecord();
+        MarcxmlTaggedField field = record.getTaggedField(tag);  
+
         BuildParams params = new BuildParams()
-                .setRecord(MINIMAL_RECORD.toRecord());
-        return buildActivity(params);
+                .setParent(new Entity())
+                .setRecord(record)
+                .setField(field);
+        
+        if (field instanceof MarcxmlDataField && codes != null) {
+            List<RecordField> subfields = new ArrayList<>();
+            for (char code : codes) {
+                subfields.add(((MarcxmlDataField)field).getSubfield(code));
+            }
+            params.setSubfields(subfields);
+        }
+        
+        return builder.build(params);
     }
 
-    private Entity buildActivity(MockMarcxml input) throws Exception {
-        BuildParams params = new BuildParams().setRecord(input.toRecord());
-        return buildActivity(params);         
-    }   
-    
-    private Entity buildActivity(BuildParams params) 
-            throws Exception { 
-        Entity instance = instanceBuilder.build(params);
-        return instance.getChild(Ld4lObjectProp.HAS_ACTIVITY); 
-    }
-    
-    private Entity buildInstance(MockMarcxml input) throws Exception {
-        BuildParams params = new BuildParams().setRecord(input.toRecord());
-        return instanceBuilder.build(params);
-    }
     
 }
