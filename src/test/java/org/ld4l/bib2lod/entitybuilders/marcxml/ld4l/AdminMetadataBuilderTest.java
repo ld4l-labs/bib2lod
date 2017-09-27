@@ -199,9 +199,17 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
                 "Invalid value for control field 005");
     }
     
+    @Test
+    public void testRelationshipToInstance() throws Exception {
+        Entity instance = new InstanceEntity();
+        Entity adminMetadata = buildAdminMetadata(instance, TEST_RECORD);
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_ADMIN_METADATA, adminMetadata));
+    }
+    
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
+
 
     private Entity buildAdminMetadata(Entity entity, MockMarcxml input) 
             throws Exception {

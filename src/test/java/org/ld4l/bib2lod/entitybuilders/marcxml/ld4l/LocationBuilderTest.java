@@ -12,12 +12,8 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
@@ -48,8 +44,8 @@ public class LocationBuilderTest extends AbstractTestClass {
             "<subfield code='b'>Leiden :</subfield>";
     
     private static BaseMockBib2LodObjectFactory factory;
-    private InstanceBuilder instanceBuilder;
     private LocationBuilder locationBuilder;
+    private InstanceBuilder instanceBuilder;
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -59,9 +55,9 @@ public class LocationBuilderTest extends AbstractTestClass {
     }
     
     @Before
-    public void setUp() {       
-        this.instanceBuilder = new InstanceBuilder();   
+    public void setUp() {         
         this.locationBuilder = new LocationBuilder();
+        this.instanceBuilder = new InstanceBuilder();
     }
     
     // ---------------------------------------------------------------------
@@ -85,45 +81,15 @@ public class LocationBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void invalidType_ThrowsException() throws Exception {
-        expectException(EntityBuilderException.class, 
-                "Invalid location type");  
-        BuildParams params = new BuildParams()
-                .setType(Ld4lInstanceType.INSTANCE)
-                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
-                        
-                .setParent(new Entity());
-        locationBuilder.build(params);
-    }
-    
-    @Test
-    public void testTypeFromBuildParam() throws Exception {
-        Type type = Ld4lLocationType.LOCATION;
-        BuildParams params = new BuildParams()
-                .setType(type)
-                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
-                        
-                .setParent(new Entity());
-        Entity location = locationBuilder.build(params);
-        Assert.assertTrue(location.hasType(type));
-    }
-    
-    @Test
     public void testNameFromBuildParam() throws Exception {
         String name = "Leiden";
-        BuildParams params = new BuildParams()
-                .setValue(name)
-                .setParent(new Entity());
-        Entity location = locationBuilder.build(params);
+        Entity location = buildLocation(name);
         Assert.assertEquals(name, location.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test
     public void testNameFromSubfield() throws Exception {
-        BuildParams params = new BuildParams()
-                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
-                .setParent(new Entity());
-        Entity location = locationBuilder.build(params);
+        Entity location = buildLocation(buildSubfieldFromString(NAME_SUBFIELD));
         Assert.assertEquals("Leiden", 
                 location.getValue(Ld4lDatatypeProp.NAME));
     }
@@ -155,15 +121,46 @@ public class LocationBuilderTest extends AbstractTestClass {
                     activity2.getChild(Ld4lObjectProp.HAS_LOCATION));
     }
     
+    @Test
+    public void testRelationshipToResource() throws Exception {
+        Entity activity = new Entity();
+        Entity location = buildLocation(activity, "Leiden");
+        Assert.assertTrue(activity.hasChild(Ld4lObjectProp.HAS_LOCATION, location));
+    }
     
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
 
   
-    private MarcxmlSubfield buildSubfieldFromString(
-            String element) throws RecordFieldException {                   
+    private MarcxmlSubfield buildSubfieldFromString(String element) 
+            throws Exception {                   
         return new MarcxmlSubfield(
                 XmlTestUtils.buildElementFromString(element));
     } 
+    
+    private Entity buildLocation(MarcxmlSubfield subfield) 
+            throws Exception {
+        return buildLocation(new Entity(), subfield);
+    }
+    
+    private Entity buildLocation(Entity entity, MarcxmlSubfield subfield) 
+            throws Exception {
+        BuildParams params = new BuildParams()
+                .setParent(entity)
+                .setSubfield(subfield);   
+        return locationBuilder.build(params);
+    }
+    
+    private Entity buildLocation(String value) throws Exception {
+        return buildLocation(new Entity(), value);
+    }
+    
+    private Entity buildLocation(Entity entity, String value) 
+            throws Exception {
+        BuildParams params = new BuildParams()
+                .setParent(entity)
+                .setValue(value);   
+        return locationBuilder.build(params);
+    }
 }

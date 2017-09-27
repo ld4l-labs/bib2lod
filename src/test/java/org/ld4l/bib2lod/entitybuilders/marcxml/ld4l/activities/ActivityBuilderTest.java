@@ -10,9 +10,7 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.WorkBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -38,9 +36,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
             .lock();
 
     private static BaseMockBib2LodObjectFactory factory;
-    private PublisherActivityBuilder activityBuilder;  
-    private InstanceBuilder instanceBuilder;
-    private WorkBuilder workBuilder;
+    private PublisherActivityBuilder builder;  
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -51,9 +47,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() {       
-        this.activityBuilder = new PublisherActivityBuilder();  
-        this.instanceBuilder = new InstanceBuilder();
-        this.workBuilder = new WorkBuilder();
+        this.builder = new PublisherActivityBuilder();  
     }   
     
     // ---------------------------------------------------------------------
@@ -66,7 +60,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 "A parent entity is required");
         BuildParams params = new BuildParams()
                 .setParent(null);        
-        activityBuilder.build(params);        
+        builder.build(params);        
     }
     
     @Test
@@ -77,7 +71,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 .setParent(new Entity())
                 .setRecord(null)
                 .setField(null);
-        activityBuilder.build(params);        
+        builder.build(params);        
     }
 
     @Test
@@ -90,7 +84,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 .setField(new MarcxmlSubfield(
                         XmlTestUtils.buildElementFromString(
                                 "<subfield code='a'>test</subfield>")));
-        activityBuilder.build(params);        
+        builder.build(params);        
     }
     
     @Test 
@@ -101,41 +95,29 @@ public class ActivityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testRelationshipToInstance() throws Exception {
-        Entity instance = buildInstance(MINIMAL_RECORD);
-        Assert.assertNotNull(instance.getChild(Ld4lObjectProp.HAS_ACTIVITY));
-    }
-    
-    @Test
-    public void testRelationshipToWork() throws Exception {
-        Entity work = buildWork(_100_AUTHOR);
-        Assert.assertNotNull(work.getChild(Ld4lObjectProp.HAS_ACTIVITY));
+    public void testRelationshipToResource() throws Exception {
+        Entity instance = new Entity();
+        Entity activity = buildActivity(instance, _260_PUBLISHER, "260");
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_ACTIVITY, activity));
     }
 
-    
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
          
     private Entity buildActivity(MockMarcxml input, String tag) 
             throws Exception {
+        return buildActivity(new Entity(), input, tag);
+    }
+    
+    private Entity buildActivity(Entity parent, MockMarcxml input, String tag) 
+            throws Exception {
         MarcxmlRecord record = input.toRecord(); 
         BuildParams params = new BuildParams()
-                .setParent(new Entity())
+                .setParent(parent)
                 .setRecord(record)
                 .setField(record.getDataField(tag));
-        return activityBuilder.build(params);
+        return builder.build(params);
     }
-    
-    private Entity buildInstance(MockMarcxml input) throws Exception {
-        return instanceBuilder.build(
-                new BuildParams().setRecord(input.toRecord()));
-    }
-    
-    private Entity buildWork(MockMarcxml input) throws Exception {
-        BuildParams params = new BuildParams()
-                .setParent(new Entity())
-                .setRecord(input.toRecord());        
-        return workBuilder.build(params);
-    }
+        
 }

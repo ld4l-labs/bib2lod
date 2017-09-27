@@ -4,19 +4,15 @@ import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
-import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
@@ -33,22 +29,12 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
             .deleteSubfield("c")
             .addSubfield("a", "123 p.")
             .lock();
-    
-    private static BaseMockBib2LodObjectFactory factory;
-    private InstanceBuilder instanceBuilder;
-    private PhysicalDescriptionBuilder physDescrBuilder;
-    
-    @BeforeClass
-    public static void setUpOnce() throws Exception {
-        factory = new BaseMockBib2LodObjectFactory();  
-        factory.addInstance(EntityBuilderFactory.class, 
-                new MarcxmlToLd4lEntityBuilderFactory());
-    }
+
+    private PhysicalDescriptionBuilder builder;
     
     @Before
-    public void setUp() {       
-        this.instanceBuilder = new InstanceBuilder();    
-        this.physDescrBuilder = new PhysicalDescriptionBuilder();
+    public void setUp() {         
+        this.builder = new PhysicalDescriptionBuilder();
     }
         
     // ---------------------------------------------------------------------
@@ -56,19 +42,16 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
       
     @Test
-    public void no300_Succeeds() throws Exception {
-        buildInstance(MockMarcxml.MINIMAL_RECORD);
-    }
-    
-    @Test
     public void no300$a_Succeeds() throws Exception {
-        buildInstance(_300_NO_$a);
+        buildPhysicalDescription(_300_NO_$a, Ld4lExtentType.EXTENT, "300", 'c');
     }
     
     @Test
     public void testInstanceHasExtent() throws Exception {
-        Entity instance = buildInstance(_300_EXTENT);
-        Assert.assertNotNull(instance.getChild(Ld4lObjectProp.HAS_EXTENT));
+        Entity instance = new Entity();
+        Entity extent = buildPhysicalDescription(_300_EXTENT, 
+                Ld4lExtentType.EXTENT, "300", 'a', instance);
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_EXTENT, extent));
     }
     
     @Test
@@ -89,20 +72,19 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
-    private Entity buildInstance(MockMarcxml input) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(input.toRecord());  
-        return instanceBuilder.build(params);
+
+    private Entity buildPhysicalDescription(MockMarcxml input, Type type, 
+            String tag, char code) throws Exception {
+        return buildPhysicalDescription(input, type, tag, code, new Entity());
     }
     
     private Entity buildPhysicalDescription(MockMarcxml input, Type type, 
-            String tag, char code) throws Exception {
+            String tag, char code, Entity parent) throws Exception {
         MarcxmlDataField field = input.toRecord().getDataField(tag);
         BuildParams params = new BuildParams()
-                .setParent(new InstanceEntity())
+                .setParent(parent)
                 .setField(field)
                 .setSubfield(field.getSubfield(code));
-        return physDescrBuilder.build(params);
+        return builder.build(params);
     }
 }

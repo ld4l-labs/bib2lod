@@ -11,7 +11,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.AuthorActivityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -67,15 +66,6 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
             throws Exception {
         BuildParams params = new BuildParams() 
                 .setField(record.toRecord().getDataField("100"))
-                .setParent(new Entity());
-        return builder.build(params);         
-    }
-    
-    private Entity buildActivity(
-            MockMarcxml record, Type type) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setField(record.toRecord().getDataField("100"))
-                .setType(type)
                 .setParent(new Entity());
         return builder.build(params);         
     }

@@ -1,5 +1,7 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +35,7 @@ public class ItemBuilderTest extends AbstractTestClass {
         expectException(EntityBuilderException.class, 
                 "A related instance is required");
         BuildParams params = new BuildParams() 
-                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord());  
+                .setRecord(MINIMAL_RECORD.toRecord());  
         builder.build(params);        
     }
     
@@ -48,21 +50,32 @@ public class ItemBuilderTest extends AbstractTestClass {
     
     @Test 
     public void testItemType() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord())
-                .setParent(new Entity()); 
-        Entity item = builder.build(params);     
+        Entity item = buildItem(MINIMAL_RECORD);     
         Assert.assertTrue(item.hasType(Ld4lItemType.ITEM));
     }
     
     @Test 
     public void testInstanceHasItem() throws Exception {
         Entity instance = new InstanceEntity();
-        BuildParams params = new BuildParams() 
-                .setRecord(MockMarcxml.MINIMAL_RECORD.toRecord())
-                .setParent(instance); 
-        Entity item = builder.build(params);   
+        Entity item = buildItem(instance, MINIMAL_RECORD);   
         Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_ITEM, item));
-    }    
+    }   
+    
+    // ---------------------------------------------------------------------
+    // Helper methods
+    // ---------------------------------------------------------------------
+         
+    private Entity buildItem(MockMarcxml input) 
+            throws Exception {
+        return buildItem(new Entity(), input);
+    }
+    
+    private Entity buildItem(Entity parent, MockMarcxml input) 
+            throws Exception {
+        BuildParams params = new BuildParams()
+                .setParent(parent)
+                .setRecord(input.toRecord());
+        return builder.build(params);
+    }
     
 }

@@ -137,6 +137,14 @@ public class TitleBuilderTest extends AbstractTestClass {
         buildTitleAndExpectValue(TITLE_WITH_TWO_SUBTITLES, 
                 "main title : subtitle one : subtitle two");     
     }
+    
+    @Test
+    public void testRelationshipToParent() throws Exception {
+        Entity bibResource = new Entity();
+        Entity title = buildTitle(MINIMAL_RECORD, bibResource);
+        Assert.assertTrue(bibResource.hasChild(
+                Ld4lObjectProp.HAS_PREFERRED_TITLE, title));        
+    }
 
     // ---------------------------------------------------------------------
     // Helper methods
@@ -144,8 +152,13 @@ public class TitleBuilderTest extends AbstractTestClass {
     
     private Entity buildTitle(MockMarcxml marcxml) 
             throws Exception {
+        return buildTitle(marcxml, new Entity());
+    }
+    
+    private Entity buildTitle(MockMarcxml marcxml, Entity entity) 
+            throws Exception {
         BuildParams params = new BuildParams()
-                .setParent(new Entity())
+                .setParent(entity)
                 .setRecord(marcxml.toRecord());        
         return builder.build(params);   
     }

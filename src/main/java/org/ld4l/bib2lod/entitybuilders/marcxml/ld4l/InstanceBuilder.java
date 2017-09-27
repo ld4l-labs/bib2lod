@@ -119,7 +119,6 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     
     private void buildPhysicalDescriptions() throws EntityBuilderException {
         
-        // TODO Not sure yet if there are others. 
         buildExtent();
     
     }

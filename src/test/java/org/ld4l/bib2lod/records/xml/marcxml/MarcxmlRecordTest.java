@@ -2,6 +2,8 @@
 
 package org.ld4l.bib2lod.records.xml.marcxml;
 
+import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -140,7 +142,7 @@ public class MarcxmlRecordTest extends AbstractTestClass {
     @Test
     public void validRecord_Succeeds() throws Exception {
         // No exception
-        buildRecord(MockMarcxml.MINIMAL_RECORD);
+        buildRecord(MINIMAL_RECORD);
     }
     
     // ---------------------------------------------------------------------

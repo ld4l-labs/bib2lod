@@ -207,6 +207,13 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         Entity identifier = buildIdentifier(_035_NO_ORG_CODE, "035", 'a');
         Assert.assertEquals("1345399", identifier.getValue(Ld4lDatatypeProp.VALUE));      
     }
+    
+    @Test
+    public void testRelationshipToResource() throws Exception {
+        Entity instance = new Entity();
+        Entity identifier = buildIdentifier(instance, _035_NIC, "035", 'a');
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.IDENTIFIED_BY, identifier));
+    }
 
     
     // ---------------------------------------------------------------------

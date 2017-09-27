@@ -74,6 +74,19 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("c", "date2")
             .lock();
     
+    public static final MockMarcxml TWO_260 = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Lugduni Batavorum :")
+            .addSubfield("b", "E.J. Brill")
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Leiden :")
+            .addSubfield("b", "E.J. Brill")
+            .lock();
+    
+    public static final MockMarcxml _260_CURRENT_PUBLISHER = _260_PUBLISHER.openCopy()
+            .findDatafield("260").setInd1("3").lock();
+    
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder builder;   
     
@@ -202,25 +215,24 @@ public class InstanceBuilderTest extends AbstractTestClass {
     }    
     
     
-    // TODO
-//  public void testThreePublishers() throws Exception {
-//      Entity activity = buildActivity(TWO_260, "260")
-//      BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
-//      Entity instance = instanceBuilder.build(params);   
-//      Assert.assertEquals(3, 
-//              instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
-//                      Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
-//  }
+    @Test
+    public void testThreePublishers() throws Exception {
+        BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
+        Entity instance = builder.build(params);   
+        Assert.assertEquals(3, 
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+    }
   
-//  @Test
-//  public void testCurrentPublishers_008_260() throws Exception {
-//      BuildParams params = new BuildParams() 
-//              .setRecord(_260_CURRENT_PUBLISHER.toRecord());
-//      Entity instance = instanceBuilder.build(params);   
-//      Assert.assertEquals(2, 
-//              instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
-//                      Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
-//  }
+    @Test
+    public void testCurrentPublishers_008_260() throws Exception {
+        BuildParams params = new BuildParams() 
+                .setRecord(_260_CURRENT_PUBLISHER.toRecord());
+        Entity instance = builder.build(params);   
+        Assert.assertEquals(2, 
+              instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+                      Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+  }
     
     // ---------------------------------------------------------------------
     // Helper methods
