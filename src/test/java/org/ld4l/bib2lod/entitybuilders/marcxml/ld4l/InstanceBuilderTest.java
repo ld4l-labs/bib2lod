@@ -37,15 +37,13 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("b", "Grune & Stratton,")
             .addSubfield("c", "1957.")
             .lock();
-
-    public static final MockMarcxml _260_PUBLISHER_AND_MANUFACTURER = MINIMAL_RECORD.openCopy()
-            .findDatafield("245").findSubfield("a").setValue("full title")
-            .addDatafield("260", " ", " ")
-            .addSubfield("a", "Springfield, Va. :")
-            .addSubfield("b", "National Technical Information Service,")
-            .addSubfield("c", "1974-")
-            .addSubfield("e", "(Oak Ridge, Tenn. :")
-            .addSubfield("f", "Oak Ridge National Laboratory ")
+    
+    public static final MockMarcxml _260_ONE_FIELD_TWO_PUBLISHERS = _260_PUBLISHER.openCopy()
+            .replaceDatafield("260", "2", " ")
+            .addSubfield("a", "place1")
+            .addSubfield("c", "date1")
+            .addSubfield("b", "name2")
+            .addSubfield("c", "date2")
             .lock();
     
     public static final MockMarcxml _260_TWO_FIELDS_TWO_PUBLISHERS = MINIMAL_RECORD.openCopy()
@@ -57,8 +55,18 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("a", "place1")
             .addSubfield("b", "name2")
             .addSubfield("c", "date2")
-            .lock();        
-            
+            .lock();       
+
+    public static final MockMarcxml _260_PUBLISHER_AND_MANUFACTURER = MINIMAL_RECORD.openCopy()
+            .findDatafield("245").findSubfield("a").setValue("full title")
+            .addDatafield("260", " ", " ")
+            .addSubfield("a", "Springfield, Va. :")
+            .addSubfield("b", "National Technical Information Service,")
+            .addSubfield("c", "1974-")
+            .addSubfield("e", "(Oak Ridge, Tenn. :")
+            .addSubfield("f", "Oak Ridge National Laboratory ")
+            .lock();
+
     public static final MockMarcxml _260_TWO_PUBLISHERS_AND_MANUFACTURER = 
             _260_TWO_FIELDS_TWO_PUBLISHERS.openCopy()
             .findDatafield("260", 0)
@@ -66,26 +74,13 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addSubfield("f", "name1")
             .lock();
     
-    public static final MockMarcxml _260_ONE_FIELD_TWO_PUBLISHERS = _260_PUBLISHER.openCopy()
-            .replaceDatafield("260", "2", " ")
-            .addSubfield("a", "place1")
-            .addSubfield("c", "date1")
-            .addSubfield("b", "name2")
-            .addSubfield("c", "date2")
-            .lock();
-    
-    public static final MockMarcxml TWO_260 = MINIMAL_RECORD.openCopy()
-            .addControlfield("001", "102063")
-            .addDatafield("260", "3", " ")
-            .addSubfield("a", "Lugduni Batavorum :")
-            .addSubfield("b", "E.J. Brill")
-            .addDatafield("260", "3", " ")
-            .addSubfield("a", "Leiden :")
-            .addSubfield("b", "E.J. Brill")
-            .lock();
-    
     public static final MockMarcxml _260_CURRENT_PUBLISHER = _260_PUBLISHER.openCopy()
             .findDatafield("260").setInd1("3").lock();
+    
+    public static final MockMarcxml MULTIPLE_035 = MINIMAL_RECORD.openCopy()
+            .addDatafield("035", " ", " ").addSubfield("a", "(NIC)notisAAL3258")
+            .addDatafield("035", " ", " ").addSubfield("a", "(OCoLC)1345399")
+            .lock();
     
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder builder;   
@@ -120,6 +115,14 @@ public class InstanceBuilderTest extends AbstractTestClass {
         buildInstance(MINIMAL_RECORD);
     }
     
+    @Test
+    public void testMultipleIdentifiers_035() throws Exception {
+        Entity instance = 
+                buildInstance(MULTIPLE_035);  
+        Assert.assertEquals(2, 
+                instance.getChildren(Ld4lObjectProp.IDENTIFIED_BY).size());
+    }
+    
     @Test 
     public void testResponsibilityStatement() throws Exception {
         Entity instance = 
@@ -142,6 +145,16 @@ public class InstanceBuilderTest extends AbstractTestClass {
         Entity instance = buildInstance(_260_TWO_FIELDS_TWO_PUBLISHERS); 
         Assert.assertEquals(2, instance.getAttributes(
                 Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());   
+    }
+    
+    public void testTwoFieldsTwoPublishers_260() throws Exception {
+        BuildParams params = new BuildParams().setRecord(
+                _260_TWO_FIELDS_TWO_PUBLISHERS.toRecord());
+        Entity instance = builder.build(params);  
+        // Third publisher is from 008
+        Assert.assertEquals(3, 
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
+                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
     }
 
     @Test
@@ -166,6 +179,14 @@ public class InstanceBuilderTest extends AbstractTestClass {
         Assert.assertEquals(1, instance.getAttributes(
                 Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());   
     }
+ 
+    @Test
+    public void testOneFieldTwoPublishers_260() throws Exception {
+        Entity instance = buildInstance(_260_ONE_FIELD_TWO_PUBLISHERS); 
+        // Third publisher is from 008
+        Assert.assertEquals(3, instance.getChildren(
+                Ld4lObjectProp.HAS_ACTIVITY).size());   
+    }
     
     @Test
     public void testPasOneFieldTwoPublishersValue_260() throws Exception {
@@ -182,13 +203,15 @@ public class InstanceBuilderTest extends AbstractTestClass {
                 Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());
     }
     
-    @Test 
-    public void testPasTwoPublishersAndManufacturer_260() throws Exception {
-        Entity instance = buildInstance(_260_TWO_PUBLISHERS_AND_MANUFACTURER);
-        Assert.assertEquals(3, instance.getAttributes(
-                Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());
-    }
-
+    @Test
+    public void testPublisherWithhManufacturer() throws Exception {
+        Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
+        List<Entity> activities = 
+                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
+        Assert.assertEquals(Ld4lActivityType.PUBLISHER_ACTIVITY,
+                activities.get(0).getType());     
+    } 
+    
     @Test
     public void testManufacturerWithPublisher() throws Exception {
         Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
@@ -198,32 +221,21 @@ public class InstanceBuilderTest extends AbstractTestClass {
                 activities.get(2).getType());     
     }    
     
-    @Test
-    public void testPublisherWithManufacturer() throws Exception {
-        Entity instance = buildInstance(_260_PUBLISHER_AND_MANUFACTURER); 
-        List<Entity> activities = 
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
-        Assert.assertEquals(Ld4lActivityType.PUBLISHER_ACTIVITY,
-                activities.get(0).getType());     
-    }   
-    
-    @Test
-    public void testTwoPublishers_260() throws Exception {
-        Entity instance = buildInstance(_260_ONE_FIELD_TWO_PUBLISHERS); 
-        Assert.assertEquals(3,
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY).size());    
-    }    
-    
-    
-    @Test
-    public void testThreePublishers() throws Exception {
-        BuildParams params = new BuildParams().setRecord(TWO_260.toRecord());
-        Entity instance = builder.build(params);   
-        Assert.assertEquals(3, 
-                instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
-                        Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+    @Test 
+    public void testPasTwoPublishersAndManufacturer_260() throws Exception {
+        Entity instance = buildInstance(_260_TWO_PUBLISHERS_AND_MANUFACTURER);
+        Assert.assertEquals(3, instance.getAttributes(
+                Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT).size());
     }
-  
+
+    @Test 
+    public void testTwoPublishersAndManufacturer_260() throws Exception {
+        Entity instance = buildInstance(_260_TWO_PUBLISHERS_AND_MANUFACTURER);
+        // Third publisher is from 008
+        Assert.assertEquals(4, instance.getChildren(
+                Ld4lObjectProp.HAS_ACTIVITY).size());   
+    }
+
     @Test
     public void testCurrentPublishers_008_260() throws Exception {
         BuildParams params = new BuildParams() 
@@ -232,7 +244,7 @@ public class InstanceBuilderTest extends AbstractTestClass {
         Assert.assertEquals(2, 
               instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
                       Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
-  }
+    }
     
     // ---------------------------------------------------------------------
     // Helper methods
