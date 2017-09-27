@@ -51,8 +51,7 @@ public class ProviderActivityBuilder extends ActivityBuilder {
         BuildParams params = new BuildParams() 
               .setGrandparent(parent)
               .setParent(activity)
-              .addSubfield(subfield)
-              .setType(Ld4lLocationType.defaultType());
+              .addSubfield(subfield);
         builder.build(params);
     }
 
@@ -67,10 +66,10 @@ public class ProviderActivityBuilder extends ActivityBuilder {
         EntityBuilder builder = getBuilder(Ld4lAgentType.defaultType());
 
         BuildParams params = new BuildParams() 
+              .setField(field)
               .setGrandparent(parent)
               .setParent(activity)
               .setSubfield(subfield);
-              //.setType(Ld4lAgentType.superclass());
         builder.build(params);  
     }
     

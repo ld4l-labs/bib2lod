@@ -8,8 +8,8 @@ import org.w3c.dom.Element;
 /**
  * The MockMarcxml instance will keep a list of Fields.
  * 
- * Leader, Controlfield, and Datafield should each implement this interface, and
- * override the appropate "is" method.
+ * Leader, Controlfield, and Datafield should each implement this interface, 
+ * and override the appropriate "is" method.
  */
 interface Field {
     Element element(Document doc);

@@ -82,10 +82,10 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     }
     
     private void buildIdentifiers() throws EntityBuilderException {
-        convert_035();
+        convert035();
     }
 
-    private void convert_035() throws EntityBuilderException {
+    private void convert035() throws EntityBuilderException {
 
         // 035 is a repeating field
         List<MarcxmlDataField> fields = record.getDataFields("035");
@@ -119,7 +119,6 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     
     private void buildPhysicalDescriptions() throws EntityBuilderException {
         
-        // TODO Not sure yet if there are others. 
         buildExtent();
     
     }

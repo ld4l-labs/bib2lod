@@ -7,6 +7,7 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleElementType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lTitleType;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -140,23 +141,41 @@ public class TitleElementBuilderTest extends AbstractTestClass {
         buildAndExpectValue(Ld4lTitleElementType.NON_SORT_ELEMENT, 
                 NON_SORT_ELEMENT_WITH_FINAL_SPACE, "L' ");             
     }
+    
+    @Test
+    public void testRelationshipToTitle() throws Exception {
+        Entity bibResource = new Entity();
+        Entity titleElement = buildTitleElement(
+                Ld4lTitleElementType.MAIN_TITLE_ELEMENT, "main title", 
+                        bibResource);
+        Assert.assertTrue(bibResource.hasChild(
+                Ld4lObjectProp.HAS_PART, titleElement));        
+    }
 
     
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-       
     
     private void buildAndExpectValue(Ld4lTitleElementType type, 
-            String inputValue, String expectedValue) 
-                    throws EntityBuilderException {
+            String value, String expectedValue) throws Exception {
+        Entity titleElement = buildTitleElement(type, value);
+        Assert.assertEquals(expectedValue, titleElement.getAttribute(
+                Ld4lDatatypeProp.VALUE).getValue());                  
+    }
+    
+    private Entity buildTitleElement(Ld4lTitleElementType type, 
+            String value, Entity title) throws Exception {
         BuildParams params = new BuildParams()
-                .setParent(new Entity()) 
-                .setValue(inputValue)
+                .setParent(title) 
+                .setValue(value)
                 .setType(type); 
-        Entity titleElement = builder.build(params);
-        Assert.assertEquals(expectedValue,
-                titleElement.getAttribute(Ld4lDatatypeProp.VALUE).getValue());  
+        return builder.build(params);        
+    }
+    
+    private Entity buildTitleElement(Ld4lTitleElementType type, 
+            String value) throws Exception {
+        return buildTitleElement(type, value, new Entity());      
     }
     
 }

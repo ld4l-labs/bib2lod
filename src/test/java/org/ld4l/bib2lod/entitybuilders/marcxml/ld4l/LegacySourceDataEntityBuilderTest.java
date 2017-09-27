@@ -9,8 +9,6 @@ import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.LegacySourceDataType;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
-import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 
@@ -39,7 +37,7 @@ public class LegacySourceDataEntityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testLabelDatatype() throws Exception {
+    public void testLabelHasDatatype() throws Exception {
         BuildParams params = new BuildParams()
                 .setValue("Legacy data");
         Entity entity = builder.build(params);
@@ -49,14 +47,4 @@ public class LegacySourceDataEntityBuilderTest extends AbstractTestClass {
                 Ld4lDatatypeProp.LABEL).toLiteral());
     }
     
-    @Test
-    public void testType() throws Exception {
-        Type type = Ld4lActivityType.ACTIVITY;
-        BuildParams params = new BuildParams()
-                .setType(type)
-                .setValue("Legacy data entity");
-        Entity entity = builder.build(params);
-        Assert.assertTrue(entity.hasType(type));
-    }
-
 }

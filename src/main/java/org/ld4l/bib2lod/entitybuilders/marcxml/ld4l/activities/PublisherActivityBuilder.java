@@ -30,10 +30,10 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         
         switch (field.getTag()) {
         case "008": 
-            convert_008();
+            convert008();
             break;
         case "260":
-            convert_260();
+            convert260();
             break;
         default:
             break;
@@ -41,9 +41,9 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
          
     }
 
-    private void convert_008() {
+    private void convert008() {
         
-        MarcxmlControlField field_008 = (MarcxmlControlField) field;
+        MarcxmlControlField controlfield = (MarcxmlControlField) field;
         
         this.activity = new Entity(TYPE);
       
@@ -52,14 +52,14 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
                 Ld4lNamedIndividual.CURRENT);
 
         // Publication date
-        String year = field_008.getTextSubstring(7, 11);
+        String year = controlfield.getTextSubstring(7, 11);
         if (! StringUtils.isBlank(year)) {
           activity.addAttribute(
                   Ld4lDatatypeProp.DATE, year, BibDatatype.EDTF);
         } 
         
         // Publication location
-        String location = field_008.getTextSubstring(15, 18);
+        String location = controlfield.getTextSubstring(15, 18);
         if (! StringUtils.isBlank(location)) {
             // Two or three characters - "ne", "nyu"
             location = location.trim();
@@ -68,7 +68,7 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         }        
     }
 
-    private void convert_260() 
+    private void convert260() 
             throws EntityBuilderException {
         
         MarcxmlDataField datafield = (MarcxmlDataField) field;

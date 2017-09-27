@@ -98,9 +98,9 @@ public class TitleBuilder extends MarcxmlEntityBuilder {
         titleElements = new ArrayList<>();
             
         // Note that every record must have a 245
-        MarcxmlDataField field_245 = record.getDataField("245");   
+        MarcxmlDataField field = record.getDataField("245");   
 
-        for (MarcxmlSubfield subfield : field_245.getSubfields()) {
+        for (MarcxmlSubfield subfield : field.getSubfields()) {
  
             char code = subfield.getCode();
             
@@ -108,7 +108,7 @@ public class TitleBuilder extends MarcxmlEntityBuilder {
             // 245$a always stores the full title. If 130 and/or 240 are
             // present,the $a fields should be the same.
             case 'a':
-                addNonSortAndMainTitleElements(field_245, subfield);
+                addNonSortAndMainTitleElements(field, subfield);
                 break;
             case 'b':
                 addSubtitleElements(subfield);

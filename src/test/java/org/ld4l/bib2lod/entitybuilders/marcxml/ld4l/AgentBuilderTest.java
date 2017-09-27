@@ -14,40 +14,29 @@ import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
-import org.ld4l.bib2lod.ontology.Type;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lInstanceType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
+import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
-
-
 
 /**
  * Tests class AgentBuilder.
  */
 public class AgentBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml DUPLICATE_AGENTS = MockMarcxml.parse( 
-            "<record>" +
-                "<leader>01050cam a22003011  4500</leader>" +
-                "<controlfield tag='001'>102063</controlfield>" + 
-                "<controlfield tag='008'>860506s1957    nyua     b    000 0 eng  </controlfield>" +  
-                "<datafield tag='245' ind1='0' ind2='0'>" +
-                    "<subfield code='a'>full title</subfield>" +  
-                "</datafield>" +   
-                "<datafield tag='260' ind1='3' ind2=' '>" +
-                    "<subfield code='a'>Lugduni Batavorum :</subfield>" +
-                    "<subfield code='b'>E.J. Brill</subfield>" +               
-                "</datafield>" +
-                "<datafield tag='260' ind1=' ' ind2=' '>" +
-                "<subfield code='a'>Leiden :</subfield>" +
-                "<subfield code='b'>E.J. Brill</subfield>" +                 
-            "</datafield>" +
-            "</record>");
+    public static final MockMarcxml DUPLICATE_AGENTS = MINIMAL_RECORD.openCopy()
+            .addDatafield("260", "3", " ")
+            .addSubfield("a", "Lugduni Batavorum :")
+            .addSubfield("b", "E.J. Brill")
+            .addDatafield("260", " ", " ")
+            .addSubfield("a", "Leiden :")
+            .addSubfield("b", "E.J. Brill")
+            .lock();
     
     public static final MockMarcxml DIFFERENT_AGENTS = DUPLICATE_AGENTS.openCopy()
             .findDatafield("260", 1).replaceSubfield("b", "Random House")
@@ -65,7 +54,6 @@ public class AgentBuilderTest extends AbstractTestClass {
     
     public static final MockMarcxml AUTHOR_SURNAME = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "1", "")
-            //.findDatafield("100")
             .addSubfield("a", "Watson,")
             .addSubfield("c", "Rev.")
             .addSubfield("d", "1775-1817")
@@ -73,7 +61,6 @@ public class AgentBuilderTest extends AbstractTestClass {
     
     public static final MockMarcxml AUTHOR_FORENAME = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "1", "")
-            //.findDatafield("100")
             .addSubfield("a", "John")
             .addSubfield("c", "the Baptist, Saint.")
             .lock();
@@ -109,7 +96,7 @@ public class AgentBuilderTest extends AbstractTestClass {
     @Test
     public void noNameOrSubfield_ThrowsException() throws Exception {
         expectException(EntityBuilderException.class, 
-                "A name value, subfield, or field is required");  
+                "A subfield or field is required");  
         BuildParams params = new BuildParams()
                 .setParent(new Entity());
         agentBuilder.build(params);
@@ -121,38 +108,15 @@ public class AgentBuilderTest extends AbstractTestClass {
                 "Invalid agent type");  
         BuildParams params = new BuildParams()
                 .setType(Ld4lInstanceType.INSTANCE)
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(NAME_SUBFIELD))
+                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))
                 .setParent(new Entity());
         agentBuilder.build(params);
     }
     
     @Test
-    public void testTypeFromBuildParam() throws Exception {
-        Type type = Ld4lAgentType.PERSON;
-        BuildParams params = new BuildParams()
-                .setType(type)
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
-                        NAME_SUBFIELD))
-                .setParent(new Entity());
-        Entity agent = agentBuilder.build(params);
-        Assert.assertTrue(agent.hasType(type));
-    }
-    
-    @Test
-    public void testNameFromBuildParam() throws Exception {
-        String name = "E.J. Brill";
-        BuildParams params = new BuildParams()
-                .setValue(name)
-                .setParent(new Entity());
-        Entity agent = agentBuilder.build(params);
-        Assert.assertEquals(name, agent.getValue(Ld4lDatatypeProp.NAME));
-    }
-    
-    @Test
     public void testNameFromSubfield() throws Exception {
         BuildParams params = new BuildParams()
-                .addSubfield(MarcxmlTestUtils.buildSubfieldFromString(
-                        NAME_SUBFIELD))
+                .addSubfield(buildSubfieldFromString(NAME_SUBFIELD))                        
                 .setParent(new Entity());
         Entity agent = agentBuilder.build(params);
         Assert.assertEquals("E.J. Brill", 
@@ -207,5 +171,10 @@ public class AgentBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
+  
+    private MarcxmlSubfield buildSubfieldFromString(
+            String element) throws RecordFieldException {                   
+        return new MarcxmlSubfield(
+                XmlTestUtils.buildElementFromString(element));
+    } 
 }

@@ -44,13 +44,11 @@ public class WorkBuilderTest extends AbstractTestClass {
     
     public static final MockMarcxml AUTHOR_ACTIVITY = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "1", "")
-            //.findDatafield("100")
             .addSubfield("a", "Austen, Jane")
             .lock();
     
 
     private static BaseMockBib2LodObjectFactory factory;
-    // private InstanceBuilder instanceBuilder;
     private WorkBuilder workBuilder;
     
     @BeforeClass
@@ -114,13 +112,19 @@ public class WorkBuilderTest extends AbstractTestClass {
                 Ld4lActivityType.AUTHOR_ACTIVITY).size());
     }
     
-
+    @Test
+    public void testRelationshipToInstance() throws Exception {
+        Entity instance = new Entity();
+        Entity work = buildWork(MINIMAL_RECORD, instance);
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.IS_INSTANCE_OF, work));
+    }
+    
 
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
     
-    private Entity buildWork(MockMarcxml marcxml, InstanceEntity instance) 
+    private Entity buildWork(MockMarcxml marcxml, Entity instance) 
             throws Exception {
         BuildParams params = new BuildParams()
                 .setParent(instance)
@@ -130,8 +134,7 @@ public class WorkBuilderTest extends AbstractTestClass {
     
     private Entity buildWork(MockMarcxml marcxml) 
             throws Exception {
-        return buildWork(marcxml, new InstanceEntity());
+        return buildWork(marcxml, new Entity());
     }
-    
-    
+
 }

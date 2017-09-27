@@ -41,10 +41,9 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         buildChildFromControlField(Ld4lIdentifierType.defaultType(), 
                 adminMetadata, record, "001");
         
-        convert_040();      
+        convert040();      
         
-        convert_005();
-
+        convert005();
         
         if (adminMetadata.isEmpty()) {
             return null;
@@ -78,7 +77,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         }
     }
     
-    private void convert_040() throws EntityBuilderException {
+    private void convert040() throws EntityBuilderException {
         
         MarcxmlDataField field = record.getDataField("040");
         
@@ -174,15 +173,15 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
         }       
     }
     
-    private void convert_005() throws EntityBuilderException {
+    private void convert005() throws EntityBuilderException {
         
-        MarcxmlControlField field_005 = record.getControlField("005");
+        MarcxmlControlField field = record.getControlField("005");
         
-        if (field_005 == null) {
+        if (field == null) {
             return;
         }    
         
-        String value = field_005.getTextValue();
+        String value = field.getTextValue();
         // Convert format 20130330145647.0 to 2013-03-30T14:56:47
         if (! PATTERN_005.matcher(value).matches()) {
             throw new EntityBuilderException(

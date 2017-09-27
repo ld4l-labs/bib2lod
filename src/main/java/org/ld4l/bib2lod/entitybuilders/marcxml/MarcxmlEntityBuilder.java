@@ -19,15 +19,6 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 
 public class MarcxmlEntityBuilder extends BaseEntityBuilder {
     
-/*
- * TODO
- * Record as a whole - done
- * Field as a whole
- * Field with one or more specific subfields
- * Field iterating through each subfield (e.g., each subfield generates a distinct entity
- * Field iterating through all subfields  (or is that just field as a whole?)
- */
-
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
@@ -194,8 +185,5 @@ public class MarcxmlEntityBuilder extends BaseEntityBuilder {
         
         return entity;
     }
-    
-
-   
-   
+     
 }

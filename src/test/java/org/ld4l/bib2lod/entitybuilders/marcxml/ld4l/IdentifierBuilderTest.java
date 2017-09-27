@@ -207,6 +207,13 @@ public class IdentifierBuilderTest extends AbstractTestClass {
         Entity identifier = buildIdentifier(_035_NO_ORG_CODE, "035", 'a');
         Assert.assertEquals("1345399", identifier.getValue(Ld4lDatatypeProp.VALUE));      
     }
+    
+    @Test
+    public void testRelationshipToResource() throws Exception {
+        Entity instance = new Entity();
+        Entity identifier = buildIdentifier(instance, _035_NIC, "035", 'a');
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.IDENTIFIED_BY, identifier));
+    }
 
     
     // ---------------------------------------------------------------------
@@ -246,19 +253,6 @@ public class IdentifierBuilderTest extends AbstractTestClass {
     private Entity buildIdentifier(MockMarcxml input,  
             String tag, char code) throws Exception {
         return buildIdentifier(new Entity(), input, tag, code);
-    }
-    
-    private void buildAndExpectException(
-            Entity entity, MockMarcxml input, String tag, String error) 
-                    throws Exception {            
-        expectException(EntityBuilderException.class, error);
-        buildIdentifier(entity, input, tag);
-    }
-    
-    @SuppressWarnings("unused")
-    private void buildAndExpectException(MockMarcxml input, String tag, 
-            String error) throws Exception {
-        buildAndExpectException(new Entity(), input, tag, error);
     }
     
     private void buildAndExpectException(Entity entity, MockMarcxml input, 

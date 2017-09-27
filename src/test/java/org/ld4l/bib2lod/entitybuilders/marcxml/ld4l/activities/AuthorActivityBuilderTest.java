@@ -11,7 +11,6 @@ import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.AuthorActivityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
@@ -21,7 +20,7 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 public class AuthorActivityBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml _100_AUTHOR =  MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _100_AUTHOR = MINIMAL_RECORD.openCopy()
             .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("100", "0", " ").addSubfield("a", "Manya K'Omalowete a Djonga,")
             .lock();
@@ -44,17 +43,10 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // The tests
     // ---------------------------------------------------------------------
+   
     
     @Test
-    public void testActivityTypeSpecified_100() throws Exception {
-        Entity activity = buildActivity(_100_AUTHOR, 
-                Ld4lActivityType.AUTHOR_ACTIVITY);
-        Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
-                activity.getType());
-    }
-    
-    @Test
-    public void testActivityTypeNotSpecified_100() throws Exception {
+    public void testActivityType_100() throws Exception {
         Entity activity = buildActivity(_100_AUTHOR);
         Assert.assertEquals(Ld4lActivityType.AUTHOR_ACTIVITY, 
                 activity.getType());
@@ -74,15 +66,6 @@ public class AuthorActivityBuilderTest extends AbstractTestClass {
             throws Exception {
         BuildParams params = new BuildParams() 
                 .setField(record.toRecord().getDataField("100"))
-                .setParent(new Entity());
-        return builder.build(params);         
-    }
-    
-    private Entity buildActivity(
-            MockMarcxml record, Type type) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setField(record.toRecord().getDataField("100"))
-                .setType(type)
                 .setParent(new Entity());
         return builder.build(params);         
     }

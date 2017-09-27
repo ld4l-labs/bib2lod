@@ -26,14 +26,16 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
         reset();       
         parseBuildParams(params);
         
+        if (name == null) {
+            name = subfield.getTrimmedTextValue();                 
+        }
 
-        
         Entity existingLocation = findDuplicateLocation();
         if (existingLocation != null) {
             this.location = existingLocation;
         } else {
-            this.location = buildFromString(
-                    type, Ld4lDatatypeProp.NAME, name);                  
+            this.location = buildFromString(Ld4lLocationType.defaultType(), 
+                    Ld4lDatatypeProp.NAME, name);                  
         }
         
         parent.addRelationship(Ld4lObjectProp.HAS_LOCATION, location);
@@ -58,13 +60,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build a location.");
         }
-        
-        this.type = params.getType(); 
-        if (type == null) {
-            type = Ld4lLocationType.defaultType();
-        } else if (! (type instanceof Ld4lLocationType)) {
-            throw new EntityBuilderException("Invalid location type");
-        } 
 
         this.subfield = (MarcxmlSubfield) params.getSubfield();
         this.name = params.getValue();
@@ -73,9 +68,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
             throw new EntityBuilderException(
                     "A subfield or name value is required to build a " +
                             "location.");
-        }
-        if (name == null) {
-            name = subfield.getTrimmedTextValue();                 
         }
 
         this.grandparent = params.getGrandparent();

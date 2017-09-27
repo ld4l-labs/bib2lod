@@ -12,6 +12,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Datatype;
+import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.ontology.DatatypeProp;
 import org.ld4l.bib2lod.ontology.NamedIndividual;
 import org.ld4l.bib2lod.ontology.ObjectProp;
@@ -283,6 +284,11 @@ public class Entity {
     
     public void addAttribute(DatatypeProp prop, String string, Datatype type) {
         addAttribute(prop, new Attribute(string, type));
+    }
+    
+    public void addLegacySourceDataAttribute(
+                DatatypeProp prop, String string) {
+        addAttribute(prop, string, BibDatatype.LEGACY_SOURCE_DATA);
     }
     
     public void addAttribute(DatatypeProp prop, int i) {

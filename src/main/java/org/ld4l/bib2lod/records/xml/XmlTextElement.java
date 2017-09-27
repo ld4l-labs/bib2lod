@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.records.RecordField;
-import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -4,16 +4,15 @@ import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
-import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
-import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
-import org.ld4l.bib2lod.testing.xml.MarcxmlTestUtils;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 /**
@@ -21,29 +20,21 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     
-    private static final MockMarcxml _300_NO_$A = MINIMAL_RECORD.openCopy()
+    private static final MockMarcxml _300_NO_$a = MINIMAL_RECORD.openCopy()
             .addDatafield("300", "", "").addSubfield("c", "23 cm")
             .lock();
     
-    private static final MockMarcxml _300_EXTENT = _300_NO_$A.openCopy()
+    private static final MockMarcxml _300_EXTENT = _300_NO_$a.openCopy()
             .findDatafield("300")
             .deleteSubfield("c")
             .addSubfield("a", "123 p.")
             .lock();
-    
-    private static BaseMockBib2LodObjectFactory factory;
-    private InstanceBuilder instanceBuilder;
-    
-    @BeforeClass
-    public static void setUpOnce() throws Exception {
-        factory = new BaseMockBib2LodObjectFactory();  
-        factory.addInstance(EntityBuilderFactory.class, 
-                new MarcxmlToLd4lEntityBuilderFactory());
-    }
+
+    private PhysicalDescriptionBuilder builder;
     
     @Before
-    public void setUp() {       
-        this.instanceBuilder = new InstanceBuilder();              
+    public void setUp() {         
+        this.builder = new PhysicalDescriptionBuilder();
     }
         
     // ---------------------------------------------------------------------
@@ -51,25 +42,29 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
       
     @Test
-    public void no300_Succeeds() throws Exception {
-        buildInstance();
-    }
-    
-    @Test
     public void no300$a_Succeeds() throws Exception {
-        buildInstance(_300_NO_$A);
+        buildPhysicalDescription(_300_NO_$a, Ld4lExtentType.EXTENT, "300", 'c');
     }
     
     @Test
-    public void testExtent() throws Exception {
-        Entity instance = buildInstance(_300_EXTENT);
-        Assert.assertNotNull(instance.getChild(Ld4lObjectProp.HAS_EXTENT));
+    public void testInstanceHasExtent() throws Exception {
+        Entity instance = new Entity();
+        Entity extent = buildPhysicalDescription(_300_EXTENT, 
+                Ld4lExtentType.EXTENT, "300", 'a', instance);
+        Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_EXTENT, extent));
+    }
+    
+    @Test
+    public void testExtentType() throws Exception {
+        Entity extent = buildPhysicalDescription(_300_EXTENT, 
+                Ld4lExtentType.EXTENT, "300", 'a');
+        Assert.assertTrue(extent.hasType(Ld4lExtentType.EXTENT)); 
     }
     
     @Test
     public void testExtentLabel() throws Exception {
-        Entity extent = buildInstance(_300_EXTENT).getChild(
-                Ld4lObjectProp.HAS_EXTENT);
+        Entity extent = buildPhysicalDescription(_300_EXTENT, 
+                Ld4lExtentType.EXTENT, "300", 'a');
         Assert.assertEquals("123 p.", 
                 extent.getValue(Ld4lDatatypeProp.LABEL));
     }
@@ -77,16 +72,19 @@ public class PhysicalDescriptionBuilderTest extends AbstractTestClass {
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
-    
-    private Entity buildInstance() throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(MarcxmlTestUtils.getMinimalRecord());  
-        return instanceBuilder.build(params);
+
+    private Entity buildPhysicalDescription(MockMarcxml input, Type type, 
+            String tag, char code) throws Exception {
+        return buildPhysicalDescription(input, type, tag, code, new Entity());
     }
     
-    private Entity buildInstance(MockMarcxml input) throws Exception {
-        BuildParams params = new BuildParams() 
-                .setRecord(input.toRecord());  
-        return instanceBuilder.build(params);
+    private Entity buildPhysicalDescription(MockMarcxml input, Type type, 
+            String tag, char code, Entity parent) throws Exception {
+        MarcxmlDataField field = input.toRecord().getDataField(tag);
+        BuildParams params = new BuildParams()
+                .setParent(parent)
+                .setField(field)
+                .setSubfield(field.getSubfield(code));
+        return builder.build(params);
     }
 }
