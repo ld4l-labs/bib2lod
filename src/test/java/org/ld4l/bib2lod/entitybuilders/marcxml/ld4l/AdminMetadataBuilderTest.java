@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
+import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entity.InstanceEntity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -189,7 +190,7 @@ public class AdminMetadataBuilderTest extends AbstractTestClass {
     @Test
     public void testDateTimeDatatype_005() throws Exception {
         Entity adminMetadata = buildAdminMetadata(TEST_RECORD);
-        Assert.assertSame(XsdDatatype.DATETIME, adminMetadata.getAttribute(
+        Assert.assertSame(BibDatatype.EDTF, adminMetadata.getAttribute(
                 Ld4lDatatypeProp.CHANGE_DATE).getDatatype());
     }
     

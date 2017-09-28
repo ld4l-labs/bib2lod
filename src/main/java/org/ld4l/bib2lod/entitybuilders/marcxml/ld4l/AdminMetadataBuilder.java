@@ -3,6 +3,7 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
@@ -193,7 +194,7 @@ public class AdminMetadataBuilder extends MarcxmlEntityBuilder {
                 value.substring(8, 10) + ":" + value.substring(10,12) + 
                 ":" + value.substring(12, 14);
         adminMetadata.addAttribute(Ld4lDatatypeProp.CHANGE_DATE, 
-                datetime, XsdDatatype.DATETIME);       
+                datetime, BibDatatype.EDTF);       
     }
 
 }
