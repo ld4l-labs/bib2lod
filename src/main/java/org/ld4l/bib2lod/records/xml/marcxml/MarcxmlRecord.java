@@ -86,8 +86,7 @@ public class MarcxmlRecord extends BaseXmlRecord {
             Element field = (Element) controlFieldNodes.item(i);
             // There should be only one control field per control number; ignore
             // others.
-            String controlNumber = field.getAttribute(
-                  MarcxmlControlField.getControlNumberAttributeName());
+            String controlNumber = field.getAttribute("tag");
             if (! controlNumbers.contains(controlNumber)) {
                 controlFields.add(new MarcxmlControlField(field));
                 controlNumbers.add(controlNumber);
