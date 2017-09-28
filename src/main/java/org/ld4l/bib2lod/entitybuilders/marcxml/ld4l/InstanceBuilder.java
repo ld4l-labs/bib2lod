@@ -34,9 +34,9 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
-    private static List<Character> _260_PUBLISHER_CODES = 
+    public static List<Character> _260_PUBLISHER_CODES = 
             Arrays.asList('a', 'b', 'c');
-    private static List<Character> _260_MANUFACTURER_CODES = 
+    public static List<Character> _260_MANUFACTURER_CODES = 
             Arrays.asList('e', 'f', 'g');
 
     private InstanceEntity instance;
@@ -53,15 +53,15 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         // Admin metadata is built from multiple fields
         buildChildFromRecord(
                 Ld4lAdminMetadataType.defaultType(), instance, record);  
-        
+ 
+        buildWorks();
+        buildItem();
         buildIdentifiers();       
         buildTitles();
         buildActivities();
         buildProvisionActivityStatements();
         buildResponsiblityStatement();
         buildPhysicalDescriptions();
-        buildWorks();
-        buildItem();
 
         return instance;
     }
@@ -208,11 +208,11 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
 
         // Each 260 and 264 yields one statement from all $a$b$c concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList("260", "264"), _260_PUBLISHER_CODES);
+                Arrays.asList("260", "264"), Arrays.asList('a', 'b', 'c'));
         
         // Each 260 yields one statement from all $e$f$g concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList("260"), _260_MANUFACTURER_CODES);
+                Arrays.asList("260"), Arrays.asList('e', 'f', 'g'));
     }
     
     private void buildProvisionActivityStatements(

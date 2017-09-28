@@ -78,26 +78,10 @@ public class XmlTextElementTest extends AbstractTestClass {
         Assert.assertEquals('h', element.getCharAt(4));
     }
     
-    @Test
-    public void testPunctFinal() {
-        Assert.assertTrue(XmlTextElement.endsWithPunct("test."));
-    }
-    
-    @Test
-    public void testNonPunctFinal() {
-        Assert.assertFalse(XmlTextElement.endsWithPunct("test"));        
-    }
-    
-    @Test 
-    public void testRemoveFinalPunct() {
-        Assert.assertEquals(
-                "test", XmlTextElement.removeFinalPunct("test."));
-    }
-    
     @Test 
     public void testRemoveFinalPunctAndWhitespace() {
         Assert.assertEquals("test", 
-                XmlTextElement.removeFinalPunctAndWhitespace("test : "));
+                XmlTextElement.trimFinalPunctAndWhitespace("test : "));
     }
     
     @Test 

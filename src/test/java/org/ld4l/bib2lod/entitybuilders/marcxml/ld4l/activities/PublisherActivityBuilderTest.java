@@ -3,18 +3,24 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities;
 import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.EdtfType;
 import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.InstanceBuilder;
+import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
@@ -24,6 +30,7 @@ import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlRecord;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlTaggedField;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
+import org.ld4l.bib2lod.testing.BaseMockBib2LodObjectFactory;
 import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
 
 
@@ -74,6 +81,11 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
             .addSubfield("a", "Leiden :")
             .addSubfield("b", "E.J. Brill")
             .lock();
+    
+    public static final MockMarcxml  _260_COPYRIGHT_DATE = MINIMAL_RECORD.openCopy()
+            .addControlfield("001", "102063")
+            .addDatafield("260", " ", " ").addSubfield("c", "1957 &copy;1957")
+            .lock();
 
     public static final String _001 = 
             "<controlfield tag='001'>102063</controlfield>";  
@@ -81,12 +93,21 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     public static final String _245 = 
             "<datafield tag='245'><subfield code='a'>text</subfield></datafield>";
 
-
-    private PublisherActivityBuilder builder;
+    private static BaseMockBib2LodObjectFactory factory;
+    private InstanceBuilder instanceBuilder;
+    private PublisherActivityBuilder publisherActivityBuilder;
+    
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        factory = new BaseMockBib2LodObjectFactory();  
+        factory.addInstance(EntityBuilderFactory.class, 
+                new MarcxmlToLd4lEntityBuilderFactory());
+    }
     
     @Before
-    public void setUp() {       
-        this.builder = new PublisherActivityBuilder();         
+    public void setUp() {    
+        this.instanceBuilder = new InstanceBuilder();
+        this.publisherActivityBuilder = new PublisherActivityBuilder();         
     }
     
     // ---------------------------------------------------------------------
@@ -189,31 +210,63 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
                 activity.getExternal(Ld4lObjectProp.HAS_STATUS));
     }
     
+    @Test
+    public void testDate() throws Exception {
+        Entity activity = buildActivity(_260_PUBLISHER, "260", Arrays.asList('c'));
+        Assert.assertEquals("1957", activity.getValue(Ld4lDatatypeProp.DATE));
+    }
+    
+    @Test
+    public void testCopyrightHolderActivity() throws Exception {
+        Entity instance = buildInstance(_260_COPYRIGHT_DATE);
+        Entity activity = instance.getChild(Ld4lObjectProp.HAS_ACTIVITY, 
+                Ld4lActivityType.COPYRIGHT_HOLDER_ACTIVITY);
+        Assert.assertNotNull(activity);
+    }
+    
+    @Test
+    public void testCopyrightDate() throws Exception {
+        Entity instance = buildInstance(_260_COPYRIGHT_DATE);
+        Entity activity = instance.getChild(Ld4lObjectProp.HAS_ACTIVITY, 
+                Ld4lActivityType.COPYRIGHT_HOLDER_ACTIVITY);
+        Assert.assertEquals("1957", activity.getValue(Ld4lDatatypeProp.DATE)); 
+    }
+    
 
     // ---------------------------------------------------------------------
     // Helper methods
     // ---------------------------------------------------------------------
+    
+    private Entity buildInstance(MockMarcxml input) throws Exception {
+        return instanceBuilder.build(
+                new BuildParams().setRecord(input.toRecord()));
+    }
 
     private Entity buildActivity(String tag) 
             throws Exception {
-        return buildActivity(MINIMAL_RECORD, tag, null);
+        return buildActivity(new Entity(), MINIMAL_RECORD, tag, null);
     }
     
     private Entity buildActivity(MockMarcxml input, String tag) 
             throws Exception {
-        return buildActivity(input, tag, null);
+        return buildActivity(new Entity(), input, tag, null);
     }
     
     private Entity buildActivity(MockMarcxml input, String tag, 
             List<Character> codes) throws Exception {
+        return buildActivity(new Entity(), input, tag, codes);
+    }
+    
+    private Entity buildActivity(Entity parent, MockMarcxml input, 
+            String tag, List<Character> codes) throws Exception {
         MarcxmlRecord record = input.toRecord();
         MarcxmlTaggedField field = record.getTaggedField(tag);  
 
         BuildParams params = new BuildParams()
-                .setParent(new Entity())
+                .setParent(parent)
                 .setRecord(record)
                 .setField(field);
-        
+                
         if (field instanceof MarcxmlDataField && codes != null) {
             List<RecordField> subfields = new ArrayList<>();
             for (char code : codes) {
@@ -222,7 +275,7 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
             params.setSubfields(subfields);
         }
         
-        return builder.build(params);
+        return publisherActivityBuilder.build(params);
     }
 
     

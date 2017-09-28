@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
-import org.ld4l.bib2lod.datatypes.XsdDatatype;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;

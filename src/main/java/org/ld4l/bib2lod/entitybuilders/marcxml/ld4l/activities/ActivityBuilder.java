@@ -9,6 +9,8 @@ import org.ld4l.bib2lod.entity.Attribute;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -21,13 +23,18 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
     
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    private static final Ld4lActivityType DEFAULT_TYPE = 
+            (Ld4lActivityType) Ld4lActivityType.defaultType();
 
     protected Entity activity;
-    protected Entity parent;
     protected MarcxmlTaggedField field;
-    protected List<MarcxmlSubfield> subfields;
+    protected Entity parent;
+    protected DatatypeProp property;
     protected MarcxmlRecord record;
+    protected List<MarcxmlSubfield> subfields;
     protected Ld4lActivityType type;
+    protected String value;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -52,9 +59,11 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         this.activity = null;
         this.parent = null;
         this.field = null;
+        this.property = null;
         this.subfields = new ArrayList<>();
         this.record = null;
         this.type = null;
+        this.value = null;
     }
     
     private void parseBuildParams(BuildParams params) 
@@ -70,16 +79,35 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
         this.record = (MarcxmlRecord) params.getRecord();
 
         RecordField field = params.getField();
-        if (field == null) {
-            throw new EntityBuilderException(
-                    "A field is required to build an activity.");
+        if (field != null) {
+            if (! (field instanceof MarcxmlTaggedField)) {
+                throw new EntityBuilderException("A data field or control " + 
+                        "field is required to build an activity");
+            }        
+            this.field = (MarcxmlTaggedField) field;
         }
         
-        if (! (field instanceof MarcxmlTaggedField)) {
-            throw new EntityBuilderException("A data field or control " + 
-                    "field is required to build an activity");
-        }        
-        this.field = (MarcxmlTaggedField) field;
+        this.property = params.getProperty();
+        this.value = params.getValue();
+        
+        if (field == null && property == null) {
+            throw new EntityBuilderException(
+                    "A field or property and value is required to build an activity.");
+        }
+        if (field == null && value == null) {
+            throw new EntityBuilderException("A field or property and " +
+                    "value is required to build an activity.");            
+        }
+        
+        Type type = params.getType();
+        if (type != null) {
+            if (! (type instanceof Ld4lActivityType)) {
+                throw new EntityBuilderException("Invalid type.");
+            }
+            this.type = (Ld4lActivityType) type;
+        } else {
+            this.type = DEFAULT_TYPE;
+        }
         
         /* 
          * This needs to be a list of MarcxmlSubfields in order
@@ -92,7 +120,13 @@ public class ActivityBuilder extends MarcxmlEntityBuilder {
     }
     
     protected void build() throws EntityBuilderException {
-        // If never used, make this an abstract class.
+
+        if (property == null || value == null) {
+            throw new EntityBuilderException(
+                    "A property and value are needed to build a generic Activity.");
+        }
+        this.activity = new Entity(type);
+        activity.addAttribute(property, value);       
     }
 
 }

@@ -34,7 +34,7 @@ public class ManufacturerActivityBuilder extends ProviderActivityBuilder {
         
         buildLocation(datafield.getSubfield('e')); 
         buildAgent(datafield.getSubfield('f'));
-        buildDate(datafield.getSubfield('g'));
+        buildUntypedDate(datafield.getSubfield('g'));
     }
     
 }

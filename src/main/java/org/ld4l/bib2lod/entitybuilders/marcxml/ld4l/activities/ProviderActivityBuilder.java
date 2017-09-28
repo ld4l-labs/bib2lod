@@ -20,8 +20,13 @@ public class ProviderActivityBuilder extends ActivityBuilder {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
+
+    /**
+     * Builds an untyped date attribute from a subfield with uncontrolled  
+     * values (e.g., 260$c as opposed to the controlled 008 values).
+     */
     // TODO Move up to ActivityBuilder if it works for other activities
-    protected void buildDate(MarcxmlSubfield subfield) 
+    protected void buildUntypedDate(MarcxmlSubfield subfield) 
             throws EntityBuilderException {
         
         if (subfield == null) {
@@ -29,8 +34,6 @@ public class ProviderActivityBuilder extends ActivityBuilder {
         }
         
         String date = subfield.getTrimmedTextValue();
-        // Unlike the controlled 008 date, the 260$c date value is an 
-        // untyped literal.
         activity.addAttribute(Ld4lDatatypeProp.DATE, date);
     }
    
