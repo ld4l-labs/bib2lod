@@ -39,6 +39,10 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     private static final MockMarcxml _008_NO_DATE = MINIMAL_RECORD.openCopy()
             .replaceControlfield("008", "860506s        nyua     b    000 0 eng  ")
             .lock();
+    
+    private static final MockMarcxml _008_TWO_DATES = MINIMAL_RECORD.openCopy()
+            .replaceControlfield("008", "860506s19571960   a     b    000 0 eng  ")
+            .lock();
 
     public static final MockMarcxml _008_TWO_CHAR_PUB_LOCATION = MINIMAL_RECORD.openCopy()
             .findControlfield("008").setValue("750226c18529999ne bx p       0   b0eng  ")
@@ -134,11 +138,27 @@ public class PublisherActivityBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testActivityDate_008() throws Exception {
+    public void testActivityDate1_008() throws Exception {
         Entity activity = buildActivity("008"); 
         Attribute attribute = activity.getAttribute(Ld4lDatatypeProp.DATE);
         Literal literal = ResourceFactory.createTypedLiteral(
                 "1957", BibDatatype.EDTF.rdfType());
+        Assert.assertEquals(literal, attribute.toLiteral());  
+    }
+    
+    @Test
+    public void testActivityTwoDates_008() throws Exception {
+        Entity activity = buildActivity(_008_TWO_DATES, "008"); 
+        Assert.assertEquals(2,  
+                activity.getAttributes(Ld4lDatatypeProp.DATE).size());
+    }
+    
+    @Test
+    public void testActivityDate2_008() throws Exception {
+        Entity activity = buildActivity(_008_TWO_DATES, "008"); 
+        Attribute attribute = activity.getAttributes(Ld4lDatatypeProp.DATE).get(1);
+        Literal literal = ResourceFactory.createTypedLiteral(
+                "1960", BibDatatype.EDTF.rdfType());
         Assert.assertEquals(literal, attribute.toLiteral());  
     }
     

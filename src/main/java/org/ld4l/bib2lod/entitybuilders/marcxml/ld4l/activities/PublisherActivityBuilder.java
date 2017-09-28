@@ -51,11 +51,16 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         activity.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, 
                 Ld4lNamedIndividual.CURRENT);
 
-        // Publication date
-        String year = controlfield.getTextSubstring(7, 11);
-        if (! StringUtils.isBlank(year)) {
+        // Publication dates
+        String year1 = controlfield.getTextSubstring(7, 11);
+        if (! StringUtils.isBlank(year1)) {
           activity.addAttribute(
-                  Ld4lDatatypeProp.DATE, year, BibDatatype.EDTF);
+                  Ld4lDatatypeProp.DATE, year1, BibDatatype.EDTF);
+        } 
+        String year2 = controlfield.getTextSubstring(11, 15);
+        if (! StringUtils.isBlank(year2)) {
+          activity.addAttribute(
+                  Ld4lDatatypeProp.DATE, year2, BibDatatype.EDTF);
         } 
         
         // Publication location
