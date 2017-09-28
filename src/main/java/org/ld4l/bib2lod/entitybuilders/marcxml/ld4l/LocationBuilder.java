@@ -18,7 +18,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
     private String name;    
     private Entity parent;
     private MarcxmlSubfield subfield;
-    private Type type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -49,7 +48,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
         this.name = null;
         this.parent = null;
         this.subfield = null;
-        this.type = null;
     }
     
     private void parseBuildParams(BuildParams params) 

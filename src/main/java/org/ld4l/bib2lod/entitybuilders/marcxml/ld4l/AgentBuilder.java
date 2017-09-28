@@ -1,5 +1,6 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.ld4l.bib2lod.entity.Entity;
@@ -10,6 +11,7 @@ import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
@@ -23,7 +25,6 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     private Entity parent;
     private ObjectProp relationship;
     private MarcxmlSubfield subfield;
-    private Type type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -56,12 +57,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build an agent.");
         }
-
-        this.type = params.getType();
-        if (type != null && ! (type instanceof Ld4lAgentType)) {
-            throw new EntityBuilderException("Invalid agent type");
-        } 
-                       
+           
         this.subfield = (MarcxmlSubfield) params.getSubfield(); 
         this.field = (MarcxmlDataField) params.getField();       
         if (subfield == null && field == null) {
@@ -85,6 +81,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         // Subfield only
         if (field == null) {
             agent = new Entity(Ld4lAgentType.defaultType());
+            // TODO Add legacySourceData datatype?
             agent.addAttribute(Ld4lDatatypeProp.NAME, 
                     subfield.getTrimmedTextValue());
             
@@ -106,14 +103,27 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     
     private Entity convert100() {
         
-        // Person or Family type
+        // Person or Family 
         Type type = field.getFirstIndicator() == 3 ? 
                 Ld4lAgentType.FAMILY : Ld4lAgentType.PERSON; 
         Entity agent = new Entity(type);
         
         // Name
-        agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                field.getSubfield('a').getTrimmedTextValue());
+        String name = null;
+        MarcxmlSubfield subfield = field.getSubfield('a');
+        if (subfield != null) {
+            if (type.equals(Ld4lAgentType.FAMILY)) {
+                name = subfield.getTextValue();
+            } else {
+                // Personal name concatenates $a (name) $b (numeration) $c 
+                // (titles and other words associated with the name)
+                name = field.concatenateSubfieldValues(
+                        Arrays.asList('a', 'b', 'c'));
+            }
+            agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
+                    // Trim final punct and whitespace from the name
+                    XmlTextElement.trim(name));
+        }   
         
         return agent;      
     }
