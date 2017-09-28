@@ -55,7 +55,7 @@ public class ManufacturerActivityBuilderTest extends AbstractTestClass {
     @Test
     public void testManufacturer_260() throws Exception {
        Entity activity = buildActivity(_260_MANUFACTURER, "260", 
-               Arrays.asList('e', 'f', 'g'));     
+               Arrays.asList('e'));     
        Assert.assertEquals(Ld4lActivityType.MANUFACTURER_ACTIVITY, activity.getType());
     }  
     
