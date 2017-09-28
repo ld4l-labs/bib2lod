@@ -5,7 +5,6 @@ import java.util.List;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -18,7 +17,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
     private String name;    
     private Entity parent;
     private MarcxmlSubfield subfield;
-    private Type type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -49,7 +47,6 @@ public class LocationBuilder extends MarcxmlEntityBuilder {
         this.name = null;
         this.parent = null;
         this.subfield = null;
-        this.type = null;
     }
     
     private void parseBuildParams(BuildParams params) 

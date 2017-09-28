@@ -11,10 +11,12 @@ import org.ld4l.bib2lod.ontology.DatatypeProp;
 public enum Ld4lDatatypeProp implements DatatypeProp {
     
     /* List in alpha order */
+    BIRTH_DATE(Ld4lNamespace.SCHEMA, "birthDate"),
     CHANGE_DATE(Ld4lNamespace.BIBFRAME, "changeDate"),
     CODE(Ld4lNamespace.BIBFRAME, "code"),
     COMMENT(Ld4lNamespace.RDFS, "comment"),
     DATE(Ld4lNamespace.DCTERMS, "date"),
+    DEATH_DATE(Ld4lNamespace.SCHEMA, "deathDate"),
     EDITION_STATEMENT(Ld4lNamespace.BIBFRAME, "editionStatement"),
     EDITORIAL_NOTE(Ld4lNamespace.SKOS, "editorialNote"),
     FAMILY_NAME(Ld4lNamespace.FOAF, "familyName"),

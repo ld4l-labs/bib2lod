@@ -16,7 +16,6 @@ public class MarcxmlControlField extends BaseMarcxmlField
  
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String CONTROL_NUMBER_ATTRIBUTE_NAME = "tag";
     
     private String tag;
     private String textValue;
@@ -27,13 +26,9 @@ public class MarcxmlControlField extends BaseMarcxmlField
      */
     public MarcxmlControlField(Element element) throws RecordFieldException {
         super(element);
-        tag = element.getAttribute(CONTROL_NUMBER_ATTRIBUTE_NAME);
+        tag = element.getAttribute("tag");
         textValue = retrieveTextValue(this.element);
         isValid();
-    }
-    
-    static String getControlNumberAttributeName() {
-        return CONTROL_NUMBER_ATTRIBUTE_NAME;
     }
     
     /**

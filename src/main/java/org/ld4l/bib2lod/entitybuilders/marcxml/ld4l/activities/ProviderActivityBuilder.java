@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
@@ -15,17 +14,19 @@ import org.ld4l.bib2lod.records.RecordField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
+// TODO Might be abstract - do we ever build a generic provider activity?
 public class ProviderActivityBuilder extends ActivityBuilder {
 
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
-    @SuppressWarnings("unused")
-    private static final Ld4lActivityType TYPE = 
-            Ld4lActivityType.PROVIDER_ACTIVITY;
-    
+
+    /**
+     * Builds an untyped date attribute from a subfield with uncontrolled  
+     * values (e.g., 260$c as opposed to the controlled 008 values).
+     */
     // TODO Move up to ActivityBuilder if it works for other activities
-    protected void buildDate(MarcxmlSubfield subfield) 
+    protected void buildUntypedDate(MarcxmlSubfield subfield) 
             throws EntityBuilderException {
         
         if (subfield == null) {
@@ -33,8 +34,6 @@ public class ProviderActivityBuilder extends ActivityBuilder {
         }
         
         String date = subfield.getTrimmedTextValue();
-        // Unlike the controlled 008 date, the 260$c date value is an 
-        // untyped literal.
         activity.addAttribute(Ld4lDatatypeProp.DATE, date);
     }
    

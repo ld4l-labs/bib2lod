@@ -8,9 +8,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder.EntityBuilderException;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilderFactory;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.MarcxmlToLd4lEntityBuilderFactory;
+import org.ld4l.bib2lod.ontology.DatatypeProp;
+import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -26,17 +29,15 @@ public class ActivityBuilderTest extends AbstractTestClass {
     
     public static final MockMarcxml _260_PUBLISHER = MINIMAL_RECORD.openCopy()
             .addControlfield("001", "102063")
-            .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("260", " ", " ").addSubfield("b", "Grune & Stratton,")
             .lock();
 
     public static final MockMarcxml _100_AUTHOR = MINIMAL_RECORD.openCopy()
-            .findDatafield("245").findSubfield("a").setValue("full title")
             .addDatafield("100", "0", " ").addSubfield("a", "Manya K'Omalowete a Djonga,")
             .lock();
 
     private static BaseMockBib2LodObjectFactory factory;
-    private PublisherActivityBuilder builder;  
+    private PublisherActivityBuilder publisherActivityBuilder;  
     
     @BeforeClass
     public static void setUpOnce() throws Exception {
@@ -47,7 +48,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
     
     @Before
     public void setUp() {       
-        this.builder = new PublisherActivityBuilder();  
+        this.publisherActivityBuilder = new PublisherActivityBuilder();  
     }   
     
     // ---------------------------------------------------------------------
@@ -60,18 +61,29 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 "A parent entity is required");
         BuildParams params = new BuildParams()
                 .setParent(null);        
-        builder.build(params);        
+        publisherActivityBuilder.build(params);        
     }
     
     @Test
-    public void nullField_ThrowsException() throws Exception {     
+    public void nullFieldAndProperty_ThrowsException() throws Exception {     
         expectException(EntityBuilderException.class, 
-                "A field is required");
+                "A field or property and value");
         BuildParams params = new BuildParams()
                 .setParent(new Entity())
                 .setRecord(null)
-                .setField(null);
-        builder.build(params);        
+                .setProperty(Ld4lDatatypeProp.NAME);
+        publisherActivityBuilder.build(params);        
+    }
+    
+    @Test
+    public void nullFieldAndValue_ThrowsException() throws Exception {     
+        expectException(EntityBuilderException.class, 
+                "A field or property and value");
+        BuildParams params = new BuildParams()
+                .setParent(new Entity())
+                .setRecord(null)
+                .setValue("value");
+        publisherActivityBuilder.build(params);        
     }
 
     @Test
@@ -84,7 +96,7 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 .setField(new MarcxmlSubfield(
                         XmlTestUtils.buildElementFromString(
                                 "<subfield code='a'>test</subfield>")));
-        builder.build(params);        
+        publisherActivityBuilder.build(params);        
     }
     
     @Test 
@@ -99,6 +111,13 @@ public class ActivityBuilderTest extends AbstractTestClass {
         Entity instance = new Entity();
         Entity activity = buildActivity(instance, _260_PUBLISHER, "260");
         Assert.assertTrue(instance.hasChild(Ld4lObjectProp.HAS_ACTIVITY, activity));
+    }
+    
+    @Test
+    public void testCopyrightHolderActivity() throws Exception {
+        Entity activity = buildActivity(Ld4lActivityType.COPYRIGHT_HOLDER_ACTIVITY,
+                Ld4lDatatypeProp.DATE, "1957");
+        Assert.assertEquals("1957", activity.getValue(Ld4lDatatypeProp.DATE));
     }
 
     // ---------------------------------------------------------------------
@@ -117,6 +136,17 @@ public class ActivityBuilderTest extends AbstractTestClass {
                 .setParent(parent)
                 .setRecord(record)
                 .setField(record.getDataField(tag));
+        return publisherActivityBuilder.build(params);
+    }
+    
+    private Entity buildActivity(Type type, DatatypeProp property, String value) 
+            throws Exception {
+        EntityBuilder builder = new ActivityBuilder();
+        BuildParams params = new BuildParams()
+                .setParent(new Entity())
+                .setProperty(property)
+                .setType(type)
+                .setValue(value);
         return builder.build(params);
     }
         

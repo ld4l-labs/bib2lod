@@ -1,12 +1,13 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
@@ -23,7 +24,6 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     private Entity parent;
     private ObjectProp relationship;
     private MarcxmlSubfield subfield;
-    private Type type;
 
     @Override
     public Entity build(BuildParams params) throws EntityBuilderException {
@@ -56,12 +56,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
             throw new EntityBuilderException(
                     "A parent entity is required to build an agent.");
         }
-
-        this.type = params.getType();
-        if (type != null && ! (type instanceof Ld4lAgentType)) {
-            throw new EntityBuilderException("Invalid agent type");
-        } 
-                       
+           
         this.subfield = (MarcxmlSubfield) params.getSubfield(); 
         this.field = (MarcxmlDataField) params.getField();       
         if (subfield == null && field == null) {
@@ -85,6 +80,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         // Subfield only
         if (field == null) {
             agent = new Entity(Ld4lAgentType.defaultType());
+            // TODO Add legacySourceData datatype?
             agent.addAttribute(Ld4lDatatypeProp.NAME, 
                     subfield.getTrimmedTextValue());
             
@@ -106,15 +102,48 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     
     private Entity convert100() {
         
-        // Person or Family type
-        Type type = field.getFirstIndicator() == 3 ? 
-                Ld4lAgentType.FAMILY : Ld4lAgentType.PERSON; 
-        Entity agent = new Entity(type);
+        Entity agent = new Entity();
+        MarcxmlSubfield subfield$a = field.getSubfield('a');
         
-        // Name
-        agent.addAttribute(Ld4lDatatypeProp.NAME, 
-                field.getSubfield('a').getTrimmedTextValue());
-        
+        // Family
+        if (field.getFirstIndicator() == 3) {
+            agent.addType(Ld4lAgentType.FAMILY);
+            
+            // Name
+            if (subfield$a != null) {
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
+                        subfield$a.getTrimmedTextValue());
+            }
+                
+        // Person
+        } else {
+            agent.addType(Ld4lAgentType.PERSON);
+ 
+            // Person name: concatenate $a (name) $b (numeration) $c (titles 
+            // and other words associated with the name)
+            if (subfield$a != null) {
+
+                String name = field.concatenateSubfieldValues(
+                        Arrays.asList('a', 'b', 'c', 'q'));
+                if (name.endsWith(",")) {
+                    name = StringUtils.chop(name);
+                }
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
+                        name);
+            }
+            
+            // Person birth and death dates: variable values, no attempt to 
+            // parse at this time, so use dcterms:date instead of 
+            // schema:birthDate, schema:deathDate. 
+            // Examples: "1775-1817", "d. 1683", "282-133 B.C."
+            // "dd. ca. 1558", "d1240 or 41-ca. 1316"
+            MarcxmlSubfield subfield$d = field.getSubfield('d');
+            if (subfield$d != null) {
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.DATE, 
+                        subfield$d.getTextValue());
+            }
+        }
+
         return agent;      
     }
     
@@ -162,5 +191,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         
         return agent;
     }   
+    
+
     
 }

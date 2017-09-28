@@ -3,9 +3,7 @@
 package org.ld4l.bib2lod.records.xml.marcxml;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,6 +12,7 @@ import org.ld4l.bib2lod.records.RecordField.RecordFieldException;
 import org.ld4l.bib2lod.testing.AbstractTestClass;
 import org.ld4l.bib2lod.testing.xml.XmlTestUtils;
 import org.w3c.dom.Element;
+
 
 
 /**
@@ -65,29 +64,15 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
                 "<subfield code='a'>Clinical cardiopulmonary physiology.</subfield>" +
             "</datafield>";
     
-    private static final String REPEATED_SUBFIELDS = 
-            "<datafield tag='260' ind1=' ' ind2=' '>" +
-                "<subfield code='a'>One </subfield>" +
-                "<subfield code='a'> Two</subfield>" +
-                "<subfield code='a'>Three : </subfield>" +
-                "<subfield code='a'>Three : </subfield>" +
-                "<subfield code='a'>Three ; </subfield>" +
-                "<subfield code='b'>B1</subfield>" +
-                "<subfield code='b'>B2</subfield>" +
-                "<subfield code='c'>C</subfield>" +
-            "</datafield>";    
-    
     private static final String MULTIPLE_SUBFIELDS = 
-            "<datafield tag='260' ind1=' ' ind2=' '>" +
-                "<subfield code='a'>A1</subfield>" +
-                "<subfield code='a'>A2</subfield>" +
-                "<subfield code='a'>A3</subfield>" +
-                "<subfield code='b'>B1</subfield>" +
-                "<subfield code='b'>B2</subfield>" +
-                "<subfield code='c'>C1</subfield>" +
-            "</datafield>";        
+            "<datafield tag='245' ind1='0' ind2='0'>" +
+                "<subfield code='a'>subfield a,</subfield>" +
+                "<subfield code='b'>subfield b,</subfield>" +
+                "<subfield code='b'>subfield b again,</subfield>" +
+                "<subfield code='c'>subfield c,</subfield>" +
+                "<subfield code='d'>subfield d,</subfield>" +
+            "</datafield>";
     
-    private MarcxmlDataField datafield;
     
     // ---------------------------------------------------------------------
     // The tests
@@ -147,67 +132,41 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     public void validDataField_Valid() throws Exception {
         // No exception
         buildFromString(VALID_DATAFIELD);
+    } 
+    
+    @Test
+    public void testListSubfieldValues() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
+        List<String> list = field.listSubfieldValues(
+                Arrays.asList('a', 'b', 'c', 'e'));
+        Assert.assertEquals(4, list.size());      
     }
     
     @Test
-    public void testGetSubfieldValues() throws Exception {
-        datafield = buildFromString(REPEATED_SUBFIELDS);
-        List<String> values = datafield.getSubfieldValues('a', false);
-        Assert.assertEquals(5, values.size());
+    public void testListSubfieldValuesNoMatch() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
+        List<String> list = field.listSubfieldValues(
+                Arrays.asList('x', 'y', 'z'));
+        Assert.assertEquals(0, list.size());      
+    }
+
+    @Test
+    public void testConcatenateSubfieldValues() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
+        String values = field.concatenateSubfieldValues(
+                Arrays.asList('a', 'b', 'c', 'e'));
+        Assert.assertEquals("subfield a, subfield b, subfield b again, " + 
+            "subfield c,", values);     
     }
     
     @Test
-    public void testGetTrimmedSubfieldValues() throws Exception {
-        datafield = buildFromString(REPEATED_SUBFIELDS);
-        List<String> values = datafield.getTrimmedSubfieldValues('a');
-        Assert.assertEquals("Three", values.get(3));   
+    public void testConcatenateSubfieldValuesNoMatch() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
+        String values = field.concatenateSubfieldValues(
+                Arrays.asList('x', 'y', 'z'));
+        Assert.assertNull(values);      
     }
-    
-    @Test 
-    public void testGetUniqueSubfieldValues() throws Exception {
-        datafield = buildFromString(REPEATED_SUBFIELDS);
-        Set<String> values = datafield.getUniqueSubfieldValues('a', false);
-        Assert.assertEquals(4, values.size());           
-    }
-    
-    @Test 
-    public void testGetUniqueTrimmedSubfieldValues() throws Exception {
-        datafield = buildFromString(REPEATED_SUBFIELDS);
-        Set<String> values = datafield.getUniqueTrimmedSubfieldValues('a');
-        Assert.assertEquals(3, values.size());         
-    }
-    
-    @Test
-    public void testGetSubfieldCodes() throws Exception {
-        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);                
-        List<Character> expected = Arrays.asList(
-                'a', 'a', 'a', 'b', 'b', 'c');
-        Assert.assertEquals(expected, field.getSubfieldCodes());
-        
-    }
-    
-    @Test
-    public void testGetUniqueSubfieldCodes() throws Exception {
-        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);                
-        Set<Character> expected = new HashSet<>(Arrays.asList('a', 'b', 'c'));
-        Assert.assertEquals(expected, field.getUniqueSubfieldCodes());        
-    }
-    
-    @Test
-    public void testContainsSomeSubfield() throws Exception {
-        MarcxmlDataField field = buildFromString(VALID_DATAFIELD);
-                
-        Character[] codes = {'a', 'e', 'g'};
-        Assert.assertTrue(field.containsAnySubfield(codes));
-    }
-    
-    @Test
-    public void testDoesNotContainSomeSubfield() throws Exception {
-        MarcxmlDataField field = buildFromString(VALID_DATAFIELD);               
-        Character[] codes = {'e', 'f', 'g'};
-        Assert.assertFalse(field.containsAnySubfield(codes));
-    }
-    
+
     
     // ---------------------------------------------------------------------
     // Helper methods

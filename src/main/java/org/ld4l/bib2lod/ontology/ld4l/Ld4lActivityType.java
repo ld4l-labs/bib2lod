@@ -11,6 +11,8 @@ public enum Ld4lActivityType implements Type {
     ACTIVITY(Ld4lNamespace.BIBLIOTEKO, "Activity", "Activity"),
     AUTHOR_ACTIVITY(
             Ld4lNamespace.BIBLIOTEKO, "AuthorActivity", "Author"),    
+    COPYRIGHT_HOLDER_ACTIVITY(
+            Ld4lNamespace.BIBLIOTEKO, "CopyrightHolderActivity", "C"),   
     DISTRIBUTOR_ACTIVITY(
             Ld4lNamespace.BIBLIOTEKO, "DistributorActivity", "Distributor"),
     MANUFACTURER_ACTIVITY(

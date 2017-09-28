@@ -28,7 +28,7 @@ public class TitleElementBuilder extends MarcxmlEntityBuilder {
          * correctly reconstruct the title: E.g., French "L'" vs. "Le ".
          */
         if (! type.equals(Ld4lTitleElementType.NON_SORT_ELEMENT)) {
-            value = XmlTextElement.removeFinalPunctAndWhitespace(
+            value = XmlTextElement.trimFinalPunctAndWhitespace(
                     value).trim();
         } 
 

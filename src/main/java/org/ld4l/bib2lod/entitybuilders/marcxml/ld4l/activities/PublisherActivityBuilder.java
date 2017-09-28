@@ -5,11 +5,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
+import org.ld4l.bib2lod.entitybuilders.BuildParams;
+import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamedIndividual;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lNamespace;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
+import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlControlField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
@@ -51,11 +54,16 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
         activity.addExternalRelationship(Ld4lObjectProp.HAS_STATUS, 
                 Ld4lNamedIndividual.CURRENT);
 
-        // Publication date
-        String year = controlfield.getTextSubstring(7, 11);
-        if (! StringUtils.isBlank(year)) {
+        // Publication dates
+        String year1 = controlfield.getTextSubstring(7, 11);
+        if (! StringUtils.isBlank(year1)) {
           activity.addAttribute(
-                  Ld4lDatatypeProp.DATE, year, BibDatatype.EDTF);
+                  Ld4lDatatypeProp.DATE, year1, BibDatatype.EDTF);
+        } 
+        String year2 = controlfield.getTextSubstring(11, 15);
+        if (! StringUtils.isBlank(year2)) {
+          activity.addAttribute(
+                  Ld4lDatatypeProp.DATE, year2, BibDatatype.EDTF);
         } 
         
         // Publication location
@@ -87,10 +95,36 @@ public class PublisherActivityBuilder extends ProviderActivityBuilder {
 
         buildLocation(MarcxmlSubfield.getSubfield(subfields, 'a')); 
         buildAgent(MarcxmlSubfield.getSubfield(subfields, 'b'));
-        buildDate(MarcxmlSubfield.getSubfield(subfields, 'c'));
+        buildUntypedDate(MarcxmlSubfield.getSubfield(subfields, 'c'));
   
         // TODO 264 with indicator for publisher - otherwise a different type,
         // but otherwise the same (mostly?)
+    }
+    
+    @Override
+    protected void buildUntypedDate(MarcxmlSubfield subfield) 
+            throws EntityBuilderException {
+        
+        if (subfield == null) {
+            return;
+        }
+        
+        String date = subfield.getTextValue();
+        String[] dates = date.split(" &copy;");
+        
+        activity.addAttribute(Ld4lDatatypeProp.DATE, 
+                XmlTextElement.trimFinalPunctAndWhitespace(dates[0]));
+        
+        if (dates.length > 1) {
+            String copyright = dates[1].trim();
+            EntityBuilder builder = getBuilder(Ld4lActivityType.defaultType());
+            BuildParams params = new BuildParams() 
+                    .setParent(parent)
+                    .setValue(copyright)
+                    .setProperty(Ld4lDatatypeProp.DATE)
+                    .setType(Ld4lActivityType.COPYRIGHT_HOLDER_ACTIVITY);
+            builder.build(params);
+        }
     }
     
 }

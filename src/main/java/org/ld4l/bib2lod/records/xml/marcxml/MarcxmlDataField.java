@@ -4,15 +4,11 @@ package org.ld4l.bib2lod.records.xml.marcxml;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -21,11 +17,7 @@ import org.w3c.dom.NodeList;
  */
 public class MarcxmlDataField extends BaseMarcxmlField 
         implements MarcxmlTaggedField {
-    
-    private static List<Integer> NON_REPEATING_FIELDS = Arrays.asList(
-            
-            );
-
+  
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger(); 
 
@@ -56,71 +48,7 @@ public class MarcxmlDataField extends BaseMarcxmlField
         isValid();
         
     }
-
-    
-    /**
-     * Returns a list of values of subfields of this data field with the
-     * specified code. If no subfields, returns an empty list. Never returns
-     * null.
-     * @param code - the code of the subfields to get
-     * @param trim - if true, trim and remove final punct and whitespace
-     */
-    public List<String> getSubfieldValues(char code, boolean trim) {
-        List<String> values = new ArrayList<>();
-        for (MarcxmlSubfield subfield : subfields) {
-            if (!subfield.hasCode(code)) {
-                continue;
-            }
-            String value = subfield.getTextValue();            
-            values.add(trim ? XmlTextElement.trim(value) : value);
-        }
-        return values;        
-    }
-    
-    public List<String> getTrimmedSubfieldValues(char code) {
-        return getSubfieldValues(code, true);
-    }
-    
-    /**
-     * Returns a list of values of subfields of this data field with the
-     * specified code. If no subfields, returns an empty list. Never returns
-     * null.
-     * @param code - the code of the subfields to get
-     * @param clean - if true, trim and remove final punct and whitespace
-     */
-    public Set<String> getUniqueSubfieldValues(char code, boolean trim) {
-        return new HashSet<String>(getSubfieldValues(code, trim)); 
-    }
-    
-    public Set<String> getUniqueTrimmedSubfieldValues(char code) {
-        return getUniqueSubfieldValues(code, true);
-    }
-    
-    /**
-     * Returns true iff this data field has a subfield with the specified code
-     * with the specified value.
-     * @param code - the code of the subfields to check
-     * @param value - the value to look for 
-     * @param clean - if true, trim and remove final punct and whitespace
-     */
-    public boolean hasSubfieldValue(char code, String value, boolean clean) {
-            
-        List<String> values = getSubfieldValues(code, clean);
-        return values.contains(value);
-    }
-    
-    public boolean hasCleanSubfieldValue(char code, String value) {
-        return hasSubfieldValue(code, value, true);
-    }
-    
-    private Integer getIndicatorValue(String ind, Element element) {
-        String value = element.getAttribute(ind);
-        if (StringUtils.isBlank(value)) {
-            return null;
-        }
-        return Integer.parseInt(value);
-    }
-      
+ 
     @Override
     public String getTag() {
         return tag;
@@ -133,9 +61,47 @@ public class MarcxmlDataField extends BaseMarcxmlField
     public Integer getSecondIndicator() {
         return ind2;
     }
+    
+    private Integer getIndicatorValue(String ind, Element element) {
+        String value = element.getAttribute(ind);
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+        return Integer.parseInt(value);
+    }
   
     public List<MarcxmlSubfield> getSubfields() {
         return subfields;
+    }
+    
+    /**
+     * Returns a list of values of subfields of this data field with the
+     * one of the specified codes, in order of occurrence. If no subfields, 
+     * returns an empty list. Never returns null.
+     */
+    public List<String> listSubfieldValues(List<Character> codes) {
+        List<String> values = new ArrayList<>();
+        for (MarcxmlSubfield subfield : subfields) {
+            if (! codes.contains(subfield.getCode())) {
+                continue;
+            }      
+            values.add(subfield.getTextValue());
+        }
+        return values;        
+    }
+    
+    /**
+     * Concatenates the string values of the specified subfields of this
+     * data field, in order of occurrence. If no subfields, 
+     * returns null.
+     */
+    public String concatenateSubfieldValues(List<Character> codes) {
+        String value = null;
+        List<String> values = listSubfieldValues(codes);
+        if (values.size() > 0) {
+            value = StringUtils.join(values, " ");
+        }
+        return value; 
     }
 
     /**
@@ -196,61 +162,6 @@ public class MarcxmlDataField extends BaseMarcxmlField
         return getSubfield(code) != null;
     }
     
-    /**
-     * Returns a list of subfield codes in the datafield. Note that a valid
-     * datafield must have at least one subfield, so this method never
-     * returns an empty list.
-     */
-    public List<Character> getSubfieldCodes() {        
-    
-        List<Character> codes = new ArrayList<>();
-        for (MarcxmlSubfield subfield : subfields) {
-            codes.add(subfield.getCode());
-        }
-        return codes;
-    }
-    
-    public Set<Character> getUniqueSubfieldCodes() {
-        
-        Set<Character> codes = new HashSet<>();
-        for (MarcxmlSubfield subfield : subfields) {
-            codes.add(subfield.getCode());
-        }
-        return codes;        
-    }
-    
-    /**
-     * Returns true iff this datafield contains at least one subfield
-     * in the specified list of character codes.
-     */
-    public boolean containsAnySubfield(List<Character> codes) {
-        return CollectionUtils.containsAny(getSubfieldCodes(), codes);
-    }
-    
-    /**
-     * Returns true iff this datafield contains at least one subfield
-     * in the specified array of character codes.
-     */
-    public boolean containsAnySubfield(Character[] codes) {
-        return containsAnySubfield(Arrays.asList(codes));
-    }
-    
-      
-    /**
-     * Returns the datafield in the specified list with the specified tag value.
-     * Returns the first if multiple are found. Returns null if none are found. 
-     */
-    public static MarcxmlDataField get(
-            List<MarcxmlDataField> fields, String tag) {
-        
-        for (MarcxmlDataField field: fields) {
-            if (field.getTag().equals(tag)) {
-                return field;
-            }
-        }
-        return null;       
-    }
-
     private void isValid() throws RecordFieldException {
 
         if (StringUtils.isBlank(tag)) {
@@ -276,13 +187,5 @@ public class MarcxmlDataField extends BaseMarcxmlField
            }
         }
     }
-    
-    public static boolean isNonRepeating(int tag) {
-        return NON_REPEATING_FIELDS.contains(tag);
-    }
-    
-    public static boolean isRepeating(int tag) {
-        return ! NON_REPEATING_FIELDS.contains(tag);
-    }
-    
+
 }
