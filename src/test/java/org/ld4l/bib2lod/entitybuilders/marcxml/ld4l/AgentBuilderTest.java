@@ -60,7 +60,17 @@ public class AgentBuilderTest extends AbstractTestClass {
             .addSubfield("a", "Gustaf")
             .addSubfield("b", "V,")
             .addSubfield("c", "King of Sweden,")
-            .addSubfield("d", "1858-1950")
+            .lock();
+    
+    public static final MockMarcxml _100_AUTHOR_INITIALS = MINIMAL_RECORD.openCopy()
+            .addDatafield("100", "1", "")
+            .addSubfield("a", "Curien, P.-L.")
+            .lock();
+    
+    public static final MockMarcxml _100_AUTHOR_FULLER_NAME_FORM = MINIMAL_RECORD.openCopy()
+            .addDatafield("100", "1", "")
+            .addSubfield("a", "Claudius")
+            .addSubfield("q", "(Claudius Ceccon)")
             .lock();
     
     private static BaseMockBib2LodObjectFactory factory;
@@ -149,7 +159,7 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testAuthorSimplePersonName_100() throws Exception {
+    public void testAuthorPersonName_100() throws Exception {
         Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertEquals("Austen, Jane", 
                 author.getValue(Ld4lDatatypeProp.NAME));
@@ -170,6 +180,20 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
+    public void testAuthorInitials_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_INITIALS, "100");
+        Assert.assertEquals("Curien, P.-L.", 
+                author.getValue(Ld4lDatatypeProp.NAME));
+    }
+    
+    @Test
+    public void testAuthorFullerPersonName_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_FULLER_NAME_FORM, "100");
+        Assert.assertEquals("Claudius (Claudius Ceccon)", 
+                author.getValue(Ld4lDatatypeProp.NAME));
+    }
+    
+    @Test
     public void testAuthorFamilyName_100() throws Exception {
         Entity author = buildAgent(_100_AUTHOR_FAMILY, "100");
         Assert.assertEquals("Clark family", 
@@ -177,21 +201,21 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testAuthorFamilyNameDatatype_100() throws Exception {
+    public void testAuthorFamilyNameDatatype_100$a() throws Exception {
         Entity author = buildAgent(_100_AUTHOR_FAMILY, "100");
         Assert.assertEquals(BibDatatype.LEGACY_SOURCE_DATA, 
                 author.getAttribute(Ld4lDatatypeProp.NAME).getDatatype());
     }
     
     @Test
-    public void testAuthorDatesValue() throws Exception {
+    public void testAuthorDateValue() throws Exception {
         Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertEquals("1775-1817", 
                 author.getValue(Ld4lDatatypeProp.DATE));
     }
     
     @Test
-    public void testAuthorDatesDatatype() throws Exception {
+    public void testAuthorDateDatatype() throws Exception {
         Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertEquals(BibDatatype.LEGACY_SOURCE_DATA, 
                 author.getAttribute(Ld4lDatatypeProp.DATE).getDatatype());

@@ -3,15 +3,14 @@ package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ld4l.bib2lod.entity.Entity;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.ontology.ObjectProp;
-import org.ld4l.bib2lod.ontology.Type;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lObjectProp;
-import org.ld4l.bib2lod.records.xml.XmlTextElement;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
@@ -103,38 +102,48 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
     
     private Entity convert100() {
         
-        // Person or Family 
-        Type type = field.getFirstIndicator() == 3 ? 
-                Ld4lAgentType.FAMILY : Ld4lAgentType.PERSON; 
-        Entity agent = new Entity(type);
+        Entity agent = new Entity();
+        MarcxmlSubfield subfield$a = field.getSubfield('a');
         
-        // Name
-        String name = null;
-        MarcxmlSubfield subfield = field.getSubfield('a');
-        if (subfield != null) {
-            if (type.equals(Ld4lAgentType.FAMILY)) {
-                name = subfield.getTextValue();
-            } else {
-                // Personal name concatenates $a (name) $b (numeration) $c 
-                // (titles and other words associated with the name)
-                name = field.concatenateSubfieldValues(
-                        Arrays.asList('a', 'b', 'c'));
+        // Family
+        if (field.getFirstIndicator() == 3) {
+            agent.addType(Ld4lAgentType.FAMILY);
+            
+            // Name
+            if (subfield$a != null) {
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
+                        subfield$a.getTrimmedTextValue());
             }
-            agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
-                    // Trim final punct and whitespace from the name
-                    XmlTextElement.trim(name));
-        }   
-        
-        // Person birth and death dates. Variable values, no attempt to 
-        // parse at this time, so use dcterms:date instead of 
-        // schema:birthDate, schema:deathDate. 
-        // Examples: "1775-1817", "d. 1683", "282-133 B.C."
-        MarcxmlSubfield dateSubfield = field.getSubfield('d');
-        if (dateSubfield != null) {
-            agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.DATE, 
-                    dateSubfield.getTextValue());
+                
+        // Person
+        } else {
+            agent.addType(Ld4lAgentType.PERSON);
+ 
+            // Person name: concatenate $a (name) $b (numeration) $c (titles 
+            // and other words associated with the name)
+            if (subfield$a != null) {
+
+                String name = field.concatenateSubfieldValues(
+                        Arrays.asList('a', 'b', 'c', 'q'));
+                if (name.endsWith(",")) {
+                    name = StringUtils.chop(name);
+                }
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.NAME, 
+                        name);
+            }
+            
+            // Person birth and death dates: variable values, no attempt to 
+            // parse at this time, so use dcterms:date instead of 
+            // schema:birthDate, schema:deathDate. 
+            // Examples: "1775-1817", "d. 1683", "282-133 B.C."
+            // "dd. ca. 1558", "d1240 or 41-ca. 1316"
+            MarcxmlSubfield subfield$d = field.getSubfield('d');
+            if (subfield$d != null) {
+                agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.DATE, 
+                        subfield$d.getTextValue());
+            }
         }
-        
+
         return agent;      
     }
     
