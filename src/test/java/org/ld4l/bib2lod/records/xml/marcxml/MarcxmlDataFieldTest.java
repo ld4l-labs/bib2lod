@@ -143,12 +143,19 @@ public class MarcxmlDataFieldTest extends AbstractTestClass {
     }
     
     @Test
-    public void testConcatenateSubfieldValues() throws Exception {
+    public void testListSubfieldValuesNoMatch() throws Exception {
+        MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
+        List<String> list = field.listSubfieldValues(
+                Arrays.asList('x', 'y', 'z'));
+        Assert.assertEquals(0, list.size());      
+    }
+    
+    @Test
+    public void testConcatenateSubfieldValuesNoMatch() throws Exception {
         MarcxmlDataField field = buildFromString(MULTIPLE_SUBFIELDS);
         String values = field.concatenateSubfieldValues(
-                Arrays.asList('a', 'b', 'c', 'e'));
-        Assert.assertEquals("subfield a, subfield b, subfield b again, " + 
-                "subfield c,", values);      
+                Arrays.asList('x', 'y', 'z'));
+        Assert.assertNull(values);      
     }
 
     

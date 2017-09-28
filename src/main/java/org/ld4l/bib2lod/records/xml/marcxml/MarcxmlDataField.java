@@ -93,11 +93,15 @@ public class MarcxmlDataField extends BaseMarcxmlField
     /**
      * Concatenates the string values of the specified subfields of this
      * data field, in order of occurrence. If no subfields, 
-     * returns an empty list. Never returns null.
+     * returns null.
      */
     public String concatenateSubfieldValues(List<Character> codes) {
+        String value = null;
         List<String> values = listSubfieldValues(codes);
-        return StringUtils.join(values, " ");
+        if (values.size() > 0) {
+            value = StringUtils.join(values, " ");
+        }
+        return value; 
     }
 
     /**

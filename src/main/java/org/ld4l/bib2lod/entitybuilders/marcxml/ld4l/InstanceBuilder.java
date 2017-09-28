@@ -35,6 +35,11 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    private static List<Character> _260_PUBLISHER_CODES = 
+            Arrays.asList('a', 'b', 'c');
+    private static List<Character> _260_MANUFACTURER_CODES = 
+            Arrays.asList('e', 'f', 'g');
 
     private InstanceEntity instance;
     private MarcxmlRecord record;
@@ -173,7 +178,6 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     private void buildActivities() throws EntityBuilderException  {
         buildPublisherActivities();
         buildManufacturerActivities();
-        buildProviderActivities();
     } 
  
     private void buildPublisherActivities() throws EntityBuilderException {
@@ -190,11 +194,10 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
 
         // 260 fields: build additional publisher activities and add data to 
         // current publisher activity from 008.
-        List<Character> publisherCodes = Arrays.asList('a', 'b', 'c');
         for (MarcxmlDataField field : record.getDataFields("260")) {
             params.setField(field);
             List<List<RecordField>> subfieldLists = ProviderActivityBuilder.
-                    getActivitySubfields(field, publisherCodes);
+                    getActivitySubfields(field, _260_PUBLISHER_CODES);
 
             for (List<RecordField> subfields : subfieldLists) {
                 params.setSubfields(subfields);                     
@@ -207,30 +210,23 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
 
         // Each 260 and 264 yields one statement from all $a$b$c concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList("260", "264"), Arrays.asList('a', 'b', 'c'));
+                Arrays.asList("260", "264"), _260_PUBLISHER_CODES);
         
         // Each 260 yields one statement from all $e$f$g concatenated.
         buildProvisionActivityStatements(
-                Arrays.asList("260"), Arrays.asList('e', 'f', 'g'));
+                Arrays.asList("260"), _260_MANUFACTURER_CODES);
     }
     
     private void buildProvisionActivityStatements(
             List<String> tags, List<Character> codes) {
 
-        for (MarcxmlDataField field : record.getDataFields(tags)) {
-            
-            List<String> textValues = new ArrayList<>();
-            
-            for (MarcxmlSubfield subfield : field.getSubfields(codes)) {
-                textValues.add(subfield.getTextValue());
-            }
-
-            if (textValues.size() > 0) {
-                String statement = StringUtils.join(textValues, " ");
+        for (MarcxmlDataField field : record.getDataFields(tags)) {            
+            String statement = field.concatenateSubfieldValues(codes);
+            if (statement != null) {
                 instance.addAttribute
                     (Ld4lDatatypeProp.PROVISION_ACTIVITY_STATEMENT, 
-                            statement);
-            }       
+                      statement);               
+            }      
         } 
     }
 
@@ -244,12 +240,11 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
                 .setRecord(record);
 
         // Build manufacturer activities from 260$e$f$g
-        List<Character> manufacturerCodes = Arrays.asList('e', 'f', 'g');
         for (MarcxmlDataField field : record.getDataFields("260")) {
             params.setField(field);
             List<List<RecordField>> subfieldLists = 
                     ProviderActivityBuilder.getActivitySubfields(
-                            field, manufacturerCodes);
+                            field, _260_MANUFACTURER_CODES);
 
             for (List<RecordField> subfields : subfieldLists) {
                 params.setField(field)
@@ -259,12 +254,8 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         }  
     }
     
-    private void buildProviderActivities() throws EntityBuilderException {
-        
-    }
-    
     /**
-     * Add responsibility statement to instance from 245$c.
+     * Adds responsibility statement 245$c.
      */
     private void buildResponsiblityStatement() {
         

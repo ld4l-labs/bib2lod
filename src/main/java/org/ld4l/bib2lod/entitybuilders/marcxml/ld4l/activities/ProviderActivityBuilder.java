@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ld4l.bib2lod.entitybuilders.BuildParams;
 import org.ld4l.bib2lod.entitybuilders.EntityBuilder;
-import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAgentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lLocationType;
@@ -15,14 +14,11 @@ import org.ld4l.bib2lod.records.RecordField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlDataField;
 import org.ld4l.bib2lod.records.xml.marcxml.MarcxmlSubfield;
 
+// TODO Might be abstract - do we ever build a generic provider activity?
 public class ProviderActivityBuilder extends ActivityBuilder {
 
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
-    
-    @SuppressWarnings("unused")
-    private static final Ld4lActivityType TYPE = 
-            Ld4lActivityType.PROVIDER_ACTIVITY;
     
     // TODO Move up to ActivityBuilder if it works for other activities
     protected void buildDate(MarcxmlSubfield subfield) 
