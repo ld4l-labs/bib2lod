@@ -125,6 +125,16 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
                     XmlTextElement.trim(name));
         }   
         
+        // Person birth and death dates. Variable values, no attempt to 
+        // parse at this time, so use dcterms:date instead of 
+        // schema:birthDate, schema:deathDate. 
+        // Examples: "1775-1817", "d. 1683", "282-133 B.C."
+        MarcxmlSubfield dateSubfield = field.getSubfield('d');
+        if (dateSubfield != null) {
+            agent.addLegacySourceDataAttribute(Ld4lDatatypeProp.DATE, 
+                    dateSubfield.getTextValue());
+        }
+        
         return agent;      
     }
     
@@ -172,5 +182,7 @@ public class AgentBuilder extends MarcxmlEntityBuilder {
         
         return agent;
     }   
+    
+
     
 }

@@ -1,6 +1,5 @@
 package org.ld4l.bib2lod.entitybuilders.marcxml.ld4l;
 
-import static org.junit.Assert.fail;
 import static org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml.MINIMAL_RECORD;
 
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.ld4l.bib2lod.datatypes.Ld4lCustomDatatypes.BibDatatype;
 import org.ld4l.bib2lod.entity.Entity;
@@ -30,7 +28,7 @@ import org.ld4l.bib2lod.testing.xml.testrecord.MockMarcxml;
  */
 public class AgentBuilderTest extends AbstractTestClass {
     
-    public static final MockMarcxml DUPLICATE_AGENTS = MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _260_DUPLICATE_AGENTS = MINIMAL_RECORD.openCopy()
             .addDatafield("260", "3", " ")
             .addSubfield("a", "Lugduni Batavorum :")
             .addSubfield("b", "E.J. Brill")
@@ -39,50 +37,31 @@ public class AgentBuilderTest extends AbstractTestClass {
             .addSubfield("b", "E.J. Brill")
             .lock();
     
-    public static final MockMarcxml DIFFERENT_AGENTS = DUPLICATE_AGENTS.openCopy()
+    public static final MockMarcxml _260_DIFFERENT_AGENTS = _260_DUPLICATE_AGENTS.openCopy()
             .findDatafield("260", 1).replaceSubfield("b", "Random House")
             .lock();
             
     private static final String NAME_SUBFIELD = 
             "<subfield code='b'>E.J. Brill</subfield>";
     
-    public static final MockMarcxml AUTHOR_PERSON = MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _100_AUTHOR_PERSON = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "1", "")
             .addSubfield("a", "Austen, Jane")
             .addSubfield("d", "1775-1817")
             .lock();
 
-    public static final MockMarcxml AUTHOR_FAMILY = MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _100_AUTHOR_FAMILY = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "3", "")
             .addSubfield("a", "Clark family")
             .lock();
     
-    public static final MockMarcxml AUTHOR_COMPLEX_NAME = MINIMAL_RECORD.openCopy()
+    public static final MockMarcxml _100_AUTHOR_COMPLEX_NAME = MINIMAL_RECORD.openCopy()
             .addDatafield("100", "1", "")
             .addSubfield("a", "Gustaf")
             .addSubfield("b", "V,")
             .addSubfield("c", "King of Sweden,")
             .addSubfield("d", "1858-1950")
             .lock();
-    
-//    public static final MockMarcxml AUTHOR_FULL_NAME = MINIMAL_RECORD.openCopy()
-//            .addDatafield("100", "1", "")
-//            .addSubfield("a", "Austen, Jane")
-//            .addSubfield("d", "1775-1817")
-//            .lock();
-//    
-//    public static final MockMarcxml AUTHOR_SURNAME = MINIMAL_RECORD.openCopy()
-//            .addDatafield("100", "1", "")
-//            .addSubfield("a", "Watson,")
-//            .addSubfield("c", "Rev.")
-//            .addSubfield("d", "1775-1817")
-//            .lock();
-//    
-//    public static final MockMarcxml AUTHOR_FORENAME = MINIMAL_RECORD.openCopy()
-//            .addDatafield("100", "1", "")
-//            .addSubfield("a", "John")
-//            .addSubfield("c", "the Baptist, Saint.")
-//            .lock();
     
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder instanceBuilder;
@@ -132,9 +111,9 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testReuseExistingAgent() throws Exception {
+    public void testReuseExistingAgent_260() throws Exception {
         BuildParams params = new BuildParams()
-                .setRecord(DUPLICATE_AGENTS.toRecord());
+                .setRecord(_260_DUPLICATE_AGENTS.toRecord());
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
@@ -145,9 +124,9 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testBuildNewAgent() throws Exception {
+    public void testBuildNewAgent_260() throws Exception {
         BuildParams params = new BuildParams()
-                .setRecord(DIFFERENT_AGENTS.toRecord());
+                .setRecord(_260_DIFFERENT_AGENTS.toRecord());
         Entity instance = instanceBuilder.build(params);
         List<Entity> activities = 
                 instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY);
@@ -158,62 +137,64 @@ public class AgentBuilderTest extends AbstractTestClass {
     }
     
     @Test
-    public void testAuthorIsPerson() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_PERSON, "100");
+    public void testAuthorIsPerson_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertTrue(author.hasType(Ld4lAgentType.PERSON));
     }
     
     @Test
-    public void testAuthorIsFamily() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_FAMILY, "100");
+    public void testAuthorIsFamily_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_FAMILY, "100");
         Assert.assertTrue(author.hasType(Ld4lAgentType.FAMILY));
     }
     
     @Test
-    public void testAuthorSimplePersonName() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_PERSON, "100");
+    public void testAuthorSimplePersonName_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertEquals("Austen, Jane", 
                 author.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test
-    public void testAuthorPersonNameDatatype() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_PERSON, "100");
+    public void testAuthorPersonNameDatatype_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
         Assert.assertEquals(BibDatatype.LEGACY_SOURCE_DATA, 
                 author.getAttribute(Ld4lDatatypeProp.NAME).getDatatype());
     }
     
     @Test
-    public void testAuthorComplexPersonName() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_COMPLEX_NAME, "100");
+    public void testAuthorComplexPersonName_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_COMPLEX_NAME, "100");
         Assert.assertEquals("Gustaf V, King of Sweden", 
                 author.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test
-    public void testAuthorFamilyName() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_FAMILY, "100");
+    public void testAuthorFamilyName_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_FAMILY, "100");
         Assert.assertEquals("Clark family", 
                 author.getValue(Ld4lDatatypeProp.NAME));
     }
     
     @Test
-    public void testAuthorFamilyNameDatatype() throws Exception {
-        Entity author = buildAgentFromField(AUTHOR_FAMILY, "100");
+    public void testAuthorFamilyNameDatatype_100() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_FAMILY, "100");
         Assert.assertEquals(BibDatatype.LEGACY_SOURCE_DATA, 
                 author.getAttribute(Ld4lDatatypeProp.NAME).getDatatype());
     }
     
     @Test
-    @Ignore
-    public void testAuthorDates() throws Exception {
-        fail("testAuthorDates not yet implemented.");
+    public void testAuthorDatesValue() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
+        Assert.assertEquals("1775-1817", 
+                author.getValue(Ld4lDatatypeProp.DATE));
     }
     
     @Test
-    @Ignore
-    public void testAuthorBirthdate() throws Exception {
-        fail("testAuthorBirthdate not yet implemented.");
+    public void testAuthorDatesDatatype() throws Exception {
+        Entity author = buildAgent(_100_AUTHOR_PERSON, "100");
+        Assert.assertEquals(BibDatatype.LEGACY_SOURCE_DATA, 
+                author.getAttribute(Ld4lDatatypeProp.DATE).getDatatype());
     }
     
     
@@ -228,7 +209,7 @@ public class AgentBuilderTest extends AbstractTestClass {
                 XmlTestUtils.buildElementFromString(element));
     } 
     
-    private Entity buildAgentFromField(MockMarcxml marcxml, String tag) 
+    private Entity buildAgent(MockMarcxml marcxml, String tag) 
             throws Exception {
         BuildParams params = new BuildParams()
                 .setParent(new Entity())
