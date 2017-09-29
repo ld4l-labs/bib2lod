@@ -82,6 +82,11 @@ public class InstanceBuilderTest extends AbstractTestClass {
             .addDatafield("035", " ", " ").addSubfield("a", "(OCoLC)1345399")
             .lock();
     
+    public static final MockMarcxml _500_ANNOTATION = MINIMAL_RECORD.openCopy()
+            .addDatafield("500", " ", " ")
+            .addSubfield("a", "Many items are stamped 'impounded.'")      
+            .lock();
+    
     private static BaseMockBib2LodObjectFactory factory;
     private InstanceBuilder builder;   
     
@@ -244,6 +249,13 @@ public class InstanceBuilderTest extends AbstractTestClass {
         Assert.assertEquals(2, 
               instance.getChildren(Ld4lObjectProp.HAS_ACTIVITY, 
                       Ld4lActivityType.PUBLISHER_ACTIVITY).size());      
+    }
+    
+    @Test
+    public void testHasAnnotation_500() throws Exception {
+        Entity instance = buildInstance(_500_ANNOTATION);
+        Assert.assertEquals(1, instance.getChildren(
+                Ld4lObjectProp.HAS_ANNOTATION).size());       
     }
     
     // ---------------------------------------------------------------------

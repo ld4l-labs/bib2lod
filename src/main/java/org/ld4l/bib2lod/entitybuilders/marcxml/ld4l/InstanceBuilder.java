@@ -15,6 +15,7 @@ import org.ld4l.bib2lod.entitybuilders.marcxml.MarcxmlEntityBuilder;
 import org.ld4l.bib2lod.entitybuilders.marcxml.ld4l.activities.ProviderActivityBuilder;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lActivityType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lAdminMetadataType;
+import org.ld4l.bib2lod.ontology.ld4l.Ld4lAnnotationType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lDatatypeProp;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lExtentType;
 import org.ld4l.bib2lod.ontology.ld4l.Ld4lIdentifierType;
@@ -34,9 +35,9 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
     
-    public static List<Character> _260_PUBLISHER_CODES = 
+    public static final List<Character> _260_PUBLISHER_CODES = 
             Arrays.asList('a', 'b', 'c');
-    public static List<Character> _260_MANUFACTURER_CODES = 
+    public static final List<Character> _260_MANUFACTURER_CODES = 
             Arrays.asList('e', 'f', 'g');
 
     private InstanceEntity instance;
@@ -62,6 +63,7 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         buildProvisionActivityStatements();
         buildResponsiblityStatement();
         buildPhysicalDescriptions();
+        buildAnnotations();
 
         return instance;
     }
@@ -269,6 +271,32 @@ public class InstanceBuilder extends MarcxmlEntityBuilder {
         
         instance.addAttribute(Ld4lDatatypeProp.RESPONSIBILITY_STATEMENT, 
                 subfield.getTextValue());             
+    }
+    
+    private void buildAnnotations() throws EntityBuilderException {
+        
+        EntityBuilder builder = getBuilder(Ld4lAnnotationType.defaultType());
+        
+        // 500 general note repeating
+        List<MarcxmlDataField> fields = record.getDataFields("500");  
+        buildAnnotations(builder, fields);
+    }
+    
+    private void buildAnnotations(EntityBuilder builder, 
+            List<MarcxmlDataField> fields) throws EntityBuilderException {
+        
+        if (fields.size() == 0) {
+            return;            
+        }
+        
+        BuildParams params = new BuildParams()
+                .setParent(instance);
+        
+        for (MarcxmlDataField field : fields) {
+            params.setField(field);
+            builder.build(params);           
+        }
+        
     }
 
 }
