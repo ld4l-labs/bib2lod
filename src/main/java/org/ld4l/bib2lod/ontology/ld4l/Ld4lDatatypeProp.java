@@ -22,6 +22,7 @@ public enum Ld4lDatatypeProp implements DatatypeProp {
     FAMILY_NAME(Ld4lNamespace.FOAF, "familyName"),
     FIRST_NAME(Ld4lNamespace.FOAF, "firstName"),
     GIVEN_NAME(Ld4lNamespace.FOAF, "givenName"),
+    BODY_VALUE(Ld4lNamespace.OA, "bodyValue"),
     /*
      * rdfs:label is not technically a datatype property, but functions as
      * one in our application profile.

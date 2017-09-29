@@ -63,7 +63,6 @@ public enum Ld4lActivityType implements Type {
         return DEFAULT_TYPE;
     }
 
-
     public static Type defaultType() {
         return DEFAULT_TYPE;
     }
